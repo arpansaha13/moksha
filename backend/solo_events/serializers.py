@@ -5,7 +5,7 @@ from .models import *
 # Created modelSerializer for each user
 
 
-class UsersSerializers(serializers.ModelSerializer):
+class SoloEventSerializers(serializers.ModelSerializer):
     class Meta:
         model = SoloEvent
         fields = '__all__'
