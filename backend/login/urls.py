@@ -7,5 +7,7 @@ urlpatterns = [
     path('forgot-password', ForgotApi.as_view()),
     path('view', ViewApi.as_view()),
     path('logout', LogoutApi.as_view()),
+    path('otp', OTPValidation.as_view()),
+    path('resendotp', ResendOtp.as_view()),
     
 ]
