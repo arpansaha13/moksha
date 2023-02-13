@@ -1,10 +1,13 @@
 import './App.css';
 import Routes from "./routes";
+import DataProvider from './containers/DataProvider'
 
 function App() {
   return (
     <div className="App">
-      <Routes />
+      <DataProvider>
+        <Routes />
+      </DataProvider>
     </div>
   );
 }
