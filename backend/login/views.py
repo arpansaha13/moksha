@@ -15,13 +15,6 @@ class RegisterApi(APIView):
         if request.data['password'] == request.data['confirm_password']:
             x = random.randint(1000, 9999)
             otp_generated = str(x)
-            send_mail(
-                'Subject here',
-                otp_generated,
-                'bhowmikarghajit@gmail.com',
-                [email],
-                fail_silently=False,
-            )
             user = User.objects.filter(email=email).first()
             uid = generate_UID()
             if user is None:
@@ -37,6 +30,13 @@ class RegisterApi(APIView):
                 user.otp = otp_generated
                 user.user_id = uid
                 user.save()
+                send_mail(
+                    'Subject here',
+                    otp_generated,
+                    'bhowmikarghajit@gmail.com',
+                    [email],
+                    fail_silently=False,
+                )
                 return Response({'message': 'User added successfully!'})
             return Response({'message': 'User already Exists!'})
         return Response({'message': 'Password Not Matched!'})
