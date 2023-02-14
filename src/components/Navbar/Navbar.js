@@ -1,26 +1,19 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
+import { AiOutlineClose, AiOutlineAlignRight } from "react-icons/ai";
 
 function Navbar() {
   const [click, setClick] = useState(false);
-  
-
-  
-
-  
 
   const [button, setButton] = useState(true);
   const [navbar, setNavbar] = useState(false);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
-
- 
-
-
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -29,8 +22,6 @@ function Navbar() {
       setButton(true);
     }
   };
-
- 
 
   window.addEventListener("resize", showButton);
 
@@ -51,16 +42,8 @@ function Navbar() {
         </Link> */}
 
         <div className="menu-icon" onClick={handleClick}>
-          <img src={click ? "./images/icons/close.png" : "./images/icons/menu.png"} />
+          <img src={click ? <AiOutlineClose /> : <AiOutlineAlignRight />} />
         </div>
-
-         
-            
-               
-        
-        
-
-        
 
         <ul className={click ? "nav-menu active" : "nav-menu"}>
           <li className="nav-item">
@@ -69,16 +52,18 @@ function Navbar() {
             </Link>
           </li>
 
-
           <li className="nav-item">
-            <Link to="/timeline" className="nav-links" onClick={closeMobileMenu}>
+            <Link
+              to="/timeline"
+              className="nav-links"
+              onClick={closeMobileMenu}>
               Timeline
             </Link>
           </li>
 
           <li className="nav-item">
             <Link to="/events" className="nav-links" onClick={closeMobileMenu}>
-              Events 
+              Events
             </Link>
           </li>
 
@@ -89,28 +74,26 @@ function Navbar() {
           </li>
 
           <li className="nav-item">
-            <Link to="/sponsors" className="nav-links" onClick={closeMobileMenu}>
-              Sponsors 
+            <Link
+              to="/sponsors"
+              className="nav-links"
+              onClick={closeMobileMenu}>
+              Sponsors
             </Link>
           </li>
 
-          
-
           <li className="nav-item">
             <Link to="/profile" className="nav-links" onClick={closeMobileMenu}>
-              Profile 
+              Profile
             </Link>
           </li>
 
           <li className="nav-item">
             <Link to="/login" className="nav-links" onClick={closeMobileMenu}>
-              SIGN UP/LOGIN  
+              SIGN UP/LOGIN
             </Link>
           </li>
-
         </ul>
-
-        
       </div>
     </nav>
   );
