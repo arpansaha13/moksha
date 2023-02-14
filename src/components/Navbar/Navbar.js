@@ -6,7 +6,7 @@ import menuIcon from '@iconify-icons/mdi/menu'
 // import { AiOutlineClose, AiOutlineAlignRight } from "react-icons/ai"
 import './Navbar.css'
 
-{/* <img src={click ? <AiOutlineClose /> : <AiOutlineAlignRight />} /> */}
+// <img src={click ? <AiOutlineClose /> : <AiOutlineAlignRight />} />
 
 const tabs = [
   {
@@ -57,7 +57,6 @@ function Navbar() {
               </li>
             ))
           }
-
         </ul>
       </div>
 
