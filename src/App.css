@@ -8,12 +8,12 @@ body {
   top: 0;
   padding: 0;
   padding-right: 0!important;
-
 }
 
 .App{
+  @apply text-white;
   overflow-x: hidden;
-  width:"100%"
+  width:"100%";
 }
 
 .home{

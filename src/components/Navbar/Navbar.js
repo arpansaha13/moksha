@@ -1,10 +1,46 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
+
 import { AiOutlineClose, AiOutlineAlignRight } from "react-icons/ai";
+const tabs = [
+  {
+    to: '/',
+    name: 'Home',
+  },
+  {
+    to: '/timeline',
+    name: 'Timeline',
+  },
+  {
+    to: '/events',
+    name: 'Events',
+  },
+  {
+    to: '/faqs',
+    name: 'FAQs',
+  },
+  {
+    to: '/sponsors',
+    name: 'Sponsors',
+  },
+  {
+    to: '/profile',
+    name: 'Profile',
+  },
+  {
+    to: '/auth/login',
+    name: 'Login',
+  },
+  {
+    to: '/auth/signup',
+    name: 'Sign up',
+  },
+]
+
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -38,7 +74,7 @@ function Navbar() {
     <nav className={navbar ? "navbar active" : "navbar"}>
       <div className="navbar-container">
         {/* <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-          
+
         </Link> */}
 
         <div className="menu-icon" onClick={handleClick}>
@@ -93,6 +129,21 @@ function Navbar() {
               SIGN UP/LOGIN
             </Link>
           </li>
+
+          <img src={click ? "./images/icons/close.png" : "./images/icons/menu.png"} alt='' />
+        </div>
+
+        <ul className={click ? "nav-menu active" : "nav-menu"}>
+          {
+            tabs.map(tab => (
+            <li key={tab.to} className="nav-item">
+              <Link to={tab.to} className="nav-links" onClick={closeMobileMenu}>
+                { tab.name }
+              </Link>
+            </li>
+            ))
+          }
+
         </ul>
       </div>
     </nav>
