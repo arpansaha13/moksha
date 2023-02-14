@@ -9,3 +9,13 @@ class SoloEventSerializers(serializers.ModelSerializer):
     class Meta:
         model = SoloEvent
         fields = '__all__'
+
+class TeamEventSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = TeamEvent
+        fields = '__all__'
+
+class TeamDetailsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = TeamDetail
+        fields = '__all__'

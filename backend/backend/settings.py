@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +27,7 @@ SECRET_KEY = 'django-insecure-f)4pl8-6li$+b8eqlz70cjk7!c!fl7oqwuxi%%ejc-6a)dg5qj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -77,14 +79,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'Jyi0dAWx9fAXSZoNyFhf',
-        'HOST': 'containers-us-west-38.railway.app',
-        'PORT': '7778',
-    }
+    'default': dj_database_url.config(default='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a/mokshadb', conn_max_age=600),
 }
 
 
