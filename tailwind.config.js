@@ -1,8 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,js,jsx,ts,tsx,css}"],
+  content: [
+    "./public/index.html",
+    "./src/**/*.{js,jsx,css}",
+  ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brown: '#34190d',
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),
