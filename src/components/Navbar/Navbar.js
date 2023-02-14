@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
+
+import { AiOutlineClose, AiOutlineAlignRight } from "react-icons/ai";
 const tabs = [
   {
     to: '/',
@@ -37,6 +40,7 @@ const tabs = [
     name: 'Sign up',
   },
 ]
+
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -74,6 +78,58 @@ function Navbar() {
         </Link> */}
 
         <div className="menu-icon" onClick={handleClick}>
+          <img src={click ? <AiOutlineClose /> : <AiOutlineAlignRight />} />
+        </div>
+
+        <ul className={click ? "nav-menu active" : "nav-menu"}>
+          <li className="nav-item">
+            <Link to="/" className="nav-links" onClick={closeMobileMenu}>
+              Home
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link
+              to="/timeline"
+              className="nav-links"
+              onClick={closeMobileMenu}>
+              Timeline
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/events" className="nav-links" onClick={closeMobileMenu}>
+              Events
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/faqs" className="nav-links" onClick={closeMobileMenu}>
+              FAQS
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link
+              to="/sponsors"
+              className="nav-links"
+              onClick={closeMobileMenu}>
+              Sponsors
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/profile" className="nav-links" onClick={closeMobileMenu}>
+              Profile
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link to="/login" className="nav-links" onClick={closeMobileMenu}>
+              SIGN UP/LOGIN
+            </Link>
+          </li>
+
           <img src={click ? "./images/icons/close.png" : "./images/icons/menu.png"} alt='' />
         </div>
 
@@ -87,6 +143,7 @@ function Navbar() {
             </li>
             ))
           }
+
         </ul>
       </div>
     </nav>
