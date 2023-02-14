@@ -16,7 +16,7 @@ export default function DefaultLayout({ children }) {
       <ScrollToTop />
       <Navbar />
       {/* <Slider /> */}
-      <div className="mt-20">{children}</div>
+      <div className="mt-[74px] py-4">{children}</div>
       {/* <Footer /> */}
     </>
   )
