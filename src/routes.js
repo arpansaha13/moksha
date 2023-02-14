@@ -1,33 +1,11 @@
-
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
-import Home from "./pages/Home";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import Events from "./pages/Events";
-
-function routes() {
-  return (
-    <div className="abc">
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/events" element={<Events />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
-
-import React from 'react'
+import React from "react";
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import DefaultLayout from './layouts/default'
 import Home from "./pages/Home";
-import Timeline from "./pages/Timeline";
+import Events from "./pages/Events";
+import Faqs from "./pages/Faqs";
+import Sponsors from "./pages/Sponsors";
 import LoginPage from "./pages/auth/login";
 import SignUpPage from "./pages/auth/signup";
 
@@ -37,13 +15,15 @@ function getPage(PageComponent) {
   return getLayout(<PageComponent />)
 }
 
-function routes() {
+function AppRoutes() {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
         <Route exact path="/" element={getPage(Home)} />
-        <Route exact path="/timeline" element={getPage(Timeline)} />
+        <Route exact path="/events" element={getPage(Events)} />
+        <Route exact path="/faqs" element={getPage(Faqs)} />
+        <Route exact path="/sponsors" element={getPage(Sponsors)} />
         <Route exact path="/auth/login" element={getPage(LoginPage)} />
         <Route exact path="/auth/signup" element={getPage(SignUpPage)} />
       </Routes>
@@ -51,4 +31,4 @@ function routes() {
   );
 }
 
-export default routes;
+export default AppRoutes;

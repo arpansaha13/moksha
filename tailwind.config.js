@@ -1,13 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./public/index.html",
+    "./src/**/*.{js,jsx,ts,tsx,css}",
+  ],
   theme: {
     extend: {
       colors: {
+        brown: '#34190d', // background
+        ochre: '#ffbd59', // navbar items
         "prime-yell": "#6B3600",
         "sec-yell": "#8A6524",
       },
     },
   },
-  plugins: [],
-};
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+  ],
+}
