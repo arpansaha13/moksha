@@ -1,13 +1,16 @@
+import classNames from '../../utils/classNames'
+
 /*
   Props
   id: string
   label: string
   innerRef?: RefObject<HTMLInputElement>
+  disabled?: boolean
   validationError?: string | null
 */
 
 export default function BaseInput(props) {
-  const { id, label, innerRef, validationError = null, ...inputAttrs } = props
+  const { id, label, innerRef, validationError = null, disabled = false, ...inputAttrs } = props
 
   return (
     <div className="relative">
@@ -17,9 +20,13 @@ export default function BaseInput(props) {
       <div className="mt-1">
         <input
           id={id}
+          disabled={disabled}
           ref={innerRef}
           {...inputAttrs}
-          className="block w-full appearance-none rounded-md border border-gray-300 bg-amber-900/70 px-3 py-2 text placeholder-gray-400 shadow-sm focus:border-amber-500 focus:outline-none focus:ring-amber-500 sm:text-sm"
+          className={classNames(
+            "block w-full appearance-none rounded-md  px-3 py-2 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-amber-500 sm:text-sm",
+            disabled ? 'bg-amber-900/50 border-none' : 'bg-amber-900/70 border border-gray-300 shadow-sm',
+          )}
         />
       </div>
       {validationError !== null && (

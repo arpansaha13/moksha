@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
@@ -7,37 +7,40 @@ import BaseInput from '../../components/base/BaseInput'
 import AuthLayout from '../../layouts/auth'
 import { STORAGE_AUTH_KEY } from '../../constants'
 import { useAppContext } from '../../containers/DataProvider'
+import { useAuthContext } from '../../containers/AuthProvider'
 
-const LoginPage = () => {
-  const [token, setAuthToken] = useLocalStorage(STORAGE_AUTH_KEY)
-  const { setAppContext } = useAppContext()
+const VerificationPage = () => {
   const navigate = useNavigate()
+  const [token, setAuthToken] = useLocalStorage(STORAGE_AUTH_KEY)
+  const {setAppContext} = useAppContext()
+  const {authContext} = useAuthContext()
 
   useEffect(() => {
     if (token) navigate('/')
+    if (!authContext.email) navigate('/auth/register')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchHook = useFetch()
 
   const [formData, { set }] = useMap({
-    email: '',
-    password: '',
+    email: authContext.email,
+    otp: '',
   })
 
-  function signIn(e) {
+  function verifyOTP(e) {
     e.preventDefault()
 
-    fetchHook('users/login', {
+    fetchHook('users/otp', {
       method: 'POST',
       body: JSON.stringify(formData),
     })
     .then((res) => {
-      if (res.message === "User logged in!!") {
+      if (res.message === "User Validated!!") {
         // TODO: replace with user data from designated api
         setAppContext(state => {
           const newState = { ...state }
-          newState.authUser = { ...state.authUser, ...formData }
+          newState.authUser = { ...state.authUser, ...authContext }
           return newState
         })
         navigate('/')
@@ -45,6 +48,13 @@ const LoginPage = () => {
     })
     .catch(err => {
       // Failed
+    })
+  }
+
+  function resendOTP() {
+    fetchHook('users/resendotp', {
+      method: 'POST',
+      body: JSON.stringify({email: formData.email}),
     })
   }
 
@@ -56,57 +66,50 @@ const LoginPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head> */}
 
-      <form className="space-y-6" onSubmit={signIn}>
+      <form className="space-y-6" onSubmit={verifyOTP}>
         <BaseInput
           id="email"
           name="email"
           type="email"
           autoComplete="email"
-          required
+          disabled
           label="Email address"
           value={formData.email}
           onChange={e => set('email', e.target.value)}
         />
 
         <BaseInput
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
+          id="otp"
+          name="otp"
+          type="number"
+          autoComplete="one-time-code"
           required
-          label="Password"
-          value={formData.password}
-          onChange={e => set('password', e.target.value)}
+          minLength={4}
+          maxLength={4}
+          label="Enter OTP"
+          value={formData.otp}
+          onChange={e => set('otp', e.target.value)}
         />
 
-        {/* <div className="flex items-center justify-end">
+        <div className="flex items-center justify-start">
           <div className="text-sm">
-            <a href="#" className="font-medium text-amber-600 hover:text-amber-500">
-              Forgot your password?
-            </a>
+            <button type="button" className="font-medium text-amber-600 hover:text-amber-500" onClick={resendOTP}>
+              Resend OTP
+            </button>
           </div>
-        </div> */}
+        </div>
 
         <div>
           <button
             type="submit"
             className="flex w-full justify-center rounded-md border border-transparent bg-amber-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
           >
-            Login
+            Verify OTP
           </button>
-        </div>
-
-        <div className="flex items-center justify-start">
-          <div className="text-sm">
-            <span className="text-gray-100">Don&apos;t have an account?</span>{' '}
-            <Link to="/auth/register">
-              <span className="font-medium text-amber-600 cursor-pointer">Sign up</span>
-            </Link>
-          </div>
         </div>
       </form>
     </div>
   )
 }
-LoginPage.getLayout = (page) => <AuthLayout heading="Login to your account">{page}</AuthLayout>
-export default LoginPage
+VerificationPage.getLayout = (page) => <AuthLayout heading="Verify your account">{page}</AuthLayout>
+export default VerificationPage
