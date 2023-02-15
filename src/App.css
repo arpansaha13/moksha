@@ -25,16 +25,20 @@
 */
 
 body {
-  @apply bg-brown;
+  background-color: #241711;
+ 
+}
+
+::-webkit-scrollbar {
+  display:none;
 }
 
 .App {
-  @apply text-white;
-  overflow-x: hidden;
+ 
+  /* overflow-x: hidden; */
   width: 100%;
 }
 
 .home {
-  overflow: auto;
-  scroll-snap-type: y mandatory;
+  
 }

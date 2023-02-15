@@ -28,7 +28,7 @@ const tabs = [
 ]
 
 const NavTab = ({ to, children }) => (
-  <Link to={to} className="block w-max hover:text-amber-600 font-semibold text-lg sm:text-2xl p-1.5 uppercase transition-colors">
+  <Link to={to} className="block w-max font-semibold text-lg sm:text-2xl p-1.5 uppercase transition-colors">
     { children }
   </Link>
 )
@@ -37,7 +37,7 @@ function Navbar() {
   const isAuthorized = false
 
   return (
-    <nav className="px-4 sm:px-20 py-2.5 w-full flex justify-between fixed top-0 bg-brown text-ochre shadow shadow-amber-900">
+    <nav className="px-4 navbar sm:px-20 py-2.5 w-full flex justify-between top-0">
       {/* Mobile Navbar */}
       <div className="sm:hidden">
         <button className="block p-1 w-10 h-10 focus:text-amber-600 border border-ochre rounded-md focus:ring-1 focus:ring-offset-1 focus:ring-offset-amber-200 focus:ring-amber-600 transition-colors relative">
