@@ -7,7 +7,7 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     institution_name = models.CharField(max_length=100)
     phone_no = models.BigIntegerField(default=0)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=False)
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     user_id = models.CharField(max_length=100,blank=True, null=True)

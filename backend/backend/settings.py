@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a/mokshadb', conn_max_age=600),
+    'default': dj_database_url.config(default='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a.singapore-postgres.render.com/mokshadb', conn_max_age=600),
 }
 
 

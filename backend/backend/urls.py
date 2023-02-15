@@ -20,4 +20,5 @@ urlpatterns = [
     path('users/', include('login.urls')),
     path('admin/', admin.site.urls),
     path('new/', include('solo_events.urls')),
+    
 ]

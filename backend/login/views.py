@@ -17,7 +17,9 @@ class RegisterApi(APIView):
             otp_generated = str(x)
             user = User.objects.filter(email=email).first()
             uid = generate_UID()
-            if user is None:
+            if user is None or user.otp:
+                if user.otp:
+                    user.delete()
                 user1 = User.objects.filter(user_id=uid).first()
                 while user1:
                     uid = generate_UID()             
@@ -47,6 +49,7 @@ class LoginApi(APIView):
         email = request.data['email']
         user = User.objects.filter(email=email).first()
         if user:
+            print(user.user_id)
             if user.password == request.data['password']:
                 if user.otp == '':
                     user.logged_in = True
@@ -74,6 +77,17 @@ class ViewApi(APIView):
         user = User.objects.all()
         serializer = UsersSerializers(user, many=True)
         return Response(serializer.data)
+
+class ViewParticularApi(APIView):
+    def get(self, request, id):
+        print(id)
+        user = User.objects.filter(user_id=id).first()
+        print(user.email)
+        if user:
+            serializer = UsersSerializers(user)
+            print(serializer.data)
+            return Response(serializer.data)
+        return Response({'status':200 ,'message':'User Not Found'})
 
 
 class LogoutApi(APIView):
