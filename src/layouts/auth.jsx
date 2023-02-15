@@ -4,7 +4,7 @@ import AuthProvider from '../containers/AuthProvider'
 
 export default function AuthLayout({ children, heading }) {
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen bg-brown text-white">
       <div className="flex min-h-full flex-col justify-center py-8 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link to="/" className="block mx-auto w-16 h-16 relative">

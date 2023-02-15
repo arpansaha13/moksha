@@ -4,6 +4,7 @@ import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import BaseInput from '../../components/base/BaseInput'
+import OtpInput from '../../components/base/OtpInput'
 import AuthLayout from '../../layouts/auth'
 import { STORAGE_AUTH_KEY } from '../../constants'
 import { useAppContext } from '../../containers/DataProvider'
@@ -73,12 +74,13 @@ const VerificationPage = () => {
           type="email"
           autoComplete="email"
           disabled
+          required
           label="Email address"
           value={formData.email}
           onChange={e => set('email', e.target.value)}
         />
 
-        <BaseInput
+        {/* <BaseInput
           id="otp"
           name="otp"
           type="number"
@@ -89,6 +91,12 @@ const VerificationPage = () => {
           label="Enter OTP"
           value={formData.otp}
           onChange={e => set('otp', e.target.value)}
+        /> */}
+        <OtpInput
+          length={4}
+          label="Enter OTP"
+          value={formData.otp}
+          setValue={value => set('otp', value)}
         />
 
         <div className="flex items-center justify-start">

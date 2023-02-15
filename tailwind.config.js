@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brown: '#34190d', // background
+        brown: '#34190d', // auth background
         ochre: '#ffbd59', // navbar items
         "prime-yell": "#6B3600",
         "sec-yell": "#8A6524",
