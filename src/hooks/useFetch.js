@@ -19,9 +19,9 @@ import { FETCH_BASE_URL, STORAGE_AUTH_KEY } from '../constants'
  * 2) This hook does not check if auth token is expired or not.
  */
 export function useFetch() {
-  const authToken = useLocalStorage(STORAGE_AUTH_KEY)
+  const [authToken] = useLocalStorage(STORAGE_AUTH_KEY)
 
-  const fecthHook = (url, options) => {
+  const fetchHook = (url, options) => {
     return fetch(`${FETCH_BASE_URL}${url}`, {
       ...options,
       body: options?.body ? new URLSearchParams(JSON.parse(options?.body)) : null,
@@ -45,5 +45,5 @@ export function useFetch() {
       return jsonData
     })
   }
-  return fecthHook
+  return fetchHook
 }

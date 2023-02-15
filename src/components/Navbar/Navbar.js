@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-unused-vars */
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
 // import { AiOutlineClose, AiOutlineAlignRight } from "react-icons/ai"
+import { useAppContext } from '../../containers/DataProvider'
 import './Navbar.css'
 
 // <img src={click ? <AiOutlineClose /> : <AiOutlineAlignRight />} />
@@ -34,7 +35,8 @@ const NavTab = ({ to, children }) => (
 )
 
 function Navbar() {
-  const isAuthorized = false
+  const { appContext } = useAppContext()
+  const isAuthorized = !!appContext.authUser.email
 
   return (
     <nav className="px-4 navbar sm:px-20 py-2.5 w-full flex justify-between top-0">
@@ -74,7 +76,7 @@ function Navbar() {
               Login
             </NavTab>
 
-            <NavTab to="auth/signup">
+            <NavTab to="auth/register">
               Sign up
             </NavTab>
           </div>

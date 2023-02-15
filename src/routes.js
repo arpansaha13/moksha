@@ -7,7 +7,8 @@ import Events from "./pages/Events";
 import Faqs from "./pages/Faqs";
 import Sponsors from "./pages/Sponsors";
 import LoginPage from "./pages/auth/login";
-import SignUpPage from "./pages/auth/signup";
+import RegistrationPage from "./pages/auth/register";
+import VerificationPage from "./pages/auth/verification";
 
 /** Pass in the page component and get the page back with its layout. */
 function getPage(PageComponent) {
@@ -25,7 +26,8 @@ function AppRoutes() {
         <Route exact path="/faqs" element={getPage(Faqs)} />
         <Route exact path="/sponsors" element={getPage(Sponsors)} />
         <Route exact path="/auth/login" element={getPage(LoginPage)} />
-        <Route exact path="/auth/signup" element={getPage(SignUpPage)} />
+        <Route exact path="/auth/register" element={getPage(RegistrationPage)} />
+        <Route exact path="/auth/verification" element={getPage(VerificationPage)} />
       </Routes>
     </BrowserRouter>
   );
