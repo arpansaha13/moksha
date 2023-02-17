@@ -90,7 +90,7 @@ const LoginPage = () => {
         <div>
           <button
             type="submit"
-            className="flex w-full justify-center rounded-md border border-transparent bg-amber-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+            className="flex w-full justify-center rounded-md border border-transparent bg-amber-700 hover:bg-amber-800 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 transition-colors"
           >
             Login
           </button>
@@ -100,7 +100,7 @@ const LoginPage = () => {
           <div className="text-sm">
             <span className="text-gray-100">Don&apos;t have an account?</span>{' '}
             <Link to="/auth/register">
-              <span className="font-medium text-amber-600 cursor-pointer">Sign up</span>
+              <span className="font-medium text-amber-600 hover:text-amber-500 cursor-pointer">Sign up</span>
             </Link>
           </div>
         </div>

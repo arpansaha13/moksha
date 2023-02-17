@@ -18,7 +18,7 @@ const VerificationPage = () => {
 
   useEffect(() => {
     if (token) navigate('/')
-    if (!authContext.email) navigate('/auth/register')
+    if (!authContext.email) navigate('/auth/login')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
