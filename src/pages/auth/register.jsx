@@ -73,7 +73,7 @@ const SignUpPage = () => {
         <div>
           <button
             type="submit"
-            className="flex w-full justify-center rounded-md border border-transparent bg-amber-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+            className="flex w-full justify-center rounded-md border border-transparent bg-amber-700 hover:bg-amber-800 py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 transition-colors"
           >
             Sign up
           </button>
@@ -83,7 +83,7 @@ const SignUpPage = () => {
           <div className="text-sm">
             <span className="text-gray-100">Already have an account?</span>{' '}
             <Link to="/auth/login">
-              <span className="font-medium text-amber-600 cursor-pointer">Login</span>
+              <span className="font-medium text-amber-600 hover:text-amber-500 cursor-pointer">Login</span>
             </Link>
           </div>
         </div>
