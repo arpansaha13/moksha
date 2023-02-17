@@ -19,6 +19,10 @@ const tabs = [
     name: 'Events',
   },
   {
+    to: '/contests',
+    name: 'Contests',
+  },
+  {
     to: '/faqs',
     name: 'FAQs',
   },

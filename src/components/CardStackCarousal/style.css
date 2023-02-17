@@ -1,0 +1,13 @@
+/* Scrollbar */
+.tz-card-stack-carousal-scrollbar::-webkit-scrollbar,
+.tz-card-stack-carousal-scrollbar::-webkit-scrollbar-track,
+.tz-card-stack-carousal-scrollbar::-webkit-scrollbar-track-piece {
+  @apply block h-1.5;
+}
+
+.tz-card-stack-carousal-scrollbar::-webkit-scrollbar-button {
+  @apply hidden;
+}
+.tz-card-stack-carousal-scrollbar::-webkit-scrollbar-thumb {
+  @apply block bg-orange-800/70;
+}

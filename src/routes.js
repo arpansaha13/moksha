@@ -4,6 +4,7 @@ import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import DefaultLayout from './layouts/default'
 import Home from "./pages/Home";
 import Events from "./pages/Events";
+import Contests from "./pages/Contests";
 import Faqs from "./pages/Faqs";
 import Sponsors from "./pages/Sponsors";
 import LoginPage from "./pages/auth/login";
@@ -23,6 +24,7 @@ function AppRoutes() {
       <Routes>
         <Route exact path="/" element={getPage(Home)} />
         <Route exact path="/events" element={getPage(Events)} />
+        <Route exact path="/contests" element={getPage(Contests)} />
         <Route exact path="/faqs" element={getPage(Faqs)} />
         <Route exact path="/sponsors" element={getPage(Sponsors)} />
         <Route exact path="/auth/login" element={getPage(LoginPage)} />
