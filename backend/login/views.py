@@ -38,9 +38,9 @@ class RegisterApi(APIView):
                     [email],
                     fail_silently=False,
                 )
-                return Response({'status': 201 ,'message': 'User added successfully!!'})
-            return Response({'message': 'User already Exists!'},status=409)
-        return Response({'status': 400, 'message': 'Password Not Matched!'})
+                return Response({'message': 'User added successfully!!'}, status=201)
+            return Response({'message': 'User already Exists!'}, status=409)
+        return Response({'message': 'Password Not Matched!'}, status=400)
 
 
 class LoginApi(APIView):
@@ -53,10 +53,10 @@ class LoginApi(APIView):
                 if user.otp == '':
                     user.logged_in = True
                     user.save()
-                    return Response({'status': 200, 'message': 'User logged in!!'})
-                return Response({'status': 403, 'message': 'Please validate your account using otp!!'})
-            return Response({'status': 400, 'message': 'Invalid Password!!'})
-        return Response({'status': 404, 'message': 'User Not Found!'})
+                    return Response({'message': 'User logged in!!'}, status=200)
+                return Response({'message': 'Please validate your account using otp!!'}, status=403)
+            return Response({'message': 'Invalid Password!!'}, status=400)
+        return Response({'message': 'User Not Found!'}, status=404)
 
 
 class ForgotApi(APIView):
@@ -74,8 +74,8 @@ class ForgotApi(APIView):
                 )
             user.password = new_password
             user.save()
-            return Response({'status': 200, 'message': 'Password Changed!!'})
-        return Response({'status': 404, 'message': 'User Not Found!'})
+            return Response({'message': 'Password Changed!!'}, status=200)
+        return Response({'message': 'User Not Found!'}, status=404)
     
 class ChangePasswordApi(APIView):
     def post(self, request):
@@ -87,16 +87,16 @@ class ChangePasswordApi(APIView):
             if user.password==old_password:
                 user.password = new_password
                 user.save()
-                return Response({'status': 200, 'message': 'Password Changed!!'})
-            return Response({'status': 200, 'message': 'Password Not Matched!!'})
-        return Response({'status': 404, 'message': 'User Not Found!'})
+                return Response({'message': 'Password Changed!!'}, status=200)
+            return Response({'message': 'Password Not Matched!!'}, status=400)
+        return Response({'message': 'User Not Found!'}, status=404)
 
 
 class ViewApi(APIView):
     def get(self, request):
         user = User.objects.all()
         serializer = UsersSerializers(user, many=True)
-        return Response({'status': 200, 'payload' : serializer.data})
+        return Response({'message': 'Success', 'payload' : serializer.data}, status=200)
 
 class ViewParticularApi(APIView):
     def get(self, request, id):
@@ -106,8 +106,8 @@ class ViewParticularApi(APIView):
         if user:
             serializer = UsersSerializers(user)
             print(serializer.data)
-            return Response({'status': 200, 'payload': serializer.data})
-        return Response({'status': 404 ,'message':'User Not Found'})
+            return Response({'message': 'Success', 'payload': serializer.data}, status=200)
+        return Response({'message':'User Not Found'}, status=404)
 
 
 class LogoutApi(APIView):
@@ -117,8 +117,8 @@ class LogoutApi(APIView):
         if user:
             user.logged_in = False
             user.save()
-            return Response({'status': 200,'message': 'User Logged Out!!'})
-        return Response({'status': 404, 'message': 'User Not Found!'})
+            return Response({'message': 'User Logged Out!!'}, status=200)
+        return Response({'message': 'User Not Found!'}, status=404)
 
 
 class OTPValidation(APIView):
@@ -130,9 +130,9 @@ class OTPValidation(APIView):
             if user.otp == otp:
                 user.otp = ''
                 user.save()
-                return Response({'status': 200, 'message': 'User Validated!!'})
-            return Response({'status': 401,'message': 'OTP Not Matched!'})
-        return Response({'status': 404, 'message': 'User Not Found!'})
+                return Response({'message': 'User Validated!!'}, status=200)
+            return Response({'message': 'OTP Not Matched!'}, status=401)
+        return Response({'message': 'User Not Found!'}, status=404)
 
 
 class ResendOtp(APIView):
@@ -150,7 +150,7 @@ class ResendOtp(APIView):
         user = User.objects.filter(email=email).first()
         user.otp = otp_generated
         user.save()
-        return Response({'status': 200, 'message': 'Otp Sent!!'})
+        return Response({'message': 'Otp Sent!!'}, status=200)
 
 # Create your views here.
 
