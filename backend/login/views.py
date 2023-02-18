@@ -18,13 +18,12 @@ class RegisterApi(APIView):
             user = User.objects.filter(email=email).first()
             uid = generate_UID()
             if user is None or user.otp:
-                if user.otp:
+                if user and user.otp:
                     user.delete()
                 user1 = User.objects.filter(user_id=uid).first()
                 while user1:
                     uid = generate_UID()             
                     user1 = User.objects.filter(user_id=uid).first()
-
                 serializer = UsersSerializers(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -40,7 +39,7 @@ class RegisterApi(APIView):
                     fail_silently=False,
                 )
                 return Response({'status': 201 ,'message': 'User added successfully!!'})
-            return Response({'status': 409 ,'message': 'User already Exists!'})
+            return Response({'message': 'User already Exists!'},status=409)
         return Response({'status': 400, 'message': 'Password Not Matched!'})
 
 
@@ -63,12 +62,33 @@ class LoginApi(APIView):
 class ForgotApi(APIView):
     def post(self, request):
         email = request.data['email']
-        password = request.data['new_password']
         user = User.objects.filter(email=email).first()
         if user:
-            user.password = password
+            new_password=generate_UID()
+            send_mail(
+                    'Subject here',
+                    'Your new password is:'+new_password+' Link will be here.',
+                    'bhowmikarghajit@gmail.com',
+                    [email],
+                    fail_silently=False,
+                )
+            user.password = new_password
             user.save()
             return Response({'status': 200, 'message': 'Password Changed!!'})
+        return Response({'status': 404, 'message': 'User Not Found!'})
+    
+class ChangePasswordApi(APIView):
+    def post(self, request):
+        email = request.data['email']
+        old_password = request.data['old_password']
+        new_password = request.data['new_password']
+        user = User.objects.filter(email=email).first()
+        if user:
+            if user.password==old_password:
+                user.password = new_password
+                user.save()
+                return Response({'status': 200, 'message': 'Password Changed!!'})
+            return Response({'status': 200, 'message': 'Password Not Matched!!'})
         return Response({'status': 404, 'message': 'User Not Found!'})
 
 

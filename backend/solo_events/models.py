@@ -14,9 +14,9 @@ class TeamEvent(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.CharField(max_length=100, blank=True, null=True)
     team_id = models.CharField(max_length=100, blank=True, null=True)
-    team_name = models.TextField()
+    team_name = models.TextField(blank=True, null=True)
     event_id = models.CharField(max_length=100, blank=True, null=True)
-    event_name = models.TextField()
+    event_name = models.TextField(blank=True, null=True)
     leader=models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
@@ -26,7 +26,7 @@ class TeamDetail(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.CharField(max_length=100, blank=True, null=True)
     team_id = models.CharField(max_length=100, blank=True, null=True)
-    team_name = models.TextField()
+    team_name = models.TextField(blank=True, null=True)
     leader=models.CharField(max_length=100, blank=True, null=True)
     count=models.IntegerField(default=0)
 

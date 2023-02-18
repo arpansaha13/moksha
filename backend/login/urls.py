@@ -5,6 +5,7 @@ urlpatterns = [
     path('login', LoginApi.as_view()),
     path('register', RegisterApi.as_view()),
     path('forgot-password', ForgotApi.as_view()),
+    path('reset-password', ChangePasswordApi.as_view()),
     path('view', ViewApi.as_view()),
     path('logout', LogoutApi.as_view()),
     path('otp', OTPValidation.as_view()),

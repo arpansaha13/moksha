@@ -8,6 +8,6 @@ urlpatterns = [
     path('viewdetailsteam',TeamEventsApi.as_view()),
     path('createteam',CreateTeam.as_view()),
     path('jointeam',JoinTeam.as_view()),
-    path('eventregistration',EventRegistration.as_view()),
+    path('eventregistration',TeamEventRegistration.as_view()),
 
 ]
