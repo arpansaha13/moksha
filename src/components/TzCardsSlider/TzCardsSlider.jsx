@@ -3,10 +3,11 @@ import { memo, useEffect, useMemo, useRef, useState } from "react"
 import { useSize } from '../../hooks/useSize'
 import { useScrolling } from '../../hooks/useScrolling'
 import { useData } from './Wrapper'
+import classNames from '../../utils/classNames'
 import getValueByBreakpoint from '../../utils/getValueByBreakpoint'
-import './style.css'
+import styles from './style.css'
 
-export default function CardStackCarousal({ children, className, gap }) {
+export default function TzCardsSlider({ children, className, gap }) {
   const { context, setContext } = useData()
   const rootRef = useRef(null)
   const [effectiveGap, setGap] = useState(0)
@@ -52,7 +53,14 @@ export default function CardStackCarousal({ children, className, gap }) {
 
   return (
     <div className={className}>
-      <div ref={rootRef} className="py-2 w-full h-full flex overflow-x-scroll scroll-smooth snap-x tz-card-stack-carousal-scrollbar" style={{ gap: `${effectiveGap}px` }}>
+      <div
+        ref={rootRef}
+        className={classNames(
+          'py-2 w-full h-full flex overflow-x-scroll scroll-smooth snap-x',
+          styles['tz-card-stack-carousal-scrollbar']
+        )}
+        style={{ gap: `${effectiveGap}px` }}
+      >
         {
           context.list.map(item => (
             <Card key={ item.id } item={item} style={{ width: `${cardWidth}px` }}>

@@ -2,7 +2,7 @@
 import { memo } from 'react'
 import EventLayout from '../layouts/event'
 import Container from '../components/base/Container'
-import CardStackCarousal from "../components/CardStackCarousal"
+import TzCardsSlider from "../components/TzCardsSlider"
 import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
@@ -23,7 +23,7 @@ const events = [
 function Contests() {
   return (
     <section className="flex-grow w-full prose prose-invert max-w-none flex flex-col justify-center" id='events-list'>
-      <div className="mx-auto max-w-xs sm:max-w-3xl text-center">
+      <div className="mx-auto max-w-xs sm:max-w-3xl px-2 sm:px-0 text-center">
         <h2>
           Lorem Ipsum
         </h2>
@@ -33,7 +33,7 @@ function Contests() {
       </div>
 
       <Container className='w-full'>
-        <CardStackCarousal.Wrapper
+        <TzCardsSlider.Wrapper
           list={events}
           exposeWidth={48}
           visibleCount={{ base: 1, sm: 3, xl: 5 }}
@@ -41,7 +41,7 @@ function Contests() {
           {
             ({ scrollToStart, scrollToEnd, prev, next, start, end, total }) => (
               <>
-                <CardStackCarousal className='w-full h-80' gap={{ base: 24, sm: 36, xl: 40 }}>
+                <TzCardsSlider className='w-full h-80' gap={{ base: 16, sm: 20, xl: 32 }}>
                   {
                     event => (
                       <div className="not-prose w-full h-full bg-amber-900/60 rounded-md flex items-center justify-center text-5xl">
@@ -49,7 +49,7 @@ function Contests() {
                       </div>
                     )
                   }
-                </CardStackCarousal>
+                </TzCardsSlider>
 
                 <div className='mx-auto mt-4 w-max flex items-center gap-4'>
                   <PaginateButton onClick={scrollToStart}>
@@ -74,7 +74,7 @@ function Contests() {
               </>
             )
           }
-        </CardStackCarousal.Wrapper>
+        </TzCardsSlider.Wrapper>
       </Container>
     </section>
   )
