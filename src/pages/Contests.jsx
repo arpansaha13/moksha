@@ -80,7 +80,7 @@ function Contests() {
   )
 }
 
-Contests.getLayout = (page) => <EventLayout heading="Create your account">{page}</EventLayout>
+Contests.getLayout = (page) => <EventLayout>{page}</EventLayout>
 export default Contests
 
 const PaginateButton = memo(({ children, onClick }) => (

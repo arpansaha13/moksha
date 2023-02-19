@@ -1,7 +1,7 @@
 // import { useEffect, useState } from 'react'
 // import { useLocation } from "react-router-dom"
-import Navbar from "../components/Navbar/Navbar"
-import ScrollToTop from "../components/ScrollToTop/ScrollToTop"
+import Navbar from '../components/Navbar/Navbar'
+import ScrollToTop from '../components/ScrollToTop/ScrollToTop'
 // import CastleGate1 from '../assets/castle-gate-1.svg'
 import CastleGate2 from '../assets/castle-gate-2.svg'
 // import CastleGate3 from '../assets/castle-gate-3.svg'
@@ -32,9 +32,7 @@ export default function EventLayout({ children }) {
           <Navbar />
         </div>
 
-        <div className='flex-grow flex flex-col'>
-          {children}
-        </div>
+        <div className='flex-grow flex flex-col'>{children}</div>
       </div>
     </div>
   )

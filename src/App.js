@@ -4,7 +4,7 @@ import DataProvider from './containers/DataProvider'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" >
       <DataProvider>
         <Routes />
       </DataProvider>
