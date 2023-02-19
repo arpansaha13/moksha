@@ -47,15 +47,15 @@ function Slider() {
   const textLeave = () => setCursorVariant('default')
 
   return (
-    <div className='flex flex-col justify-center items-center'>
-      <div className='h-40 w-max flex items-center justify-center'>
-        <Tilt className='Tilt' options={{ max: 25 }}>
-          <img src={Moksha} onMouseEnter={textEnter} onMouseLeave={textLeave} />
+    <div className='flex flex-col justify-center items-center mt-4 sm:mt-0'>
+      <div className='h-28 sm:h-40 w-max flex items-center justify-center'>
+        <Tilt className='Tilt w-full h-full' options={{ max: 25 }}>
+          <img className='w-full h-full' src={Moksha} onMouseEnter={textEnter} onMouseLeave={textLeave} />
         </Tilt>
       </div>
       {/* <motion.div className='cursor' variants={variants} animate={cursorVariant} /> */}
 
-      <div className='w-[30rem] h-[30rem] mt-4'>
+      <div className='sm:w-[30rem] sm:h-[30rem] mt-4'>
         <img className='w-full h-full' src='./images/man_with_bird.png' alt='' />
       </div>
     </div>

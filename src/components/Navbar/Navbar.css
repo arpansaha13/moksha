@@ -5,7 +5,6 @@
 
   padding-top: 30px;
   height: 100px;
-  background-color: transparent;
   color: #ffbd59;
 }
 
@@ -261,7 +260,7 @@
     left: -100%;
     margin-left: 0;
     opacity: 1;
-    background-color: #ffffff;
+    background-color: transparent;
     transition: all 0.5s ease;
     /* border-right: 4px solid #00519C; */
     justify-content: flex-start;
@@ -469,7 +468,7 @@
 @media screen and (max-width: 600px) {
   .navbar {
     height: 80px;
-    background-color: #fff;
+    background-color: transparent;
     box-shadow: none;
     top: 60px;
     /* transition: 0.2s; */
