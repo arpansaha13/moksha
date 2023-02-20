@@ -10,6 +10,8 @@ import string
 events = {'E-1': ["dance", 3], 'E-2': ["singing", 2],
           'E-3': ["drama", 5], 'E-4': ["acting", 1]}
 
+# SOLO EVENT APIs
+
 
 class RegisterEvent(APIView):
     def post(self, request):
@@ -31,8 +33,9 @@ class RegisterEvent(APIView):
 
         return Response({'message': 'User not found!'}, status=404)
 
+# GET DETAILS APIs
 
-# Create POST API for fetching registered solo and group events for a User.
+
 class EventDetails(APIView):
     def post(self, request):
         user_id = request.data['user_id']
@@ -62,6 +65,38 @@ class TeamEventsApi(APIView):
         return Response({'message': 'Success', 'payload': serializer.data}, status=200)
 
 
+# EVENT DB APIs
+class EventAll(APIView):
+    def get(self, request):
+        user = EventDetail.objects.all()
+        serializer = EventDetailSerializers(user, many=True)
+        return Response({'message': 'Success', 'payload': serializer.data}, status=200)
+
+
+class EventParticular(APIView):
+    def post(self, request):
+        event_id = request.data['event_id']
+        user = EventDetail.objects.filter(event_id=event_id).first()
+        if user is None:
+            return Response({'message': 'No such event found'}, status=404)
+        serializer = EventDetailSerializers(user)
+        return Response({'message': 'Success', 'payload': serializer.data}, status=200)
+
+
+class AddEvent(APIView):
+    def post(self, request):
+        event_id = request.data['event_id']
+        user = EventDetail.objects.filter(event_id=event_id).first()
+        if user:
+            return Response({'message': 'Event already exists'}, status=400)
+        
+        serializer = EventDetailSerializers(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'message': 'Event added successfully'}, status=200)
+
+
+# TEAM EVENT APIs
 class CreateTeam(APIView):
     def post(self, request):
         user_id = request.data['user_id']

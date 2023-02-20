@@ -19,3 +19,8 @@ class TeamDetailsSerializers(serializers.ModelSerializer):
     class Meta:
         model = TeamDetail
         fields = '__all__'
+
+class EventDetailSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = EventDetail
+        fields = '__all__'

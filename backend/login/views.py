@@ -100,9 +100,7 @@ class ViewApi(APIView):
 
 class ViewParticularApi(APIView):
     def get(self, request, id):
-        print(id)
         user = User.objects.filter(user_id=id).first()
-        print(user.email)
         if user:
             serializer = UsersSerializers(user)
             print(serializer.data)
