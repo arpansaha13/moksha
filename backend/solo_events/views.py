@@ -37,16 +37,15 @@ class RegisterEvent(APIView):
 
 
 class EventDetails(APIView):
-    def post(self, request):
-        user_id = request.data['user_id']
-
-        SE_events = SoloEvent.objects.filter(user_id=user_id).all()
-        TE_events = TeamEvent.objects.filter(user_id=user_id).all()
-        if SE_events is None and TE_events is None:
-            return Response({'message': "No registered events!"}, status=404)
+    def get(self, request, id):
+        SE_events = SoloEvent.objects.filter(user_id=id).all()
+        TE_events = TeamEvent.objects.filter(user_id=id).all()
 
         serializer = SoloEventSerializers(SE_events, many=True)
         serializer1 = TeamEventSerializers(TE_events, many=True)
+
+        if serializer.data == [] and serializer1.data == []:
+            return Response({'message': "No registered events!"}, status=404)
 
         return Response({'message': 'Success', 'payload': {'solo_event': serializer.data, 'team_event': serializer1.data}}, status=200)
 
@@ -100,7 +99,10 @@ class AddEvent(APIView):
 class CreateTeam(APIView):
     def post(self, request):
         user_id = request.data['user_id']
-
+        user_1 = User.objects.filter(user_id=user_id).first()
+        if user_1 is None:
+            return Response({'message': 'Unregistered User!'}, status=403)
+        
         user = TeamDetail.objects.filter(leader=user_id).first()
         # print(user)
         if not user:
@@ -118,7 +120,7 @@ class CreateTeam(APIView):
             user.count += 1
             user.save()
 
-            return Response({'message': 'Team created successfully!!', 'payload': {'team_id': user.team_id}}, status=200)
+            return Response({'message': 'Team created successfully!!', 'payload': {'team_id': user.team_id}}, status=201)
 
         return Response({'message': 'Team Already Exists!'}, status=400)
 
@@ -143,7 +145,7 @@ class JoinTeam(APIView):
                 user.count += 1
                 user.save()
                 user1.save()
-                return Response({'message': 'Member Added!!'}, status=200)
+                return Response({'message': 'Member Added!!'}, status=201)
             return Response({'message': 'Team Full!'}, status=400)
         return Response({'message': 'Team Doesn\'t Exists!'}, status=404)
 

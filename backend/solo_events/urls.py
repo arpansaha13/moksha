@@ -3,7 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('event', RegisterEvent.as_view()),
-    path('details', EventDetails.as_view()),
+    path('details/<str:id>', EventDetails.as_view()),
     path('viewdetailssolo',SoloEventsApi.as_view()),
     path('viewdetailsteam',TeamEventsApi.as_view()),
     path('createteam',CreateTeam.as_view()),

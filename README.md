@@ -223,7 +223,7 @@ Request:
 ```json
 {
   "email": "suggi.aditya@gmail.com",
-  "old_password" : "7w1e7gocar",
+  "verification_code" : "7w1e7gocar",
   "new_password" : "password"
 }
 ```
@@ -362,3 +362,223 @@ Status: 404
   "message": "User Not Found!"
 }
 ```
+## EVENT
+### 1. Get event details of a particular user
+HTTP Request: https://moksha-backend.onrender.com/new/details/MOK-s2l2dij8
+\
+Method = [GET] 
+\
+Response:
+1. Registered for any event
+\
+Status: 200 
+```json
+{
+  "message": "Success",
+  "payload": {
+    "solo_event": [
+      {
+        "id": 1,
+        "user_id": "MOK-s2l2dij8",
+        "event_id": "E-1",
+        "event_name": "dance"
+      }
+    ],
+    "team_event": [
+      {
+        "id": 3,
+        "user_id": "MOK-s2l2dij8",
+        "team_id": "T-omkwz81o",
+        "team_name": "hydraze1",
+        "event_id": "E-3",
+        "event_name": "drama",
+        "leader": "MOK-s2l2dij8"
+      }
+    ]
+  }
+}
+```
+2. No registered events
+\
+Status: 404 
+```json
+{
+  "message": "No registered events!"
+}
+```
+### 2. View Solo Table 
+HTTP Request: https://moksha-backend.onrender.com/new/viewdetailssolo
+\
+Method = [GET] 
+\
+Response:
+1. Registered User
+\
+Status: 200 
+```json
+{
+  "message": "Success",
+  "payload": [
+    {
+      "id": 1,
+      "user_id": "MOK-s2l2dij8",
+      "event_id": "E-1",
+      "event_name": "dance"
+    }
+  ]
+}
+```
+
+### 3. View Team Table 
+HTTP Request: https://moksha-backend.onrender.com/new/viewdetailsteam
+\
+Method = [GET] 
+\
+Response:
+1. Registered User
+\
+Status: 200 
+```json
+{
+  "message": "Success",
+  "payload": [
+    {
+      "id": 3,
+      "user_id": "MOK-s2l2dij8",
+      "team_id": "T-omkwz81o",
+      "team_name": "hydraze1",
+      "event_id": "E-3",
+      "event_name": "drama",
+      "leader": "MOK-s2l2dij8"
+    },
+    {
+      "id": 4,
+      "user_id": "MOK-ssev2rmf",
+      "team_id": "T-omkwz81o",
+      "team_name": "hydraze1",
+      "event_id": "E-3",
+      "event_name": "drama",
+      "leader": "MOK-s2l2dij8"
+    }
+  ]
+}
+```
+
+### 4. Register for Solo Event
+HTTP Request: https://moksha-backend.onrender.com/new/event
+\
+Method = [POST] 
+\
+Request:
+```json
+{
+  "user_id": "MOK-4x459er3s",
+  "event_id": "SE2",
+  "event_name" : "Dance"
+}
+```
+Response:
+1. Registered User
+\
+Status: 201 
+```json
+{
+  "message": "User registered successfully!!"
+}
+```
+2. Already Registered for the event
+\
+Status: 400 
+```json
+{
+  "message": "User already registered for the event!"
+}
+```
+3. Unregistered User
+\
+Status: 404
+```json
+{
+  "message": "User not found!"
+}
+```
+
+### 5. Create Team
+HTTP Request: https://moksha-backend.onrender.com/new/createteam
+\
+Method = [POST] 
+\
+Request:
+```json
+{
+  "user_id": "MOK-4x459er3s",
+  "team_name": "DRX"
+}
+```
+Response:
+1. Only Leader can create Team
+\
+Status: 201 
+```json
+{
+  "message": "Team created successfully!!",
+  "payload": {
+    "team_id": "T-oimi2n0l"
+  }
+}
+```
+2. Already Registered for the event
+\
+Status: 400 
+```json
+{
+  "message": "Team Already Exists!"
+}
+```
+3. Unregistered User
+\
+Status: 403
+```json
+{
+  "message": "Unregistered User!"
+}
+```
+### 6. Join Team
+HTTP Request: https://moksha-backend.onrender.com/new/jointeam
+\
+Method = [POST] 
+\
+Request:
+```json
+{
+  "user_id": "MOK-4x459er3s",
+  "team_name": "DRX"
+}
+```
+Response:
+1. Only Leader can add Team Members, if team_id is correct 
+\
+Status: 201 
+```json
+{
+  "message": "Member Added!!"
+}
+```
+2. Already Registered for the event
+\
+Status: 400 
+```json
+{
+  "message": "User already registered for the event!"
+}
+```
+3. Team Doesn't Exist
+\
+Status: 404
+```json
+{
+  "message": "Team Doesn't Exists!"
+}
+```
+
+## CREATE/JOIN TEAM  

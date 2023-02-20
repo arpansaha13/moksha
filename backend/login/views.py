@@ -82,11 +82,11 @@ class ForgotApi(APIView):
 class ChangePasswordApi(APIView):
     def post(self, request):
         email = request.data['email']
-        old_password = request.data['old_password']
+        code = request.data['verification_code']
         new_password = request.data['new_password']
         user = User.objects.filter(email=email).first()
         if user:
-            if user.password == old_password:
+            if user.password == code:
                 user.password = new_password
                 user.save()
                 return Response({'message': 'Password Changed!!'}, status=200)
