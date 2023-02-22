@@ -1,9 +1,29 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import AuthProvider from '../containers/AuthProvider'
 import CastleGate3 from '../assets/castle-gate-3.svg'
 
-export default function AuthLayout({ children, heading }) {
+const getHeading = (route) => {
+  switch (route) {
+    case '/auth/login':
+      return 'Login to your account'
+    case '/auth/register':
+      return 'Create your account'
+    case '/auth/verification':
+      return 'Verify your account'
+    case '/auth/forgot-password':
+      return 'Forgot password'
+    default:
+      return null
+  }
+}
+
+export default function AuthLayout() {
+  const location = useLocation()
+  const [heading, setHeading] = useState(getHeading(location.pathname))
+
+  useEffect(() => setHeading(getHeading(location.pathname)), [location])
+
   return (
     <div className="relative min-w-screen min-h-screen bg-brown text-white">
       <img src={CastleGate3} alt='' className='fixed w-full h-full object-cover' aria-hidden={true} />
@@ -22,7 +42,7 @@ export default function AuthLayout({ children, heading }) {
         <div className="mt-8 w-full [&>*]:sm:mx-auto [&>*]:py-8 [&>*]px-4 [&>*]:sm:px-10 [&>*]:sm:w-full [&>*]:bg-amber-900/50 [&>*]:sm:rounded-lg [&>*]:shadow">
           <AuthProvider>
             {/* Use appropriate max-w-{size} on the root of this children */}
-            {children}
+            <Outlet />
           </AuthProvider>
         </div>
       </div>

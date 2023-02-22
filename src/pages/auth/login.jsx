@@ -4,7 +4,6 @@ import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import BaseInput from '../../components/base/BaseInput'
-import AuthLayout from '../../layouts/auth'
 import { STORAGE_AUTH_KEY } from '../../constants'
 import { useAppContext } from '../../containers/DataProvider'
 
@@ -108,5 +107,4 @@ const LoginPage = () => {
     </div>
   )
 }
-LoginPage.getLayout = (page) => <AuthLayout heading="Login to your account">{page}</AuthLayout>
 export default LoginPage

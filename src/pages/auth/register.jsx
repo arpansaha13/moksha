@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import BaseInput from '../../components/base/BaseInput'
-import AuthLayout from '../../layouts/auth'
 import { STORAGE_AUTH_KEY } from '../../constants'
-import { useAuthContext } from '../../containers/AuthProvider';
+import { useAuthContext } from '../../containers/AuthProvider'
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -91,7 +90,6 @@ const SignUpPage = () => {
     </div>
   )
 }
-SignUpPage.getLayout = (page) => <AuthLayout heading="Create your account">{page}</AuthLayout>
 export default SignUpPage
 
 const getFields = (formData, set) => {
