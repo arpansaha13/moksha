@@ -26,8 +26,8 @@ export default function AuthLayout() {
 
   return (
     <div className="relative min-w-screen min-h-screen bg-brown text-white">
-      <img src={CastleGate3} alt='' className='fixed w-full h-full object-cover' aria-hidden={true} />
-      <span className='fixed inset-0 z-10 bg-darkBrown/90 mix-blend-darken' />
+      <img src={CastleGate3} alt='' className='fixed w-screen h-screen object-cover' aria-hidden={true} />
+      <span className='fixed w-screen h-screen z-10 bg-darkBrown/90 mix-blend-darken' />
 
       <div className="min-w-screen min-h-screen flex flex-col justify-center py-8 sm:px-6 lg:px-8 relative z-20">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
