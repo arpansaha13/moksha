@@ -42,7 +42,7 @@ export function useFetch() {
         }
       }
       if (res.status >= 400) throw jsonData
-      return jsonData
+      return { status: res.status, ...jsonData }
     })
   }
   return fetchHook
