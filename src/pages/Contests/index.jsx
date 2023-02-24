@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { memo } from 'react'
-import EventLayout from '../layouts/event'
-import Container from '../components/base/Container'
-import TzCardsSlider from "../components/TzCardsSlider"
+import Container from '../../components/common/Container'
+import TzCardsSlider from "../../components/TzCardsSlider"
 import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
@@ -10,7 +9,7 @@ import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
 import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
 
 // Fake data for now
-const events = [
+const contests = [
   ...(() => {
     const array = []
     for (let i = 0; i < 20; i++) {
@@ -22,7 +21,7 @@ const events = [
 
 function Contests() {
   return (
-    <section className="flex-grow w-full prose prose-invert max-w-none flex flex-col justify-center" id='events-list'>
+    <section className="flex-grow w-full prose prose-invert max-w-none" id='events-list'>
       <div className="mx-auto max-w-xs sm:max-w-3xl px-2 sm:px-0 text-center">
         <h2>
           Lorem Ipsum
@@ -32,9 +31,9 @@ function Contests() {
         </p>
       </div>
 
-      <Container className='w-full'>
+      <Container className='xl:!max-w-[84rem]'>
         <TzCardsSlider.Wrapper
-          list={events}
+          list={contests}
           exposeWidth={48}
           visibleCount={{ base: 1, sm: 3, xl: 5 }}
         >
@@ -80,7 +79,6 @@ function Contests() {
   )
 }
 
-Contests.getLayout = (page) => <EventLayout>{page}</EventLayout>
 export default Contests
 
 const PaginateButton = memo(({ children, onClick }) => (

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from 'react';
-import { useList } from '../../hooks/useList'
-import classNames from '../../utils/classNames'
-import './otpInput.css'
+import { useEffect, useRef, useState } from 'react'
+import { useList } from '../../../hooks/useList'
+import classNames from '../../../utils/classNames'
+import './style.css'
 
 // interface OtpInputProps {
 //   value: string
