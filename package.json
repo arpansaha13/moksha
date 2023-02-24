@@ -23,8 +23,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "serve": "serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
@@ -50,6 +52,9 @@
   "devDependencies": {
     "@iconify-icons/mdi": "^1.2.41",
     "@iconify/react": "^4.1.0",
-    "prettier": "^2.8.4"
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "prettier": "^2.8.4",
+    "serve": "^14.2.0",
+    "source-map-explorer": "^2.5.3"
   }
 }
