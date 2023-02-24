@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { memo } from 'react'
-import Container from '../../components/base/Container'
+import Container from '../../components/common/Container'
 import TzCardsSlider from "../../components/TzCardsSlider"
 import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
@@ -31,7 +31,7 @@ function Contests() {
         </p>
       </div>
 
-      <Container>
+      <Container className='xl:!max-w-[84rem]'>
         <TzCardsSlider.Wrapper
           list={contests}
           exposeWidth={48}
