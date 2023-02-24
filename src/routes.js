@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react"
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
 const DefaultLayout = lazy(() => import('./layouts/default'))
 const AuthLayout = lazy(() => import('./layouts/auth'))
@@ -14,30 +14,34 @@ const LoginPage = lazy(() => import('./pages/auth/login'))
 const RegistrationPage = lazy(() => import('./pages/auth/register'))
 const VerificationPage = lazy(() => import('./pages/auth/verification'))
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<DefaultLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/faqs" element={<Faqs />} />
+        <Route path="/sponsors" element={<Sponsors />} />
+      </Route>
+
+      <Route element={<AuthLayout />}>
+        <Route path="/auth/login" element={<LoginPage />} />
+        <Route path="/auth/register" element={<RegistrationPage />} />
+        <Route path="/auth/verification" element={<VerificationPage />} />
+      </Route>
+
+      <Route element={<ContestLayout />}>
+        <Route path="/contests" element={<Contests />} />
+      </Route>
+    </>
+  )
+)
+
 function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<div />}>
-        <Routes>
-          <Route element={<DefaultLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/faqs" element={<Faqs />} />
-            <Route path="/sponsors" element={<Sponsors />} />
-          </Route>
-
-          <Route element={<AuthLayout />}>
-            <Route path="/auth/login" element={<LoginPage />} />
-            <Route path="/auth/register" element={<RegistrationPage />} />
-            <Route path="/auth/verification" element={<VerificationPage />} />
-          </Route>
-
-          <Route element={<ContestLayout />}>
-            <Route path="/contests" element={<Contests />} />
-          </Route>
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <Suspense fallback={<div />}>
+      <RouterProvider router={router} />
+    </Suspense>
   )
 }
 
