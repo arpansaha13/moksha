@@ -13,6 +13,7 @@ const Sponsors = lazy(() => import('./pages/Sponsors'))
 const LoginPage = lazy(() => import('./pages/auth/login'))
 const RegistrationPage = lazy(() => import('./pages/auth/register'))
 const VerificationPage = lazy(() => import('./pages/auth/verification'))
+const ForgotPasswordPage = lazy(() => import('./pages/auth/forgot-password'))
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/register" element={<RegistrationPage />} />
         <Route path="/auth/verification" element={<VerificationPage />} />
+        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
       <Route element={<ContestLayout />}>
