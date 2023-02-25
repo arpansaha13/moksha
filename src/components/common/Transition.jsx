@@ -35,7 +35,6 @@ export default function Transition({
 
   const modifiedChildren = Children.map(children, (child, i) => {
     if (resetting.current) {
-      console.log('lala')
       resetting.current = false
       return show ? child : null
     }

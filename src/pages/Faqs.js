@@ -26,8 +26,8 @@ function Faqs() {
 
   return (
     <Container className="py-4">
-      <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-6">
-        <section className="lg:col-span-2 prose prose-invert max-w-none" id='moksha-faqs'>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section className="lg:col-span-2 markdown" id='moksha-faqs'>
           <h1>Frequently Asked Questions</h1>
 
           <div className='space-y-6'>
@@ -35,7 +35,7 @@ function Faqs() {
               faqs.map(faq => (
                 <Sheet
                   innerRef={hashRef(faq.id)}
-                  className="group p-6 bg-amber-900/30"
+                  className="group p-4 sm:p-6 bg-amber-900/30"
                   key={ faq.id }
                   id={ faq.id }
                 >
@@ -46,8 +46,8 @@ function Faqs() {
           </div>
         </section>
 
-        <aside className="lg:col-span-1" id='moksha-faqs-table-of-contents'>
-          <Sheet className="p-4 bg-amber-900/30 prose prose-invert max-w-none sticky top-4">
+        <aside className="hidden lg:block lg:col-span-1" id='moksha-faqs-table-of-contents'>
+          <Sheet className="p-4 bg-amber-900/30 markdown sticky top-4">
             {
               faqs.slice(0, 5).map(faq => (
                 <p key={faq.id}>

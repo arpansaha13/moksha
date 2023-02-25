@@ -16,7 +16,7 @@ export default function TzCardsSlider({ children, className, gap }) {
 
   const cardWidth = useMemo(
     () => getCardWidth(rootWidth, context.visibleCount, effectiveGap, context.exposeWidth),
-    [effectiveGap, rootWidth, context]
+    [effectiveGap, rootWidth, context.visibleCount, context.exposeWidth]
   )
 
   useEffect(() => {
