@@ -1,16 +1,16 @@
-import { createElement, createRef, useCallback, useEffect, useRef } from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { createElement, createRef, useCallback, useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
+import { createFocusTrap } from 'focus-trap'
 import { useEventListener } from '../../hooks/useEventListener'
 
 const dialogRef = createRef()
 
-function BaseDialog({ children, open, as = 'div', className, initialFocus, onClose }) {
+function BaseDialog({ children, open, as = 'div', className, onClose }) {
   const overlayRef = useRef(null)
 
   const htmlEl = document.getElementsByTagName('html')[0]
   const bodyEl = document.getElementsByTagName('body')[0]
-
-  useEffect(() => initialFocus?.current?.focus(), [])
 
   const openDialog = useCallback(() => {
     htmlEl.style.overflow = 'hidden'
@@ -43,7 +43,17 @@ function BaseDialog({ children, open, as = 'div', className, initialFocus, onClo
   )
 }
 
-const BaseDialogPanel = ({ as = 'div', className, children }) => {
+const BaseDialogPanel = ({ as = 'div', className, children, initialFocus }) => {
+  useEffect(() => {
+    const trap = createFocusTrap(dialogRef.current, {
+      initialFocus: initialFocus?.current,
+      allowOutsideClick: true,
+    })
+    trap.activate()
+
+    return () => trap.deactivate()
+  }, [])
+
   return createElement(as, { ref: dialogRef, className }, children)
 }
 
