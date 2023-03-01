@@ -1,10 +1,17 @@
-import React from "react";
+import React from "react"
+import { Helmet } from "react-helmet"
 
 function Sponsors() {
   return (
-    <div>
-      sponsors
-    </div>
+    <>
+      <Helmet>
+        <title>Moksha | Sponsors</title>
+      </Helmet>
+
+      <div>
+        sponsors
+      </div>
+    </>
   );
 }
 
