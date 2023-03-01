@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect } from "react"
 
-export function useEventListener(ref, event, listener) {
+export function useEventListener(ref, event, listener, deps = []) {
   useEffect(() => {
     if (ref.current) {
       ref.current.addEventListener(event, listener)
@@ -11,5 +11,5 @@ export function useEventListener(ref, event, listener) {
     }
     return () => {}
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref])
+  }, [ref, ...deps])
 }

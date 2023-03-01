@@ -8,6 +8,7 @@ const ContestLayout = lazy(() => import('./layouts/contest'))
 const Home = lazy(() => import('./pages/Home'))
 const Events = lazy(() => import('./pages/Events'))
 const Contests = lazy(() => import('./pages/Contests'))
+const Contest = lazy(() => import('./pages/Contests/Contest'))
 const Faqs = lazy(() => import('./pages/Faqs'))
 const Sponsors = lazy(() => import('./pages/Sponsors'))
 const LoginPage = lazy(() => import('./pages/auth/login'))
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
 
       <Route element={<ContestLayout />}>
         <Route path="/contests" element={<Contests />} />
+        <Route path="/contests/:contest" element={<Contest />} />
       </Route>
     </>
   )

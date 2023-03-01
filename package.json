@@ -53,6 +53,8 @@
     "@iconify-icons/mdi": "^1.2.41",
     "@iconify/react": "^4.1.0",
     "@tailwindcss/line-clamp": "^0.4.2",
+    "@tranzis/react": "file:packages/tranzis-react-0.1.0.tgz",
+    "focus-trap": "^7.3.1",
     "prettier": "^2.8.4",
     "serve": "^14.2.0",
     "source-map-explorer": "^2.5.3"

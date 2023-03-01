@@ -13,6 +13,8 @@ export default function Transition({
   leave = "",
   leaveFrom = "",
   leaveTo = "",
+  afterLeave, // call after leave, if any
+  ...props
 }) {
   const [initialClasses, { setAll }] = useList([])
 
@@ -23,8 +25,8 @@ export default function Transition({
   }, [])
 
   // 1 = start
-  // 2 = transitioning
-  // 3 = end
+  // 2 = transitioning to end
+  // 3 = unmount after leave
   const [transitionState, setTransitionState] = useState(1)
   const resetting = useRef(false)
 
@@ -61,7 +63,10 @@ export default function Transition({
       }
       else if (transitionState === 2) {
         const newProps = { className: classNames(initialClasses[i], leave, leaveTo) }
-        if (unmount) newProps.onTransitionEnd = () => setTransitionState(3)
+        newProps.onTransitionEnd = () => {
+          afterLeave?.()
+          if (unmount) setTransitionState(3)
+        }
 
         clonedChild = cloneElement(child, newProps)
       }
@@ -73,5 +78,5 @@ export default function Transition({
     }
   })
 
-  return createElement(as, [], modifiedChildren)
+  return createElement(as, props, modifiedChildren)
 }
