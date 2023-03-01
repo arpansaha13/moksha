@@ -6,7 +6,10 @@ const breakpoints = {
   '2xl': 1536,
 }
 
-const getVisibleCount = (valuesAtBreakpoint) => {
+/**
+ * Needs to be used **after mounting** when `window` object is available.
+ */
+const getValueAtBreakpoint = valuesAtBreakpoint => {
   const windowWidth = window.screen.width
 
   const valuesInSequence = [
@@ -30,4 +33,4 @@ const getVisibleCount = (valuesAtBreakpoint) => {
   return effectiveValue
 }
 
-export default getVisibleCount
+export default getValueAtBreakpoint

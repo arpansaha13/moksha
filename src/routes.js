@@ -1,19 +1,19 @@
-import { Suspense, lazy } from "react"
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
-const DefaultLayout = lazy(() => import('./layouts/default'))
-const AuthLayout = lazy(() => import('./layouts/auth'))
-const ContestLayout = lazy(() => import('./layouts/contest'))
+import DefaultLayout from './layouts/default'
+import AuthLayout from './layouts/auth'
+import ContestLayout from './layouts/contest'
 
-const Home = lazy(() => import('./pages/Home'))
-const Events = lazy(() => import('./pages/Events'))
-const Contests = lazy(() => import('./pages/Contests'))
-const Faqs = lazy(() => import('./pages/Faqs'))
-const Sponsors = lazy(() => import('./pages/Sponsors'))
-const LoginPage = lazy(() => import('./pages/auth/login'))
-const RegistrationPage = lazy(() => import('./pages/auth/register'))
-const VerificationPage = lazy(() => import('./pages/auth/verification'))
-const ForgotPasswordPage = lazy(() => import('./pages/auth/forgot-password'))
+import Home from './pages/Home'
+import Events from './pages/Events'
+import Contests from './pages/Contests'
+import Contest from './pages/Contests/Contest'
+import Faqs from './pages/Faqs'
+import Sponsors from './pages/Sponsors'
+import LoginPage from './pages/auth/login'
+import RegistrationPage from './pages/auth/register'
+import VerificationPage from './pages/auth/verification'
+import ForgotPasswordPage from './pages/auth/forgot-password'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,17 +34,16 @@ const router = createBrowserRouter(
 
       <Route element={<ContestLayout />}>
         <Route path="/contests" element={<Contests />} />
+        <Route path="/contests/:contest" element={<Contest />} />
       </Route>
     </>
   )
 )
 
+
 function AppRoutes() {
   return (
-    <Suspense fallback={<div />}>
-      <RouterProvider router={router} />
-    </Suspense>
+    <RouterProvider router={router} />
   )
 }
-
 export default AppRoutes

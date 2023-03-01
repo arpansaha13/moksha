@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import Container from '../../components/common/Container'
 import TzCardsSlider from "../../components/TzCardsSlider"
 import { Icon } from '@iconify/react'
@@ -19,9 +19,12 @@ const contests = [
   })(),
 ]
 
+
 function Contests() {
+  const cardGap = useMemo(() => ({ base: 16, sm: 20, xl: 32 }), [])
+
   return (
-    <section className="flex-grow w-full prose prose-invert max-w-none" id='events-list'>
+    <section className="flex-grow w-full markdown" id='events-list'>
       <div className="mx-auto max-w-xs sm:max-w-3xl px-2 sm:px-0 text-center">
         <h2>
           Lorem Ipsum
@@ -40,7 +43,7 @@ function Contests() {
           {
             ({ scrollToStart, scrollToEnd, prev, next, start, end, total }) => (
               <>
-                <TzCardsSlider className='w-full h-80' gap={{ base: 16, sm: 20, xl: 32 }}>
+                <TzCardsSlider className='w-full h-80' gap={cardGap}>
                   {
                     event => (
                       <div className="not-prose w-full h-full bg-amber-900/60 rounded-md flex items-center justify-center text-5xl">

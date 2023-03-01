@@ -10,11 +10,11 @@ import classNames from '../../utils/classNames'
 */
 
 export default function BaseInput(props) {
-  const { id, label, innerRef, validationError = null, disabled = false, ...inputAttrs } = props
+  const { id, label, innerRef, validationError = null, disabled = false, srOnlyLabel = false, ...inputAttrs } = props
 
   return (
     <div className="relative">
-      <label htmlFor={id} className="block text-sm font-medium text-gray-100">
+      <label htmlFor={id} className={classNames("block text-sm font-medium text-gray-100", srOnlyLabel && 'sr-only')}>
         {label}
       </label>
       <div className="mt-1">
@@ -24,7 +24,7 @@ export default function BaseInput(props) {
           ref={innerRef}
           {...inputAttrs}
           className={classNames(
-            "block w-full appearance-none rounded-md  px-3 py-2 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-amber-500 sm:text-sm",
+            "block w-full appearance-none rounded-md  px-3 py-2 text-gray-50 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-amber-500 text-sm",
             disabled ? 'bg-amber-900/50 border-none' : 'bg-amber-900/70 border border-gray-300 shadow-sm',
           )}
         />

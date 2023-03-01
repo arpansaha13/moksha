@@ -4,8 +4,8 @@ import { useSize } from '../../hooks/useSize'
 import { useScrolling } from '../../hooks/useScrolling'
 import { useData } from './Wrapper'
 import classNames from '../../utils/classNames'
-import getValueByBreakpoint from '../../utils/getValueByBreakpoint'
-import styles from './style.css'
+import getValueByBreakpoint from '../../utils/getValueAtBreakpoint'
+import styles from './style.module.css'
 
 export default function TzCardsSlider({ children, className, gap }) {
   const { context, setContext } = useData()
@@ -16,7 +16,7 @@ export default function TzCardsSlider({ children, className, gap }) {
 
   const cardWidth = useMemo(
     () => getCardWidth(rootWidth, context.visibleCount, effectiveGap, context.exposeWidth),
-    [effectiveGap, rootWidth, context]
+    [effectiveGap, rootWidth, context.visibleCount, context.exposeWidth]
   )
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function TzCardsSlider({ children, className, gap }) {
         ref={rootRef}
         className={classNames(
           'py-2 w-full h-full flex overflow-x-scroll scroll-smooth snap-x',
-          styles['tz-card-stack-carousal-scrollbar']
+          styles['tz-cards-slider-scrollbar']
         )}
         style={{ gap: `${effectiveGap}px` }}
       >
