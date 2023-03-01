@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
@@ -62,6 +63,10 @@ const SignUpPage = () => {
 
   return (
     <div className='sm:max-w-2xl px-4 sm:px-0'>
+      <Helmet>
+        <title>Moksha | Sign up</title>
+      </Helmet>
+
       <Notification
         show={notification.show}
         setShow={bool => setNotification('show', bool)}

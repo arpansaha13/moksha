@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { useHashLink } from '../hooks/useHashLink'
 import { Icon } from '@iconify/react'
@@ -26,6 +27,9 @@ function Faqs() {
 
   return (
     <Container className="py-4">
+      <Helmet>
+        <title>Moksha | FAQs</title>
+      </Helmet>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2 markdown" id='moksha-faqs'>
           <h1>Frequently Asked Questions</h1>

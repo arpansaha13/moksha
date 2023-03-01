@@ -1,10 +1,12 @@
-import { Children, Fragment, createElement, cloneElement, useEffect, useState, useRef } from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Children, Fragment, createElement, cloneElement, useEffect, useState, useRef, useCallback } from "react"
 import { useList } from '../../hooks/useList'
 import classNames from '../../utils/classNames'
 
 export default function Transition({
   show,
   unmount = true,
+  appear = false,
   as = Fragment,
   children,
   enter = "",
@@ -13,8 +15,11 @@ export default function Transition({
   leave = "",
   leaveFrom = "",
   leaveTo = "",
+  afterLeave, // call after leave, if any
+  ...props
 }) {
   const [initialClasses, { setAll }] = useList([])
+  const isFirstRender = useRef(!appear)
 
   useEffect(() => {
     setAll(Children.map(children, (child, i) => {
@@ -23,25 +28,39 @@ export default function Transition({
   }, [])
 
   // 1 = start
-  // 2 = transitioning
-  // 3 = end
+  // 2 = transitioning to end
+  // 3 = unmount after leave
   const [transitionState, setTransitionState] = useState(1)
+  const [entering, setEntering] = useState(false)
+  const [leaving, setLeaving] = useState(false)
+  const [modifiedChildren, setChildren] = useState(null)
   const resetting = useRef(false)
 
-  const resetTransitionState = () => {
+  const resetTransitionState = useCallback(() => {
     resetting.current = true
     setTimeout(() => setTransitionState(1))
-  }
+  }, [])
 
-  const modifiedChildren = Children.map(children, (child, i) => {
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    if (show) setEntering(true)
+    else setLeaving(true)
+  }, [show])
+
+  useEffect(() => {
     if (resetting.current) {
       resetting.current = false
-      return show ? child : null
+      setChildren(show || !unmount ? modifiedChildren : null)
     }
 
-    let clonedChild
+    if (!entering) return
 
-    if (show) {
+    const newChildren = Children.map(children, (child, i) => {
+      let clonedChild
+
       if (transitionState === 1) {
         clonedChild = cloneElement(child, { className: classNames(initialClasses[i], enter, enterFrom) })
         setTimeout(() => setTransitionState(2))
@@ -49,29 +68,54 @@ export default function Transition({
       else if (transitionState === 2) {
         clonedChild = cloneElement(child, {
           className: classNames(initialClasses[i], enter, enterTo),
-          onTransitionEnd: resetTransitionState
+          onTransitionEnd: () => {
+            resetTransitionState()
+            setEntering(false)
+          }
         })
       }
       return clonedChild
+    })
+    setChildren(newChildren)
+  }, [entering, transitionState])
+
+  useEffect(() => {
+    if (resetting.current) {
+      resetting.current = false
+      setChildren(show || !unmount ? modifiedChildren : null)
     }
-    else {
+
+    if (!leaving) return
+
+    const newChildren = Children.map(children, (child, i) => {
+      let clonedChild
+
       if (transitionState === 1) {
         clonedChild = cloneElement(child, { className: classNames(initialClasses[i], leave, leaveFrom) })
         setTransitionState(2)
       }
       else if (transitionState === 2) {
-        const newProps = { className: classNames(initialClasses[i], leave, leaveTo) }
-        if (unmount) newProps.onTransitionEnd = () => setTransitionState(3)
+        const newProps = {
+          className: classNames(initialClasses[i], leave, leaveTo),
+          onTransitionEnd: () => {
+            afterLeave?.()
+            if (unmount) setTransitionState(3)
+            else setLeaving(false)
+          }
+        }
 
         clonedChild = cloneElement(child, newProps)
       }
       else if (transitionState === 3) {
         clonedChild = null
         resetTransitionState()
+        setLeaving(false)
       }
       return clonedChild
-    }
-  })
+    })
 
-  return createElement(as, [], modifiedChildren)
+    setChildren(newChildren)
+  }, [leaving, transitionState])
+
+  return createElement(as, props, modifiedChildren)
 }

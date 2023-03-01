@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
@@ -49,6 +50,10 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className='max-w-md px-4 sm:px-0'>
+      <Helmet>
+        <title>Moksha | Forgot password</title>
+      </Helmet>
+
       <form className="space-y-6" onSubmit={signIn}>
         <BaseInput
           id="email"

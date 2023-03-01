@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
@@ -73,6 +74,10 @@ const VerificationPage = () => {
 
   return (
     <div className='max-w-md px-4 sm:px-0'>
+      <Helmet>
+        <title>Moksha | Verification</title>
+      </Helmet>
+
       <Notification
         show={notification.show}
         setShow={bool => setNotification('show', bool)}
