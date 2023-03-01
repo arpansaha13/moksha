@@ -3,6 +3,12 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import DefaultLayout from './layouts/default'
 import AuthLayout from './layouts/auth'
 import ContestLayout from './layouts/contest'
+import AccountLayout from './layouts/account'
+
+// const DefaultLayout = lazy(() => import('./layouts/default'))
+// const AuthLayout = lazy(() => import('./layouts/auth'))
+// const ContestLayout = lazy(() => import('./layouts/contest'))
+// const AccountLayout = lazy(() => import('./layouts/account'))
 
 import Home from './pages/Home'
 import Events from './pages/Events'
@@ -10,10 +16,22 @@ import Contests from './pages/Contests'
 import Contest from './pages/Contests/Contest'
 import Faqs from './pages/Faqs'
 import Sponsors from './pages/Sponsors'
+import Dashboard from './pages/Dashboard'
 import LoginPage from './pages/auth/login'
 import RegistrationPage from './pages/auth/register'
 import VerificationPage from './pages/auth/verification'
 import ForgotPasswordPage from './pages/auth/forgot-password'
+
+// const Home = lazy(() => import('./pages/Home'))
+// const Dashboard = lazy(() => import('./pages/Dashboard'))
+// const Events = lazy(() => import('./pages/Events'))
+// const Contests = lazy(() => import('./pages/Contests'))
+// const Faqs = lazy(() => import('./pages/Faqs'))
+// const Sponsors = lazy(() => import('./pages/Sponsors'))
+// const LoginPage = lazy(() => import('./pages/auth/login'))
+// const RegistrationPage = lazy(() => import('./pages/auth/register'))
+// const VerificationPage = lazy(() => import('./pages/auth/verification'))
+// const ForgotPasswordPage = lazy(() => import('./pages/auth/forgot-password'))
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +41,10 @@ const router = createBrowserRouter(
         <Route path="/events" element={<Events />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/sponsors" element={<Sponsors />} />
+
+        <Route element={<AccountLayout />}>
+          <Route path="/account/dashboard" element={<Dashboard />} />
+        </Route>
       </Route>
 
       <Route element={<AuthLayout />}>
