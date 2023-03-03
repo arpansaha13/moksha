@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { useState } from "react"
 import { Helmet } from "react-helmet"
-import Model from "../components/Model"
 
 function Events() {
   const [openModel, setOpenModel] = useState(false);
@@ -34,7 +33,6 @@ function Events() {
             className="box-border cursor-pointer w-[889px] object-fill h-[250px] sm:h-[400px] left-0 border-solid border-1 border-black bg-prime-yell"
           />
         </div>
-        <Model open={openModel} />
       </div>
     </>
   );

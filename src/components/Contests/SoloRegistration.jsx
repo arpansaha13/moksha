@@ -1,6 +1,5 @@
 import { memo } from "react"
 import BaseButton from "../base/BaseButton"
-import BaseButtonLink from "../base/BaseButtonLink"
 import Sheet from "../common/Sheet"
 
 const SoloRegistration = ({ onSubmit }) => {
