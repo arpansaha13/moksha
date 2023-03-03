@@ -56,7 +56,7 @@ const router = createBrowserRouter(
 
       <Route element={<ContestLayout />}>
         <Route path="/contests" element={<Contests />} />
-        <Route path="/contests/:contest" element={<Contest />} />
+        <Route path="/contests/:club/:contest" element={<Contest />} />
       </Route>
     </>
   )

@@ -15,8 +15,8 @@ export default function TzCardsSlider({ children, className, gap }) {
   const isScrolling = useScrolling(rootRef)
 
   const cardWidth = useMemo(
-    () => getCardWidth(rootWidth, context.visibleCount, effectiveGap, context.exposeWidth),
-    [effectiveGap, rootWidth, context.visibleCount, context.exposeWidth]
+    () => getCardWidth(rootWidth, context.visibleCount, effectiveGap, context.exposeWidth, context.list.length),
+    [effectiveGap, rootWidth, context.visibleCount, context.exposeWidth, context.list.length]
   )
 
   useEffect(() => {
@@ -79,7 +79,8 @@ const Card = memo(({ children, item, style }) => (
   </div>
 ))
 
-const getCardWidth = (rootWidth, visibleCount, gap, exposeWidth) => {
-  const availableWidth = rootWidth - exposeWidth
+const getCardWidth = (rootWidth, visibleCount, gap, exposeWidth, listLength) => {
+  const effectiveExposeWidth = listLength > visibleCount ? exposeWidth : 0
+  const availableWidth = rootWidth - effectiveExposeWidth
   return Math.floor((availableWidth - (visibleCount - 1) * gap) / visibleCount)
 }
