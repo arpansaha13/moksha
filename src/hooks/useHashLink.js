@@ -1,24 +1,19 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useLocation } from 'react-router-dom'
 
 export function useHashLink() {
-  const hashElRef = useRef(null)
   const location = useLocation()
 
   useEffect(() => {
-    if (hashElRef.current) {
+    if (!location.hash) return
+
+    const el = document.getElementById(location.hash.replace('#', ''))
+
+    if (el) {
       window.scrollTo({
-        top: hashElRef.current.offsetTop,
+        top: el.offsetTop,
         behavior: 'smooth'
       })
     }
   }, [location.hash])
-
-  const hashRef = id => ref => {
-      if (location.hash.replace('#', '') === id) {
-      hashElRef.current = ref
-    }
-  }
-
-  return hashRef
 }

@@ -23,13 +23,14 @@ const faqs = [
 ]
 
 function Faqs() {
-  const hashRef = useHashLink()
+  useHashLink()
 
   return (
     <Container className="py-4">
       <Helmet>
         <title>Moksha | FAQs</title>
       </Helmet>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2 markdown" id='moksha-faqs'>
           <h1>Frequently Asked Questions</h1>
@@ -38,7 +39,6 @@ function Faqs() {
             {
               faqs.map(faq => (
                 <Sheet
-                  innerRef={hashRef(faq.id)}
                   className="group p-4 sm:p-6 bg-amber-900/30"
                   key={ faq.id }
                   id={ faq.id }
