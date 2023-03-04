@@ -1,3 +1,4 @@
+from rest_framework.exceptions import AuthenticationFailed
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 from .serializers import *
@@ -7,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import secrets
 import string
+import jwt
 events = {'E-1': ["dance", 3], 'E-2': ["singing", 2],
           'E-3': ["drama", 5], 'E-4': ["acting", 1]}
 
@@ -15,14 +17,23 @@ events = {'E-1': ["dance", 3], 'E-2': ["singing", 2],
 
 class RegisterEvent(APIView):
     def post(self, request):
-        user_id = request.data['user_id']
+        token = request.COOKIES['jwt']
+        print(token)
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        print(payload)
+        user = User.objects.filter(user_id=payload['id']).first()
         event_id = request.data['event_id']
 
-        user = User.objects.filter(user_id=user_id).first()
         # print(user)
         if user:
             user_solo = SoloEvent.objects.filter(
-                user_id=user_id, event_id=event_id).first()
+                user_id=user.user_id, event_id=event_id).first()
             if user_solo:
                 return Response({'message': "User already registered for the event!"}, status=400)
             print(request.data)
@@ -37,18 +48,36 @@ class RegisterEvent(APIView):
 
 
 class EventDetails(APIView):
-    def get(self, request, id):
+    def get(self, request, id):#?query_param e ?username=something link er last e
         SE_events = SoloEvent.objects.filter(user_id=id).all()
         TE_events = TeamEvent.objects.filter(user_id=id).all()
 
         serializer = SoloEventSerializers(SE_events, many=True)
         serializer1 = TeamEventSerializers(TE_events, many=True)
 
-        if serializer.data == [] and serializer1.data == []:
-            return Response({'message': "No registered events!"}, status=404)
+        # Arpan koise
+        # if serializer.data == [] and serializer1.data == []:
+        #     return Response({'message': "No registered events!"}, status=404)
 
         return Response({'message': 'Success', 'payload': {'solo_event': serializer.data, 'team_event': serializer1.data}}, status=200)
 
+class EventDetailsUserName(APIView):
+    def get(self, request):#?query_param e ?username=something link er last e
+        # username=request.data['username']
+        username=request.GET.get('username', None)
+        user1=User.objects.filter(username=username).first()
+        id=user1.id
+        SE_events = SoloEvent.objects.filter(user_id=id).all()
+        TE_events = TeamEvent.objects.filter(user_id=id).all()
+
+        serializer = SoloEventSerializers(SE_events, many=True)
+        serializer1 = TeamEventSerializers(TE_events, many=True)
+
+        # Arpan koise
+        # if serializer.data == [] and serializer1.data == []:
+        #     return Response({'message': "No registered events!"}, status=404)
+
+        return Response({'message': 'Success', 'payload': {'solo_event': serializer.data, 'team_event': serializer1.data}}, status=200)
 
 class SoloEventsApi(APIView):
     def get(self, request):
@@ -98,19 +127,28 @@ class AddEvent(APIView):
 # TEAM EVENT APIs
 class CreateTeam(APIView):
     def post(self, request):
-        user_id = request.data['user_id']
-        user_1 = User.objects.filter(user_id=user_id).first()
+        token = request.COOKIES['jwt']
+        print(token)
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        print(payload)
+        user_1= User.objects.filter(user_id=payload['id']).first()
         if user_1 is None:
             return Response({'message': 'Unregistered User!'}, status=403)
         
-        user = TeamDetail.objects.filter(leader=user_id).first()
+        user = TeamDetail.objects.filter(leader=user_1.user_id).first()
         # print(user)
         if not user:
             serializer = TeamDetailsSerializers(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            user = TeamDetail.objects.filter(user_id=user_id).first()
-            user.leader = user_id
+            user = TeamDetail.objects.filter(user_id=user_1.user_id).first()
+            user.leader = user_1.user_id
             uid = generate_UID()
             user1 = TeamDetail.objects.filter(team_id=uid).first()
             while user1:
@@ -127,7 +165,17 @@ class CreateTeam(APIView):
 
 class JoinTeam(APIView):
     def post(self, request):
-        user_id = request.data['user_id']
+        token = request.COOKIES['jwt']
+        print(token)
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        print(payload)
+        user_id = payload['id']
         team_id = request.data['team_id']
 
         user = TeamDetail.objects.filter(team_id=team_id).first()
@@ -152,7 +200,17 @@ class JoinTeam(APIView):
 
 class TeamEventRegistration(APIView):
     def post(self, request):
-        user_id = request.data['user_id']
+        token = request.COOKIES['jwt']
+        print(token)
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        print(payload)
+        user_id = payload['id']
         event_id = request.data['event_id']
         user = TeamDetail.objects.filter(
             user_id=user_id, leader=user_id).first()

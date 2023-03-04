@@ -1,3 +1,4 @@
+from rest_framework.exceptions import AuthenticationFailed
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 from .serializers import *
@@ -8,7 +9,8 @@ from django.core.mail import send_mail
 import random
 import secrets
 import string
-
+import jwt
+import datetime
 
 class RegisterApi(APIView):
     def post(self, request):
@@ -32,6 +34,17 @@ class RegisterApi(APIView):
                 user.otp = otp_generated
                 user.user_id = uid
                 user.save()
+
+                payload = {
+                    'id': uid,
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                    'iat': datetime.datetime.utcnow(),
+                }
+
+                token = jwt.encode(payload, 'secret00', algorithm='HS256')
+
+                response = Response()
+                response.set_cookie(key='otp', value=token, httponly=True)
                 send_mail(
                     'Subject here',
                     otp_generated,
@@ -39,58 +52,170 @@ class RegisterApi(APIView):
                     [email],
                     fail_silently=False,
                 )
-                return Response({'message': 'User added successfully!!'}, status=201)
-            return Response({'message': 'User already Exists!'}, status=409)
-        return Response({'message': 'Password Not Matched!'}, status=400)
+                response.data = {
+                        'message': "User added successfully!!",
+                    }
+                response.status_code=201
+                return response
+            response.data = {
+                'message': "User already Exists!",
+            }
+            response.status_code=409
+            return response
+        response.data = {
+            'message': "Password Not Matched!",
+        }
+        response.status_code=400
+        return response
+        
 
 
 class LoginApi(APIView):
     def post(self, request):
-        email = request.data['email']
-        user = User.objects.filter(email=email).first()
-        if user:
-            print(user.user_id)
-            if user.password == request.data['password']:
-                if user.otp == '':
-                    user.logged_in = True
-                    user.save()
-                    return Response({'message': 'User logged in!!'}, status=200)
-                return Response({'message': 'Please validate your account using otp!!'}, status=403)
-            return Response({'message': 'Invalid Password!!'}, status=400)
-        return Response({'message': 'User Not Found!'}, status=404)
+        try:
+            token = request.COOKIES['jwt']
+
+            try:
+                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+                return Response({'message': 'User Already Logged In!'}, status=200)
+            except jwt.ExpiredSignatureError:
+                email = request.data['email']
+                user = User.objects.filter(email=email).first()
+                if user:
+                    print(user.user_id)
+                    payload = {
+                        'id': user.user_id,
+                        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                        'iat': datetime.datetime.utcnow(),
+                    }
+
+                    token = jwt.encode(payload, 'secret00', algorithm='HS256')
+
+                    response = Response()
+                    if user.password == request.data['password']:
+                        if user.otp == "":
+                            response.set_cookie(key='jwt', value=token, httponly=True)
+                            user.logged_in = True
+                            user.save()
+                            response.data = {
+                                'message': "User Logged In",
+                            }
+                            response.status_code=200
+                            return response
+                        print(user.otp)
+                        response.data = {
+                            'message': "Please validate your account using otp!!",
+                        }
+                        response.status_code=403
+                        return response
+                    response.data = {
+                        'message': "Invalid Password!!",
+                    }
+                    response.status_code=400
+                    return response
+                response.data = {
+                    'message': "User Not Found!!",
+                }
+                response.status_code=400
+                return response
+        except:
+        
+            email = request.data['email']
+            user = User.objects.filter(email=email).first()
+            if user:
+                print(user.user_id)
+                payload = {
+                    'id': user.user_id,
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                    'iat': datetime.datetime.utcnow(),
+                }
+
+                token = jwt.encode(payload, 'secret00', algorithm='HS256')
+
+                response = Response()
+                if user.password == request.data['password']:
+                    if user.otp == None:
+                        response.set_cookie(key='jwt', value=token, httponly=True)
+                        user.logged_in = True
+                        user.save()
+                        response.data = {
+                            'message': "User Logged In",
+                        }
+                        response.status_code=200
+                        return response
+                    print(user.otp)
+                    response.data = {
+                        'message': "Please validate your account using otp!!",
+                    }
+                    response.status_code=403
+                    return response
+                response.data = {
+                    'message': "Invalid Password!!",
+                }
+                response.status_code=400
+                return response
+            response.data = {
+                'message': "User Not Found!!",
+            }
+            response.status_code=400
+            return response
 
 
 class ForgotApi(APIView):
     def post(self, request):
-        email = request.data['email']
-        user = User.objects.filter(email=email).first()
+        user_id=request.data['user_id']
+        user = User.objects.filter(user_id=user_id).first()
         if user:
-            new_password = generate_password()
+            email=user.email
+            payload = {
+                    'id': user.user_id,
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                    'iat': datetime.datetime.utcnow(),
+                }
+
+            token = jwt.encode(payload, 'secret00', algorithm='HS256')
+
+            response = Response()
+            response.set_cookie(key='reset', value=token, httponly=True)
+            # new_password = generate_password()
             send_mail(
                 'Subject here',
-                'Your new password is: '+new_password+'. Link will be here.',
+                'Your reset password link is here',
                 'bhowmikarghajit@gmail.com',
                 [email],
                 fail_silently=False,
             )
-            user.password = new_password
-            user.save()
-            return Response({'message': 'A new password has been sent to your mail. Use it to set new password!'}, status=200)
-        return Response({'message': 'User Not Found!'}, status=404)
-
+            # user.password = new_password
+            # user.save()
+            response.data = {
+                    'message': "Reset Password Link is Sent!!",
+                }
+            response.status_code=200
+            return response
+        response.data = {
+            'message': "User Not Found!",
+                }
+        response.status_code=404
+        return response   
 
 class ChangePasswordApi(APIView):
     def post(self, request):
-        email = request.data['email']
-        code = request.data['verification_code']
+        token = request.COOKIES['reset']
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
         new_password = request.data['new_password']
-        user = User.objects.filter(email=email).first()
+        user = User.objects.filter(user_id=payload['id']).first()
         if user:
-            if user.password == code:
-                user.password = new_password
-                user.save()
-                return Response({'message': 'Password Changed!!'}, status=200)
-            return Response({'message': 'Password Not Matched!!'}, status=400)
+            user.password = new_password
+            user.save()
+            response = Response()
+            response.delete_cookie('reset')
+            return Response({'message': 'Password Changed!!'}, status=200)
         return Response({'message': 'User Not Found!'}, status=404)
 
 
@@ -103,7 +228,15 @@ class ViewApi(APIView):
 
 class ViewParticularApi(APIView):
     def get(self, request, id):
-        user = User.objects.filter(user_id=id).first()
+        token = request.COOKIES['jwt']
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        user = User.objects.filter(user_id=payload['id']).first()
         if user:
             serializer = UsersSerializers(user)
             print(serializer.data)
@@ -112,25 +245,52 @@ class ViewParticularApi(APIView):
 
 
 class LogoutApi(APIView):
-    def post(self, request):
-        email = request.data['email']
-        user = User.objects.filter(email=email).first()
+    def get(self, request):
+        token = request.COOKIES['jwt']
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        user = User.objects.filter(user_id=payload['id']).first()
         if user:
             user.logged_in = False
             user.save()
-            return Response({'message': 'User Logged Out!!'}, status=200)
-        return Response({'message': 'User Not Found!'}, status=404)
+            response = Response()
+            response.delete_cookie('jwt')
+            response.data = {
+                'message': 'User have successfully logged out!'
+            }
+            response.status_code=200
+            return response
+            
+        response.data = {
+                'message': 'User Not Found!'
+            }
+        response.status_code=404
+        return response
 
 
 class OTPValidation(APIView):
     def post(self, request):
+        token = request.COOKIES['otp']
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        user = User.objects.filter(user_id=payload['id']).first()
         otp = request.data['otp']
-        email = request.data['email']
-        user = User.objects.filter(email=email).first()
         if user:
             if user.otp == otp:
                 user.otp = ''
                 user.save()
+                response=Response()
+                response.delete_cookie('jwt')
                 return Response({'message': 'User Validated!!'}, status=200)
             return Response({'message': 'OTP Not Matched!'}, status=401)
         return Response({'message': 'User Not Found!'}, status=404)
@@ -138,10 +298,19 @@ class OTPValidation(APIView):
 
 class ResendOtp(APIView):
     def post(self, request):
-        email = request.data['email']
-        user = User.objects.filter(email=email).first()
+        token = request.COOKIES['otp']
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+        user = User.objects.filter(user_id=payload['id']).first()
+        
         if user is None:
             return Response({'message': 'User Not Found!'}, status=404)
+        email=user.email
         x = random.randint(1000, 9999)
         otp_generated = str(x)
         send_mail(
