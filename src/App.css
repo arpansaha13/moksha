@@ -9,7 +9,7 @@
 }
 
 body {
-  background-color: #241711;
+  @apply bg-gradient-to-tr from-darkBrown via-darkBrown to-brown;
 }
 
 ::-webkit-scrollbar {

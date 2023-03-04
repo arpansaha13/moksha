@@ -3,34 +3,11 @@
 import { Link } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
-// import { AiOutlineClose, AiOutlineAlignRight } from "react-icons/ai"
+import closeIcon from '@iconify-icons/mdi/close'
 import { useAppContext } from '../../containers/DataProvider'
-import './Navbar.css'
-
-// <img src={click ? <AiOutlineClose /> : <AiOutlineAlignRight />} />
-
-const tabs = [
-  {
-    to: '/',
-    name: 'Home',
-  },
-  {
-    to: '/events',
-    name: 'Events',
-  },
-  {
-    to: '/contests',
-    name: 'Contests',
-  },
-  {
-    to: '/faqs',
-    name: 'FAQs',
-  },
-  {
-    to: '/sponsors',
-    name: 'Sponsors',
-  },
-]
+import { useWindowSize } from "../../hooks/useWindowSize"
+import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
+import navTabs from '../../data/nav-tabs'
 
 const NavTab = ({ to, children }) => (
   <Link to={to} className="block w-max font-semibold text-lg sm:text-2xl p-1.5 uppercase transition-colors">
@@ -42,29 +19,39 @@ function Navbar() {
   const { appContext } = useAppContext()
   const isAuthorized = !!appContext.authUser.email
 
-  return (
-    <nav className="px-4 navbar sm:px-20 py-2.5 w-full flex justify-between top-0">
-      {/* Mobile Navbar */}
-      <div className="sm:hidden">
-        <button className="block p-1 w-10 h-10 focus:text-amber-600 border border-ochre rounded-md focus:ring-1 focus:ring-offset-1 focus:ring-offset-amber-200 focus:ring-amber-600 transition-colors relative">
-          <Icon icon={menuIcon} className="block" color="inherit" width='100%' height='100%' />
-        </button>
-      </div>
+  const { windowWidth } = useWindowSize()
 
-      {/* Desktop Navbar */}
-      <div className="hidden sm:block">
-        <ul className="flex gap-3 sm:gap-6">
-          {
-            tabs.map(tab => (
-              <li key={tab.to} className="">
-                <NavTab to={tab.to}>
-                  { tab.name }
-                </NavTab>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
+  if (windowWidth === null) return <></>
+
+  return (
+    <nav className="px-4 sm:px-20 h-[100px] w-full flex items-center justify-between text-ochre">
+      {
+        windowWidth < 1024 ? (
+          // Mobile Navbar
+          <TzFloatingWindow.Button className="block p-1 w-10 h-10 focus:text-amber-600 border border-ochre rounded-md focus:ring-1 focus:ring-offset-1 focus:ring-offset-amber-200 focus:ring-amber-600 transition-colors relative">
+            {
+              ({float}) => (
+                <Icon icon={float ? closeIcon : menuIcon} className="block" color="inherit" width='100%' height='100%' />
+              )
+            }
+          </TzFloatingWindow.Button>
+        ) : (
+          // Desktop Navbar
+          <div>
+            <ul className="flex gap-3 sm:gap-6">
+              {
+                navTabs.map(tab => (
+                  <li key={tab.to} className="">
+                    <NavTab to={tab.to}>
+                      { tab.name }
+                    </NavTab>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        )
+      }
 
       {/* Common for both Mobile and Desktop */}
       {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useMemo, useState } from "react"
 
 const data = {
   authUser: {
@@ -15,8 +15,10 @@ const DataContext = createContext(null)
 const DataProvider = ({ children }) => {
   const [appContext, setAppContext] = useState(data)
 
+  const providerContext = useMemo(() => ({ appContext, setAppContext }), [appContext])
+
   return (
-    <DataContext.Provider value={{ appContext, setAppContext }}>
+    <DataContext.Provider value={providerContext}>
       {children}
     </DataContext.Provider>
   )

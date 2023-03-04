@@ -1,5 +1,6 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
+import FloatingWindow from './layouts/floating-window'
 import DefaultLayout from './layouts/default'
 import AuthLayout from './layouts/auth'
 import ContestLayout from './layouts/contest'
@@ -35,7 +36,7 @@ import ForgotPasswordPage from './pages/auth/forgot-password'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route element={<FloatingWindow />}>
       <Route element={<DefaultLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
@@ -58,7 +59,7 @@ const router = createBrowserRouter(
         <Route path="/contests" element={<Contests />} />
         <Route path="/contests/:club/:contest" element={<Contest />} />
       </Route>
-    </>
+    </Route>
   )
 )
 

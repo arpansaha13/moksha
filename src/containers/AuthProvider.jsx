@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useMemo, useState } from "react"
 
 const authUser = {
   email: '',
@@ -7,10 +7,12 @@ const authUser = {
 const AuthContext = createContext(null)
 
 const AuthProvider = ({ children }) => {
-  const [authContext, setAuthContext] = useState(authUser);
+  const [authContext, setAuthContext] = useState(authUser)
+
+  const providerContext = useMemo(() => ({ authContext, setAuthContext }), [authContext])
 
   return (
-    <AuthContext.Provider value={{ authContext, setAuthContext }}>
+    <AuthContext.Provider value={providerContext}>
       {children}
     </AuthContext.Provider>
   )
