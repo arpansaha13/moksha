@@ -1,9 +1,30 @@
-import { useState } from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useReducer } from "react"
 
-// interface UseListOptions {
-//   maxLength?: number
-//   minLength?: number
-// }
+function reducer(state, action) {
+  const index = action.index
+  const value = action.value
+  const newState = [...state]
+
+  switch (action.type) {
+    case 'set':
+      newState[index] = value
+      break
+    case 'push':
+      newState.push(value)
+      break
+    case 'pop':
+      if (typeof index !== 'undefined') newState.splice(index, 1)
+      else newState.pop()
+      break
+    case 'all':
+      return action.newList
+    default:
+      throw Error('Unknown action: ' + action.type)
+  }
+
+  return newState
+}
 
 export function useList(initialValue, options) {
   const minLength = options?.minLength
@@ -16,37 +37,27 @@ export function useList(initialValue, options) {
     throw new Error(`Length of list provided is more than the given "options.maxLength: ${maxLength}"`)
   }
 
-  const [list, setList] = useState(initialValue)
+  const [list, dispatch] = useReducer(reducer, initialValue)
 
-  const set = (index, value) => {
-    setList(state => {
-      const newState = [ ...state ]
-      newState[index] = value
-      return newState
-    })
-  }
+  const set = useCallback((index, value) => {
+    dispatch({ type: 'set', index, value })
+  }, [])
 
-  const push = (value) => {
+  const push = useCallback((value) => {
     if (typeof maxLength !== 'undefined' && list.length === maxLength) return
 
-    setList(state => {
-      const newState = [ ...state, value ]
-      return newState
-    })
-  }
+    dispatch({ type: 'push', value })
+  }, [])
 
-  const pop = (index) => {
+  const pop = useCallback((index) => {
     if (typeof minLength !== 'undefined' && list.length === minLength) return
 
-    setList(state => {
-      const newState = [ ...state ]
+    dispatch({ type: 'pop', index })
+  }, [])
 
-      if (typeof index !== 'undefined') newState.splice(index, 1)
-      else newState.pop()
+  const setAll = useCallback((newList) => {
+    dispatch({ type: 'all', newList })
+  }, [])
 
-      return newState
-    })
-  }
-
-  return [list, { set, push, pop, setAll: setList }]
+  return [list, { set, push, pop, setAll }]
 }
