@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { capitalCase } from 'change-case'
 import Container from '../../components/common/Container'
 import Sheet from '../../components/common/Sheet'
-import TzCardsSlider from "../../components/TzCardsSlider"
+import CardsSlider from "../../components/common/CardsSlider"
 import { useHashLink } from '../../hooks/useHashLink'
 import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
@@ -38,9 +38,6 @@ function Contests() {
               ))
             }
           </ul>
-        </div>
-
-        <div className=''>
         </div>
       </Container>
 
@@ -77,7 +74,7 @@ const ClubContest = memo(({ clubName, contests }) => {
     >
       <h2 className="mb-6 text-4xl font-semibold">{ capitalCase(clubName) }</h2>
 
-      <TzCardsSlider.Wrapper
+      <CardsSlider.Wrapper
         list={contests}
         exposeWidth={44}
         visibleCount={{ base: 1, sm: 3, xl: 4 }}
@@ -85,7 +82,7 @@ const ClubContest = memo(({ clubName, contests }) => {
         {
           ({ scrollToStart, scrollToEnd, prev, next, start, end, visible, total }) => (
             <>
-              <TzCardsSlider className='w-full h-96' gap={cardGap}>
+              <CardsSlider className='w-full h-96' gap={cardGap}>
                 {
                   contest => (
                     <Link to={`/contests/${clubName}/${contest.id}`}>
@@ -103,7 +100,7 @@ const ClubContest = memo(({ clubName, contests }) => {
                     </Link>
                   )
                 }
-              </TzCardsSlider>
+              </CardsSlider>
 
               {
                 total > visible && (
@@ -134,7 +131,7 @@ const ClubContest = memo(({ clubName, contests }) => {
             </>
           )
         }
-      </TzCardsSlider.Wrapper>
+      </CardsSlider.Wrapper>
     </Container>
   )
 })

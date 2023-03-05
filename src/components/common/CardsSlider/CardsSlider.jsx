@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { memo, useEffect, useMemo, useRef, useState } from "react"
-import { useSize } from '../../hooks/useSize'
-import { useScrolling } from '../../hooks/useScrolling'
+import { useSize } from '../../../hooks/useSize'
+import { useScrolling } from '../../../hooks/useScrolling'
 import { useData } from './Wrapper'
-import classNames from '../../utils/classNames'
-import getValueByBreakpoint from '../../utils/getValueAtBreakpoint'
+import classNames from '../../../utils/classNames'
+import getValueByBreakpoint from '../../../utils/getValueAtBreakpoint'
 import styles from './style.module.css'
 
-export default function TzCardsSlider({ children, className, gap }) {
+export default function CardsSlider({ children, className, gap }) {
   const { context, setContext } = useData()
   const rootRef = useRef(null)
   const [effectiveGap, setGap] = useState(0)
@@ -57,7 +57,7 @@ export default function TzCardsSlider({ children, className, gap }) {
         ref={rootRef}
         className={classNames(
           'py-2 w-full h-full flex overflow-x-scroll scroll-smooth snap-x',
-          styles['tz-cards-slider-scrollbar']
+          styles['cards-slider-scrollbar']
         )}
         style={{ gap: `${effectiveGap}px` }}
       >

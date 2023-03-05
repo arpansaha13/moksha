@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from "react"
-import { useMap } from '../../hooks/useMap'
-import getValueByBreakpoint from '../../utils/getValueAtBreakpoint'
+import { useMap } from '../../../hooks/useMap'
+import getValueByBreakpoint from '../../../utils/getValueAtBreakpoint'
 
 const DataContext = createContext(null)
 
