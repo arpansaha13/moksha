@@ -32,7 +32,7 @@ export default function AuthLayout() {
       <div className="min-w-screen min-h-screen flex flex-col justify-center py-8 sm:px-6 lg:px-8 relative z-20">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link to="/" className="block mx-auto w-16 h-16 relative">
-            <img src="/moksha-logo.svg" alt="Moksha logo" />
+            <img src="/moksha-logo.svg" alt="Moksha logo" className='w-full h-full' />
           </Link>
           <h2 className="mt-6 px-2 sm:px-0 text-center text-3xl font-bold tracking-tight">
             {heading}

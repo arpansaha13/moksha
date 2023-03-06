@@ -34,8 +34,8 @@ function AccountLayout() {
                   <NavLink
                     to={ tab.to }
                     className={({isActive}) => classNames(
-                      'block px-4 py-2 bg-gradient-to-r rounded-md',
-                      isActive ? 'from-amber-900' : 'sm:hover:from-amber-900/40',
+                      'block px-4 py-2 rounded-md',
+                      isActive ? 'bg-gradient-to-r from-amber-900' : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40',
                     )}
                   >
                     { tab.name }

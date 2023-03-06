@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar/Navbar'
+import Footer from '../components/Footer/Footer'
 import Castle from '../assets/castle.svg'
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop'
 
@@ -20,7 +21,7 @@ export default function DefaultLayout() {
       />
 
       <div className='relative z-20'>
-        <div className='w-full'>
+        <div>
           <ScrollToTop />
           <Navbar />
         </div>
@@ -28,6 +29,8 @@ export default function DefaultLayout() {
         <div>
           <Outlet />
         </div>
+
+        <Footer />
       </div>
     </div>
   )

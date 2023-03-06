@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import Navbar from '../components/Navbar/Navbar'
+import Footer from '../components/Footer/Footer'
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop'
 import CastleGate2 from '../assets/castle-gate-2.svg'
 
@@ -24,6 +25,8 @@ export default function ContestLayout() {
           <div>
             <Outlet />
           </div>
+
+          <Footer />
         </div>
       </div>
     </>
