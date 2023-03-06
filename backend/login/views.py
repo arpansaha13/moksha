@@ -139,7 +139,7 @@ class LoginApi(APIView):
                 ans=check_password(request.data['password'], user.password)
                 # print(ans)
                 if ans == True:
-                    if user.otp == None:
+                    if user.otp == "":
                         response.set_cookie(key='jwt', value=token, httponly=True)
                         user.logged_in = True
                         user.save()
