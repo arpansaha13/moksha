@@ -82,7 +82,7 @@ TEMPLATES = [
     },
 ]
 
-CORS_ORIGIN_WHITELIST = ['*']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -101,7 +101,7 @@ CORS_ALLOW_HEADERS = [
     'withCredentials'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['*']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
