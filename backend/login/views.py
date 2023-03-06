@@ -11,11 +11,15 @@ import secrets
 import string
 import jwt
 import datetime
+from django.contrib.auth.hashers import make_password,check_password
 
 class RegisterApi(APIView):
     def post(self, request):
         email = request.data['email']
+        response = Response()
         if request.data['password'] == request.data['confirm_password']:
+            main_password=make_password(request.data['password'])
+            # print(main_password)
             x = random.randint(1000, 9999)
             otp_generated = str(x)
             user = User.objects.filter(email=email).first()
@@ -33,6 +37,7 @@ class RegisterApi(APIView):
                 user = User.objects.filter(email=email).first()
                 user.otp = otp_generated
                 user.user_id = uid
+                user.password=main_password
                 user.save()
 
                 payload = {
@@ -43,7 +48,6 @@ class RegisterApi(APIView):
 
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
-                response = Response()
                 response.set_cookie(key='otp', value=token, httponly=True)
                 send_mail(
                     'Subject here',
@@ -72,6 +76,7 @@ class RegisterApi(APIView):
 
 class LoginApi(APIView):
     def post(self, request):
+        response = Response()
         try:
             token = request.COOKIES['jwt']
 
@@ -90,9 +95,9 @@ class LoginApi(APIView):
                     }
 
                     token = jwt.encode(payload, 'secret00', algorithm='HS256')
-
-                    response = Response()
-                    if user.password == request.data['password']:
+                    ans=check_password(request.data['password'], user.password)
+                    # print(ans)
+                    if ans == True:
                         if user.otp == "":
                             response.set_cookie(key='jwt', value=token, httponly=True)
                             user.logged_in = True
@@ -131,9 +136,9 @@ class LoginApi(APIView):
                 }
 
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
-
-                response = Response()
-                if user.password == request.data['password']:
+                ans=check_password(request.data['password'], user.password)
+                # print(ans)
+                if ans == True:
                     if user.otp == None:
                         response.set_cookie(key='jwt', value=token, httponly=True)
                         user.logged_in = True
@@ -163,6 +168,7 @@ class LoginApi(APIView):
 
 class ForgotApi(APIView):
     def post(self, request):
+        response = Response()
         user_id=request.data['user_id']
         user = User.objects.filter(user_id=user_id).first()
         if user:
@@ -175,7 +181,7 @@ class ForgotApi(APIView):
 
             token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
-            response = Response()
+            
             response.set_cookie(key='reset', value=token, httponly=True)
             # new_password = generate_password()
             send_mail(
@@ -201,6 +207,7 @@ class ForgotApi(APIView):
 class ChangePasswordApi(APIView):
     def post(self, request):
         token = request.COOKIES['reset']
+        response = Response()
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 
@@ -211,9 +218,9 @@ class ChangePasswordApi(APIView):
         new_password = request.data['new_password']
         user = User.objects.filter(user_id=payload['id']).first()
         if user:
-            user.password = new_password
+
+            user.password = make_password(new_password)
             user.save()
-            response = Response()
             response.delete_cookie('reset')
             return Response({'message': 'Password Changed!!'}, status=200)
         return Response({'message': 'User Not Found!'}, status=404)
@@ -247,6 +254,7 @@ class ViewParticularApi(APIView):
 class LogoutApi(APIView):
     def get(self, request):
         token = request.COOKIES['jwt']
+        response = Response()
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 
@@ -258,7 +266,6 @@ class LogoutApi(APIView):
         if user:
             user.logged_in = False
             user.save()
-            response = Response()
             response.delete_cookie('jwt')
             response.data = {
                 'message': 'User have successfully logged out!'
@@ -276,6 +283,7 @@ class LogoutApi(APIView):
 class OTPValidation(APIView):
     def post(self, request):
         token = request.COOKIES['otp']
+        response=Response()
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 
@@ -289,7 +297,6 @@ class OTPValidation(APIView):
             if user.otp == otp:
                 user.otp = ''
                 user.save()
-                response=Response()
                 response.delete_cookie('jwt')
                 return Response({'message': 'User Validated!!'}, status=200)
             return Response({'message': 'OTP Not Matched!'}, status=401)
