@@ -304,7 +304,7 @@ class OTPValidation(APIView):
 
 
 class ResendOtp(APIView):
-    def post(self, request):
+    def get(self, request):
         token = request.COOKIES['otp']
         if not token:
             raise AuthenticationFailed('Unauthenticated')
