@@ -18,10 +18,10 @@ import Contest from './pages/Contests/Contest'
 import Faqs from './pages/Faqs'
 import Sponsors from './pages/Sponsors'
 import Dashboard from './pages/Dashboard'
-import LoginPage from './pages/auth/login'
-import RegistrationPage from './pages/auth/register'
-import VerificationPage from './pages/auth/verification'
-import ForgotPasswordPage from './pages/auth/forgot-password'
+import Login from './pages/auth/login'
+import Registration from './pages/auth/register'
+import Verification from './pages/auth/verification'
+import ForgotPassword from './pages/auth/forgot-password'
 
 // const Home = lazy(() => import('./pages/Home'))
 // const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -49,10 +49,10 @@ const router = createBrowserRouter(
       </Route>
 
       <Route element={<AuthLayout />}>
-        <Route path="/auth/login" element={<LoginPage />} />
-        <Route path="/auth/register" element={<RegistrationPage />} />
-        <Route path="/auth/verification" element={<VerificationPage />} />
-        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Registration />} />
+        <Route path="/auth/verification" element={<Verification />} />
+        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       <Route element={<ContestLayout />}>
@@ -63,10 +63,8 @@ const router = createBrowserRouter(
   )
 )
 
-
 function AppRoutes() {
-  return (
-    <RouterProvider router={router} />
-  )
+  return <RouterProvider router={router} />
 }
+
 export default AppRoutes

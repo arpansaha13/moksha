@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import AuthProvider from '../containers/AuthProvider'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useAppContext } from '../containers/DataProvider'
 import CastleGate3 from '../assets/castle-gate-3.svg'
 
 const getHeading = (route) => {
@@ -19,6 +19,13 @@ const getHeading = (route) => {
 }
 
 export default function AuthLayout() {
+  const { appContext } = useAppContext()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (appContext.authenticated) navigate('/')
+  }, [])
+
   const location = useLocation()
   const [heading, setHeading] = useState(getHeading(location.pathname))
 
@@ -40,10 +47,8 @@ export default function AuthLayout() {
         </div>
 
         <div className="mt-8 w-full [&>*]:sm:mx-auto [&>*]:py-8 [&>*]px-4 [&>*]:sm:px-10 [&>*]:sm:w-full [&>*]:bg-amber-900/50 [&>*]:sm:rounded-lg [&>*]:shadow">
-          <AuthProvider>
-            {/* Use appropriate max-w-{size} on the root of this children */}
-            <Outlet />
-          </AuthProvider>
+          {/* Use appropriate max-w-{size} on the root of this children */}
+          <Outlet />
         </div>
       </div>
     </div>

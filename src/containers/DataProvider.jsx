@@ -1,6 +1,8 @@
-import { createContext, useContext, useMemo, useState } from "react"
+import { createContext, useContext, useMemo } from "react"
+import { useMap } from "../hooks/useMap"
 
 const data = {
+  authenticated: false,
   authUser: {
     name: '',
     username: '',
@@ -13,7 +15,7 @@ const data = {
 const DataContext = createContext(null)
 
 const DataProvider = ({ children }) => {
-  const [appContext, setAppContext] = useState(data)
+  const [appContext, { set: setAppContext }] = useMap(data)
 
   const providerContext = useMemo(() => ({ appContext, setAppContext }), [appContext])
 

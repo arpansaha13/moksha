@@ -30,7 +30,7 @@ const Notification = memo(({ title, description, show, setShow, status = 'succes
                       <Icon icon={checkIcon} className="block" color="inherit" width='100%' height='100%' />
                     </div>
                   ) : (
-                    <div className="h-7 w-7 text-red-500" aria-hidden="true">
+                    <div className="h-7 w-7 text-red-600" aria-hidden="true">
                       <AiOutlineExclamationCircle className='w-full h-full' />
                     </div>
                   )}

@@ -1,15 +1,40 @@
-import { useState } from "react";
+import { useCallback, useReducer } from "react"
 
-export function useMap(initialValue) {
-  const [map, setMap] = useState(initialValue)
 
-  const set = (key, value) => {
-    setMap(state => {
-      const newState = { ...state }
+function reducer(state, action) {
+  const key = action.key
+  const value = action.value
+  const newState = {...state}
+
+  switch (action.type) {
+    case 'set':
       newState[key] = value
-      return newState
-    })
+      break
+    case 'reset':
+      return {...action.initialValue}
+    case 'all':
+      return action.newMap
+    default:
+      throw Error('Unknown action: ' + action.type)
   }
 
-  return [map, { set, setAll: setMap }]
+  return newState
+}
+
+export function useMap(initialValue) {
+  const [map, dispatch] = useReducer(reducer, initialValue)
+
+  const set = useCallback((key, value) => {
+    dispatch({ type: 'set', key, value })
+  }, [])
+
+  const setAll = useCallback((newMap) => {
+    dispatch({ type: 'all', newMap })
+  }, [])
+
+  const reset = useCallback(() => {
+    dispatch({ type: 'reset', initialValue })
+  }, [])
+
+  return [map, { set, setAll, reset }]
 }

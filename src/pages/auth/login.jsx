@@ -1,17 +1,14 @@
-import { useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
 import Notification from '../../components/common/Notification'
-import { STORAGE_AUTH_KEY } from '../../constants'
 import { useAppContext } from '../../containers/DataProvider'
 
 const LoginPage = () => {
-  const [token, setAuthToken] = useLocalStorage(STORAGE_AUTH_KEY)
   const { setAppContext } = useAppContext()
   const navigate = useNavigate()
 
@@ -21,13 +18,10 @@ const LoginPage = () => {
     description: '',
     status: 'success',
   })
-
-  useEffect(() => {
-    if (token) navigate('/')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const setShowNotification = useCallback(bool => setNotification('show', bool), [])
 
   const fetchHook = useFetch()
+  const [loading, setLoading] = useState(false)
 
   const [formData, { set }] = useMap({
     email: '',
@@ -36,20 +30,24 @@ const LoginPage = () => {
 
   function signIn(e) {
     e.preventDefault()
+    setLoading(true)
 
     fetchHook('users/login', {
       method: 'POST',
       body: JSON.stringify(formData),
     })
-    .then((res) => {
-      setAppContext(state => {
-        const newState = { ...state }
-        newState.authUser = res.user
-        return newState
+    .then(() => {
+      setLoading(false)
+      setAppContext('authenticated', true)
+      setShowNotification(false)
+
+      fetchHook('users/particular').then(res => {
+        setAppContext('authUser', res.payload)
+        navigate('/')
       })
-      navigate('/')
     })
     .catch(err => {
+      setLoading(false)
       setAllNotification({
         show: true,
         title: 'Login failed',
@@ -60,14 +58,14 @@ const LoginPage = () => {
   }
 
   return (
-    <div className='max-w-md px-4 sm:px-0'>
+    <main className='max-w-md px-4 sm:px-0'>
       <Helmet>
         <title>Moksha | Login</title>
       </Helmet>
 
       <Notification
         show={notification.show}
-        setShow={bool => setNotification('show', bool)}
+        setShow={setShowNotification}
         status={ notification.status }
         title={ notification.title }
         description={ notification.description }
@@ -104,18 +102,10 @@ const LoginPage = () => {
               </span>
             </Link>
           </div>
-
-          <div>
-            <Link to="/auth/verification" state={{ prevPath: '/auth/login' }}>
-              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
-                Verify your account
-              </span>
-            </Link>
-          </div>
         </div>
 
         <div>
-          <BaseButton type="submit" stretch>
+          <BaseButton type="submit" stretch loading={loading}>
             Login
           </BaseButton>
         </div>
@@ -129,7 +119,7 @@ const LoginPage = () => {
           </div>
         </div>
       </form>
-    </div>
+    </main>
   )
 }
 export default LoginPage

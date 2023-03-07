@@ -16,10 +16,6 @@ body {
   display: none;
 }
 
-.App {
-  @apply text-gray-50;
-}
-
 /* Markdown/Prose modifications */
 .markdown {
   @apply prose prose-sm sm:prose-base prose-invert max-w-none;
