@@ -81,8 +81,15 @@ TEMPLATES = [
         },
     },
 ]
+CSRF_COOKIE_SECURE=True
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+SESSION_COOKIE_SECURE=True
+
+CSRF_COOKIE_SAMESITE='None'
+
+SESSION_COOKIE_SAMESITE='None'
+
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000','https://moksha-gules.vercel.app']
 
 CORS_ALLOW_CREDENTIALS = True
 
