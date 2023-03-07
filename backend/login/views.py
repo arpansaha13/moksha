@@ -57,17 +57,17 @@ class RegisterApi(APIView):
                     fail_silently=False,
                 )
                 response.data = {
-                        'message': "User added successfully!!",
+                        'message': "User added successfully.",
                     }
                 response.status_code=201
                 return response
             response.data = {
-                'message': "User already Exists!",
+                'message': "This email is already registered.",
             }
             response.status_code=409
             return response
         response.data = {
-            'message': "Password Not Matched!",
+            'message': "Password and confirm password not matched.",
         }
         response.status_code=400
         return response
@@ -82,7 +82,7 @@ class LoginApi(APIView):
 
             try:
                 payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-                return Response({'message': 'User Already Logged In!'}, status=200)
+                return Response({'message': 'User Already Logged In.'}, status=200)
             except jwt.ExpiredSignatureError:
                 email = request.data['email']
                 user = User.objects.filter(email=email).first()
@@ -109,17 +109,17 @@ class LoginApi(APIView):
                             return response
                         print(user.otp)
                         response.data = {
-                            'message': "Please validate your account using otp!!",
+                            'message': "Please validate your account using otp.",
                         }
                         response.status_code=403
                         return response
                     response.data = {
-                        'message': "Invalid Password!!",
+                        'message': "Invalid Email or Password.",
                     }
                     response.status_code=400
                     return response
                 response.data = {
-                    'message': "User Not Found!!",
+                    'message': "Invalid Email or Password.",
                 }
                 response.status_code=400
                 return response
@@ -150,17 +150,17 @@ class LoginApi(APIView):
                         return response
                     print(user.otp)
                     response.data = {
-                        'message': "Please validate your account using otp!!",
+                        'message': "Please validate your account using otp.",
                     }
                     response.status_code=403
                     return response
                 response.data = {
-                    'message': "Invalid Password!!",
+                    'message': "Invalid Email or Password.",
                 }
                 response.status_code=400
                 return response
             response.data = {
-                'message': "User Not Found!!",
+                'message': "Invalid Email or Password.",
             }
             response.status_code=400
             return response
@@ -194,12 +194,12 @@ class ForgotApi(APIView):
             # user.password = new_password
             # user.save()
             response.data = {
-                    'message': "Reset Password Link is Sent!!",
+                    'message': "Reset Password Link is Sent.",
                 }
             response.status_code=200
             return response
         response.data = {
-            'message': "User Not Found!",
+            'message': "User Not Found.",
                 }
         response.status_code=404
         return response   
@@ -214,7 +214,7 @@ class ChangePasswordApi(APIView):
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired! Log in again.')
+            raise AuthenticationFailed('Token Expired. Log in again.')
         new_password = request.data['new_password']
         user = User.objects.filter(user_id=payload['id']).first()
         if user:
@@ -222,8 +222,8 @@ class ChangePasswordApi(APIView):
             user.password = make_password(new_password)
             user.save()
             response.delete_cookie('reset')
-            return Response({'message': 'Password Changed!!'}, status=200)
-        return Response({'message': 'User Not Found!'}, status=404)
+            return Response({'message': 'Password Changed.'}, status=200)
+        return Response({'message': 'User Not Found.'}, status=404)
 
 
 class ViewApi(APIView):
@@ -242,7 +242,7 @@ class ViewParticularApi(APIView):
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired! Log in again.')
+            raise AuthenticationFailed('Token Expired. Log in again.')
         user = User.objects.filter(user_id=payload['id']).first()
         if user:
             serializer = UsersSerializers(user)
@@ -261,20 +261,20 @@ class LogoutApi(APIView):
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired! Log in again.')
+            raise AuthenticationFailed('Token Expired. Log in again.')
         user = User.objects.filter(user_id=payload['id']).first()
         if user:
             user.logged_in = False
             user.save()
             response.delete_cookie('jwt')
             response.data = {
-                'message': 'User have successfully logged out!'
+                'message': 'User have successfully logged out.'
             }
             response.status_code=200
             return response
             
         response.data = {
-                'message': 'User Not Found!'
+                'message': 'User Not Found.'
             }
         response.status_code=404
         return response
@@ -290,7 +290,7 @@ class OTPValidation(APIView):
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired! Log in again.')
+            raise AuthenticationFailed('Token Expired. Log in again.')
         user = User.objects.filter(user_id=payload['id']).first()
         otp = request.data['otp']
         if user:
@@ -298,9 +298,9 @@ class OTPValidation(APIView):
                 user.otp = ''
                 user.save()
                 response.delete_cookie('jwt')
-                return Response({'message': 'User Validated!!'}, status=200)
-            return Response({'message': 'OTP Not Matched!'}, status=401)
-        return Response({'message': 'User Not Found!'}, status=404)
+                return Response({'message': 'User Validated.'}, status=200)
+            return Response({'message': 'OTP Not Matched.'}, status=401)
+        return Response({'message': 'User Not Found.'}, status=404)
 
 
 class ResendOtp(APIView):
@@ -312,11 +312,11 @@ class ResendOtp(APIView):
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired! Log in again.')
+            raise AuthenticationFailed('Token Expired. Log in again.')
         user = User.objects.filter(user_id=payload['id']).first()
         
         if user is None:
-            return Response({'message': 'User Not Found!'}, status=404)
+            return Response({'message': 'User Not Found.'}, status=404)
         email=user.email
         x = random.randint(1000, 9999)
         otp_generated = str(x)
@@ -329,7 +329,7 @@ class ResendOtp(APIView):
         )
         user.otp = otp_generated
         user.save()
-        return Response({'message': 'Otp Sent!!'}, status=200)
+        return Response({'message': 'Otp Sent.'}, status=200)
 
 # Create your views here.
 
