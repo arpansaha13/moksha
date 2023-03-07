@@ -143,6 +143,7 @@ class LoginApi(APIView):
                 if ans == True:
                     if user.otp == "":
                         response.set_cookie(key='jwt', value=token, httponly=True)
+                        response.cookies['jwt'].update({"samesite":"None","secure":True})
                         user.logged_in = True
                         user.save()
                         response.data = {
