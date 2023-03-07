@@ -49,6 +49,7 @@ class RegisterApi(APIView):
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
                 response.set_cookie(key='otp', value=token, httponly=True)
+                response.cookies['otp'].update({"samesite":"None"})
                 send_mail(
                     'Subject here',
                     otp_generated,
