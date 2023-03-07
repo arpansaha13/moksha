@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useFetch } from './hooks/useFetch'
 import { useAppContext } from './containers/DataProvider'
 import Routes from "./routes"
+import fetchWithCredentials from './utils/fetchWithCredentials'
 import './App.css'
 
 function App() {
-  const fetchHook = useFetch()
   const { setAppContext } = useAppContext()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchHook('users/particular')
+    fetchWithCredentials('users/particular')
     .then(res => {
       setAppContext('authUser', res.payload)
       setAppContext('authenticated', true)

@@ -1,4 +1,5 @@
-import { FETCH_BASE_URL } from '../constants'
+import { useNavigate, useLocation } from 'react-router-dom'
+import createRequest from '../utils/createRequest'
 
 /**
  * Returns a wrapper over the Fetch API.
@@ -11,36 +12,33 @@ import { FETCH_BASE_URL } from '../constants'
  *
  * 4) Extracts and returns the json response so that the json data is directly available in the then() block.
  *
- * Note: Body data (if provided) must be a stringified JSON.
+ * 5) Automatically navigate to Login page when auth token expires.
+ *
+ * Note:
+ *
+ * 1) Body data (if provided) must be a stringified JSON.
+ *
+ * 2) It uses `useNavigate` and `useLocation` internally. So this hook has to be used within Router context.
  */
 
 export function useFetch() {
-  const fetchHook = (url, options) => {
-    const request = new Request(`${FETCH_BASE_URL}${url}`, {
-      ...options,
-      mode: 'cors',
-      credentials: 'include',
-      body: options?.body ? new URLSearchParams(JSON.parse(options?.body)) : null,
-      headers: {
-        ...(options?.headers ?? {}),
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    })
+  const navigate = useNavigate()
+  const location = useLocation()
 
-    return fetch(request).then(async res => {
-      // Handle empty responses
-      const textData = await res.text()
-      let jsonData = null
-      if (textData) {
-        try {
-          jsonData = JSON.parse(textData)
-        } catch {
-          jsonData = { message: textData }
-        }
+  return async function fetchHook(url, options) {
+    const request = createRequest(url, options)
+
+    const res = await fetch(request)
+    const jsonData = await res.json()
+
+    console.log(location.pathname)
+
+    if (res.status >= 400) {
+      if (res.status === 401 && !location.pathname.startsWith('/auth/')) {
+        navigate('/auth/login')
       }
-      if (res.status >= 400) throw jsonData
-      return { status: res.status, ...jsonData }
-    })
+      throw jsonData
+    }
+    return jsonData
   }
-  return fetchHook
 }
