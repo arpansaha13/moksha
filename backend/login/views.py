@@ -49,7 +49,7 @@ class RegisterApi(APIView):
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
                 response.set_cookie(key='otp', value=token, httponly=True)
-                response.cookies['otp'].update({"samesite":"None"})
+                response.cookies['otp'].update({"samesite":"None","secure":True})
                 send_mail(
                     'Subject here',
                     otp_generated,
@@ -58,7 +58,7 @@ class RegisterApi(APIView):
                     fail_silently=False,
                 )
                 response.data = {
-                        'message': "User added successfully.",
+                        'message': "Otp validation link is sent.",
                     }
                 response.status_code=201
                 return response
@@ -101,6 +101,7 @@ class LoginApi(APIView):
                     if ans == True:
                         if user.otp == "":
                             response.set_cookie(key='jwt', value=token, httponly=True)
+                            response.cookies['jwt'].update({"samesite":"None","secure":True})
                             user.logged_in = True
                             user.save()
                             response.data = {
@@ -184,10 +185,11 @@ class ForgotApi(APIView):
 
             
             response.set_cookie(key='reset', value=token, httponly=True)
+            response.cookies['reset'].update({"samesite":"None","secure":True})
             # new_password = generate_password()
             send_mail(
                 'Subject here',
-                'Your reset password link is here',
+                'Your reset password link is here.It will be valid for 1hr.',
                 'bhowmikarghajit@gmail.com',
                 [email],
                 fail_silently=False,

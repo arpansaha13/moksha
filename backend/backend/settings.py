@@ -115,7 +115,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','https://moksha-gules.vercel.app
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# EXTERNAL_DATABASE_URL='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a/mokshadb'
+# EXTERNAL_DATABASE_URL='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a.singapore-postgres.render.com/mokshadb'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
