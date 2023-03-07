@@ -238,7 +238,7 @@ class ViewApi(APIView):
 
 
 class ViewParticularApi(APIView):
-    def get(self, request, id):
+    def get(self, request):
         token = request.COOKIES['jwt']
         if not token:
             raise AuthenticationFailed('Unauthenticated')
