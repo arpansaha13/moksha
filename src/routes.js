@@ -22,6 +22,7 @@ import Login from './pages/auth/login'
 import Registration from './pages/auth/register'
 import Verification from './pages/auth/verification'
 import ForgotPassword from './pages/auth/forgot-password'
+import NotFound from './pages/404'
 
 // const Home = lazy(() => import('./pages/Home'))
 // const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
         <Route path="/events" element={<Events />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/sponsors" element={<Sponsors />} />
+        <Route path="/*" element={<NotFound />} />
 
         <Route element={<AccountLayout />}>
           <Route path="/account/dashboard" element={<Dashboard />} />
