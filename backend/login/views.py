@@ -74,7 +74,22 @@ class RegisterApi(APIView):
         return response
         
 
+class DetailsUserName(APIView):
+    def get(self, request):#?query_param e ?username=something link er last e
+        # username=request.data['username']
+        username=request.GET.get('username', None)
+        user1=User.objects.filter(username__contains=username)
+        if not user1:
+            return Response({'message': 'User Not Found'}, status=404)
+        if user1.count>1:
+            serializer = SpecificSerializers(user1, many=True)
+        serializer = SpecificSerializers(user1)
+        # Arpan koise
+        # if serializer.data == [] and serializer1.data == []:
+        #     return Response({'message': "No registered events!"}, status=404)
 
+        return Response({'message': 'Success', 'payload': {'details': serializer.data}}, status=200)
+    
 class LoginApi(APIView):
     def post(self, request):
         response = Response()
