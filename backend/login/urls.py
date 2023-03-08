@@ -11,4 +11,5 @@ urlpatterns = [
     path('otp', OTPValidation.as_view()),
     path('resendotp', ResendOtp.as_view()),
     path('particular',ViewParticularApi.as_view()),
+    path('details', DetailsUserName.as_view()),
 ]
