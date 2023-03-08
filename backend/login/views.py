@@ -81,7 +81,7 @@ class DetailsUserName(APIView):
         user1=User.objects.filter(username__contains=username)
         if not user1:
             return Response({'message': 'User Not Found'}, status=404)
-        if user1.count>1:
+        if user1.count()>1:
             serializer = SpecificSerializers(user1, many=True)
         serializer = SpecificSerializers(user1)
         # Arpan koise
