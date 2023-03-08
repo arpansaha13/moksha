@@ -3,7 +3,7 @@ import { Children, Fragment, createElement, cloneElement, useEffect, useState, u
 import { useList } from '../../hooks/useList'
 import classNames from '../../utils/classNames'
 
-export default function Transition({
+export const Transition = ({
   show,
   unmount = true,
   appear = false,
@@ -17,7 +17,7 @@ export default function Transition({
   leaveTo = "",
   afterLeave, // call after leave, if any
   ...props
-}) {
+}) => {
   const [initialClasses, { setAll }] = useList([])
   const isFirstRender = useRef(!appear)
 
@@ -38,7 +38,7 @@ export default function Transition({
 
   const resetTransitionState = useCallback(() => {
     resetting.current = true
-    setTimeout(() => setTransitionState(1))
+    setTransitionState(1)
   }, [])
 
   useEffect(() => {
@@ -63,16 +63,18 @@ export default function Transition({
 
       if (transitionState === 1) {
         clonedChild = cloneElement(child, { className: classNames(initialClasses[i], enter, enterFrom) })
-        setTimeout(() => setTransitionState(2))
+        setTimeout(setTransitionState, 200, 2)
       }
       else if (transitionState === 2) {
-        clonedChild = cloneElement(child, {
+        const onTransitionEnd = () => {
+          setEntering(false)
+          resetTransitionState()
+        }
+        const newProps = {
           className: classNames(initialClasses[i], enter, enterTo),
-          onTransitionEnd: () => {
-            resetTransitionState()
-            setEntering(false)
-          }
-        })
+          onTransitionEnd
+        }
+        clonedChild = cloneElement(child, newProps)
       }
       return clonedChild
     })
@@ -99,17 +101,15 @@ export default function Transition({
           className: classNames(initialClasses[i], leave, leaveTo),
           onTransitionEnd: () => {
             afterLeave?.()
-            if (unmount) setTransitionState(3)
-            else setLeaving(false)
+            setTransitionState(3)
           }
         }
-
         clonedChild = cloneElement(child, newProps)
       }
       else if (transitionState === 3) {
-        clonedChild = null
-        resetTransitionState()
+        clonedChild = unmount ? null : child
         setLeaving(false)
+        resetTransitionState()
       }
       return clonedChild
     })
@@ -119,3 +119,4 @@ export default function Transition({
 
   return createElement(as, props, modifiedChildren)
 }
+export default Transition

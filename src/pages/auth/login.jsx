@@ -5,20 +5,13 @@ import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
-import Notification from '../../components/common/Notification'
 import { useAppContext } from '../../containers/DataProvider'
+import { useAuthContext } from '../../containers/AuthProvider'
 
 const LoginPage = () => {
   const { setAppContext } = useAppContext()
+  const { setNotification, setAllNotification } = useAuthContext()
   const navigate = useNavigate()
-
-  const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
-    show: false,
-    title: '',
-    description: '',
-    status: 'success',
-  })
-  const setShowNotification = useCallback(bool => setNotification('show', bool), [])
 
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
@@ -28,7 +21,7 @@ const LoginPage = () => {
     password: '',
   })
 
-  function signIn(e) {
+  const signIn = useCallback(e => {
     e.preventDefault()
     setLoading(true)
 
@@ -39,7 +32,7 @@ const LoginPage = () => {
     .then(() => {
       setLoading(false)
       setAppContext('authenticated', true)
-      setShowNotification(false)
+      setNotification('show', false)
 
       fetchHook('users/particular').then(res => {
         setAppContext('authUser', res.payload)
@@ -55,21 +48,13 @@ const LoginPage = () => {
         status: 'error',
       })
     })
-  }
+  }, [formData])
 
   return (
     <main className='max-w-md px-4 sm:px-0'>
       <Helmet>
         <title>Moksha | Login</title>
       </Helmet>
-
-      <Notification
-        show={notification.show}
-        setShow={setShowNotification}
-        status={ notification.status }
-        title={ notification.title }
-        description={ notification.description }
-      />
 
       <form className="space-y-6" onSubmit={signIn}>
         <BaseInput

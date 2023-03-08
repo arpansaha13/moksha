@@ -1,30 +1,21 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseButton from '../../components/base/BaseButton'
 import OtpInput from '../../components/common/OtpInput'
-import Notification from '../../components/common/Notification'
 import { useAppContext } from '../../containers/DataProvider'
+import { useAuthContext } from '../../containers/AuthProvider'
 
 const VerificationPage = () => {
   const navigate = useNavigate()
   const {setAppContext} = useAppContext()
+  const { setNotification, setAllNotification } = useAuthContext()
 
   const fetchHook = useFetch()
 
-  const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
-    show: false,
-    title: '',
-    description: '',
-    status: 'success',
-  })
-
-  const setShowNotification = useCallback(bool => setNotification('show', bool), [])
-
   const [loading, setLoading] = useState(false)
-
   const [formData, { set }] = useMap({
     otp: '',
   })
@@ -40,7 +31,7 @@ const VerificationPage = () => {
     .then(() => {
       setLoading(false)
       setAppContext('authenticated', true)
-      setShowNotification(false)
+      setNotification('show', false)
       navigate('/auth/login')
     })
     .catch(err => {
@@ -78,14 +69,6 @@ const VerificationPage = () => {
       <Helmet>
         <title>Moksha | Verification</title>
       </Helmet>
-
-      <Notification
-        show={notification.show}
-        setShow={setShowNotification}
-        status={ notification.status }
-        title={ notification.title }
-        description={ notification.description }
-      />
 
       <form className="space-y-6" onSubmit={verifyOTP}>
         <OtpInput

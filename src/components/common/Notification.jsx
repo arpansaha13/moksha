@@ -1,15 +1,34 @@
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import Transition from './Transition'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 import closeIcon from '@iconify-icons/mdi/close'
 import checkIcon from '@iconify-icons/mdi/check-circle-outline'
 
-const Notification = memo(({ title, description, show, setShow, status = 'success' }) => {
+const Notification = memo(({ title, description, show, setShow, timeout, status = 'success' }) => {
+  const timeoutId = useRef(null)
+
+  useEffect(() => {
+    if (show && timeout !== null && typeof timeout !== 'undefined') {
+      if (!setShow) {
+        throw new Error('A timeout is provided but no setShow function is provided.')
+      }
+
+      timeoutId.current = setTimeout(() => setShow(false), timeout * 1000)
+
+      return () => {
+        if (timeoutId.current !== null) clearTimeout(timeoutId.current)
+        setShow(false)
+      }
+    }
+    return () => {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show])
+
   return (
     <div
       aria-live="assertive"
-      className="pointer-events-none fixed inset-0 z-40 flex items-end px-4 py-6 sm:items-start sm:p-6"
+      className="pointer-events-none fixed inset-0 z-40 flex items-start px-4 py-6 sm:p-6"
     >
       <div className="w-full flex flex-col items-center space-y-4">
         <Transition

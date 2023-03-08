@@ -1,5 +1,7 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
+import AuthProvider from './containers/AuthProvider'
+
 import FloatingWindow from './layouts/floating-window'
 import DefaultLayout from './layouts/default'
 import AuthLayout from './layouts/auth'
@@ -50,7 +52,7 @@ const router = createBrowserRouter(
         </Route>
       </Route>
 
-      <Route element={<AuthLayout />}>
+      <Route element={<AuthProvider><AuthLayout /></AuthProvider>}>
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Registration />} />
         <Route path="/auth/verification" element={<Verification />} />

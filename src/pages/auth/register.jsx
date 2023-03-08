@@ -1,23 +1,15 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
-import Notification from '../../components/common/Notification'
+import { useAuthContext } from '../../containers/AuthProvider'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
-
-  const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
-    show: false,
-    title: '',
-    description: '',
-    status: 'success',
-  })
-  const setShowNotification = useCallback(bool => setNotification('show', bool), [])
-
+  const { setNotification, setAllNotification } = useAuthContext()
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
 
@@ -58,6 +50,7 @@ const SignUpPage = () => {
     })
       .then(() => {
         setLoading(false)
+        setNotification('show', false)
         navigate('/auth/verification')
       })
       .catch(err => {
@@ -76,14 +69,6 @@ const SignUpPage = () => {
       <Helmet>
         <title>Moksha | Sign up</title>
       </Helmet>
-
-      <Notification
-        show={notification.show}
-        setShow={setShowNotification}
-        status={ notification.status }
-        title={ notification.title }
-        description={ notification.description }
-      />
 
       <form className="space-y-6" onSubmit={signUp}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

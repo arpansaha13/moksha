@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAppContext } from '../containers/DataProvider'
+import Notification from '../components/common/Notification'
 import CastleGate3 from '../assets/castle-gate-3.svg'
+import { useAuthContext } from '../containers/AuthProvider'
 
 const getHeading = (route) => {
   switch (route) {
@@ -26,6 +28,9 @@ export default function AuthLayout() {
     if (appContext.authenticated) navigate('/')
   }, [])
 
+  const { notification, setNotification } = useAuthContext()
+  const setShowNotification = useCallback(bool => setNotification('show', bool), [])
+
   const location = useLocation()
   const [heading, setHeading] = useState(getHeading(location.pathname))
 
@@ -37,6 +42,14 @@ export default function AuthLayout() {
       <span role="presentation" className='fixed w-screen h-screen z-10 bg-darkBrown/90 mix-blend-darken' />
 
       <div className="min-w-screen min-h-screen flex flex-col justify-center py-8 sm:px-6 lg:px-8 relative z-20">
+        <Notification
+          show={notification.show}
+          setShow={setShowNotification}
+          status={ notification.status }
+          title={ notification.title }
+          description={ notification.description }
+        />
+
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link to="/" className="block mx-auto w-16 h-16 relative">
             <img src="/moksha-logo.svg" alt="Moksha logo" className='w-full h-full' />
