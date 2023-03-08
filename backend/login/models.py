@@ -4,6 +4,7 @@ from django.db import models
 
 class User(models.Model):
     id = models.AutoField(primary_key=True)
+    avatar_idx=models.IntegerField(default=0)
     name = models.CharField(max_length=100)
     institution_name = models.CharField(max_length=100)
     phone_no = models.BigIntegerField(default=0)
