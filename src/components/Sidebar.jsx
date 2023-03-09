@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { Link, useLocation } from "react-router-dom"
-import navTabs from '../data/nav-tabs'
+import { navTabs } from '../data/tabs'
 import classNames from '../utils/classNames'
 import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 

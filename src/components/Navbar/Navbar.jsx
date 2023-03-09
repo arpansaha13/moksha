@@ -1,14 +1,16 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-unused-vars */
-import { memo } from "react"
-import { Link } from "react-router-dom"
+import { memo, useCallback } from "react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
 import closeIcon from '@iconify-icons/mdi/close'
+import NavbarDropdown from "./NavbarDropdown"
 import { useAppContext } from '../../containers/DataProvider'
+import { useFetch } from '../../hooks/useFetch'
 import { useWindowSize } from "../../hooks/useWindowSize"
 import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
-import navTabs from '../../data/nav-tabs'
+import { navTabs } from '../../data/tabs'
 
 const NavTab = memo(({ to, children }) => (
   <Link to={to} className="block w-max font-semibold text-lg sm:text-2xl p-1.5 uppercase transition-colors">
@@ -17,13 +19,39 @@ const NavTab = memo(({ to, children }) => (
 ))
 
 function Navbar() {
-  const { appContext } = useAppContext()
+  const { appContext, resetAuthContext } = useAppContext()
   const { windowWidth } = useWindowSize()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const fetchHook = useFetch()
+
+  const logOut = useCallback(() => {
+    fetchHook('users/logout')
+    resetAuthContext()
+
+    if (location.pathname.startsWith('/account/')) {
+      navigate('/')
+    }
+  }, [fetchHook, location.pathname])
+
+  // const headerRef = useRef(null)
+
+  // const scrollListener = useCallback(() => {
+  //   console.log(headerRef)
+  //   headerRef.current.classList[window.scrollY > 100 ? 'add' : 'remove']('top-0')
+  // }, [headerRef])
+
+  // useEffect(() => {
+  //   window.addEventListener('scroll', scrollListener)
+
+  //   return () => { window.removeEventListener('scroll', scrollListener) }
+  // }, [scrollListener])
+
 
   if (windowWidth === null) return <></>
 
   return (
-    <header className="sticky transition-[top]">
+    <header className="sticky transition-[top] z-40">
       <nav className="px-4 sm:px-20 h-[100px] w-full flex items-center justify-between text-ochre">
         {
           windowWidth < 1024 ? (
@@ -41,7 +69,7 @@ function Navbar() {
               <ul className="flex gap-3 sm:gap-6">
                 {
                   navTabs.map(tab => (
-                    <li key={tab.to} className="">
+                    <li key={tab.to}>
                       <NavTab to={tab.to}>
                         { tab.name }
                       </NavTab>
@@ -57,9 +85,16 @@ function Navbar() {
         {
           appContext.authenticated
           ? (
-            <NavTab to="/account/dashboard">
-              Dashboard
-            </NavTab>
+            // Make a dropdown here showing all accountTabs
+            // Those tabs may be shown at the bottom of sidebar in mobile
+            // <NavTab to="/account/dashboard">
+            //   Dashboard
+            // </NavTab>
+            <NavbarDropdown
+              name={ appContext.authUser.name }
+              avatarIdx={ appContext.authUser.avatar_idx }
+              onLogOut={logOut}
+            />
           )
           : (
             <div className="flex gap-3 sm:gap-6">

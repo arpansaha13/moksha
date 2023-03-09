@@ -6,6 +6,7 @@ import { useFetch } from '../../hooks/useFetch'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
 import { useAuthContext } from '../../containers/AuthProvider'
+import { getAvatarIdx} from '../../data/avatar-colors'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
@@ -46,7 +47,10 @@ const SignUpPage = () => {
 
     fetchHook('users/register', {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        avatar_idx: getAvatarIdx(formData.email),
+      }),
     })
       .then(() => {
         setLoading(false)
@@ -155,6 +159,7 @@ const getFields = (formData, validationErrors, set) => {
       name: "phone",
       type: "tel",
       autoComplete: "tel",
+      inputMode: 'numeric',
       required: true,
       label: "Phone number",
       pattern: "[0-9]{10}",
