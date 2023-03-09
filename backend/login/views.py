@@ -15,6 +15,7 @@ from django.contrib.auth.hashers import make_password,check_password
 from django.views.decorators.csrf import csrf_exempt
 
 class RegisterApi(APIView):
+    @csrf_exempt
     def post(self, request):
         email = request.data['email']
         response = Response()
@@ -91,6 +92,7 @@ class DetailsUserName(APIView):
         return Response({'message': 'Success', 'payload': {'details': data}}, status=200)
     
 class LoginApi(APIView):
+    @csrf_exempt
     def post(self, request):
         response = Response()
         try:
@@ -185,6 +187,7 @@ class LoginApi(APIView):
 
 
 class ForgotApi(APIView):
+    @csrf_exempt
     def post(self, request):
         response = Response()
         user_id=request.data['user_id']
@@ -224,6 +227,7 @@ class ForgotApi(APIView):
         return response   
 
 class ChangePasswordApi(APIView):
+    @csrf_exempt
     def post(self, request):
         token = request.COOKIES['reset']
         response = Response()
