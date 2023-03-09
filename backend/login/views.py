@@ -289,7 +289,7 @@ class LogoutApi(APIView):
         if user:
             user.logged_in = False
             user.save()
-            response.set_cookie('jwt',max_age=1)
+            response.set_cookie('jwt',max_age=2)
             response.data = {
                 'message': 'User have successfully logged out.'
             }
