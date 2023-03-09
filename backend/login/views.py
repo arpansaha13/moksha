@@ -245,7 +245,9 @@ class ChangePasswordApi(APIView):
 
                 user.password = make_password(new_password)
                 user.save()
-                response.delete_cookie('reset')
+                response.set_cookie('reset',max_age=1)
+                response.cookies['reset'].update({"samesite":"None","secure":True})
+                # response.delete_cookie('reset')
                 return Response({'message': 'Password Changed.'}, status=200)
             return Response({'message': 'User Not Found.'}, status=404)
         except:
@@ -297,7 +299,9 @@ class LogoutApi(APIView):
             if user:
                 user.logged_in = False
                 user.save()
-                response.set_cookie('jwt',max_age=2)
+                response.set_cookie('jwt',max_age=1)
+                response.cookies['jwt'].update({"samesite":"None","secure":True})
+
                 response.data = {
                     'message': 'User have successfully logged out.'
                 }
@@ -332,7 +336,9 @@ class OTPValidation(APIView):
                 if user.otp == otp:
                     user.otp = ''
                     user.save()
-                    response.delete_cookie('otp')
+                    response.set_cookie('otp',max_age=2)
+                    response.cookies['otp'].update({"samesite":"None","secure":True})
+                    # response.delete_cookie('otp')
                     return Response({'message': 'User Validated.'}, status=200)
                 return Response({'message': 'OTP Not Matched.'}, status=401)
             return Response({'message': 'User Not Found.'}, status=404)
