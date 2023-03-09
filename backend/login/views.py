@@ -229,24 +229,28 @@ class ForgotApi(APIView):
 class ChangePasswordApi(APIView):
     @csrf_exempt
     def post(self, request):
-        token = request.COOKIES['reset']
-        response = Response()
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-
         try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired. Log in again.')
-        new_password = request.data['new_password']
-        user = User.objects.filter(user_id=payload['id']).first()
-        if user:
+            token = request.COOKIES['reset']
+            response = Response()
+            if not token:
+                raise AuthenticationFailed('Unauthenticated')
 
-            user.password = make_password(new_password)
-            user.save()
-            response.delete_cookie('reset')
-            return Response({'message': 'Password Changed.'}, status=200)
-        return Response({'message': 'User Not Found.'}, status=404)
+            try:
+                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                raise AuthenticationFailed('Token Expired. Log in again.')
+            new_password = request.data['new_password']
+            user = User.objects.filter(user_id=payload['id']).first()
+            if user:
+
+                user.password = make_password(new_password)
+                user.save()
+                response.delete_cookie('reset')
+                return Response({'message': 'Password Changed.'}, status=200)
+            return Response({'message': 'User Not Found.'}, status=404)
+        except:
+            return Response({'message': 'Unauthorized.'}, status=401)
+            
 
 
 class ViewApi(APIView):
@@ -258,102 +262,114 @@ class ViewApi(APIView):
 
 class ViewParticularApi(APIView):
     def get(self, request):
-        token = request.COOKIES['jwt']
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-
         try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired. Log in again.')
-        user = User.objects.filter(user_id=payload['id']).first()
-        if user:
-            serializer = UsersSerializers(user)
-            print(serializer.data)
-            return Response({'message': 'Success', 'payload': serializer.data}, status=200)
-        return Response({'message': 'User Not Found'}, status=404)
+            token = request.COOKIES['jwt']
+            if not token:
+                raise AuthenticationFailed('Unauthenticated')
+
+            try:
+                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                raise AuthenticationFailed('Token Expired. Log in again.')
+            user = User.objects.filter(user_id=payload['id']).first()
+            if user:
+                serializer = UsersSerializers(user)
+                print(serializer.data)
+                return Response({'message': 'Success', 'payload': serializer.data}, status=200)
+            return Response({'message': 'User Not Found'}, status=404)
+        except:
+            return Response({'message': 'Unauthorized.'}, status=401)
 
 
 class LogoutApi(APIView):
     def get(self, request):
-        token = request.COOKIES['jwt']
-        response = Response()
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-
         try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired. Log in again.')
-        user = User.objects.filter(user_id=payload['id']).first()
-        if user:
-            user.logged_in = False
-            user.save()
-            response.set_cookie('jwt',max_age=2)
+            token = request.COOKIES['jwt']
+            response = Response()
+            if not token:
+                raise AuthenticationFailed('Unauthenticated')
+
+            try:
+                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                raise AuthenticationFailed('Token Expired. Log in again.')
+            user = User.objects.filter(user_id=payload['id']).first()
+            if user:
+                user.logged_in = False
+                user.save()
+                response.set_cookie('jwt',max_age=2)
+                response.data = {
+                    'message': 'User have successfully logged out.'
+                }
+                response.status_code=200
+                return response
+
             response.data = {
-                'message': 'User have successfully logged out.'
-            }
-            response.status_code=200
+                    'message': 'User Not Found.'
+                }
+            response.status_code=404
             return response
-            
-        response.data = {
-                'message': 'User Not Found.'
-            }
-        response.status_code=404
-        return response
+       except:
+            return Response({'message': 'Unauthorized.'}, status=401)
 
 
 class OTPValidation(APIView):
     @csrf_exempt
     def post(self, request):
-        token = request.COOKIES['otp']
-        response=Response()
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-
         try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired. Log in again.')
-        user = User.objects.filter(user_id=payload['id']).first()
-        otp = request.data['otp']
-        if user:
-            if user.otp == otp:
-                user.otp = ''
-                user.save()
-                response.delete_cookie('otp')
-                return Response({'message': 'User Validated.'}, status=200)
-            return Response({'message': 'OTP Not Matched.'}, status=401)
-        return Response({'message': 'User Not Found.'}, status=404)
+            token = request.COOKIES['otp']
+            response=Response()
+            if not token:
+                raise AuthenticationFailed('Unauthenticated')
+
+            try:
+                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                raise AuthenticationFailed('Token Expired. Log in again.')
+            user = User.objects.filter(user_id=payload['id']).first()
+            otp = request.data['otp']
+            if user:
+                if user.otp == otp:
+                    user.otp = ''
+                    user.save()
+                    response.delete_cookie('otp')
+                    return Response({'message': 'User Validated.'}, status=200)
+                return Response({'message': 'OTP Not Matched.'}, status=401)
+            return Response({'message': 'User Not Found.'}, status=404)
+        except:
+            return Response({'message': 'Unauthorized.'}, status=401)
 
 
 class ResendOtp(APIView):
     def get(self, request):
-        token = request.COOKIES['otp']
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-
         try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired. Log in again.')
-        user = User.objects.filter(user_id=payload['id']).first()
-        
-        if user is None:
-            return Response({'message': 'User Not Found.'}, status=404)
-        email=user.email
-        x = random.randint(1000, 9999)
-        otp_generated = str(x)
-        send_mail(
-            'Subject here',
-            otp_generated,
-            'bhowmikarghajit@gmail.com',
-            [email],
-            fail_silently=False,
-        )
-        user.otp = otp_generated
-        user.save()
-        return Response({'message': 'Otp Sent.'}, status=200)
+            token = request.COOKIES['otp']
+            if not token:
+                raise AuthenticationFailed('Unauthenticated')
+
+            try:
+                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                raise AuthenticationFailed('Token Expired. Log in again.')
+            user = User.objects.filter(user_id=payload['id']).first()
+
+            if user is None:
+                return Response({'message': 'User Not Found.'}, status=404)
+            email=user.email
+            x = random.randint(1000, 9999)
+            otp_generated = str(x)
+            send_mail(
+                'Subject here',
+                otp_generated,
+                'bhowmikarghajit@gmail.com',
+                [email],
+                fail_silently=False,
+            )
+            user.otp = otp_generated
+            user.save()
+            return Response({'message': 'Otp Sent.'}, status=200)
+        except:
+            return Response({'message': 'Unauthorized.'}, status=401)
 
 # Create your views here.
 
