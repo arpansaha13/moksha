@@ -12,6 +12,7 @@ import string
 import jwt
 import datetime
 from django.contrib.auth.hashers import make_password,check_password
+from django.views.decorators.csrf import csrf_exempt
 
 class RegisterApi(APIView):
     def post(self, request):
@@ -299,6 +300,7 @@ class LogoutApi(APIView):
 
 
 class OTPValidation(APIView):
+    @csrf_exempt
     def post(self, request):
         token = request.COOKIES['otp']
         response=Response()
