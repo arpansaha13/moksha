@@ -309,7 +309,7 @@ class LogoutApi(APIView):
                 }
             response.status_code=404
             return response
-       except:
+        except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
 
