@@ -286,6 +286,7 @@ class LogoutApi(APIView):
             user.logged_in = False
             user.save()
             response.delete_cookie('jwt')
+            response.cookies['jwt'].update({"samesite":"None","secure":True})
             response.data = {
                 'message': 'User have successfully logged out.'
             }
