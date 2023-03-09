@@ -315,7 +315,7 @@ class OTPValidation(APIView):
             if user.otp == otp:
                 user.otp = ''
                 user.save()
-                response.delete_cookie('jwt')
+                response.delete_cookie('otp')
                 return Response({'message': 'User Validated.'}, status=200)
             return Response({'message': 'OTP Not Matched.'}, status=401)
         return Response({'message': 'User Not Found.'}, status=404)
