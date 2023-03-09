@@ -5,7 +5,6 @@ import AuthProvider from './containers/AuthProvider'
 import FloatingWindow from './layouts/floating-window'
 import DefaultLayout from './layouts/default'
 import AuthLayout from './layouts/auth'
-import ContestLayout from './layouts/contest'
 import AccountLayout from './layouts/account'
 
 // const DefaultLayout = lazy(() => import('./layouts/default'))
@@ -45,6 +44,10 @@ const router = createBrowserRouter(
         <Route path="/events" element={<Events />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/sponsors" element={<Sponsors />} />
+
+        <Route path="/contests" element={<Contests />} />
+        <Route path="/contests/:club/:contest" element={<Contest />} />
+
         <Route path="/*" element={<NotFound />} />
 
         <Route element={<AccountLayout />}>
@@ -57,11 +60,6 @@ const router = createBrowserRouter(
         <Route path="/auth/register" element={<Registration />} />
         <Route path="/auth/verification" element={<Verification />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-      </Route>
-
-      <Route element={<ContestLayout />}>
-        <Route path="/contests" element={<Contests />} />
-        <Route path="/contests/:club/:contest" element={<Contest />} />
       </Route>
     </Route>
   )
