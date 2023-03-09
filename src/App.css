@@ -16,6 +16,17 @@ body {
   display: none;
 }
 
+/* NProgress */
+#nprogress .bar {
+  @apply !bg-amber-800;
+}
+#nprogress .peg {
+  @apply !shadow !shadow-amber-800;
+}
+#nprogress .spinner-icon {
+  @apply !border-amber-800;
+}
+
 /* Markdown/Prose modifications */
 .markdown {
   @apply prose prose-sm sm:prose-base prose-invert max-w-none;

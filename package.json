@@ -58,6 +58,7 @@
     "@tranzis/react-layouts": "file:packages/tranzis-react-layouts-0.1.0.tgz",
     "change-case": "^4.1.2",
     "focus-trap": "^7.3.1",
+    "nprogress": "^0.2.0",
     "prettier": "^2.8.4",
     "react-helmet": "^6.1.0",
     "serve": "^14.2.0",

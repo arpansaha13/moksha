@@ -1,4 +1,6 @@
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements, redirect } from 'react-router-dom'
+import fetchWithCredentials from './utils/fetchWithCredentials'
+import nprogress from 'nprogress'
 
 import AuthProvider from './containers/AuthProvider'
 
@@ -36,6 +38,38 @@ import NotFound from './pages/404'
 // const VerificationPage = lazy(() => import('./pages/auth/verification'))
 // const ForgotPasswordPage = lazy(() => import('./pages/auth/forgot-password'))
 
+const isAuthenticated = async () => {
+  // Replace this with another designated api
+  try {
+    await fetchWithCredentials('users/particular')
+    return true
+  } catch {
+    return false
+  }
+}
+
+const allowIfAuthenticated = async () => {
+  nprogress.start()
+  const authenticated = await isAuthenticated()
+  nprogress.done()
+
+  if (!authenticated) {
+    return redirect('/auth/login') // redirect to login if not authenticated
+  }
+  return null
+}
+
+const allowIfNotAuthenticated = async () => {
+  nprogress.start()
+  const authenticated = await isAuthenticated()
+  nprogress.done()
+
+  if (authenticated) {
+    return redirect('/') // redirect to home if authenticated
+  }
+  return null
+}
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<FloatingWindow />}>
@@ -50,12 +84,15 @@ const router = createBrowserRouter(
 
         <Route path="/*" element={<NotFound />} />
 
-        <Route element={<AccountLayout />}>
+        <Route loader={allowIfAuthenticated} element={<AccountLayout />}>
           <Route path="/account/dashboard" element={<Dashboard />} />
         </Route>
       </Route>
 
-      <Route element={<AuthProvider><AuthLayout /></AuthProvider>}>
+      <Route
+        loader={allowIfNotAuthenticated}
+        element={<AuthProvider><AuthLayout /></AuthProvider>}
+      >
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Registration />} />
         <Route path="/auth/verification" element={<Verification />} />

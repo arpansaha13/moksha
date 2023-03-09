@@ -3,6 +3,7 @@ import { useAppContext } from './containers/DataProvider'
 import Routes from "./routes"
 import fetchWithCredentials from './utils/fetchWithCredentials'
 import './App.css'
+import 'nprogress/nprogress.css'
 
 function App() {
   const { setAppContext } = useAppContext()
@@ -22,6 +23,7 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // TODO: Make a Loader
   return loading ? null : (
     <div className="text-gray-50">
       <Routes />

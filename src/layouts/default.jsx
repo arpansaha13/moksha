@@ -21,10 +21,8 @@ export default function DefaultLayout() {
       />
 
       <div className='relative z-20'>
-        <div>
-          <ScrollToTop />
-          <Navbar />
-        </div>
+        <ScrollToTop />
+        <Navbar />
 
         <div>
           <Outlet />
