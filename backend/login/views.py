@@ -245,7 +245,7 @@ class ChangePasswordApi(APIView):
 
                 user.password = make_password(new_password)
                 user.save()
-                response.set_cookie('reset',max_age=1)
+                response.set_cookie('reset',max_age=1,httponly=True)
                 response.cookies['reset'].update({"samesite":"None","secure":True})
                 # response.delete_cookie('reset')
                 return Response({'message': 'Password Changed.'}, status=200)
@@ -299,7 +299,7 @@ class LogoutApi(APIView):
             if user:
                 user.logged_in = False
                 user.save()
-                response.set_cookie('jwt',max_age=1)
+                response.set_cookie('jwt',max_age=1,httponly=True)
                 response.cookies['jwt'].update({"samesite":"None","secure":True})
 
                 response.data = {
@@ -336,7 +336,7 @@ class OTPValidation(APIView):
                 if user.otp == otp:
                     user.otp = ''
                     user.save()
-                    response.set_cookie('otp',max_age=2)
+                    response.set_cookie('otp',max_age=2,httponly=True)
                     response.cookies['otp'].update({"samesite":"None","secure":True})
                     # response.delete_cookie('otp')
                     return Response({'message': 'User Validated.'}, status=200)
