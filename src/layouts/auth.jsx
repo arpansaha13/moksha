@@ -34,7 +34,10 @@ export default function AuthLayout() {
   const location = useLocation()
   const [heading, setHeading] = useState(getHeading(location.pathname))
 
-  useEffect(() => setHeading(getHeading(location.pathname)), [location])
+  useEffect(() => {
+    setHeading(getHeading(location.pathname))
+    setShowNotification(false)
+  }, [location.pathname])
 
   return (
     <div className="relative min-w-screen min-h-screen text-white">
