@@ -25,6 +25,13 @@ class RegisterApi(APIView):
             x = random.randint(1000, 9999)
             otp_generated = str(x)
             user = User.objects.filter(email=email).first()
+            user1 = User.objects.filter(username=request.data['username']).first()
+            if user1:
+                response.data = {
+                'message': "Username Already Exists",
+                }
+                response.status_code=409
+                return response
             uid = generate_UID()
             if user is None or user.otp:
                 if user and user.otp:
@@ -82,12 +89,13 @@ class DetailsUserName(APIView):
         username=request.GET.get('username', None)
         user1=User.objects.filter(username__icontains=username).all()
         data=[]
+        if not user1:
+            return Response({'message': 'User Not Found'}, status=404)
         for i in user1:
             print(i.name)
             serializer = SpecificSerializers(i)
             data.append(serializer.data)
-        if not user1:
-            return Response({'message': 'User Not Found'}, status=404)
+        
 
         return Response({'message': 'Success', 'payload': {'details': data}}, status=200)
     
@@ -190,8 +198,8 @@ class ForgotApi(APIView):
     @csrf_exempt
     def post(self, request):
         response = Response()
-        user_id=request.data['user_id']
-        user = User.objects.filter(user_id=user_id).first()
+        user_id=request.data['email']
+        user = User.objects.filter(email=user_id).first()
         if user:
             email=user.email
             payload = {

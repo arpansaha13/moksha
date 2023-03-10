@@ -46,6 +46,25 @@ class RegisterEvent(APIView):
 
 # GET DETAILS APIs
 
+class DetailsTeamName(APIView):
+    def get(self, request):#?query_param e ?username=something link er last e
+        # username=request.data['username']
+        team_name=request.GET.get('team_name', None)
+        user1=TeamDetail.objects.filter(team_name__icontains=team_name).all()
+        user2=TeamEvent.objects.filter(team_name__icontains=team_name).all()
+        team_details,participation=[],[]
+        if not user1:
+            return Response({'message': 'Team Not Found'}, status=404)
+        for i in user1:
+            serializer = TeamDetailsSerializers(i)
+            team_details.append(serializer.data)
+
+        if not user2:
+            pass
+        for i in user2:
+            serializer = TeamDetailsSerializers(i)
+            participation.append(serializer.data)
+        return Response({'message': 'Success', 'payload': {'team_details': team_details,'team_participation':participation}}, status=200)
 
 class EventDetails(APIView):
     def get(self, request, id):#?query_param e ?username=something link er last e
