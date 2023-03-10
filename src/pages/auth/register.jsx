@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
@@ -6,32 +6,29 @@ import { useFetch } from '../../hooks/useFetch'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
 import { useAuthContext } from '../../containers/AuthProvider'
+import { getAvatarIdx} from '../../data/avatar-colors'
+import getFormData from '../../utils/getFormData'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
   const { setNotification, setAllNotification } = useAuthContext()
+
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
-
-  const [formData, { set }] = useMap({
-    name: '',
-    username: '',
-    email: '',
-    password: '',
-    confirm_password: '',
-    institution_name: '',
-    phone_no: '',
-  })
+  const formRef = useRef(null)
 
   const [validationErrors, { set: setError,reset: resetErrors }] = useMap({
     password: null,
     confirm_password: null,
   })
 
-  const fields = getFields(formData, validationErrors, set)
+  const fields = getFields(validationErrors)
 
-  function signUp(e) {
+  const signUp = useCallback(e => {
     e.preventDefault()
+
+    const formData = getFormData(formRef.current, { format: 'object' })
+    formData['avatar_idx'] = getAvatarIdx('email')
 
     if (formData.password !== formData.confirm_password) {
       setError('password', 'Password and confirm password do not match')
@@ -62,7 +59,7 @@ const SignUpPage = () => {
           status: 'error',
         })
       })
-  }
+  }, [validationErrors, formRef])
 
   return (
     <main className='sm:max-w-2xl px-4 sm:px-0'>
@@ -70,7 +67,7 @@ const SignUpPage = () => {
         <title>Moksha | Sign up</title>
       </Helmet>
 
-      <form className="space-y-6" onSubmit={signUp}>
+      <form ref={formRef} className="space-y-6" onSubmit={signUp}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           { fields.map(field => <BaseInput key={ field.id } {...field} />) }
         </div>
@@ -95,7 +92,7 @@ const SignUpPage = () => {
 }
 export default SignUpPage
 
-const getFields = (formData, validationErrors, set) => {
+const getFields = (validationErrors) => {
   const fields = [
     {
       id: "name",
@@ -104,8 +101,6 @@ const getFields = (formData, validationErrors, set) => {
       autoComplete: "name",
       required: true,
       label: "Name",
-      value: formData.name,
-      onChange: e => set('name', e.target.value),
     },
     {
       id: "username",
@@ -114,8 +109,6 @@ const getFields = (formData, validationErrors, set) => {
       autoComplete: "username",
       required: true,
       label: "Username",
-      value: formData.username,
-      onChange: e => set('username', e.target.value),
     },
     {
       id: "email",
@@ -124,18 +117,14 @@ const getFields = (formData, validationErrors, set) => {
       autoComplete: "email",
       required: true,
       label: "Email address",
-      value: formData.email,
-      onChange: e => set('email', e.target.value),
     },
     {
       id: "institution",
-      name: "institution",
+      name: "institution_name",
       type: "text",
       autoComplete: "organization",
       required: true,
       label: "Institution name",
-      value: formData.institution_name,
-      onChange: e => set('institution_name', e.target.value),
     },
     {
       id: "password",
@@ -146,33 +135,28 @@ const getFields = (formData, validationErrors, set) => {
       minLength: 8,
       maxLength: 30,
       label: "Password",
-      value: formData.password,
       validationError: validationErrors.password,
-      onChange: e => set('password', e.target.value),
     },
     {
       id: "phone",
       name: "phone",
       type: "tel",
       autoComplete: "tel",
+      inputMode: 'numeric',
       required: true,
       label: "Phone number",
       pattern: "[0-9]{10}",
       minLength: 10,
       maxLength: 10,
-      value: formData.phone_no,
-      onChange: e => set('phone_no', e.target.value),
     },
     {
       id: "confirm-password",
-      name: "confirm-password",
+      name: "confirm_password",
       type: "password",
       autoComplete: "new-password",
       required: true,
       label: "Confirm password",
-      value: formData.confirm_password,
       validationError: validationErrors.confirm_password,
-      onChange: e => set('confirm_password', e.target.value),
     },
   ]
   return fields

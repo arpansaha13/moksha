@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
@@ -7,6 +7,7 @@ import BaseButton from '../../components/base/BaseButton'
 import OtpInput from '../../components/common/OtpInput'
 import { useAppContext } from '../../containers/DataProvider'
 import { useAuthContext } from '../../containers/AuthProvider'
+import classNames from '../../utils/classNames'
 
 const VerificationPage = () => {
   const navigate = useNavigate()
@@ -16,6 +17,8 @@ const VerificationPage = () => {
   const fetchHook = useFetch()
 
   const [loading, setLoading] = useState(false)
+  const [cooldownIsActive, setCooldown] = useState(false)
+
   const [formData, { set }] = useMap({
     otp: '',
   })
@@ -46,6 +49,8 @@ const VerificationPage = () => {
   }
 
   function resendOTP() {
+    setCooldown(true)
+
     fetchHook('users/resendotp').then(() => {
       setAllNotification({
         show: true,
@@ -78,12 +83,19 @@ const VerificationPage = () => {
           setValue={value => set('otp', value)}
         />
 
-        <div className="flex items-center">
-          <div className="text-sm">
-            <button type="button" className="font-medium text-amber-600 hover:text-amber-500" onClick={resendOTP}>
-              Resend OTP
-            </button>
-          </div>
+        <div className="flex items-center justify-between gap-3 text-sm">
+          <button
+            type="button"
+            className={classNames(
+              "block font-medium text-amber-600",
+              cooldownIsActive ? '' : 'hover:text-amber-500'
+            )}
+            disabled={cooldownIsActive}
+            onClick={resendOTP}
+          >
+            Resend OTP
+          </button>
+          { cooldownIsActive && <ResendOtpCooldown onCooldownEnd={setCooldown.bind(false)} /> }
         </div>
 
         <div>
@@ -96,3 +108,29 @@ const VerificationPage = () => {
   )
 }
 export default VerificationPage
+
+const ResendOtpCooldown = memo(({ onCooldownEnd }) => {
+  const [count, setCount] = useState(30)
+  const timeoutId = useRef(null)
+
+  useEffect(() => {
+    timeoutId.current = setInterval(() => {
+      setCount(state => {
+        if (state === 1) {
+          clearInterval(timeoutId.current)
+          onCooldownEnd()
+          return state
+        }
+        return state - 1
+      })
+    }, 1000)
+  }, [])
+
+  return (
+    <p className="text-gray-400 text-xs">
+      Resend again in {' '}
+      <span>{ count }</span>
+      {' '} seconds
+    </p>
+  )
+})

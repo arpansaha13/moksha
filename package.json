@@ -8,13 +8,7 @@
     "@sanity/image-url": "^1.0.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.9",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.13",
-    "framer-motion": "^6.3.1",
-    "gsap": "^3.11.4",
-    "nodemon": "^2.0.20",
     "postcss": "^8.4.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -22,8 +16,7 @@
     "react-router-dom": "^6.8.1",
     "react-scripts": "^5.0.1",
     "react-tilt": "^0.1.4",
-    "tailwindcss": "^3.2.6",
-    "web-vitals": "^2.1.4"
+    "tailwindcss": "^3.2.6"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -53,7 +46,11 @@
     ]
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@babel/eslint-parser": "^7.19.1",
+=======
+    "@headlessui/react": "^1.7.13",
+>>>>>>> 6a012519a1bd3b1fe173fcdc51828d57f6a10d0b
     "@iconify-icons/mdi": "^1.2.41",
     "@iconify/react": "^4.1.0",
     "@tailwindcss/line-clamp": "^0.4.2",
@@ -62,6 +59,7 @@
     "babel-eslint": "^10.1.0",
     "change-case": "^4.1.2",
     "focus-trap": "^7.3.1",
+    "nprogress": "^0.2.0",
     "prettier": "^2.8.4",
     "react-helmet": "^6.1.0",
     "serve": "^14.2.0",

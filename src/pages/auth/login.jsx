@@ -1,29 +1,27 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
-import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
 import { useAppContext } from '../../containers/DataProvider'
 import { useAuthContext } from '../../containers/AuthProvider'
+import getFormData from '../../utils/getFormData'
 
 const LoginPage = () => {
   const { setAppContext } = useAppContext()
   const { setNotification, setAllNotification } = useAuthContext()
+
   const navigate = useNavigate()
-
   const fetchHook = useFetch()
+  const formRef = useRef(null)
   const [loading, setLoading] = useState(false)
-
-  const [formData, { set }] = useMap({
-    email: '',
-    password: '',
-  })
 
   const signIn = useCallback(e => {
     e.preventDefault()
     setLoading(true)
+
+    const formData = getFormData(formRef.current, { format: 'object' })
 
     fetchHook('users/login', {
       method: 'POST',
@@ -48,7 +46,7 @@ const LoginPage = () => {
         status: 'error',
       })
     })
-  }, [formData])
+  }, [formRef])
 
   return (
     <main className='max-w-md px-4 sm:px-0'>
@@ -56,7 +54,7 @@ const LoginPage = () => {
         <title>Moksha | Login</title>
       </Helmet>
 
-      <form className="space-y-6" onSubmit={signIn}>
+      <form ref={formRef} className="space-y-6" onSubmit={signIn}>
         <BaseInput
           id="email"
           name="email"
@@ -64,8 +62,6 @@ const LoginPage = () => {
           autoComplete="email"
           required
           label="Email address"
-          value={formData.email}
-          onChange={e => set('email', e.target.value)}
         />
 
         <BaseInput
@@ -75,8 +71,6 @@ const LoginPage = () => {
           autoComplete="current-password"
           required
           label="Password"
-          value={formData.password}
-          onChange={e => set('password', e.target.value)}
         />
 
         <div className="text-sm flex items-center justify-between">

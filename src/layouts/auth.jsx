@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useAppContext } from '../containers/DataProvider'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import Notification from '../components/common/Notification'
 import CastleGate3 from '../assets/castle-gate-3.svg'
 import { useAuthContext } from '../containers/AuthProvider'
@@ -21,20 +20,16 @@ const getHeading = (route) => {
 }
 
 export default function AuthLayout() {
-  const { appContext } = useAppContext()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (appContext.authenticated) navigate('/')
-  }, [])
-
   const { notification, setNotification } = useAuthContext()
   const setShowNotification = useCallback(bool => setNotification('show', bool), [])
 
   const location = useLocation()
   const [heading, setHeading] = useState(getHeading(location.pathname))
 
-  useEffect(() => setHeading(getHeading(location.pathname)), [location])
+  useEffect(() => {
+    setHeading(getHeading(location.pathname))
+    setShowNotification(false)
+  }, [location.pathname])
 
   return (
     <div className="relative min-w-screen min-h-screen text-white">

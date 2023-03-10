@@ -1,4 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link, useParams } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
@@ -17,12 +18,12 @@ export default function Contest() {
 
   const isSoloContest = false
 
-  useEffect(() => {
-    // Fetch contest details
-  }, [])
-
   return (
     <Container as="section" className='py-4' id={`contest-${contest}`}>
+      <Helmet>
+        <title>Moksha | Contests</title>
+      </Helmet>
+
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full">
         <div className="lg:col-span-3 h-full space-y-4 sm:space-y-6">
           <Link to="/contests" className="flex items-center font-medium text-amber-600 hover:text-amber-500 cursor-pointer">

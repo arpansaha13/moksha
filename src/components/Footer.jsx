@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import instagramIcon from '@iconify-icons/mdi/instagram'
 import githubIcon from '@iconify-icons/mdi/github'
-import navTabs from '../../data/nav-tabs'
+import { navTabs } from '../data/tabs'
 
 const socialLinks = [
   {

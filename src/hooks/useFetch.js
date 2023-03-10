@@ -1,4 +1,6 @@
+import { useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useAppContext } from '../containers/DataProvider'
 import createRequest from '../utils/createRequest'
 
 /**
@@ -24,21 +26,24 @@ import createRequest from '../utils/createRequest'
 export function useFetch() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { resetAppContext } = useAppContext()
 
-  return async function fetchHook(url, options) {
+  const fetchHook = useCallback(async (url, options) => {
     const request = createRequest(url, options)
 
     const res = await fetch(request)
     const jsonData = await res.json()
 
-    console.log(location.pathname)
-
     if (res.status >= 400) {
-      if (res.status === 401 && !location.pathname.startsWith('/auth/')) {
+      // Expired token gives 403 exception with a "detail" key in response object
+      if ((res.status === 403 || jsonData.detail) && !location.pathname.startsWith('/auth/')) {
+        resetAppContext()
         navigate('/auth/login')
       }
       throw jsonData
     }
     return jsonData
-  }
+  }, [location.pathname])
+
+  return fetchHook
 }

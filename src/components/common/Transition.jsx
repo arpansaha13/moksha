@@ -18,11 +18,11 @@ export const Transition = ({
   afterLeave, // call after leave, if any
   ...props
 }) => {
-  const [initialClasses, { setAll }] = useList([])
+  const [initialClasses, setClasses] = useState('')
   const isFirstRender = useRef(!appear)
 
   useEffect(() => {
-    setAll(Children.map(children, (child, i) => {
+    setClasses(Children.map(children, (child, i) => {
       return child.props.className
     }))
   }, [])
@@ -51,6 +51,14 @@ export const Transition = ({
   }, [show])
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    if (show) setChildren(cloneElement(children, { className: classNames(initialClasses, enter, enterTo) }))
+  }, [children])
+
+  useEffect(() => {
     if (resetting.current) {
       resetting.current = false
       setChildren(show || !unmount ? modifiedChildren : null)
@@ -58,26 +66,23 @@ export const Transition = ({
 
     if (!entering) return
 
-    const newChildren = Children.map(children, (child, i) => {
-      let clonedChild
+    let newChildren
 
-      if (transitionState === 1) {
-        clonedChild = cloneElement(child, { className: classNames(initialClasses[i], enter, enterFrom) })
-        setTimeout(setTransitionState, 200, 2)
+    if (transitionState === 1) {
+      newChildren = cloneElement(children, { className: classNames(initialClasses, enter, enterFrom) })
+      setTimeout(setTransitionState, 200, 2)
+    }
+    else if (transitionState === 2) {
+      const onTransitionEnd = () => {
+        setEntering(false)
+        resetTransitionState()
       }
-      else if (transitionState === 2) {
-        const onTransitionEnd = () => {
-          setEntering(false)
-          resetTransitionState()
-        }
-        const newProps = {
-          className: classNames(initialClasses[i], enter, enterTo),
-          onTransitionEnd
-        }
-        clonedChild = cloneElement(child, newProps)
+      const newProps = {
+        className: classNames(initialClasses, enter, enterTo),
+        onTransitionEnd
       }
-      return clonedChild
-    })
+      newChildren = cloneElement(children, newProps)
+    }
     setChildren(newChildren)
   }, [entering, transitionState])
 
@@ -89,30 +94,27 @@ export const Transition = ({
 
     if (!leaving) return
 
-    const newChildren = Children.map(children, (child, i) => {
-      let clonedChild
+    let newChildren
 
-      if (transitionState === 1) {
-        clonedChild = cloneElement(child, { className: classNames(initialClasses[i], leave, leaveFrom) })
-        setTransitionState(2)
-      }
-      else if (transitionState === 2) {
-        const newProps = {
-          className: classNames(initialClasses[i], leave, leaveTo),
-          onTransitionEnd: () => {
-            afterLeave?.()
-            setTransitionState(3)
-          }
+    if (transitionState === 1) {
+      newChildren = cloneElement(children, { className: classNames(initialClasses, leave, leaveFrom) })
+      setTransitionState(2)
+    }
+    else if (transitionState === 2) {
+      const newProps = {
+        className: classNames(initialClasses, leave, leaveTo),
+        onTransitionEnd: () => {
+          afterLeave?.()
+          setTransitionState(3)
         }
-        clonedChild = cloneElement(child, newProps)
       }
-      else if (transitionState === 3) {
-        clonedChild = unmount ? null : child
-        setLeaving(false)
-        resetTransitionState()
-      }
-      return clonedChild
-    })
+      newChildren = cloneElement(children, newProps)
+    }
+    else if (transitionState === 3) {
+      newChildren = unmount ? null : children
+      setLeaving(false)
+      resetTransitionState()
+    }
 
     setChildren(newChildren)
   }, [leaving, transitionState])

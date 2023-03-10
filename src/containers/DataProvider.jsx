@@ -4,9 +4,11 @@ import { useMap } from "../hooks/useMap"
 const data = {
   authenticated: false,
   authUser: {
+    user_id: '',
     name: '',
     username: '',
     email: '',
+    avatar_idx: 0,
     institution_name: '',
     phone_no: '',
   }
@@ -15,9 +17,9 @@ const data = {
 const DataContext = createContext(null)
 
 const DataProvider = ({ children }) => {
-  const [appContext, { set: setAppContext }] = useMap(data)
+  const [appContext, { set: setAppContext, reset: resetAuthContext }] = useMap(data)
 
-  const providerContext = useMemo(() => ({ appContext, setAppContext }), [appContext])
+  const providerContext = useMemo(() => ({ appContext, setAppContext, resetAuthContext }), [appContext])
 
   return (
     <DataContext.Provider value={providerContext}>

@@ -1,23 +1,15 @@
-import { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
-import { STORAGE_AUTH_KEY } from '../../constants'
 import { useAppContext } from '../../containers/DataProvider'
 
 const ForgotPasswordPage = () => {
-  const [token, setAuthToken] = useLocalStorage(STORAGE_AUTH_KEY)
   const { setAppContext } = useAppContext()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (token) navigate('/')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const fetchHook = useFetch()
 

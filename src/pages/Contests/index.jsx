@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { memo } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { capitalCase } from 'change-case'
 import Container from '../../components/common/Container'
@@ -19,6 +20,10 @@ function Contests() {
 
   return (
     <>
+      <Helmet>
+        <title>Moksha | Contests</title>
+      </Helmet>
+
       <Container className="pb-4 grid grid-cols-1 sm:grid-cols-2" id="contests-hero-section">
         <div className='markdown'>
           <h1>Contests</h1>
@@ -69,15 +74,15 @@ const ClubContest = memo(({ clubName, contests }) => {
   return (
     <Container
       as="section"
-      className="flex-grow py-4 w-full xl:!max-w-[84rem]"
+      className="flex-grow py-4 w-full"
       id={`${clubName}-contests`}
     >
       <h2 className="mb-6 text-4xl font-semibold">{ capitalCase(clubName) }</h2>
 
       <CardsSlider.Wrapper
         list={contests}
-        exposeWidth={44}
-        visibleCount={{ base: 1, sm: 3, xl: 4 }}
+        exposeWidth={{ base: 44, sm: 140 }}
+        visibleCount={{ base: 1, sm: 3 }}
       >
         {
           ({ scrollToStart, scrollToEnd, prev, next, start, end, visible, total }) => (
@@ -86,7 +91,7 @@ const ClubContest = memo(({ clubName, contests }) => {
                 {
                   contest => (
                     <Link to={`/contests/${clubName}/${contest.id}`}>
-                      <Sheet className="w-full h-full bg-amber-900/60 text-sm overflow-hidden">
+                      <Sheet className="w-full h-full !bg-amber-900/60 text-sm overflow-hidden">
                         <div className="w-full h-48 flex items-center justify-center">
                           <img src={CastleGate2} alt='' className='w-full h-full object-cover' aria-hidden={true} />
                         </div>
