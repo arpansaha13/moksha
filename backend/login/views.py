@@ -12,10 +12,10 @@ import string
 import jwt
 import datetime
 from django.contrib.auth.hashers import make_password,check_password
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 
 class RegisterApi(APIView):
-    @csrf_exempt
+    # @csrf_exempt
     def post(self, request):
         email = request.data['email']
         response = Response()
@@ -100,7 +100,7 @@ class DetailsUserName(APIView):
         return Response({'message': 'Success', 'payload': {'details': data}}, status=200)
     
 class LoginApi(APIView):
-    @csrf_exempt
+    # @csrf_exempt
     def post(self, request):
         response = Response()
         try:
@@ -195,7 +195,7 @@ class LoginApi(APIView):
 
 
 class ForgotApi(APIView):
-    @csrf_exempt
+    # @csrf_exempt
     def post(self, request):
         response = Response()
         user_id=request.data['email']
@@ -235,7 +235,7 @@ class ForgotApi(APIView):
         return response   
 
 class ChangePasswordApi(APIView):
-    @csrf_exempt
+    # @csrf_exempt
     def post(self, request):
         try:
             token = request.COOKIES['reset']
@@ -326,7 +326,7 @@ class LogoutApi(APIView):
 
 
 class OTPValidation(APIView):
-    @csrf_exempt
+    # @csrf_exempt
     def post(self, request):
         try:
             token = request.COOKIES['otp']
@@ -339,7 +339,7 @@ class OTPValidation(APIView):
             except jwt.ExpiredSignatureError:
                 raise AuthenticationFailed('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
-            otp = request.data['otp']
+            otp = request.data['otp_data']
             if user:
                 if user.otp == otp:
                     user.otp = ''
