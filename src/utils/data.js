@@ -5,7 +5,7 @@ export const feedQuery = `*[_type == "events"] | order(_createdAt desc) {
       }
     },
     name,
-        _slug,
+        slug,
         category,
         description,
  } `
