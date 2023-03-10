@@ -1,41 +1,52 @@
-/* eslint-disable jsx-a11y/alt-text */
-import { useState } from "react"
-import { Helmet } from "react-helmet"
+/* eslint-disable import/no-anonymous-default-export */
+import { useEffect, useState } from 'react'
+import Container from '../components/common/Container'
+import { Client, urlFor } from '../utils/Client'
+import { feedQuery } from '../utils/data'
+import Category from '../components/Category/Category'
+import { Link } from 'react-router-dom'
 
-function Events() {
-  const [openModel, setOpenModel] = useState(false);
+export default function () {
+  const [events, setEvents] = useState()
+  const [eventNew, setEventNew] = useState(events)
+
+  const filterEvents = category => {
+    setEventNew(category)
+  }
+
+  useEffect(() => {
+    Client.fetch(feedQuery).then(data => {
+      setEvents(data)
+    })
+  }, [])
 
   return (
-    <>
-      <Helmet>
-        <title>Moksha | Events</title>
-      </Helmet>
+    <Container className='w-full max-w-md px-2 py-16 sm:px-0'>
+      <Category events={events} filterEvents={filterEvents} />
 
-      <div className=" mt-[80px] ">
-        <div className="flex justify-center mx-[2px] items-center sm:mx-auto">
-          <img
-            src="https://imgs.search.brave.com/DJ2IC7NS4xuxojmtlESdT_nIeSKmidXy71mIAyKayUY/rs:fit:1200:857:1/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDI0ODMz/MjkuanBn"
-            className="box-border cursor-pointer object-fill w-[889px] h-[250px] sm:h-[400px] left-0 border-solid border-1 border-black bg-prime-yell"
-          />
-          <img
-            onClick={() => setOpenModel(true)}
-            src="https://imgs.search.brave.com/TeotcDDseRu34FVtwZ4OolqkT9VG1a7_3ilEJEWuw-w/rs:fit:1200:1200:1/g:ce/aHR0cDovL2QyOGhn/cHJpOGFtMmlmLmNs/b3VkZnJvbnQubmV0/L2Jvb2tfaW1hZ2Vz/L29uaXgvY3ZyOTc4/MTYwODg3Mzk2OC9t/YXJ2ZWwtY29taWNz/LTk3ODE2MDg4NzM5/NjhfaHIuanBn"
-            className="ml-4 cursor-pointer box-border object-contain w-[551px] h-[250px] sm:h-[400px] bg-sec-yell left-[889px] border-solid border-1 border-black"
-          />
-        </div>
-        <div className="flex mt-1 justify-center mx-[2px] items-center">
-          <img
-            src="https://imgs.search.brave.com/TeotcDDseRu34FVtwZ4OolqkT9VG1a7_3ilEJEWuw-w/rs:fit:1200:1200:1/g:ce/aHR0cDovL2QyOGhn/cHJpOGFtMmlmLmNs/b3VkZnJvbnQubmV0/L2Jvb2tfaW1hZ2Vz/L29uaXgvY3ZyOTc4/MTYwODg3Mzk2OC9t/YXJ2ZWwtY29taWNz/LTk3ODE2MDg4NzM5/NjhfaHIuanBn"
-            className="box-border cursor-pointer sm:w-[551px] w-[400px] object-contain h-[250px] sm:h-[400px] bg-sec-yell left-[889px] border-solid border-1 border-black"
-          />
-          <img
-            src="https://imgs.search.brave.com/DJ2IC7NS4xuxojmtlESdT_nIeSKmidXy71mIAyKayUY/rs:fit:1200:857:1/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDI0ODMz/MjkuanBn"
-            className="box-border cursor-pointer w-[889px] object-fill h-[250px] sm:h-[400px] left-0 border-solid border-1 border-black bg-prime-yell"
-          />
-        </div>
+      <div className='grid grid-cols-12 gap-8 mt-10'>
+        {events?.map(event => {
+          return (
+            <div className='flex flex-col col-span-12 bg-ochre/25 rounded-lg cursor-pointer md:col-span-6 xl:col-span-3 h-fit'>
+              <Link to={`/events/${event.slug}`}>
+                <div className='flex flex-col bg-white z-30 rounded-md'>
+                  <div className='w-full max-h-1/2'>
+                    <img
+                      className='object-cover w-full rounded-tl-lg rounded-tr-lg aspect-square'
+                      src={urlFor(event.image)}
+                      alt=''
+                    />
+                  </div>
+                </div>
+                <div className='flex flex-col space-y-2 pb-4 items-center justify-between px-3 mt-4'>
+                  <h3 className='text-xl font-semibold text-ochre'>{event.name}</h3>
+                  <h5>{event.description.slice(0, 250)}</h5>
+                </div>
+              </Link>
+            </div>
+          )
+        })}
       </div>
-    </>
-  );
+    </Container>
+  )
 }
-
-export default Events;
