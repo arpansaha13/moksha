@@ -91,7 +91,7 @@ const ClubContest = memo(({ clubName, contests }) => {
                 {
                   contest => (
                     <Link to={`/contests/${clubName}/${contest.id}`}>
-                      <Sheet className="w-full h-full bg-amber-900/60 text-sm overflow-hidden">
+                      <Sheet className="w-full h-full !bg-amber-900/60 text-sm overflow-hidden">
                         <div className="w-full h-48 flex items-center justify-center">
                           <img src={CastleGate2} alt='' className='w-full h-full object-cover' aria-hidden={true} />
                         </div>

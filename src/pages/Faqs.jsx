@@ -37,7 +37,7 @@ function Faqs() {
             {
               faqs.map(faq => (
                 <Sheet
-                  className="group p-4 sm:p-6 bg-amber-900/30"
+                  className="group p-4 sm:p-6"
                   key={ slugify(faq.question) }
                   id={ slugify(faq.question) }
                 >
@@ -49,7 +49,7 @@ function Faqs() {
         </section>
 
         <aside className="hidden lg:block lg:col-span-1" id='moksha-faqs-table-of-contents'>
-          <Sheet className="p-4 bg-amber-900/30 sticky top-4 markdown prose-a:no-underline prose-a:text-[inherit] prose-a:font-normal">
+          <Sheet className="p-4 sticky top-4 markdown prose-a:no-underline prose-a:text-[inherit] prose-a:font-normal">
             { asideTable }
           </Sheet>
         </aside>
