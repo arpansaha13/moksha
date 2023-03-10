@@ -24,7 +24,7 @@ body {
   @apply !shadow !shadow-amber-800;
 }
 #nprogress .spinner-icon {
-  @apply !border-amber-800;
+  @apply !border-x !border-amber-800;
 }
 
 /* Markdown/Prose modifications */
@@ -33,4 +33,18 @@ body {
 }
 .markdown :where(h1,h2,h3,h4,h5,h6):not(:where([class~='not-prose'] *)) {
   @apply first:mt-0;
+}
+
+/* Scrollbar */
+.scrollbar::-webkit-scrollbar,
+.scrollbar::-webkit-scrollbar-track,
+.scrollbar::-webkit-scrollbar-track-piece {
+  @apply block w-1.5;
+}
+
+.scrollbar::-webkit-scrollbar-button {
+  @apply hidden;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply block bg-orange-800/70;
 }

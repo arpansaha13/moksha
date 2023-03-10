@@ -11,7 +11,7 @@ const Dropdown = memo(({ name, avatarIdx, onLogOut }) => {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="block w-11 h-11 lg:w-14 lg:h-14 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ochre focus-visible:ring-opacity-75">
-          <Avatar name={name} avatarIdx={avatarIdx} />
+          <Avatar avatarIdx={avatarIdx} />
         </Menu.Button>
       </div>
       <Transition

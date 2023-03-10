@@ -47,13 +47,13 @@ export function useList(initialValue, options) {
     if (typeof maxLength !== 'undefined' && list.length === maxLength) return
 
     dispatch({ type: 'push', value })
-  }, [])
+  }, [list])
 
   const pop = useCallback((index) => {
     if (typeof minLength !== 'undefined' && list.length === minLength) return
 
     dispatch({ type: 'pop', index })
-  }, [])
+  }, [list])
 
   const setAll = useCallback((newList) => {
     dispatch({ type: 'all', newList })

@@ -35,8 +35,8 @@ export function useFetch() {
     const jsonData = await res.json()
 
     if (res.status >= 400) {
-      // Expired token gives 403 exception with a "detail" key in response object
-      if ((res.status === 403 || jsonData.detail) && !location.pathname.startsWith('/auth/')) {
+      // Expired token gives 403 or 401 exception with a "detail" key in response object
+      if ((res.status === 403 || res.status === 401 || jsonData.detail) && !location.pathname.startsWith('/auth/')) {
         resetAppContext()
         navigate('/auth/login')
       }

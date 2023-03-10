@@ -1,38 +1,54 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { createContext, useCallback, useContext, useEffect, useMemo } from "react"
 import { useMap } from '../../../hooks/useMap'
 import getValueByBreakpoint from '../../../utils/getValueAtBreakpoint'
 
 const DataContext = createContext(null)
 
 const Wrapper = ({ list, children, visibleCount, exposeWidth = 0 }) => {
-  const effectiveVisibleCount = useRef(5)
-
   const [context, {set: setContext}] = useMap({
     rootRef: null,
     rootWidth: 0,
     list,
-    visibleCount: effectiveVisibleCount.current,
-    exposeWidth,
+    visibleCount: 5,
+    exposeWidth: 0,
     start: 0,
-    end: effectiveVisibleCount.current - 1,
+    end: 4,
   })
 
   useEffect(() => {
+    let effectiveVisibleCount = 0
+
     if (typeof visibleCount === 'number') {
-      effectiveVisibleCount.current = visibleCount
+      effectiveVisibleCount = visibleCount
     }
     else if (typeof visibleCount === 'object') {
       if (Object.keys(visibleCount).length === 0) {
         throw new Error('No breakpoints provided for prop `visibleCount`.')
       }
-      effectiveVisibleCount.current = getValueByBreakpoint(visibleCount)
+      effectiveVisibleCount = getValueByBreakpoint(visibleCount)
     }
     else {
       throw new Error('Invalid value for prop `visibleCount`.')
     }
-    setContext('visibleCount', effectiveVisibleCount.current)
-    setContext('end', effectiveVisibleCount.current - 1)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setContext('visibleCount', effectiveVisibleCount)
+    setContext('end', effectiveVisibleCount - 1)
+
+    let effectiveExposeWidth = 0
+
+    if (typeof exposeWidth === 'number') {
+      effectiveExposeWidth = exposeWidth
+    }
+    else if (typeof exposeWidth === 'object') {
+      if (Object.keys(exposeWidth).length === 0) {
+        throw new Error('No breakpoints provided for prop `exposeWidth`.')
+      }
+      effectiveExposeWidth = getValueByBreakpoint(exposeWidth)
+    }
+    else {
+      throw new Error('Invalid value for prop `exposeWidth`.')
+    }
+    setContext('exposeWidth', effectiveExposeWidth)
   }, [])
 
   const scrollToStart = useCallback(() => {

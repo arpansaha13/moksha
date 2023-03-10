@@ -1,10 +1,8 @@
-import { useEffect, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useParams } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
-import { useFetch } from '../../hooks/useFetch'
-import Sheet from '../../components/common/Sheet'
 import Container from '../../components/common/Container'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
 import '@tranzis/react/styles/Tz3dCard'
@@ -14,7 +12,6 @@ const TeamRegistration = lazy(() => import('../../components/Contests/TeamRegist
 
 export default function Contest() {
   const { contest } = useParams()
-  const fetchHook = useFetch()
 
   const isSoloContest = false
 
@@ -25,31 +22,13 @@ export default function Contest() {
       </Helmet>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full">
-        <div className="lg:col-span-3 h-full space-y-4 sm:space-y-6">
-          <Link to="/contests" className="flex items-center font-medium text-amber-600 hover:text-amber-500 cursor-pointer">
+        <div className="lg:col-span-3 h-full">
+          <Link to="/contests" className="w-max flex items-center font-medium text-sm lg:text-base text-amber-600 hover:text-amber-500 cursor-pointer">
             <Icon icon={leftIcon} className="inline-block" color="inherit" width='1.5rem' height='1.5rem' />
             <span>Go to contests</span>
           </Link>
 
-          <Sheet className="p-4 sm:p-6 bg-amber-900/30">
-            <article className='markdown'>
-              <h1>{isSoloContest ? 'Solo' : 'Team'} contest name</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium saepe a voluptate? Ad enim dicta provident deleniti vitae! Ratione cumque reprehenderit animi error. Aliquam numquam, maiores atque obcaecati rem animi?
-              </p>
-            </article>
-          </Sheet>
-
-          <Sheet className="p-4 sm:p-6 bg-amber-900/30">
-            <article className='markdown'>
-              <h2>Instructions</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium saepe a voluptate? Ad enim dicta provident deleniti vitae! Ratione cumque reprehenderit animi error. Aliquam numquam, maiores atque obcaecati rem animi?
-              </p>
-            </article>
-          </Sheet>
-
-          <Suspense fallback={<div />}>
+          <Suspense fallback={null}>
             { isSoloContest ? <SoloRegistration /> : <TeamRegistration /> }
           </Suspense>
         </div>

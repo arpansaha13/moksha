@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
-import Transition from './Transition'
+import { Transition } from '@headlessui/react'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 import closeIcon from '@iconify-icons/mdi/close'
 import checkIcon from '@iconify-icons/mdi/check-circle-outline'

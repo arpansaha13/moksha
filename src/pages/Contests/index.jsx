@@ -119,7 +119,7 @@ const ClubContest = memo(({ clubName, contests }) => {
 
                     {/* Specify a width to prevent shifts in width during scroll */}
                     <p className="w-[5ch] sm:w-[8ch] text-center">
-                      <span>{start + 1}</span>
+                      <span>{start + 1}{''}</span>
                       <span className="hidden sm:inline">{'-'}{end + 1}</span>
                       <span>{'/'}{total}</span>
                     </p>
