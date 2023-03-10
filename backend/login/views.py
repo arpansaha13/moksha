@@ -344,11 +344,11 @@ class OTPValidation(APIView):
                 if user.otp == otp:
                     user.otp = ''
                     user.save()
-                    response.set_cookie('otp',max_age=2,httponly=True)
+                    response.set_cookie('otp',max_age=1,httponly=True)
                     response.cookies['otp'].update({"samesite":"None","secure":True})
                     # response.delete_cookie('otp')
                     return Response({'message': 'User Validated.'}, status=200)
-                return Response({'message': 'OTP Not Matched.'}, status=401)
+                return Response({'message': 'Invalid OTP.'}, status=401)
             return Response({'message': 'User Not Found.'}, status=404)
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
