@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
@@ -17,27 +17,38 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false)
   const formRef = useRef(null)
 
-  const [validationErrors, { set: setError,reset: resetErrors }] = useMap({
+  const [validationErrors, { set: setError }] = useMap({
+    username: null,
     password: null,
     confirm_password: null,
   })
 
-  const fields = getFields(validationErrors)
+  const fields = useMemo(() => getFields(validationErrors), [validationErrors])
 
   const signUp = useCallback(e => {
     e.preventDefault()
 
     const formData = getFormData(formRef.current, { format: 'object' })
     formData['avatar_idx'] = getAvatarIdx('email')
+    formData['username'] = formData['username'].toLowerCase() // force lowercase
+
+    let hasError = false
 
     if (formData.password !== formData.confirm_password) {
       setError('password', 'Password and confirm password do not match')
       setError('confirm_password', 'Password and confirm password do not match')
-      return
+      hasError = true
     }
     else if (validationErrors.password) {
-      resetErrors()
+      setError('password', null)
+      setError('confirm_password', null)
     }
+
+    if (!validateUsername(formData.username, setError)) {
+      hasError = true
+    }
+
+    if (hasError) return
 
     setLoading(true)
 
@@ -92,6 +103,26 @@ const SignUpPage = () => {
 }
 export default SignUpPage
 
+function validateUsername(username, setError) {
+  const spacialChars = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,<>\/?~]/
+  const consecutiveDots = /\.{2,}/g
+
+  if (username.includes(' ')) {
+    setError('username', 'Username cannot contain any spaces')
+  }
+  else if (spacialChars.test(username)) {
+    setError('username', 'Username cannot contain special characters')
+  }
+  else if (consecutiveDots.test(username)) {
+    setError('username', 'Username cannot contain consecutive dots')
+  }
+  else {
+    setError('username', null)
+    return true
+  }
+  return false
+}
+
 const getFields = (validationErrors) => {
   const fields = [
     {
@@ -99,6 +130,7 @@ const getFields = (validationErrors) => {
       name: "name",
       type: "text",
       autoComplete: "name",
+      autocapitalize: "words",
       required: true,
       label: "Name",
     },
@@ -107,8 +139,13 @@ const getFields = (validationErrors) => {
       name: "username",
       type: "text",
       autoComplete: "username",
+      autocapitalize: "none",
       required: true,
       label: "Username",
+      minLength: 6,
+      maxLength: 20,
+      validationError: validationErrors.username,
+      style: { textTransform: 'lowercase' }, // force lowercase
     },
     {
       id: "email",
@@ -123,6 +160,7 @@ const getFields = (validationErrors) => {
       name: "institution_name",
       type: "text",
       autoComplete: "organization",
+      autocapitalize: "words",
       required: true,
       label: "Institution name",
     },
