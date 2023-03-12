@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseInput from '../../components/base/BaseInput'
@@ -11,6 +11,7 @@ import getFormData from '../../utils/getFormData'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
+  let [searchParams] = useSearchParams()
   const { setNotification, setAllNotification } = useAuthContext()
 
   const fetchHook = useFetch()
@@ -59,7 +60,7 @@ const SignUpPage = () => {
       .then(() => {
         setLoading(false)
         setNotification('show', false)
-        navigate('/auth/verification')
+        navigate({pathname: '/auth/verification', search: searchParams.toString()})
       })
       .catch(err => {
         setLoading(false)
@@ -92,7 +93,7 @@ const SignUpPage = () => {
         <div className="flex items-center">
           <div className="text-sm">
             <span className="text-gray-100">Already have an account?</span>{' '}
-            <Link to="/auth/login">
+            <Link to={{pathname: "/auth/login", search: searchParams.toString()}}>
               <span className="font-medium text-amber-600 hover:text-amber-500 cursor-pointer">Login</span>
             </Link>
           </div>

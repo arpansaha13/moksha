@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-unused-vars */
 import { memo, useCallback } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { createSearchParams, NavLink, useLocation, useNavigate } from "react-router-dom"
 import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
 import closeIcon from '@iconify-icons/mdi/close'
@@ -11,11 +11,18 @@ import { useFetch } from '../../hooks/useFetch'
 import { useWindowSize } from "../../hooks/useWindowSize"
 import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 import { navTabs } from '../../data/tabs'
+import classNames from "../../utils/classNames"
 
 const NavTab = memo(({ to, children }) => (
-  <Link to={to} className="block w-max font-semibold text-lg sm:text-2xl p-1.5 uppercase transition-colors">
+  <NavLink
+    to={to}
+    className={({ isActive }) => classNames(
+      "block w-max font-semibold text-xl p-1.5 uppercase transition-colors",
+      isActive ? 'text-amber-600': 'hover:text-amber-500',
+    )}
+  >
     { children }
-  </Link>
+  </NavLink>
 ))
 
 function Navbar() {
@@ -47,11 +54,10 @@ function Navbar() {
   //   return () => { window.removeEventListener('scroll', scrollListener) }
   // }, [scrollListener])
 
-
   if (windowWidth === null) return <></>
 
   return (
-    <header className="sticky transition-[top] z-40">
+    <header className="z-40">
       <nav className="px-4 sm:px-20 h-[100px] w-full flex items-center justify-between text-ochre">
         {
           windowWidth < 1024 ? (
@@ -65,7 +71,10 @@ function Navbar() {
             </TzFloatingWindow.Button>
           ) : (
             // Desktop Navbar
-            <div>
+            <div className="flex items-center">
+              <div className='sm:mr-8 w-12 h-12'>
+                <img src="/moksha-logo.svg" alt="Moksha logo" className='w-full h-full' />
+              </div>
               <ul className="flex gap-3 sm:gap-6">
                 {
                   navTabs.map(tab => (
@@ -85,11 +94,6 @@ function Navbar() {
         {
           appContext.authenticated
           ? (
-            // Make a dropdown here showing all accountTabs
-            // Those tabs may be shown at the bottom of sidebar in mobile
-            // <NavTab to="/account/dashboard">
-            //   Dashboard
-            // </NavTab>
             <NavbarDropdown
               name={ appContext.authUser.name }
               avatarIdx={ appContext.authUser.avatar_idx }
@@ -98,11 +102,11 @@ function Navbar() {
           )
           : (
             <div className="flex gap-3 sm:gap-6">
-              <NavTab to="/auth/login">
+              <NavTab to={{pathname: "/auth/login", search: `${createSearchParams({from: location.pathname})}`}}>
                 Login
               </NavTab>
 
-              <NavTab to="auth/register">
+              <NavTab to={{pathname: "/auth/register", search: `${createSearchParams({from: location.pathname})}`}}>
                 Sign up
               </NavTab>
             </div>

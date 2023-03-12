@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseButton from '../../components/base/BaseButton'
@@ -11,6 +11,7 @@ import classNames from '../../utils/classNames'
 
 const VerificationPage = () => {
   const navigate = useNavigate()
+  let [searchParams] = useSearchParams()
   const {setAppContext} = useAppContext()
   const { setNotification, setAllNotification } = useAuthContext()
 
@@ -35,7 +36,7 @@ const VerificationPage = () => {
       setLoading(false)
       setAppContext('authenticated', true)
       setNotification('show', false)
-      navigate('/auth/login')
+      navigate({pathname: '/auth/login', search: searchParams.toString()})
     })
     .catch(err => {
       setLoading(false)

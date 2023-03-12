@@ -48,13 +48,18 @@ const isAuthenticated = async () => {
   }
 }
 
-const allowIfAuthenticated = async () => {
+function getPathFromURL(url) {
+  return new URL(url).pathname
+}
+
+const allowIfAuthenticated = async ({ request }) => {
   nprogress.start()
   const authenticated = await isAuthenticated()
   nprogress.done()
 
   if (!authenticated) {
-    return redirect('/auth/login') // redirect to login if not authenticated
+    // redirect to login if not authenticated
+    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
   return null
 }
@@ -74,29 +79,33 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<FloatingWindow />}>
       <Route element={<DefaultLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/faqs" element={<Faqs />} />
-        <Route path="/sponsors" element={<Sponsors />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/events' element={<Events />} />
+        <Route path='/faqs' element={<Faqs />} />
+        <Route path='/sponsors' element={<Sponsors />} />
 
-        <Route path="/contests" element={<Contests />} />
-        <Route path="/contests/:club/:contest" element={<Contest />} />
+        <Route path='/contests' element={<Contests />} />
+        <Route path='/contests/:club/:contest' element={<Contest />} />
 
-        <Route path="/*" element={<NotFound />} />
+        <Route path='/*' element={<NotFound />} />
 
         <Route loader={allowIfAuthenticated} element={<AccountLayout />}>
-          <Route path="/account/dashboard" element={<Dashboard />} />
+          <Route path='/account/dashboard' element={<Dashboard />} />
         </Route>
       </Route>
 
       <Route
         loader={allowIfNotAuthenticated}
-        element={<AuthProvider><AuthLayout /></AuthProvider>}
+        element={
+          <AuthProvider>
+            <AuthLayout />
+          </AuthProvider>
+        }
       >
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/register" element={<Registration />} />
-        <Route path="/auth/verification" element={<Verification />} />
-        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+        <Route path='/auth/login' element={<Login />} />
+        <Route path='/auth/register' element={<Registration />} />
+        <Route path='/auth/verification' element={<Verification />} />
+        <Route path='/auth/forgot-password' element={<ForgotPassword />} />
       </Route>
     </Route>
   )

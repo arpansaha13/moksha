@@ -19,6 +19,10 @@ export const navTabs = [
     to: '/sponsors',
     name: 'Sponsors',
   },
+  {
+    to: '/merch', // this route doesn't exist yet
+    name: 'Merch',
+  },
 ]
 
 export const profileTabs = [
@@ -29,6 +33,10 @@ export const profileTabs = [
   {
     name: 'Registrations',
     to: '/account/registrations', // this route doesn't exist yet
+  },
+  {
+    name: 'Teams',
+    to: '/account/teams', // this route doesn't exist yet
   },
 ]
 
