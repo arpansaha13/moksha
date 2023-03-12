@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react"
+import { useCallback, useRef } from 'react'
 
 export function useDebouncedFn(fn, ms) {
   const timeoutId = useRef(null)
@@ -6,10 +6,10 @@ export function useDebouncedFn(fn, ms) {
   const debouncedFn = useCallback((...args) => {
     if (timeoutId.current !== null) clearTimeout(timeoutId.current)
     timeoutId.current = setTimeout(() => {
-      fn()
+      fn(...args)
       timeoutId.current = null
-    }, ms, ...args)
-  })
+    }, ms)
+  }, [])
 
   return debouncedFn
 }

@@ -5,15 +5,15 @@ import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Container from '../../components/common/Container'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
+import { getContestData } from '../../data/contests'
 import '@tranzis/react/styles/Tz3dCard'
 
 const SoloRegistration = lazy(() => import('../../components/Contests/SoloRegistration'))
 const TeamRegistration = lazy(() => import('../../components/Contests/TeamRegistration'))
 
 export default function Contest() {
-  const { contest } = useParams()
-
-  const isSoloContest = false
+  const params = useParams()
+  const contest = getContestData(params.club, params.contest)
 
   return (
     <Container as="section" className='py-4' id={`contest-${contest}`}>
@@ -29,7 +29,7 @@ export default function Contest() {
           </Link>
 
           <Suspense fallback={null}>
-            { isSoloContest ? <SoloRegistration /> : <TeamRegistration /> }
+            { ['solo', 'any'].includes(contest.type) ? <SoloRegistration /> : <TeamRegistration /> }
           </Suspense>
         </div>
 
@@ -38,7 +38,7 @@ export default function Contest() {
             <div className="mx-auto w-64 h-64 sm:w-80 sm:h-80">
               <Tz3dCard
                 src="https://images-platform.99static.com/J66rJkV_HyDRL8BvSnYAexqqKB8=/500x500/top/smart/99designs-contests-attachments/55/55370/attachment_55370577"
-                alt={`moksha-contest-${contest}`}
+                alt={`moksha-contest-${contest}-poster`}
                 rotation={{ base: -30, sm: -30 }}
                 elevation={{ base: 8, sm: 10 }}
               />

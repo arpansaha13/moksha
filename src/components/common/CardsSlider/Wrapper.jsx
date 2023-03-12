@@ -5,15 +5,15 @@ import getValueByBreakpoint from '../../../utils/getValueAtBreakpoint'
 
 const DataContext = createContext(null)
 
-const Wrapper = ({ list, children, visibleCount, exposeWidth = 0 }) => {
+const Wrapper = ({ length, children, visibleCount, exposeWidth = 0 }) => {
   const [context, {set: setContext}] = useMap({
     rootRef: null,
     rootWidth: 0,
-    list,
     visibleCount: 5,
     exposeWidth: 0,
     start: 0,
     end: 4,
+    length,
   })
 
   useEffect(() => {
@@ -90,8 +90,7 @@ const Wrapper = ({ list, children, visibleCount, exposeWidth = 0 }) => {
     start: context.start,
     end: context.end,
     visible: context.visibleCount,
-    total: list.length,
-  }), [next, prev, scrollToStart, scrollToEnd, context.start, context.end, context.visibleCount, list.length])
+  }), [next, prev, scrollToStart, scrollToEnd, context.start, context.end, context.visibleCount])
 
   return (
     <DataContext.Provider value={{ context, setContext }}>

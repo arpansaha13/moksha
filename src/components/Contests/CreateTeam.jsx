@@ -15,9 +15,6 @@ import BaseInput from "../base/BaseInput"
 import classNames from "../../utils/classNames"
 import getFormData from "../../utils/getFormData"
 
-const minTeamMembers = 0
-const maxTeamMembers = 2
-
 export default function CreateTeam() {
   const { appContext } = useAppContext()
 
@@ -25,11 +22,7 @@ export default function CreateTeam() {
   const formRef = useRef(null)
   const isFirstRender = useRef(true)
 
-  const [members, { push: pushMember, pop: popMember }] = useList([], {
-      minLength: minTeamMembers,
-      maxLength: maxTeamMembers,
-    },
-  )
+  const [members, { push: pushMember, pop: popMember }] = useList([])
   const [modalOpen, setModalOpen] = useState(false)
   const [searchString, setSearchString] = useState('')
   const [searchResults, setSearchResults] = useState([])
@@ -38,6 +31,10 @@ export default function CreateTeam() {
     if (isFirstRender.current) {
       isFirstRender.current = false
       return
+    }
+    if (searchString === '') {
+        setSearchResults([])
+        return
     }
     fetchHook('users/details?' + new URLSearchParams({ username: searchString }))
       .then(res => {
@@ -54,10 +51,7 @@ export default function CreateTeam() {
 
     fetchHook('new/createteam', {
       method: 'POST',
-      body: JSON.stringify({
-        user_id: appContext.authUser.user_id,
-        team_name: formData.get('team_name'),
-      })
+      body: JSON.stringify({ team_name: formData.get('team_name') })
     })
   }, [])
 
@@ -80,11 +74,7 @@ export default function CreateTeam() {
 
           <button
             type="button"
-            className={classNames(
-              "w-full appearance-none rounded-md text-left px-3 py-2 flex items-center text-sm",
-              members.length === maxTeamMembers ? 'bg-amber-900/50 border-none' : 'bg-amber-900/70 hover:bg-amber-800/70 border border-gray-300 shadow-sm transition-colors',
-            )}
-            disabled={members.length === maxTeamMembers}
+            className="w-full appearance-none rounded-md text-left px-3 py-2 flex items-center text-sm bg-amber-900/70 hover:bg-amber-800/70 border border-gray-300 shadow-sm transition-colors"
             onClick={() => setModalOpen(true)}
           >
             <Icon icon={searchIcon} className="block" color="inherit" width='1.5rem' height='1.5rem' />
