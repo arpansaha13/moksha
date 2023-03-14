@@ -27,8 +27,8 @@ export const navTabs = [
 
 export const profileTabs = [
   {
-    name: 'Dashboard',
-    to: '/account/dashboard',
+    name: 'Profile',
+    to: '/account/profile',
   },
   {
     name: 'Registrations',

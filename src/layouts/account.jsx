@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import Container from '../components/common/Container'
 import classNames from '../utils/classNames'
 import { profileTabs, accountTabs } from '../data/tabs'
+import Sheet from '../components/common/Sheet';
 
 function AccountLayout() {
   return (
@@ -43,9 +44,17 @@ function AccountLayout() {
           </ul>
         </aside>
 
-        <div className='lg:col-span-9'>
+        <section className="lg:col-span-6">
           <Outlet />
-        </div>
+        </section>
+
+        <section className="lg:col-span-3">
+          <Sheet className="group p-4 sm:p-6">
+            <div className='h-80'>
+              secondary content
+            </div>
+          </Sheet>
+        </section>
       </div>
     </Container>
   )

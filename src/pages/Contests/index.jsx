@@ -146,7 +146,7 @@ const ContestCard = memo(({ clubName, cardWidth, contest }) => (
           <div className="absolute top-3 right-3 z-20 flex gap-2">
             {
               contest.type.map(type => (
-                <ContestTypeBadge small type={type} />
+                <ContestTypeBadge key={type} small type={type} />
               ))
             }
           </div>

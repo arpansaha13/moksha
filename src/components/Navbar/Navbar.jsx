@@ -57,7 +57,7 @@ function Navbar() {
   if (windowWidth === null) return <></>
 
   return (
-    <header className="z-40">
+    <header className="relative z-40">
       <nav className="px-4 sm:px-20 h-[100px] w-full flex items-center justify-between text-ochre">
         {
           windowWidth < 1024 ? (

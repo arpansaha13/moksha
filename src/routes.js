@@ -20,15 +20,20 @@ import Contests from './pages/Contests'
 import Contest from './pages/Contests/Contest'
 import Faqs from './pages/Faqs'
 import Sponsors from './pages/Sponsors'
-import Dashboard from './pages/Dashboard'
+
+import Profile from './pages/account/Profile'
+import Teams from './pages/account/Teams'
+import Registrations from './pages/account/Registrations'
+
 import Login from './pages/auth/login'
 import Registration from './pages/auth/register'
 import Verification from './pages/auth/verification'
 import ForgotPassword from './pages/auth/forgot-password'
+
 import NotFound from './pages/404'
 
 // const Home = lazy(() => import('./pages/Home'))
-// const Dashboard = lazy(() => import('./pages/Dashboard'))
+// const Profile = lazy(() => import('./pages/account/Profile'))
 // const Events = lazy(() => import('./pages/Events'))
 // const Contests = lazy(() => import('./pages/Contests'))
 // const Faqs = lazy(() => import('./pages/Faqs'))
@@ -90,7 +95,9 @@ const router = createBrowserRouter(
         <Route path='/*' element={<NotFound />} />
 
         <Route loader={allowIfAuthenticated} element={<AccountLayout />}>
-          <Route path='/account/dashboard' element={<Dashboard />} />
+          <Route path='/account/profile' element={<Profile />} />
+          <Route path='/account/teams' element={<Teams />} />
+          <Route path='/account/registrations' element={<Registrations />} />
         </Route>
       </Route>
 
