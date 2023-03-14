@@ -47,16 +47,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
@@ -115,12 +115,12 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','https://moksha-gules.vercel.app
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# EXTERNAL_DATABASE_URL='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a.singapore-postgres.render.com/mokshadb'
+# EXTERNAL_DATABASE_URL='postgres://mokshadb_q0lz_user:UYxwuxUN8LdDwYFV3ziuZ3LBknTSuWSQ@dpg-cg4dhgndvk4st73kkji0-a.singapore-postgres.render.com/mokshadb_q0lz'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://mokshadb_q0lz_user:UYxwuxUN8LdDwYFV3ziuZ3LBknTSuWSQ@dpg-cg4dhgndvk4st73kkji0-a/mokshadb_q0lz', conn_max_age=600),
+    'default': dj_database_url.config(default='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a/mokshadb', conn_max_age=600),
 }
 # INTERNAL_DATABASE_URL='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a/mokshadb'
 
@@ -183,6 +183,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
-EMAIL_HOST_USER='bhowmikarghajit@gmail.com'
-EMAIL_HOST_PASSWORD='ycoltanzfwknoxks'
+EMAIL_HOST_USER='moksha.nita.web@gmail.com'
+EMAIL_HOST_PASSWORD='bkntcdsenrqxfafz'
 EMAIL_USE_TLS=True

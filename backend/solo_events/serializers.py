@@ -10,17 +10,31 @@ class SoloEventSerializers(serializers.ModelSerializer):
         model = SoloEvent
         fields = '__all__'
 
+class SoloContestSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = SoloContestRegistrations
+        fields = '__all__'
+
 class TeamEventSerializers(serializers.ModelSerializer):
     class Meta:
         model = TeamEvent
         fields = '__all__'
 
-class TeamDetailsSerializers(serializers.ModelSerializer):
+class TeamSerializers(serializers.ModelSerializer):
     class Meta:
-        model = TeamDetail
+        model = Team
         fields = '__all__'
 
-class EventDetailSerializers(serializers.ModelSerializer):
+class TeamUserRegistrationsSerializers(serializers.ModelSerializer):
     class Meta:
-        model = EventDetail
+        model = TeamUserRegistrations
         fields = '__all__'
+
+class TeamContestDetailsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = TeamContestRegistrations
+        fields = '__all__'
+# class EventDetailSerializers(serializers.ModelSerializer):
+#     class Meta:
+#         model = EventDetail
+#         fields = '__all__'

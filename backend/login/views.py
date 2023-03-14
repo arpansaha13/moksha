@@ -11,26 +11,28 @@ import secrets
 import string
 import jwt
 import datetime
-from django.contrib.auth.hashers import make_password,check_password
-# from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import make_password, check_password
+from django.views.decorators.csrf import csrf_exempt
+
 
 class RegisterApi(APIView):
-    # @csrf_exempt
+    @csrf_exempt
     def post(self, request):
         email = request.data['email']
         response = Response()
         if request.data['password'] == request.data['confirm_password']:
-            main_password=make_password(request.data['password'])
+            main_password = make_password(request.data['password'])
             # print(main_password)
             x = random.randint(1000, 9999)
             otp_generated = str(x)
             user = User.objects.filter(email=email).first()
-            user1 = User.objects.filter(username=request.data['username']).first()
+            user1 = User.objects.filter(
+                username=request.data['username']).first()
             if user1:
                 response.data = {
-                'message': "Username Already Exists",
+                    'message': "Username Already Exists",
                 }
-                response.status_code=409
+                response.status_code = 409
                 return response
             uid = generate_UID()
             if user is None or user.otp:
@@ -46,7 +48,7 @@ class RegisterApi(APIView):
                 user = User.objects.filter(email=email).first()
                 user.otp = otp_generated
                 user.user_id = uid
-                user.password=main_password
+                user.password = main_password
                 user.save()
 
                 payload = {
@@ -58,7 +60,6 @@ class RegisterApi(APIView):
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
                 response.set_cookie(key='otp', value=token, httponly=True)
-                response.cookies['otp'].update({"samesite":"None","secure":True})
                 send_mail(
                     'Subject here',
                     otp_generated,
@@ -67,45 +68,45 @@ class RegisterApi(APIView):
                     fail_silently=False,
                 )
                 response.data = {
-                        'message': "Otp validation link is sent.",
-                    }
-                response.status_code=201
+                    'message': "Otp validation link is sent.",
+                }
+                response.status_code = 201
                 return response
             response.data = {
                 'message': "This email is already registered.",
             }
-            response.status_code=409
+            response.status_code = 409
             return response
         response.data = {
             'message': "Password and confirm password not matched.",
         }
-        response.status_code=400
+        response.status_code = 400
         return response
-        
+
 
 class DetailsUserName(APIView):
-    def get(self, request):#?query_param e ?username=something link er last e
+    def get(self, request):  # ?query_param e ?username=something link er last e
         # username=request.data['username']
-        username=request.GET.get('username', None)
-        user1=User.objects.filter(username__icontains=username).all()
-        data=[]
+        username = request.GET.get('username', None)
+        user1 = User.objects.filter(username__icontains=username).all()
+        data = []
         if not user1:
             return Response({'message': 'User Not Found'}, status=404)
         for i in user1:
             print(i.name)
             serializer = SpecificSerializers(i)
             data.append(serializer.data)
-        
 
         return Response({'message': 'Success', 'payload': {'details': data}}, status=200)
-    
+
+
 class LoginApi(APIView):
-    # @csrf_exempt
+    @csrf_exempt
     def post(self, request):
         response = Response()
         try:
             token = request.COOKIES['jwt']
-
+            print(token)
             try:
                 payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
                 return Response({'message': 'User Already Logged In.'}, status=200)
@@ -121,37 +122,40 @@ class LoginApi(APIView):
                     }
 
                     token = jwt.encode(payload, 'secret00', algorithm='HS256')
-                    ans=check_password(request.data['password'], user.password)
+                    ans = check_password(
+                        request.data['password'], user.password)
                     # print(ans)
                     if ans == True:
                         if user.otp == "":
-                            response.set_cookie(key='jwt', value=token, httponly=True)
-                            response.cookies['jwt'].update({"samesite":"None","secure":True})
+                            response.set_cookie(
+                                key='jwt', value=token, httponly=True)
+                            response.cookies['jwt'].update(
+                                {"samesite": "None", "secure": True})
                             user.logged_in = True
                             user.save()
                             response.data = {
                                 'message': "User Logged In",
                             }
-                            response.status_code=200
+                            response.status_code = 200
                             return response
                         print(user.otp)
                         response.data = {
                             'message': "Please validate your account using otp.",
                         }
-                        response.status_code=403
+                        response.status_code = 403
                         return response
                     response.data = {
                         'message': "Invalid Email or Password.",
                     }
-                    response.status_code=400
+                    response.status_code = 400
                     return response
                 response.data = {
                     'message': "Invalid Email or Password.",
                 }
-                response.status_code=400
+                response.status_code = 400
                 return response
         except:
-        
+
             email = request.data['email']
             user = User.objects.filter(email=email).first()
             if user:
@@ -163,56 +167,57 @@ class LoginApi(APIView):
                 }
 
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
-                ans=check_password(request.data['password'], user.password)
+                ans = check_password(request.data['password'], user.password)
                 # print(ans)
                 if ans == True:
                     if user.otp == "":
                         response.set_cookie(key='jwt', value=token, httponly=True)
-                        response.cookies['jwt'].update({"samesite":"None","secure":True})
+                        response.cookies['jwt'].update(
+                            {"samesite": "None", "secure": True})
                         user.logged_in = True
                         user.save()
                         response.data = {
                             'message': "User Logged In",
                         }
-                        response.status_code=200
+                        response.status_code = 200
                         return response
                     print(user.otp)
                     response.data = {
                         'message': "Please validate your account using otp.",
                     }
-                    response.status_code=403
+                    response.status_code = 403
                     return response
                 response.data = {
                     'message': "Invalid Email or Password.",
                 }
-                response.status_code=400
+                response.status_code = 400
                 return response
             response.data = {
                 'message': "Invalid Email or Password.",
             }
-            response.status_code=400
+            response.status_code = 400
             return response
 
 
 class ForgotApi(APIView):
-    # @csrf_exempt
+    @csrf_exempt
     def post(self, request):
         response = Response()
-        user_id=request.data['email']
+        user_id = request.data['email']
         user = User.objects.filter(email=user_id).first()
         if user:
-            email=user.email
+            email = user.email
             payload = {
-                    'id': user.user_id,
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                    'iat': datetime.datetime.utcnow(),
-                }
+                'id': user.user_id,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                'iat': datetime.datetime.utcnow(),
+            }
 
             token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
-            
             response.set_cookie(key='reset', value=token, httponly=True)
-            response.cookies['reset'].update({"samesite":"None","secure":True})
+            response.cookies['reset'].update(
+                {"samesite": "None", "secure": True})
             # new_password = generate_password()
             send_mail(
                 'Subject here',
@@ -224,18 +229,19 @@ class ForgotApi(APIView):
             # user.password = new_password
             # user.save()
             response.data = {
-                    'message': "Reset Password Link is Sent.",
-                }
-            response.status_code=200
+                'message': "Reset Password Link is Sent.",
+            }
+            response.status_code = 200
             return response
         response.data = {
             'message': "User Not Found.",
-                }
-        response.status_code=404
-        return response   
+        }
+        response.status_code = 404
+        return response
+
 
 class ChangePasswordApi(APIView):
-    # @csrf_exempt
+    @csrf_exempt
     def post(self, request):
         try:
             token = request.COOKIES['reset']
@@ -253,14 +259,22 @@ class ChangePasswordApi(APIView):
 
                 user.password = make_password(new_password)
                 user.save()
-                response.set_cookie('reset',max_age=1,httponly=True)
-                response.cookies['reset'].update({"samesite":"None","secure":True})
+                response.set_cookie('reset', max_age=1, httponly=True)
+                response.cookies['reset'].update(
+                    {"samesite": "None", "secure": True})
                 # response.delete_cookie('reset')
-                return Response({'message': 'Password Changed.'}, status=200)
-            return Response({'message': 'User Not Found.'}, status=404)
+                response.data = {
+                    'message': "Password Changed.",
+                }
+                response.status_code = 200
+                return response
+            response.data = {
+                    'message': "User Not Found.",
+                }
+            response.status_code = 404
+            return response    
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
-            
 
 
 class ViewApi(APIView):
@@ -307,49 +321,62 @@ class LogoutApi(APIView):
             if user:
                 user.logged_in = False
                 user.save()
-                response.set_cookie('jwt',max_age=1,httponly=True)
-                response.cookies['jwt'].update({"samesite":"None","secure":True})
+                response.set_cookie('jwt', max_age=1, httponly=True)
+                response.cookies['jwt'].update(
+                    {"samesite": "None", "secure": True})
 
                 response.data = {
                     'message': 'User have successfully logged out.'
                 }
-                response.status_code=200
+                response.status_code = 200
                 return response
 
             response.data = {
-                    'message': 'User Not Found.'
-                }
-            response.status_code=404
+                'message': 'User Not Found.'
+            }
+            response.status_code = 404
             return response
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
 
 class OTPValidation(APIView):
-    # @csrf_exempt
+    @csrf_exempt
     def post(self, request):
         try:
             token = request.COOKIES['otp']
-            response=Response()
+            response = Response()
             if not token:
-                raise AuthenticationFailed('Unauthenticated')
+                    raise AuthenticationFailed('Unauthenticated')
 
             try:
-                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+                    payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
-                raise AuthenticationFailed('Token Expired. Log in again.')
+                    raise AuthenticationFailed('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
             otp = request.data['otp_data']
             if user:
                 if user.otp == otp:
-                    user.otp = ''
-                    user.save()
-                    response.set_cookie('otp',max_age=1,httponly=True)
-                    response.cookies['otp'].update({"samesite":"None","secure":True})
-                    # response.delete_cookie('otp')
-                    return Response({'message': 'User Validated.'}, status=200)
-                return Response({'message': 'Invalid OTP.'}, status=401)
-            return Response({'message': 'User Not Found.'}, status=404)
+                        user.otp = ''
+                        user.save()
+                        # response.set_cookie('otp', max_age=1, httponly=True)
+                        # response.cookies['otp'].update({"samesite": "None", "secure": True})
+                        response.delete_cookie('otp')
+                        response.data = {
+                            'message': 'User Validated.'
+                        }
+                        response.status_code = 200
+                        return response
+                response.data = {
+                    'message': 'Invalid OTP.'
+                }
+                response.status_code = 404
+                return response
+            response.data = {
+                    'message': 'User Not Found.'
+                }
+            response.status_code = 404
+            return response    
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
@@ -369,7 +396,7 @@ class ResendOtp(APIView):
 
             if user is None:
                 return Response({'message': 'User Not Found.'}, status=404)
-            email=user.email
+            email = user.email
             x = random.randint(1000, 9999)
             otp_generated = str(x)
             send_mail(
@@ -395,7 +422,8 @@ def generate_UID(length=8):
                   for i in range(length))
     return 'MOK-' + uid
 
+
 def generate_password(length=10):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
-                for i in range(length))
+                  for i in range(length))
     return uid

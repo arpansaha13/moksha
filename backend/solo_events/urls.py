@@ -12,6 +12,11 @@ urlpatterns = [
     path('createteam',CreateTeam.as_view()),
     path('jointeam',JoinTeam.as_view()),
     path('eventregistration',TeamEventRegistration.as_view()),
-    path('eventall', EventAll.as_view()),
-    path('eventparticulars', EventParticular.as_view()),
+    path('solo-contest/register',SoloContestRegister.as_view()),
+    path('team-contest/register',TeamContestRegister.as_view()),
+    path('teams/joined',JoinedTeamsApi.as_view()),
+    path('teams/created',CreatedTeamsApi.as_view()),
+    path('<slug:team_id>/users',TeamUserDetails.as_view()),
+    # path('eventall', EventAll.as_view()),
+    # path('eventparticulars', EventParticular.as_view()),
 ]
