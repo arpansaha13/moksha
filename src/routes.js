@@ -20,6 +20,7 @@ import Contests from './pages/Contests'
 import Contest from './pages/Contests/Contest'
 import Faqs from './pages/Faqs'
 import Sponsors from './pages/Sponsors'
+import Contact from './pages/Contact'
 
 import Profile from './pages/account/Profile'
 import Teams from './pages/account/Teams'
@@ -88,6 +89,7 @@ const router = createBrowserRouter(
         <Route path='/events' element={<Events />} />
         <Route path='/faqs' element={<Faqs />} />
         <Route path='/sponsors' element={<Sponsors />} />
+        <Route path='/contact' element={<Contact />} />
 
         <Route path='/contests' element={<Contests />} />
         <Route path='/contests/:club/:contest' element={<Contest />} />

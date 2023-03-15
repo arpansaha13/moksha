@@ -23,6 +23,10 @@ export const navTabs = [
     to: '/merch', // this route doesn't exist yet
     name: 'Merch',
   },
+  {
+    to: '/contact', // this route doesn't exist yet
+    name: 'Contact',
+  },
 ]
 
 export const profileTabs = [
