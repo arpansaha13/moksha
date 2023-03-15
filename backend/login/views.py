@@ -60,7 +60,8 @@ class RegisterApi(APIView):
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
                 response.set_cookie(key='otp', value=token, httponly=True)
-                response.cookies['otp'].update({"samesite": "None", "secure": True})
+                response.cookies['otp'].update(
+                    {"samesite": "None", "secure": True})
                 send_mail(
                     'Subject here',
                     otp_generated,
@@ -360,9 +361,9 @@ class OTPValidation(APIView):
                 if user.otp == otp:
                         user.otp = ''
                         user.save()
-                        # response.set_cookie('otp', max_age=1, httponly=True)
-                        # response.cookies['otp'].update({"samesite": "None", "secure": True})
-                        response.delete_cookie('otp')
+                        response.set_cookie('otp', max_age=1, httponly=True)
+                        response.cookies['otp'].update({"samesite": "None", "secure": True})
+                        # response.delete_cookie('otp')
                         response.data = {
                             'message': 'User Validated.'
                         }
