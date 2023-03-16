@@ -1,28 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: Poppins;
+  font-family: Poppins, sans-serif;
 }
 
 body {
-  background-color: #241711;
+  @apply bg-gradient-to-tr from-darkBrown via-darkBrown to-brown;
 }
 
 ::-webkit-scrollbar {
-  display:none;
+  display: none;
 }
 
-.App {
-  /* overflow-x: hidden; */
-  width: 100%;
+/* NProgress */
+#nprogress .bar {
+  @apply !bg-amber-700;
+}
+#nprogress .peg {
+  @apply !shadow !shadow-amber-700;
+}
+#nprogress .spinner-icon {
+  @apply !border-x !border-amber-700;
 }
 
 /* Markdown/Prose modifications */
 .markdown {
   @apply prose prose-sm sm:prose-base prose-invert max-w-none;
 }
-.markdown :where(h1,h2,h3,h4,h5,h6):not(:where([class~='not-prose'] *)) {
+.markdown :where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *)) {
   @apply first:mt-0;
+}
+
+/* Scrollbar */
+.scrollbar::-webkit-scrollbar,
+.scrollbar::-webkit-scrollbar-track,
+.scrollbar::-webkit-scrollbar-track-piece {
+  @apply block w-1.5;
+}
+
+.scrollbar::-webkit-scrollbar-button {
+  @apply hidden;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply block bg-orange-800/70;
 }

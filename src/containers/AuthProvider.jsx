@@ -1,16 +1,20 @@
-import { createContext, useContext, useState } from "react"
-
-const authUser = {
-  email: '',
-}
+import { createContext, useContext, useMemo } from "react"
+import { useMap } from "../hooks/useMap"
 
 const AuthContext = createContext(null)
 
 const AuthProvider = ({ children }) => {
-  const [authContext, setAuthContext] = useState(authUser);
+  const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
+    show: false,
+    title: '',
+    description: '',
+    status: 'success',
+  })
+
+  const authContext = useMemo(() => ({ notification, setNotification, setAllNotification }), [notification])
 
   return (
-    <AuthContext.Provider value={{ authContext, setAuthContext }}>
+    <AuthContext.Provider value={authContext}>
       {children}
     </AuthContext.Provider>
   )

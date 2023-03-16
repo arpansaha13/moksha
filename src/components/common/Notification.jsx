@@ -1,19 +1,39 @@
-import { memo } from 'react'
+import { Fragment, memo, useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
-import Transition from './Transition'
+import { Transition } from '@headlessui/react'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 import closeIcon from '@iconify-icons/mdi/close'
 import checkIcon from '@iconify-icons/mdi/check-circle-outline'
 
-const Notification = memo(({ title, description, show, setShow, status = 'success' }) => {
+const Notification = memo(({ title, description, show, setShow, timeout, status = 'success' }) => {
+  const timeoutId = useRef(null)
+
+  useEffect(() => {
+    if (show && timeout !== null && typeof timeout !== 'undefined') {
+      if (!setShow) {
+        throw new Error('A timeout is provided but no setShow function is provided.')
+      }
+
+      timeoutId.current = setTimeout(() => setShow(false), timeout * 1000)
+
+      return () => {
+        if (timeoutId.current !== null) clearTimeout(timeoutId.current)
+        setShow(false)
+      }
+    }
+    return () => {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show])
+
   return (
     <div
       aria-live="assertive"
-      className="pointer-events-none fixed inset-0 z-40 flex items-end px-4 py-6 sm:items-start sm:p-6"
+      className="pointer-events-none fixed inset-0 z-40 flex items-start px-4 py-6 sm:p-6"
     >
       <div className="w-full flex flex-col items-center space-y-4">
         <Transition
           show={show}
+          as={Fragment}
           enter="transform ease-out duration-300 transition"
           enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
           enterTo="translate-y-0 opacity-100 sm:translate-x-0"
@@ -30,7 +50,7 @@ const Notification = memo(({ title, description, show, setShow, status = 'succes
                       <Icon icon={checkIcon} className="block" color="inherit" width='100%' height='100%' />
                     </div>
                   ) : (
-                    <div className="h-7 w-7 text-red-500" aria-hidden="true">
+                    <div className="h-7 w-7 text-red-600" aria-hidden="true">
                       <AiOutlineExclamationCircle className='w-full h-full' />
                     </div>
                   )}

@@ -1,57 +1,69 @@
-import { useEffect } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
-import Notification from '../../components/common/Notification'
-import { STORAGE_AUTH_KEY } from '../../constants'
 import { useAuthContext } from '../../containers/AuthProvider'
+import { getAvatarIdx} from '../../data/avatar-colors'
+import getFormData from '../../utils/getFormData'
 
 const SignUpPage = () => {
-  const navigate = useNavigate();
-  const [token] = useLocalStorage(STORAGE_AUTH_KEY)
-  const {setAuthContext} = useAuthContext()
-
-  const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
-    show: false,
-    title: '',
-    description: '',
-    status: 'success',
-  })
-
-  useEffect(() => {
-    if (token) navigate('/')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const navigate = useNavigate()
+  let [searchParams] = useSearchParams()
+  const { setNotification, setAllNotification } = useAuthContext()
 
   const fetchHook = useFetch()
+  const [loading, setLoading] = useState(false)
+  const formRef = useRef(null)
 
-  const [formData, { set }] = useMap({
-    name: '',
-    username: '',
-    email: '',
-    password: '',
-    confirm_password: '',
-    institution_name: '',
-    phone_no: '',
+  const [validationErrors, { set: setError }] = useMap({
+    username: null,
+    password: null,
+    confirm_password: null,
   })
-  const fields = getFields(formData, set)
 
-  function signUp(e) {
+  const fields = useMemo(() => getFields(validationErrors), [validationErrors])
+
+  const signUp = useCallback(e => {
     e.preventDefault()
+
+    const formData = getFormData(formRef.current, { format: 'object' })
+    formData['avatar_idx'] = getAvatarIdx('email')
+    formData['username'] = formData['username'].toLowerCase() // force lowercase
+
+    let hasError = false
+
+    if (formData.password !== formData.confirm_password) {
+      setError('password', 'Password and confirm password do not match')
+      setError('confirm_password', 'Password and confirm password do not match')
+      hasError = true
+    }
+    else if (validationErrors.password) {
+      setError('password', null)
+      setError('confirm_password', null)
+    }
+
+    if (!validateUsername(formData.username, setError)) {
+      hasError = true
+    }
+
+    if (hasError) return
+
+    setLoading(true)
 
     fetchHook('users/register', {
       method: 'POST',
       body: JSON.stringify(formData),
     })
       .then(() => {
-        setAuthContext({ email: formData.email })
-        navigate('/auth/verification')
+        setLoading(false)
+        setNotification('show', false)
+        navigate({pathname: '/auth/verification', search: searchParams.toString()})
       })
       .catch(err => {
+        setLoading(false)
         setAllNotification({
           show: true,
           title: 'Registration failed',
@@ -59,30 +71,21 @@ const SignUpPage = () => {
           status: 'error',
         })
       })
-  }
+  }, [validationErrors, formRef])
 
   return (
-    <div className='sm:max-w-2xl px-4 sm:px-0'>
+    <main className='sm:max-w-2xl px-4 sm:px-0'>
       <Helmet>
         <title>Moksha | Sign up</title>
       </Helmet>
 
-      <Notification
-        show={notification.show}
-        setShow={bool => setNotification('show', bool)}
-        status={ notification.status }
-        title={ notification.title }
-        description={ notification.description }
-      />
-
-      <form className="space-y-6" onSubmit={signUp}>
+      <form ref={formRef} className="space-y-6" onSubmit={signUp}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           { fields.map(field => <BaseInput key={ field.id } {...field} />) }
         </div>
 
-
         <div>
-          <BaseButton type="submit" stretch>
+          <BaseButton type="submit" stretch loading={loading}>
             Sign up
           </BaseButton>
         </div>
@@ -90,38 +93,60 @@ const SignUpPage = () => {
         <div className="flex items-center">
           <div className="text-sm">
             <span className="text-gray-100">Already have an account?</span>{' '}
-            <Link to="/auth/login">
+            <Link to={{pathname: "/auth/login", search: searchParams.toString()}}>
               <span className="font-medium text-amber-600 hover:text-amber-500 cursor-pointer">Login</span>
             </Link>
           </div>
         </div>
       </form>
-    </div>
+    </main>
   )
 }
 export default SignUpPage
 
-const getFields = (formData, set) => {
+function validateUsername(username, setError) {
+  const spacialChars = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,<>\/?~]/
+  const consecutiveDots = /\.{2,}/g
+
+  if (username.includes(' ')) {
+    setError('username', 'Username cannot contain any spaces')
+  }
+  else if (spacialChars.test(username)) {
+    setError('username', 'Username cannot contain special characters')
+  }
+  else if (consecutiveDots.test(username)) {
+    setError('username', 'Username cannot contain consecutive dots')
+  }
+  else {
+    setError('username', null)
+    return true
+  }
+  return false
+}
+
+const getFields = (validationErrors) => {
   const fields = [
     {
       id: "name",
       name: "name",
       type: "text",
       autoComplete: "name",
+      autocapitalize: "words",
       required: true,
       label: "Name",
-      value: formData.name,
-      onChange: e => set('name', e.target.value),
     },
     {
       id: "username",
       name: "username",
       type: "text",
       autoComplete: "username",
+      autocapitalize: "none",
       required: true,
       label: "Username",
-      value: formData.username,
-      onChange: e => set('username', e.target.value),
+      minLength: 6,
+      maxLength: 20,
+      validationError: validationErrors.username,
+      style: { textTransform: 'lowercase' }, // force lowercase
     },
     {
       id: "email",
@@ -130,18 +155,15 @@ const getFields = (formData, set) => {
       autoComplete: "email",
       required: true,
       label: "Email address",
-      value: formData.email,
-      onChange: e => set('email', e.target.value),
     },
     {
       id: "institution",
-      name: "institution",
+      name: "institution_name",
       type: "text",
       autoComplete: "organization",
+      autocapitalize: "words",
       required: true,
       label: "Institution name",
-      value: formData.institution_name,
-      onChange: e => set('institution_name', e.target.value),
     },
     {
       id: "password",
@@ -152,31 +174,28 @@ const getFields = (formData, set) => {
       minLength: 8,
       maxLength: 30,
       label: "Password",
-      value: formData.password,
-      onChange: e => set('password', e.target.value),
+      validationError: validationErrors.password,
     },
     {
       id: "phone",
       name: "phone",
       type: "tel",
       autoComplete: "tel",
+      inputMode: 'numeric',
       required: true,
       label: "Phone number",
       pattern: "[0-9]{10}",
       minLength: 10,
       maxLength: 10,
-      value: formData.phone_no,
-      onChange: e => set('phone_no', e.target.value),
     },
     {
       id: "confirm-password",
-      name: "confirm-password",
+      name: "confirm_password",
       type: "password",
       autoComplete: "new-password",
       required: true,
       label: "Confirm password",
-      value: formData.confirm_password,
-      onChange: e => set('confirm_password', e.target.value),
+      validationError: validationErrors.confirm_password,
     },
   ]
   return fields

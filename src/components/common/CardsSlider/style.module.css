@@ -1,0 +1,13 @@
+/* Scrollbar */
+.cards-slider-scrollbar::-webkit-scrollbar,
+.cards-slider-scrollbar::-webkit-scrollbar-track,
+.cards-slider-scrollbar::-webkit-scrollbar-track-piece {
+  @apply block h-1.5;
+}
+
+.cards-slider-scrollbar::-webkit-scrollbar-button {
+  @apply hidden;
+}
+.cards-slider-scrollbar::-webkit-scrollbar-thumb {
+  @apply block bg-orange-800/70;
+}
