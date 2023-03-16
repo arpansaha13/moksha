@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import Tilt from 'react-tilt'
+import Tilt from 'react-parallax-tilt'
 import Moksha from '../../assets/moksha.png'
 
 export default function Slider() {
