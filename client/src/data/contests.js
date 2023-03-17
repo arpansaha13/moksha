@@ -2,7 +2,7 @@ const fineArts = [
   {
     slug: 'open-canvas',
     name: 'Open canvas',
-    type: ['unspecified'],
+    type: ['solo'],
     image: '', // Image link
     description: [
       {
@@ -13,7 +13,7 @@ const fineArts = [
   {
     slug: 'magic-of-fingers',
     name: 'Magic of fingers',
-    type: ['unspecified'],
+    type: ['solo'],
     image: '', // Image link
     description: [
       {
@@ -24,7 +24,7 @@ const fineArts = [
   {
     slug: 'art-exhibition',
     name: 'Art exhibition',
-    type: ['unspecified'],
+    type: ['solo'],
     image: '', // Image link
     description: [
       {
@@ -35,7 +35,7 @@ const fineArts = [
   {
     slug: 'instant-portrait',
     name: 'Instant portrait',
-    type: ['unspecified'],
+    type: ['solo'],
     image: '', // Image link
     description: [
       {
@@ -46,7 +46,7 @@ const fineArts = [
   {
     slug: 'digital-illustration',
     name: 'Digital illustration',
-    type: ['unspecified'],
+    type: ['solo'],
     image: '', // Image link
     description: [
       {
@@ -410,7 +410,7 @@ const pixel = [
     slug: 'click-a-story',
     name: 'Click a Story',
     image: '', // Image link
-    type: ['solo', 'any'],
+    type: ['solo'],
     description: [
       {
         p: 'Click multiple pictures that make a short story (Maximum 10 Pictures).',
@@ -427,11 +427,44 @@ const pixel = [
   },
 ]
 
+const dcc = [
+  {
+    slug: 'incredible-roll',
+    name: 'Incredible Roll',
+    image: '', // Image link
+    type: ['solo'],
+    description: [
+      {
+        p: 'The INCREDIBLE ROLL is a fun-game similar to the usual game of Ludo we play. In this game, 4 people can play at a time individually and no teams are allowed. Each participant will start from position Zero and can move to the next positions by answering simple tech-related or comic-related questions. The number of places a player can move depends on the number of points of the questions asked to each player. The one to reach the finishing point,i.e, the centre of the board first wins.',
+      },
+    ],
+    instructions: [
+      { heading: 'Stages & timelines' },
+      {
+        ul: [
+          'Mode: Offline (Onsite)',
+          'The game will be open to all on the 1st or 2nd day of Moksha (date) from 11:00 AM onwards',
+        ],
+      },
+      { heading: 'Rules' },
+      {
+        ul: [
+          'Each player will start from position Zero of the game-board . There will be colored boxes for each player position wise. One player can move forward to the next position only by answering the simple short answer question based on technology/comics/Dance/Music/famous personalities.',
+          'Partially correct answers might be accepted based on situation',
+          'If a player gives the wrong answer he/she will have to go back to the previous position . Incase of no answer, the position remains unchanged.',
+          'A player cannot take more than 1-2 minute to answer a question.',
+        ],
+      },
+    ],
+  },
+]
+
 const contests = {
   'fine-arts-club': fineArts,
   malhar: malhar,
   dzire: dzire,
   pixel: pixel,
+  dcc: dcc,
 }
 
 export function getContestData(clubName, contestSlug) {

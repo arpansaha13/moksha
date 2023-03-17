@@ -3,7 +3,7 @@ import { Tab } from '@headlessui/react'
 import accountAlertIcon from '@iconify-icons/mdi/account-alert'
 import { useAppContext } from "../../containers/DataProvider"
 import Sheet from "../common/Sheet"
-import TeamContestOverview from "./TeamContestOverview"
+import ContestOverview from "./ContestOverview"
 import CreateTeam from './CreateTeam'
 import JoinTeam from './JoinTeam'
 import EmptyState from '../common/EmptyState'
@@ -33,7 +33,7 @@ const TeamRegistration = () => {
 
       <Tab.Panels>
         <Tab.Panel>
-          <TeamContestOverview />
+          <ContestOverview />
         </Tab.Panel>
 
         <Tab.Panel>
