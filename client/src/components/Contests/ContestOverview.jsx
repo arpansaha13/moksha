@@ -1,11 +1,31 @@
-import { useParams } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useParams, useLocation } from 'react-router-dom'
+import { Icon } from '@iconify/react'
+import shareIcon from '@iconify-icons/mdi/share'
 import Sheet from '../common/Sheet'
+import { useWindowSize } from '../../hooks/useWindowSize'
 import ContestTypeBadge from './ContestTypeBadge'
+import SocialShare from '../SocialShare'
 import { getContestData } from '../../data/contests'
 
 export default function TeamContestOverview() {
   const params = useParams()
+  const location = useLocation()
   const contest = getContestData(params.club, params.contest)
+
+  const { width } = useWindowSize()
+
+  const shareData = useMemo(
+    () => ({
+      url: location.pathname,
+      title: `Moksha contest - ${contest.name}`,
+      text:
+        contest.description[0].p.length <= 100
+          ? contest.description[0].p.length
+          : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+    }),
+    [contest.name, contest.description, location.pathname]
+  )
 
   return (
     <>
@@ -13,10 +33,23 @@ export default function TeamContestOverview() {
         <article className='markdown'>
           <h1>{contest.name}</h1>
 
-          <div className='flex gap-2'>
-            {contest.type.map(type => (
-              <ContestTypeBadge key={type} type={type} />
-            ))}
+          <div className='flex items-center justify-between'>
+            <div className='flex gap-2'>
+              {contest.type.map(type => (
+                <ContestTypeBadge small={width !== null && width < 1024} key={type} type={type} />
+              ))}
+            </div>
+
+            <SocialShare data={shareData}>
+              <div className='group inline-flex items-center lg:gap-1'>
+                <div className='w-6 h-6 text-amber-700 group-hover:text-amber-600 transition-colors'>
+                  <Icon icon={shareIcon} className='block' color='inherit' width='100%' height='100%' aria-hidden />
+                </div>
+                <p className='sr-only lg:not-sr-only text-sm font-medium text-amber-600 group-hover:text-amber-500 transition-colors'>
+                  Share
+                </p>
+              </div>
+            </SocialShare>
           </div>
 
           {contest.description.map((para, i) => (

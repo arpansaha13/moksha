@@ -7,8 +7,10 @@ import Container from '../../components/common/Container'
 import Sheet from '../../components/common/Sheet'
 import ContestTypeBadge from '../../components/Contests/ContestTypeBadge'
 import CardsSlider from '../../components/common/CardsSlider'
+import SocialShare from '../../components/SocialShare'
 import { useHashLink } from '../../hooks/useHashLink'
 import { Icon } from '@iconify/react'
+import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
 import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
@@ -35,7 +37,7 @@ function Contests() {
             doloribus impedit dignissimos voluptatibus suscipit natus corporis quis.
           </p>
 
-          <ul>
+          <ul className='grid grid-cols-2 gap-y-0'>
             {Object.keys(contestsMap).map(clubName => (
               <li key={clubName}>
                 <Link to={{ hash: `${clubName}-contests` }}>{capitalCase(clubName)}</Link>
@@ -128,40 +130,69 @@ const ClubContest = memo(({ clubName, contests }) => {
 })
 
 const ContestCard = memo(({ clubName, cardWidth, contest }) => (
-  <div className='flex-shrink-0 snap-center' style={{ width: `${cardWidth}px` }}>
-    <Link to={`/contests/${clubName}/${contest.slug}`}>
-      <Sheet className='w-full h-full !bg-amber-900/60 text-sm overflow-hidden'>
-        <div className='w-full h-48 flex items-center justify-center relative'>
-          <img src={CastleGate2} alt='' className='w-full h-full object-cover' />
-          <span
-            role='presentation'
-            className='absolute w-full h-full bg-gradient-to-bl from-brown via-transparent mix-blend-darken'
-            aria-hidden={true}
-          />
+  <div className='flex-shrink-0 snap-center h-full' style={{ width: `${cardWidth}px` }}>
+    <Sheet className='w-full h-full flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
+      <div className='w-full h-48 flex items-center justify-center relative'>
+        <img src={CastleGate2} alt='' className='w-full h-full object-cover' />
+        <span
+          role='presentation'
+          className='absolute w-full h-full bg-gradient-to-bl from-brown via-transparent mix-blend-darken'
+          aria-hidden={true}
+        />
 
-          <div className='absolute top-3 right-3 z-20 flex gap-2'>
-            {contest.type.map(type => (
-              <ContestTypeBadge key={type} small type={type} />
-            ))}
-          </div>
+        <div className='absolute top-3 right-3 z-20 flex gap-2'>
+          {contest.type.map(type => (
+            <ContestTypeBadge key={type} small type={type} />
+          ))}
         </div>
-        <div className='p-4'>
-          <h3 className='text-lg text-amber-500 font-semibold'>{contest.name}</h3>
+      </div>
 
-          {contest.subtitle && <p className='text-sm text-gray-400'>{contest.subtitle}</p>}
+      <div className='flex-grow w-full px-4 pt-4'>
+        <h3 className='text-lg text-amber-500 font-semibold'>{contest.name}</h3>
 
-          <div
-            className={classNames(
-              'mt-2 text-sm text-gray-300 space-y-1',
-              contest.subtitle ? 'line-clamp-3' : 'line-clamp-4'
-            )}
-          >
-            {contest.description.map((para, i) => (
-              <p key={i}>{para.p}</p>
-            ))}
-          </div>
+        {contest.subtitle && <p className='text-sm text-gray-400'>{contest.subtitle}</p>}
+
+        <div
+          className={classNames(
+            'mt-2 text-sm text-gray-300 space-y-1',
+            contest.subtitle ? 'line-clamp-2' : 'line-clamp-3'
+          )}
+        >
+          {contest.description.map((para, i) => (
+            <p key={i}>{para.p}</p>
+          ))}
         </div>
-      </Sheet>
-    </Link>
+      </div>
+
+      <div className='px-4 pb-4 w-full flex items-center justify-between'>
+        <Link
+          to={`/contests/${clubName}/${contest.slug}`}
+          className='block font-medium text-amber-600 hover:text-amber-500 transition-colors'
+        >
+          <span>View contest</span>
+          <span className='inline-block w-5 h-5'>
+            <Icon icon={rightIcon} className='inline-block' color='inherit' width='100%' height='100%' />
+          </span>
+        </Link>
+
+        <SocialShare
+          data={{
+            url: `/contests/${clubName}/${contest.slug}`,
+            title: `Moksha contest - ${contest.name}`,
+            text:
+              contest.description[0].p.length <= 100
+                ? contest.description[0].p.length
+                : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+          }}
+        >
+          <div className='text-amber-600 hover:text-amber-500'>
+            <div className='w-6 h-6 transition-colors'>
+              <Icon icon={shareIcon} className='block' color='inherit' width='100%' height='100%' aria-hidden />
+            </div>
+            <span className='sr-only'>Share</span>
+          </div>
+        </SocialShare>
+      </div>
+    </Sheet>
   </div>
 ))
