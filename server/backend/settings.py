@@ -61,7 +61,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
+# If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -70,7 +72,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,21 +85,22 @@ TEMPLATES = [
     },
 ]
 
-SESSION_COOKIE_SAMESITE_FORCE_ALL=True
+SESSION_COOKIE_SAMESITE_FORCE_ALL = True
 
-CSRF_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE = True
 
-SESSION_COOKIE_SECURE=True
+SESSION_COOKIE_SECURE = True
 
-CSRF_COOKIE_SAMESITE='None'
+CSRF_COOKIE_SAMESITE = 'None'
 
-SESSION_COOKIE_SAMESITE='None'
+SESSION_COOKIE_SAMESITE = 'None'
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000','https://moksha-gules.vercel.app']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000',
+                         'https://moksha-gules.vercel.app']
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -112,7 +115,8 @@ CORS_ALLOW_HEADERS = [
     'credentials'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','https://moksha-gules.vercel.app']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
+                        'https://moksha-gules.vercel.app']
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
@@ -153,25 +157,31 @@ USE_I18N = True
 USE_TZ = True
 
 PASSWORD_HASHERS = [
-  'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-  'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-  'django.contrib.auth.hashers.Argon2PasswordHasher',
-  'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-  'django.contrib.auth.hashers.BCryptPasswordHasher',
-  'django.contrib.auth.hashers.SHA1PasswordHasher',
-  'django.contrib.auth.hashers.MD5PasswordHasher',
-  'django.contrib.auth.hashers.UnsaltedSHA1PasswordHasher',
-  'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
-  'django.contrib.auth.hashers.CryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedSHA1PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher',
 ]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_ROOT = os.path.join(BASE_DIR, '')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

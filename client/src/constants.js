@@ -1,1 +1,2 @@
-export const FETCH_BASE_URL = 'https://moksha-backend.onrender.com/'
+export const FETCH_BASE_URL = 'http://localhost:8000/'
+// 'https://moksha-backend.onrender.com/'

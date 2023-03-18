@@ -60,12 +60,12 @@ class RegisterApi(APIView):
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
                 response.set_cookie(key='otp', value=token, httponly=True)
-                response.cookies['otp'].update(
-                    {"samesite": "None", "secure": True})
+                # response.cookies['otp'].update(
+                #     {"samesite": "None", "secure": True})
                 send_mail(
-                    'Subject here',
+                    'Moksha OTP',
                     otp_generated,
-                    'bhowmikarghajit@gmail.com',
+                    'arghajitbhowmik08@gmail.com',
                     [email],
                     fail_silently=False,
                 )
@@ -131,8 +131,8 @@ class LoginApi(APIView):
                         if user.otp == "":
                             response.set_cookie(
                                 key='jwt', value=token, httponly=True)
-                            response.cookies['jwt'].update(
-                                {"samesite": "None", "secure": True})
+                            # response.cookies['jwt'].update(
+                            #     {"samesite": "None", "secure": True})
                             user.logged_in = True
                             user.save()
                             response.data = {
@@ -173,9 +173,10 @@ class LoginApi(APIView):
                 # print(ans)
                 if ans == True:
                     if user.otp == "":
-                        response.set_cookie(key='jwt', value=token, httponly=True)
-                        response.cookies['jwt'].update(
-                            {"samesite": "None", "secure": True})
+                        response.set_cookie(
+                            key='jwt', value=token, httponly=True)
+                        # response.cookies['jwt'].update(
+                        #     {"samesite": "None", "secure": True})
                         user.logged_in = True
                         user.save()
                         response.data = {
@@ -218,8 +219,8 @@ class ForgotApi(APIView):
             token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
             response.set_cookie(key='reset', value=token, httponly=True)
-            response.cookies['reset'].update(
-                {"samesite": "None", "secure": True})
+            # response.cookies['reset'].update(
+            #     {"samesite": "None", "secure": True})
             # new_password = generate_password()
             send_mail(
                 'Subject here',
@@ -262,8 +263,8 @@ class ChangePasswordApi(APIView):
                 user.password = make_password(new_password)
                 user.save()
                 response.set_cookie('reset', max_age=1, httponly=True)
-                response.cookies['reset'].update(
-                    {"samesite": "None", "secure": True})
+                # response.cookies['reset'].update(
+                #     {"samesite": "None", "secure": True})
                 # response.delete_cookie('reset')
                 response.data = {
                     'message': "Password Changed.",
@@ -271,10 +272,10 @@ class ChangePasswordApi(APIView):
                 response.status_code = 200
                 return response
             response.data = {
-                    'message': "User Not Found.",
-                }
+                'message': "User Not Found.",
+            }
             response.status_code = 404
-            return response    
+            return response
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
@@ -324,8 +325,8 @@ class LogoutApi(APIView):
                 user.logged_in = False
                 user.save()
                 response.set_cookie('jwt', max_age=1, httponly=True)
-                response.cookies['jwt'].update(
-                    {"samesite": "None", "secure": True})
+                # response.cookies['jwt'].update(
+                #     {"samesite": "None", "secure": True})
 
                 response.data = {
                     'message': 'User have successfully logged out.'
@@ -349,36 +350,36 @@ class OTPValidation(APIView):
             token = request.COOKIES['otp']
             response = Response()
             if not token:
-                    raise AuthenticationFailed('Unauthenticated')
+                raise AuthenticationFailed('Unauthenticated')
 
             try:
-                    payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
-                    raise AuthenticationFailed('Token Expired. Log in again.')
+                raise AuthenticationFailed('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
-            otp = request.data['otp_data']
+            otp = request.data['otp']
             if user:
                 if user.otp == otp:
-                        user.otp = ''
-                        user.save()
-                        response.set_cookie('otp', max_age=1, httponly=True)
-                        response.cookies['otp'].update({"samesite": "None", "secure": True})
-                        # response.delete_cookie('otp')
-                        response.data = {
-                            'message': 'User Validated.'
-                        }
-                        response.status_code = 200
-                        return response
+                    user.otp = ''
+                    user.save()
+                    response.set_cookie('otp', max_age=1, httponly=True)
+                    # response.cookies['otp'].update({"samesite": "None", "secure": True})
+                    # response.delete_cookie('otp')
+                    response.data = {
+                        'message': 'User Validated.'
+                    }
+                    response.status_code = 200
+                    return response
                 response.data = {
                     'message': 'Invalid OTP.'
                 }
                 response.status_code = 404
                 return response
             response.data = {
-                    'message': 'User Not Found.'
-                }
+                'message': 'User Not Found.'
+            }
             response.status_code = 404
-            return response    
+            return response
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
