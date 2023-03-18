@@ -13,23 +13,25 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+import environ # Pylance does not recognize this import for some reason but the dev server runs perfectly
 
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f)4pl8-6li$+b8eqlz70cjk7!c!fl7oqwuxi%%ejc-6a)dg5qj'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -60,7 +62,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
-
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -115,14 +116,12 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','https://moksha-gules.vercel.app
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# EXTERNAL_DATABASE_URL='postgres://mokshadb_q0lz_user:UYxwuxUN8LdDwYFV3ziuZ3LBknTSuWSQ@dpg-cg4dhgndvk4st73kkji0-a.singapore-postgres.render.com/mokshadb_q0lz'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://mokshadb_q0lz_user:UYxwuxUN8LdDwYFV3ziuZ3LBknTSuWSQ@dpg-cg4dhgndvk4st73kkji0-a/mokshadb_q0lz', conn_max_age=600),
+    'default': dj_database_url.config(default=env('DB_DEV_URL'), conn_max_age=600),
 }
-# INTERNAL_DATABASE_URL='postgres://mokshadb_user:gl5tTJZAZtxlS6tlu2X2kLowSZjZ6osc@dpg-cfli3u1a6gdjlmp5228g-a/mokshadb'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -141,7 +140,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -167,7 +165,6 @@ PASSWORD_HASHERS = [
   'django.contrib.auth.hashers.CryptPasswordHasher',
 ]
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -181,8 +178,8 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_PORT=587
-EMAIL_HOST_USER='moksha.nita.web@gmail.com'
-EMAIL_HOST_PASSWORD='bkntcdsenrqxfafz'
+EMAIL_HOST=env('EMAIL_HOST')
+EMAIL_PORT=env('EMAIL_PORT')
+EMAIL_HOST_USER=env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS=True
