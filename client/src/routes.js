@@ -15,7 +15,6 @@ import AccountLayout from './layouts/account'
 // const AccountLayout = lazy(() => import('./layouts/account'))
 
 import Home from './pages/Home'
-import Events from './pages/Events'
 import Contests from './pages/Contests'
 import Contest from './pages/Contests/Contest'
 import Faqs from './pages/Faqs'
@@ -32,6 +31,8 @@ import Verification from './pages/auth/verification'
 import ForgotPassword from './pages/auth/forgot-password'
 
 import NotFound from './pages/404'
+import Events from './pages/events/index'
+import Event from './pages/events/event'
 
 // const Home = lazy(() => import('./pages/Home'))
 // const Profile = lazy(() => import('./pages/account/Profile'))
@@ -86,7 +87,10 @@ const router = createBrowserRouter(
     <Route element={<FloatingWindow />}>
       <Route element={<DefaultLayout />}>
         <Route path='/' element={<Home />} />
+
         <Route path='/events' element={<Events />} />
+        <Route path='/events/:eventId' element={<Event />} />
+
         <Route path='/faqs' element={<Faqs />} />
         <Route path='/sponsors' element={<Sponsors />} />
         <Route path='/contact' element={<Contact />} />
