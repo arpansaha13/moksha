@@ -12,7 +12,22 @@ export default function Slider() {
       </div>
 
       <div className='sm:w-[30rem] sm:h-[30rem] mt-4'>
-        <img className='w-full h-full' src='./images/man_with_bird.png' alt='' />
+        <img
+          className='w-full h-full'
+          src='https://res.cloudinary.com/djzml9nau/image/upload/v1678712397/MokshaUpdatewithoutbG_nbylcr.png'
+          alt=''
+        />
+      </div>
+      <div className='h-screen w-screen flex justify-center items-center'>
+        <iframe
+          width='100%'
+          height='100%'
+          src='https://www.youtube.com/embed/Of0Pxz8jd4s'
+          title='YouTube video player'
+          frameborder='0'
+          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+          allowfullscreen
+        ></iframe>
       </div>
     </div>
   )

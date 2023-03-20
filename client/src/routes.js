@@ -32,7 +32,7 @@ import ForgotPassword from './pages/auth/forgot-password'
 
 import NotFound from './pages/404'
 import Events from './pages/events/index'
-import Event from './pages/events/event'
+import Event from './pages/events/Event'
 
 // const Home = lazy(() => import('./pages/Home'))
 // const Profile = lazy(() => import('./pages/account/Profile'))

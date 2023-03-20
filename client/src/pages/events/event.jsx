@@ -1,7 +1,7 @@
 import React from 'react'
 
 function event() {
-  return <div></div>
+  return <div>event</div>
 }
 
 export default event
