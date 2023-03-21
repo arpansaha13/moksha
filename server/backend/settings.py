@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'login',
     'rest_framework',
     'solo_events',
+    'invite',
     'corsheaders',
 ]
 
