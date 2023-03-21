@@ -65,8 +65,7 @@ class SoloContestRegister(APIView):
             user_solo = SoloContestRegistrations.objects.filter(
                 user_id=user.user_id, contest_slug=contest_slug).first()
             if user_solo:
-                return Response({'message': "User already registered for the contest!"}, status=400)
-            print(request.data)
+                return Response({'message': "User already registered for the contest!"}, status=409)
             format_data = {'user_id': user.user_id, 'contest_slug': contest_slug}
             serializer = SoloContestSerializers(data=format_data)
             serializer.is_valid(raise_exception=True)
@@ -88,16 +87,15 @@ class TeamContestRegister(APIView):
         print(payload)
         user = User.objects.filter(user_id=payload['id']).first()
         contest_slug = request.data.get('contest_slug')
-        user = Team.objects.filter(leader=user.user_id).first()
+        team = Team.objects.filter(leader=user.user_id).first()
         # print(user)
         if user:
             user_solo = TeamContestRegistrations.objects.filter(
-                team_id=user.team_id, contest_slug=contest_slug).first()
+                team_id=team.team_id, contest_slug=contest_slug).first()
             if user_solo:
-                return Response({'message': "User already registered for the contest!"}, status=400)
-            print(request.data)
-            format_data = {'team_id': user.team_id, 'contest_slug': contest_slug}
-            serializer = SoloContestSerializers(data=format_data)
+                return Response({'message': "Team already registered for the contest!"}, status=409)
+            format_data = {'team_id': team.team_id, 'contest_slug': contest_slug}
+            serializer = TeamContestDetailsSerializers(data=format_data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({'message': 'User registered successfully!!'}, status=201)
