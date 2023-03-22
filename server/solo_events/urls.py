@@ -13,6 +13,8 @@ urlpatterns = [
     path('jointeam',JoinTeam.as_view()),
     path('eventregistration',TeamEventRegistration.as_view()),
     path('solo-contest/register',SoloContestRegister.as_view()),
+    path('solo-contest/register/check/<slug:contest_slug>',CheckSoloRegistration.as_view()),
+    path('solo-contest/register/cancel/<slug:contest_slug>',CancelSoloRegistration.as_view()),
     path('team-contest/register',TeamContestRegister.as_view()),
     path('teams/joined',JoinedTeamsApi.as_view()),
     path('teams/created',CreatedTeamsApi.as_view()),

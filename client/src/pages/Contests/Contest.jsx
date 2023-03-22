@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Container from '../../components/common/Container'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
-import { getContestData } from '../../data/contests'
+import { getMokshaContest } from '../../data/contests/moksha'
 import '@tranzis/react/styles/Tz3dCard'
 
 const SoloRegistration = lazy(() => import('../../components/Contests/SoloRegistration'))
@@ -13,7 +13,7 @@ const TeamRegistration = lazy(() => import('../../components/Contests/TeamRegist
 
 export default function Contest() {
   const params = useParams()
-  const contest = getContestData(params.club, params.contest)
+  const contest = getMokshaContest(params.club, params.contest)
 
   useEffect(() => window.scrollTo({ top: 0 }))
 

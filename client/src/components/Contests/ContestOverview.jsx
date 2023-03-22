@@ -6,12 +6,12 @@ import Sheet from '../common/Sheet'
 import { useWindowSize } from '../../hooks/useWindowSize'
 import ContestTypeBadge from './ContestTypeBadge'
 import SocialShare from '../SocialShare'
-import { getContestData } from '../../data/contests'
+import { getMokshaContest } from '../../data/contests/moksha'
 
 export default function TeamContestOverview() {
   const params = useParams()
   const location = useLocation()
-  const contest = getContestData(params.club, params.contest)
+  const contest = getMokshaContest(params.club, params.contest)
 
   const { width } = useWindowSize()
 

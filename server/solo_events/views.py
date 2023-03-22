@@ -19,7 +19,7 @@ events = {'E-1': ["dance", 3], 'E-2': ["singing", 2],
 class RegisterEvent(APIView):
     def post(self, request):
         token = request.COOKIES['jwt']
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 
@@ -27,68 +27,113 @@ class RegisterEvent(APIView):
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
-        print(payload)
+
         user = User.objects.filter(user_id=payload['id']).first()
         event_id = request.data['event_id']
 
-        # print(user)
         if user:
             user_solo = SoloEvent.objects.filter(
                 user_id=user.user_id, event_id=event_id).first()
             if user_solo:
                 return Response({'message': "User already registered for the event!"}, status=400)
-            print(request.data)
+
             serializer = SoloEventSerializers(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({'message': 'User registered successfully!!'}, status=201)
 
         return Response({'message': 'User not found!'}, status=404)
-    
-class SoloContestRegister(APIView):
-    def post(self, request):
+
+class CheckSoloRegistration(APIView):
+    def get(self, request, contest_slug):
         token = request.COOKIES.get('jwt')
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
-        print(payload)
+
+        user = User.objects.filter(user_id=payload['id']).first()
+
+        if user:
+            solo_registration = SoloContestRegistrations.objects.filter(
+                user_id=user.user_id, contest_slug=contest_slug).first()
+            if solo_registration:
+                return Response({'registered': True}, status=200)
+            return Response({'registered': False}, status=200)
+
+        return Response({'message': 'User not found!'}, status=404)
+
+class SoloContestRegister(APIView):
+    def post(self, request):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+
         user = User.objects.filter(user_id=payload['id']).first()
         contest_slug = request.data.get('contest_slug')
 
-        # print(user)
-        if user:
+        if not contest_slug:
+            return Response({'message': 'No contest_slug provided.'}, status=400)
 
+        if user:
             user_solo = SoloContestRegistrations.objects.filter(
                 user_id=user.user_id, contest_slug=contest_slug).first()
             if user_solo:
-                return Response({'message': "User already registered for the contest!"}, status=409)
+                return Response({'message': "User already registered for the contest."}, status=409)
             format_data = {'user_id': user.user_id, 'contest_slug': contest_slug}
             serializer = SoloContestSerializers(data=format_data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({'message': 'User registered successfully!!'}, status=201)
+            return Response({'message': 'User registered successfully for contest.'}, status=201)
+
+        return Response({'message': 'User not found.'}, status=404)
+
+class CancelSoloRegistration(APIView):
+    def delete(self, request, contest_slug):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+        try:
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token Expired! Log in again.')
+
+        user = User.objects.filter(user_id=payload['id']).first()
+
+        if user:
+            solo_registration = SoloContestRegistrations.objects.filter(
+                user_id=user.user_id, contest_slug=contest_slug).first()
+            if solo_registration:
+                solo_registration.delete()
+                return Response({'message': 'Registration for this contest has been cancelled.'}, status=200)
+            return Response({'message': 'No registration found for this contest.'}, status=404)
 
         return Response({'message': 'User not found!'}, status=404)
 
 class TeamContestRegister(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
-        print(payload)
+
         user = User.objects.filter(user_id=payload['id']).first()
         contest_slug = request.data.get('contest_slug')
         team = Team.objects.filter(leader=user.user_id).first()
-        # print(user)
+
         if user:
             user_solo = TeamContestRegistrations.objects.filter(
                 team_id=team.team_id, contest_slug=contest_slug).first()
@@ -194,7 +239,7 @@ class TeamEventsApi(APIView):
 #         user = EventDetail.objects.filter(event_id=event_id).first()
 #         if user:
 #             return Response({'message': 'Event already exists'}, status=400)
-        
+
 #         serializer = EventDetailSerializers(data=request.data)
 #         serializer.is_valid(raise_exception=True)
 #         serializer.save()
@@ -205,7 +250,7 @@ class TeamEventsApi(APIView):
 class CreateTeam(APIView):
     def post(self, request):
         token = request.COOKIES['jwt']
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 
@@ -213,13 +258,13 @@ class CreateTeam(APIView):
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
-        print(payload)
+
         user_1= User.objects.filter(user_id=payload['id']).first()
         if user_1 is None:
             return Response({'message': 'Unregistered User!'}, status=403)
-        
+
         user = Team.objects.filter(leader_id=user_1.user_id).first()
-        # print(user)
+
         if not user:
             uid = generate_UID()
             user1 = Team.objects.filter(team_id=uid).first()
@@ -243,7 +288,7 @@ class CreateTeam(APIView):
 class JoinTeam(APIView):
     def post(self, request):
         token = request.COOKIES['jwt']
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 
@@ -251,16 +296,16 @@ class JoinTeam(APIView):
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
-        print(payload)
+
         user_id = payload['id']
         team_id = request.data['team_id']
 
         user = TeamUserRegistrations.objects.filter(team_id=team_id).all()
-        print(user.count)
+
         user1 = Team.objects.filter(leader_id=user_id).first()
         if user1:
             return Response({'message': 'Each user can create only one team but join any!!'}, status=403)
-        # print(user)
+
         if user:
             if user.count < 5:
                 format_data = {'team_id': team_id,'user_id':user_id}
@@ -275,7 +320,7 @@ class JoinTeam(APIView):
 class TeamEventRegistration(APIView):
     def post(self, request):
         token = request.COOKIES['jwt']
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 
@@ -283,12 +328,12 @@ class TeamEventRegistration(APIView):
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
-        print(payload)
+
         user_id = payload['id']
         event_id = request.data['event_id']
         user = Team.objects.filter(
             leader=user_id).first()
-        # print(user)
+
         if user:
             user1 = TeamEvent.objects.filter(
                 team_id=user.team_id, event_id=event_id).first()
@@ -319,11 +364,11 @@ class TeamEventRegistration(APIView):
                     break
             return Response({'message': 'Team event registered successfully!'}, status=200)
         return Response({'message': 'Only Leader can register for Team Events'}, status=403)
-    
+
 class CreatedTeamsApi(APIView):
     def get(self, request):
         token = request.COOKIES['jwt']
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
         try:
@@ -344,7 +389,7 @@ class CreatedTeamsApi(APIView):
 class JoinedTeamsApi(APIView):
     def get(self, request):
         token = request.COOKIES['jwt']
-        print(token)
+
         if not token:
             raise AuthenticationFailed('Unauthenticated')
 

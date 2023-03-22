@@ -1,15 +1,15 @@
 const fineArts = [
-  {
-    slug: 'open-canvas',
-    name: 'Open canvas',
-    type: ['solo'],
-    image: '', // Image link
-    description: [
-      {
-        p: 'Open Canvas is a Graphic Editor that has an analog-like quality and a simple or easy user interface. It is extensively suitable to beginners to advanced users. Addition to the basic performances, openCanvas has its unique "Event function" that records and replays a drawing procedure.',
-      },
-    ],
-  },
+  // {
+  //   slug: 'open-canvas',
+  //   name: 'Open canvas',
+  //   type: ['solo'],
+  //   image: '', // Image link
+  //   description: [
+  //     {
+  //       p: 'Open Canvas is a Graphic Editor that has an analog-like quality and a simple or easy user interface. It is extensively suitable to beginners to advanced users. Addition to the basic performances, openCanvas has its unique "Event function" that records and replays a drawing procedure.',
+  //     },
+  //   ],
+  // },
   {
     slug: 'magic-of-fingers',
     name: 'Magic of fingers',
@@ -17,7 +17,7 @@ const fineArts = [
     image: '', // Image link
     description: [
       {
-        p: 'Who says a painter needs brush to unleash his imagination. All that was needed in this event were         some water colours on one’s fingers and that’s how we crowned the Leonardo of finger painting.',
+        p: 'Who says a painter needs brush to unleash his imagination. All that was needed in this event were some water colours on one’s fingers and that’s how we crowned the Leonardo of finger painting.',
       },
     ],
   },
@@ -157,7 +157,7 @@ const malhar = [
     image: '', // Image link
     description: [
       {
-        p: 'This solo instrumental competition will be held in 2 stages: a preliminary round, from which selected contestants will advance to the final round and compete in the main event of ‘MOKSHA’, which will take place in the Auditorium.',
+        p: 'This solo instrumental competition will be held in 2 stages: a preliminary round, from which selected contestants will advance to the final round and compete in the main event of ‘Moksha’, which will take place in the Auditorium.',
       },
       { p: 'Winners will be awarded some exciting prizes.' },
       {
@@ -351,7 +351,7 @@ const dzire = [
           "The act shouldn't promote any sort of violence or cruelty. Use of props such as fire or any sharp objects is prohibited.",
           'Min no of participants are 4 and max no of participants are 15.',
           'Participants should arrange their own costumes and props.',
-          'Prelims will be before MOKSHA and Finals will take place during MOKSHA.',
+          'Prelims will be before Moksha and Finals will take place during Moksha.',
         ],
       },
     ],
@@ -459,7 +459,7 @@ const dcc = [
   },
 ]
 
-const contests = {
+const mokshaContests = {
   'fine-arts-club': fineArts,
   malhar: malhar,
   dzire: dzire,
@@ -467,8 +467,8 @@ const contests = {
   dcc: dcc,
 }
 
-export function getContestData(clubName, contestSlug) {
-  return contests[clubName].find(contest => contest.slug === contestSlug)
+export function getMokshaContest(clubName, contestSlug) {
+  return mokshaContests[clubName].find(contest => contest.slug === contestSlug)
 }
 
-export default contests
+export default mokshaContests
