@@ -9,22 +9,6 @@ class SoloEvent(models.Model):
 
     def __str__(self):
         return self.user_id
-    
-class SoloContestRegistrations(models.Model):
-    id = models.AutoField(primary_key=True)
-    user_id = models.CharField(max_length=100, blank=True, null=True)
-    contest_slug = models.CharField(max_length=100, blank=True, null=True)
-
-    def __str__(self):
-        return self.user_id
-    
-class TeamContestRegistrations(models.Model):
-    id = models.AutoField(primary_key=True)
-    team_id = models.CharField(max_length=100, blank=True, null=True)
-    contest_slug = models.CharField(max_length=100, blank=True, null=True)
-
-    def __str__(self):
-        return self.team_id
 
 class TeamEvent(models.Model):
     id = models.AutoField(primary_key=True)
@@ -46,7 +30,7 @@ class Team(models.Model):
 
     def __str__(self):
         return self.team_id
-    
+
 class TeamUserRegistrations(models.Model):
     id = models.AutoField(primary_key=True)
     team_id = models.CharField(max_length=100, blank=True, null=True)

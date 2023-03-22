@@ -21,6 +21,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('users/', include('login.urls')),
     path('admin/', admin.site.urls),
+    path('api/contests/', include('contests.urls')),
     path('new/', include('solo_events.urls')),
     re_path(r'.*', views.home, name="home"), # only if the above routes don't trigger a match
 ]

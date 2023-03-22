@@ -11,7 +11,7 @@ class User(models.Model):
     email = models.EmailField(unique=False)
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
-    user_id = models.CharField(max_length=100,blank=True, null=True)
+    user_id = models.CharField(max_length=100,blank=True, null=False)
     logged_in = models.BooleanField(default=False)
     otp = models.CharField(max_length=100, default='', null=True, blank=True)
 

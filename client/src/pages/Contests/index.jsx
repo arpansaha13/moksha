@@ -15,7 +15,7 @@ import leftIcon from '@iconify-icons/mdi/chevron-left'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
 import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
 import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
-import contestsMap from '../../data/contests'
+import contestsMap from '../../data/contests/moksha'
 import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
 import classNames from '../../utils/classNames'
 

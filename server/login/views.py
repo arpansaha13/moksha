@@ -170,7 +170,7 @@ class LoginApi(APIView):
 
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
                 ans = check_password(request.data['password'], user.password)
-                # print(ans)
+
                 if ans == True:
                     if user.otp == "":
                         response.set_cookie(
@@ -191,12 +191,12 @@ class LoginApi(APIView):
                     response.status_code = 403
                     return response
                 response.data = {
-                    'message': "Invalid Email or Password.",
+                    'message': "Invalid email or password.",
                 }
                 response.status_code = 400
                 return response
             response.data = {
-                'message': "Invalid Email or Password.",
+                'message': "Invalid email or password.",
             }
             response.status_code = 400
             return response

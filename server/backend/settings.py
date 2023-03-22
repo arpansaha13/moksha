@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'login',
     'rest_framework',
     'solo_events',
+    'contests',
     'invite',
     'corsheaders',
 ]
@@ -96,8 +97,7 @@ CSRF_COOKIE_SAMESITE = 'None'
 
 SESSION_COOKIE_SAMESITE = 'None'
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000',
-                         'https://moksha-gules.vercel.app']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -116,8 +116,7 @@ CORS_ALLOW_HEADERS = [
     'credentials'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
-                        'https://moksha-gules.vercel.app']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 

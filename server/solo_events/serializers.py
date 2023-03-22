@@ -10,11 +10,6 @@ class SoloEventSerializers(serializers.ModelSerializer):
         model = SoloEvent
         fields = '__all__'
 
-class SoloContestSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = SoloContestRegistrations
-        fields = '__all__'
-
 class TeamEventSerializers(serializers.ModelSerializer):
     class Meta:
         model = TeamEvent
@@ -30,10 +25,6 @@ class TeamUserRegistrationsSerializers(serializers.ModelSerializer):
         model = TeamUserRegistrations
         fields = '__all__'
 
-class TeamContestDetailsSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = TeamContestRegistrations
-        fields = '__all__'
 # class EventDetailSerializers(serializers.ModelSerializer):
 #     class Meta:
 #         model = EventDetail
