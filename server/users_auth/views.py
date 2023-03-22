@@ -1,6 +1,6 @@
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import *
-from .models import *
+from users.serializers import *
+from users.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.mail import send_mail
@@ -12,6 +12,11 @@ import datetime
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.decorators import method_decorator
 from backend.middleware import jwt_exempt
+
+import environ # Pylance does not recognize this import for some reason but the dev server runs perfectly
+
+env = environ.Env()
+environ.Env.read_env()
 
 class RegisterApi(APIView):
     def post(self, request):
@@ -27,7 +32,7 @@ class RegisterApi(APIView):
                 username=request.data['username']).first()
             if user1:
                 response.data = {
-                    'message': "Username Already Exists",
+                    'message': "This username is already taken.",
                 }
                 response.status_code = 409
                 return response
@@ -39,7 +44,7 @@ class RegisterApi(APIView):
                 while user1:
                     uid = generate_UID()
                     user1 = User.objects.filter(user_id=uid).first()
-                serializer = UsersSerializers(data=request.data)
+                serializer = UserSerializers(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
                 user = User.objects.filter(email=email).first()
@@ -57,12 +62,11 @@ class RegisterApi(APIView):
                 token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
                 response.set_cookie(key='otp', value=token, httponly=True)
-                # response.cookies['otp'].update(
-                #     {"samesite": "None", "secure": True})
+
                 send_mail(
                     'Moksha OTP',
                     otp_generated,
-                    'arghajitbhowmik08@gmail.com',
+                    env('EMAIL_HOST_USER'),
                     [email],
                     fail_silently=False,
                 )
@@ -86,115 +90,45 @@ class RegisterApi(APIView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-
-class DetailsUserName(APIView):
-    def get(self, request):  # ?query_param e ?username=something link er last e
-        # username=request.data['username']
-        username = request.GET.get('username', None)
-        user1 = User.objects.filter(username__icontains=username).all()
-        data = []
-        if not user1:
-            return Response({'message': 'User Not Found'}, status=404)
-        for i in user1:
-            print(i.name)
-            serializer = SpecificSerializers(i)
-            data.append(serializer.data)
-
-        return Response({'message': 'Success', 'payload': {'details': data}}, status=200)
-
-
 class LoginApi(APIView):
     def post(self, request):
-        response = Response()
         try:
             token = request.COOKIES['jwt']
-            try:
-                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-                return Response({'message': 'User Already Logged In.'}, status=200)
-            except jwt.ExpiredSignatureError:
-                email = request.data['email']
-                user = User.objects.filter(email=email).first()
-                if user:
-                    print(user.user_id)
-                    payload = {
-                        'id': user.user_id,
-                        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                        'iat': datetime.datetime.utcnow(),
-                    }
-
-                    token = jwt.encode(payload, 'secret00', algorithm='HS256')
-                    ans = check_password(
-                        request.data['password'], user.password)
-                    # print(ans)
-                    if ans == True:
-                        if user.otp == "":
-                            response.set_cookie(
-                                key='jwt', value=token, httponly=True)
-                            # response.cookies['jwt'].update(
-                            #     {"samesite": "None", "secure": True})
-                            user.logged_in = True
-                            user.save()
-                            response.data = {
-                                'message': "User Logged In",
-                            }
-                            response.status_code = 200
-                            return response
-                        response.data = {
-                            'message': "Please validate your account using otp.",
-                        }
-                        response.status_code = 403
-                        return response
-                    response.data = {
-                        'message': "Invalid Email or Password.",
-                    }
-                    response.status_code = 400
-                    return response
-                response.data = {
-                    'message': "Invalid Email or Password.",
-                }
-                response.status_code = 400
-                return response
+            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+            return Response({'message': 'User already logged in.'}, status=200)
         except:
             email = request.data['email']
             user = User.objects.filter(email=email).first()
-            if user:
-                payload = {
-                    'id': user.user_id,
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                    'iat': datetime.datetime.utcnow(),
-                }
 
-                token = jwt.encode(payload, 'secret00', algorithm='HS256')
-                ans = check_password(request.data['password'], user.password)
+            if not user:
+                raise AuthenticationFailed({'message': 'Invalid email or password.'})
 
-                if ans == True:
-                    if user.otp == "":
-                        response.set_cookie(
-                            key='jwt', value=token, httponly=True)
-                        # response.cookies['jwt'].update(
-                        #     {"samesite": "None", "secure": True})
-                        user.logged_in = True
-                        user.save()
-                        response.data = {
-                            'message': "User Logged In",
-                        }
-                        response.status_code = 200
-                        return response
-                    print(user.otp)
-                    response.data = {
-                        'message': "Please validate your account using otp.",
-                    }
-                    response.status_code = 403
-                    return response
-                response.data = {
-                    'message': "Invalid email or password.",
-                }
-                response.status_code = 400
-                return response
-            response.data = {
-                'message': "Invalid email or password.",
+            payload = {
+                'id': user.user_id,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                'iat': datetime.datetime.utcnow(),
             }
-            response.status_code = 400
+
+            token = jwt.encode(payload, 'secret00', algorithm='HS256')
+            password_matched = check_password(request.data['password'], user.password)
+
+            if password_matched == False:
+                raise AuthenticationFailed({'message': 'Invalid email or password.'})
+
+            response = Response()
+
+            if user.otp == "":
+                response.set_cookie(key='jwt', value=token, httponly=True)
+
+                user.logged_in = True
+                user.save()
+
+                response.data = { 'message': "User logged in" }
+                response.status_code = 200
+                return response
+
+            response.data = { 'message': "Please validate your account using otp." }
+            response.status_code = 403
             return response
 
     @method_decorator(jwt_exempt)
@@ -286,19 +220,6 @@ class ChangePasswordApi(APIView):
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
-
-
-class ViewApi(APIView):
-    def get(self, request):
-        user = User.objects.all()
-        serializer = UsersSerializers(user, many=True)
-        return Response({'message': 'Success', 'payload': serializer.data}, status=200)
-
-
-class ViewParticularApi(APIView):
-    def get(self, request):
-        serializer = UsersSerializers(request.auth_user)
-        return Response(serializer.data, status=200)
 
 
 class LogoutApi(APIView):
@@ -411,16 +332,13 @@ class ResendOtp(APIView):
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
-# Create your views here.
 
 # Generating UIDs
-
 
 def generate_UID(length=8):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
                   for i in range(length))
     return 'MOK-' + uid
-
 
 def generate_password(length=10):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)

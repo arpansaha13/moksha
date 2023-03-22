@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppContext } from '../containers/DataProvider'
 import createRequest from '../utils/createRequest'
 
@@ -17,12 +16,9 @@ import createRequest from '../utils/createRequest'
  * Note:
  *
  * 1) Body data (if provided) must be a stringified JSON.
- *
- * 2) It uses `useNavigate` and `useLocation` internally. So this hook has to be used within Router context.
  */
 
 export function useFetch() {
-  const location = useLocation()
   const { resetAppContext } = useAppContext()
 
   const fetchHook = useCallback(
@@ -41,7 +37,7 @@ export function useFetch() {
       }
       return jsonData
     },
-    [location.pathname]
+    []
   )
 
   return fetchHook

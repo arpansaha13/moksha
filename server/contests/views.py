@@ -1,7 +1,7 @@
 from .serializers import *
 from .models import *
-from login.models import *
-from login.serializers import *
+from users.models import User
+from users.serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 

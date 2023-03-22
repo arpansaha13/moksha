@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'login',
     'rest_framework',
-    'solo_events',
+    'users',
+    'users_auth',
+    'teams',
     'contests',
     'invite',
+    'solo_events',
     'corsheaders',
 ]
 
@@ -114,7 +116,6 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    'credentials'
 ]
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
@@ -174,7 +175,6 @@ PASSWORD_HASHERS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-# STATIC_URL = 'static/'
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, '')

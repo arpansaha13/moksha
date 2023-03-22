@@ -3,18 +3,18 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 from .serializers import *
 from .models import *
-from login.models import *
-from login.serializers import *
+from users.models import User
+from users.serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import secrets
 import string
 import jwt
+
 events = {'E-1': ["dance", 3], 'E-2': ["singing", 2],
           'E-3': ["drama", 5], 'E-4': ["acting", 1]}
 
 # SOLO EVENT APIs
-
 
 class RegisterEvent(APIView):
     def post(self, request):
@@ -141,78 +141,6 @@ class TeamEventsApi(APIView):
 #         serializer.is_valid(raise_exception=True)
 #         serializer.save()
 #         return Response({'message': 'Event added successfully'}, status=200)
-
-
-# TEAM EVENT APIs
-class CreateTeam(APIView):
-    def post(self, request):
-        token = request.COOKIES['jwt']
-
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-
-        try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired! Log in again.')
-
-        user_1= User.objects.filter(user_id=payload['id']).first()
-        if user_1 is None:
-            return Response({'message': 'Unregistered User!'}, status=403)
-
-        user = Team.objects.filter(leader_id=user_1.user_id).first()
-
-        if not user:
-            uid = generate_UID()
-            user1 = Team.objects.filter(team_id=uid).first()
-            while user1:
-                uid = generate_UID()
-                user1 = Team.objects.filter(team_id=uid).first()
-            format_data = {'team_id': uid, 'team_name': request.data['team_name'],'leader_id':user_1.user_id}
-            serializer = TeamSerializers(data=format_data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            format_data = {'team_id': uid,'user_id':user_1.user_id}
-            serializer = TeamUserRegistrationsSerializers(data=format_data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-            return Response({'message': 'Team created successfully!!', 'payload': {'team_id': user.team_id}}, status=201)
-
-        return Response({'message': 'Team Already Exists!'}, status=400)
-
-
-class JoinTeam(APIView):
-    def post(self, request):
-        token = request.COOKIES['jwt']
-
-        if not token:
-            raise AuthenticationFailed('Unauthenticated')
-
-        try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token Expired! Log in again.')
-
-        user_id = payload['id']
-        team_id = request.data['team_id']
-
-        user = TeamUserRegistrations.objects.filter(team_id=team_id).all()
-
-        user1 = Team.objects.filter(leader_id=user_id).first()
-        if user1:
-            return Response({'message': 'Each user can create only one team but join any!!'}, status=403)
-
-        if user:
-            if user.count < 5:
-                format_data = {'team_id': team_id,'user_id':user_id}
-                serializer = TeamUserRegistrationsSerializers(data=format_data)
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
-                return Response({'message': 'Member Added!!'}, status=201)
-            return Response({'message': 'Team Full!'}, status=400)
-        return Response({'message': 'Team Doesnot Exists!'}, status=404)
-
 
 class TeamEventRegistration(APIView):
     def post(self, request):

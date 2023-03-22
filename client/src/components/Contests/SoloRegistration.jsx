@@ -21,7 +21,7 @@ const SoloRegistration = memo(() => {
 
   useEffect(() => {
     if (appContext.authenticated) {
-      fetchHook(`api/contests/solo/register/check/${params.contest}`).then(res => {
+      fetchHook(`contests/solo/register/check/${params.contest}`).then(res => {
         setRegistered(res.registered)
         setFetchedRegistrationState(true)
       })
@@ -35,7 +35,7 @@ const SoloRegistration = memo(() => {
     const formData = getFormData(formRef.current, { format: 'object' })
     formData.contest_slug = params.contest
 
-    fetchHook('api/contests/solo/register', {
+    fetchHook('contests/solo/register', {
       method: 'POST',
       body: JSON.stringify(formData),
     }).then(() => {
@@ -47,7 +47,7 @@ const SoloRegistration = memo(() => {
   function cancelRegistration() {
     setLoading(true)
 
-    fetchHook(`api/contests/solo/register/cancel/${params.contest}`, {
+    fetchHook(`contests/solo/register/cancel/${params.contest}`, {
       method: 'DELETE',
     }).then(() => {
       setRegistered(false)

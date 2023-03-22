@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 from .serializers import *
 from .models import *
-from login.models import *
+from users.models import User
 from solo_events.models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response

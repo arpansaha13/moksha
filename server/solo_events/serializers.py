@@ -15,16 +15,6 @@ class TeamEventSerializers(serializers.ModelSerializer):
         model = TeamEvent
         fields = '__all__'
 
-class TeamSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Team
-        fields = '__all__'
-
-class TeamUserRegistrationsSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = TeamUserRegistrations
-        fields = '__all__'
-
 # class EventDetailSerializers(serializers.ModelSerializer):
 #     class Meta:
 #         model = EventDetail

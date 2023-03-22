@@ -37,8 +37,8 @@ export default function CreateTeam() {
         setSearchResults([])
         return
       }
-      fetchHook('users/details?' + new URLSearchParams({ username: searchString })).then(res => {
-        setSearchResults(res.payload.details)
+      fetchHook('users/?' + new URLSearchParams({ username: searchString })).then(res => {
+        setSearchResults(res.data)
       })
     },
     800,
@@ -52,7 +52,7 @@ export default function CreateTeam() {
 
     const formData = getFormData(formRef.current)
 
-    fetchHook('new/createteam', {
+    fetchHook('teams/create', {
       method: 'POST',
       body: JSON.stringify({ team_name: formData.get('team_name') }),
     })
@@ -135,7 +135,7 @@ export default function CreateTeam() {
           ))}
         </div>
 
-        <csrfField />
+        <CsrfField />
 
         <div className='mt-6 flex flex-col sm:flex-row sm:justify-end gap-4'>
           {/* This component won't be rendered if there is no authentication */}

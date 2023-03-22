@@ -27,7 +27,7 @@ const LoginPage = () => {
 
       const formData = getFormData(formRef.current, { format: 'object' })
 
-      fetchHook('users/login', {
+      fetchHook('auth/login', {
         method: 'POST',
         body: JSON.stringify(formData),
       })
@@ -36,8 +36,8 @@ const LoginPage = () => {
           setAppContext('authenticated', true)
           setNotification('show', false)
 
-          fetchHook('users/particular').then(res => {
-            setAppContext('authUser', res.payload)
+          fetchHook('users/me').then(res => {
+            setAppContext('authUser', res.data)
 
             if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')))
             else navigate('/')

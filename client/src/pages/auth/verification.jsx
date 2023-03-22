@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseButton from '../../components/base/BaseButton'
@@ -13,7 +13,7 @@ import classNames from '../../utils/classNames'
 const VerificationPage = () => {
   const navigate = useNavigate()
   let [searchParams] = useSearchParams()
-  const {setAppContext} = useAppContext()
+  const { setAppContext } = useAppContext()
   const { setNotification, setAllNotification } = useAuthContext()
 
   const fetchHook = useFetch()
@@ -29,46 +29,47 @@ const VerificationPage = () => {
     e.preventDefault()
     setLoading(true)
 
-    fetchHook('users/otp', {
+    fetchHook('auth/otp', {
       method: 'POST',
       body: JSON.stringify(formData),
     })
-    .then(() => {
-      setLoading(false)
-      setAppContext('authenticated', true)
-      setNotification('show', false)
-      navigate({pathname: '/auth/login', search: searchParams.toString()})
-    })
-    .catch(err => {
-      setLoading(false)
-      setAllNotification({
-        show: true,
-        title: 'Validation failed',
-        description: err.message,
-        status: 'error',
+      .then(() => {
+        setLoading(false)
+        setAppContext('authenticated', true)
+        setNotification('show', false)
+        navigate({ pathname: '/auth/login', search: searchParams.toString() })
       })
-    })
+      .catch(err => {
+        setLoading(false)
+        setAllNotification({
+          show: true,
+          title: 'Validation failed',
+          description: err.message,
+          status: 'error',
+        })
+      })
   }
 
   function resendOTP() {
     setCooldown(true)
 
-    fetchHook('users/resendotp').then(() => {
-      setAllNotification({
-        show: true,
-        title: 'OTP sent',
-        description: 'The OTP has been sent to your email', // TODO: Mention email id here from backend
-        status: 'success',
+    fetchHook('auth/resend-otp')
+      .then(() => {
+        setAllNotification({
+          show: true,
+          title: 'OTP sent',
+          description: 'The OTP has been sent to your email', // TODO: Mention email id here from backend
+          status: 'success',
+        })
       })
-    })
-    .catch(() => {
-      setAllNotification({
-        show: true,
-        title: 'Failed to resend OTP',
-        description: 'Please try to register for a new account again.',
-        status: 'error',
+      .catch(() => {
+        setAllNotification({
+          show: true,
+          title: 'Failed to resend OTP',
+          description: 'Please try to register for a new account again.',
+          status: 'error',
+        })
       })
-    })
   }
 
   return (
@@ -77,33 +78,25 @@ const VerificationPage = () => {
         <title>Moksha | Verification</title>
       </Helmet>
 
-      <form className="space-y-6" onSubmit={verifyOTP}>
-        <OtpInput
-          length={4}
-          label="Enter OTP"
-          value={formData.otp}
-          setValue={value => set('otp', value)}
-        />
+      <form className='space-y-6' onSubmit={verifyOTP}>
+        <OtpInput length={4} label='Enter OTP' value={formData.otp} setValue={value => set('otp', value)} />
 
-        <div className="flex items-center justify-between gap-3 text-sm">
+        <div className='flex items-center justify-between gap-3 text-sm'>
           <button
-            type="button"
-            className={classNames(
-              "block font-medium text-amber-600",
-              cooldownIsActive ? '' : 'hover:text-amber-500'
-            )}
+            type='button'
+            className={classNames('block font-medium text-amber-600', cooldownIsActive ? '' : 'hover:text-amber-500')}
             disabled={cooldownIsActive}
             onClick={resendOTP}
           >
             Resend OTP
           </button>
-          { cooldownIsActive && <ResendOtpCooldown onCooldownEnd={setCooldown.bind(false)} /> }
+          {cooldownIsActive && <ResendOtpCooldown onCooldownEnd={setCooldown.bind(false)} />}
         </div>
 
         <CsrfField />
 
         <div>
-          <BaseButton type="submit" stretch loading={loading}>
+          <BaseButton type='submit' stretch loading={loading}>
             Verify OTP
           </BaseButton>
         </div>
@@ -131,10 +124,8 @@ const ResendOtpCooldown = memo(({ onCooldownEnd }) => {
   }, [])
 
   return (
-    <p className="text-gray-400 text-xs">
-      Resend again in {' '}
-      <span>{ count }</span>
-      {' '} seconds
+    <p className='text-gray-400 text-xs'>
+      Resend again in <span>{count}</span> seconds
     </p>
   )
 })

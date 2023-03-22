@@ -54,7 +54,7 @@ const SignUpPage = () => {
 
       setLoading(true)
 
-      fetchHook('users/register', {
+      fetchHook('auth/register', {
         method: 'POST',
         body: JSON.stringify(formData),
       })
