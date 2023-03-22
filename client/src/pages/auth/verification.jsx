@@ -5,6 +5,7 @@ import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseButton from '../../components/base/BaseButton'
 import OtpInput from '../../components/common/OtpInput'
+import CsrfField from '../../components/common/CsrfField'
 import { useAppContext } from '../../containers/DataProvider'
 import { useAuthContext } from '../../containers/AuthProvider'
 import classNames from '../../utils/classNames'
@@ -98,6 +99,8 @@ const VerificationPage = () => {
           </button>
           { cooldownIsActive && <ResendOtpCooldown onCooldownEnd={setCooldown.bind(false)} /> }
         </div>
+
+        <CsrfField />
 
         <div>
           <BaseButton type="submit" stretch loading={loading}>
