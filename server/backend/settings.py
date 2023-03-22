@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'backend.middleware.JwtMiddleware',
 ]
 
 # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect

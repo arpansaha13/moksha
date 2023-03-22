@@ -1,6 +1,4 @@
 from rest_framework.exceptions import AuthenticationFailed
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseNotFound
 from .serializers import *
 from .models import *
 from rest_framework.views import APIView
@@ -12,11 +10,10 @@ import string
 import jwt
 import datetime
 from django.contrib.auth.hashers import make_password, check_password
-from django.views.decorators.csrf import csrf_exempt
-
+from django.utils.decorators import method_decorator
+from backend.middleware import jwt_exempt
 
 class RegisterApi(APIView):
-    @csrf_exempt
     def post(self, request):
         email = request.data['email']
         response = Response()
@@ -85,6 +82,10 @@ class RegisterApi(APIView):
         response.status_code = 400
         return response
 
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 class DetailsUserName(APIView):
     def get(self, request):  # ?query_param e ?username=something link er last e
@@ -103,12 +104,10 @@ class DetailsUserName(APIView):
 
 
 class LoginApi(APIView):
-    @csrf_exempt
     def post(self, request):
         response = Response()
         try:
             token = request.COOKIES['jwt']
-            print(token)
             try:
                 payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
                 return Response({'message': 'User Already Logged In.'}, status=200)
@@ -140,7 +139,6 @@ class LoginApi(APIView):
                             }
                             response.status_code = 200
                             return response
-                        print(user.otp)
                         response.data = {
                             'message': "Please validate your account using otp.",
                         }
@@ -157,11 +155,9 @@ class LoginApi(APIView):
                 response.status_code = 400
                 return response
         except:
-
             email = request.data['email']
             user = User.objects.filter(email=email).first()
             if user:
-                print(user.user_id)
                 payload = {
                     'id': user.user_id,
                     'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
@@ -201,9 +197,12 @@ class LoginApi(APIView):
             response.status_code = 400
             return response
 
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 class ForgotApi(APIView):
-    @csrf_exempt
     def post(self, request):
         response = Response()
         user_id = request.data['email']
@@ -243,8 +242,12 @@ class ForgotApi(APIView):
         return response
 
 
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
 class ChangePasswordApi(APIView):
-    @csrf_exempt
     def post(self, request):
         try:
             token = request.COOKIES['reset']
@@ -280,6 +283,11 @@ class ChangePasswordApi(APIView):
             return Response({'message': 'Unauthorized.'}, status=401)
 
 
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
 class ViewApi(APIView):
     def get(self, request):
         user = User.objects.all()
@@ -289,23 +297,8 @@ class ViewApi(APIView):
 
 class ViewParticularApi(APIView):
     def get(self, request):
-        try:
-            token = request.COOKIES['jwt']
-            if not token:
-                raise AuthenticationFailed('Unauthenticated')
-
-            try:
-                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-            except jwt.ExpiredSignatureError:
-                raise AuthenticationFailed('Token Expired. Log in again.')
-            user = User.objects.filter(user_id=payload['id']).first()
-            if user:
-                serializer = UsersSerializers(user)
-                print(serializer.data)
-                return Response({'message': 'Success', 'payload': serializer.data}, status=200)
-            return Response({'message': 'User Not Found'}, status=404)
-        except:
-            return Response({'message': 'Unauthorized.'}, status=401)
+        serializer = UsersSerializers(request.auth_user)
+        return Response(serializer.data, status=200)
 
 
 class LogoutApi(APIView):
@@ -344,7 +337,6 @@ class LogoutApi(APIView):
 
 
 class OTPValidation(APIView):
-    @csrf_exempt
     def post(self, request):
         try:
             token = request.COOKIES['otp']
@@ -382,6 +374,10 @@ class OTPValidation(APIView):
             return response
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
+
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 class ResendOtp(APIView):

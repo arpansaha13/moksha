@@ -11,8 +11,8 @@ function App() {
 
   useEffect(() => {
     fetchWithCredentials('users/particular')
-    .then(res => {
-      setAppContext('authUser', res.payload)
+    .then(authUser => {
+      setAppContext('authUser', authUser)
       setAppContext('authenticated', true)
       setLoading(false)
     })

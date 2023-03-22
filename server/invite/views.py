@@ -19,7 +19,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 class CreateInvite(APIView):
-    @csrf_exempt
     def post(self, request):
         team_id=request.data.get('team_id')
         user_id=request.data.get('user_id')
@@ -33,7 +32,7 @@ class CreateInvite(APIView):
            serializer.save()
            return Response({'message': 'Invite Created'}, status=200)
         return Response({'message': 'Already Invited'}, status=409)
-    
+
 class ViewInvite(APIView):
     def get(self, request):
         try:
@@ -68,7 +67,7 @@ class ViewInvite(APIView):
             return response
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
-    
+
 class AcceptInvite(APIView):
     def get(self, request,id):
         user = Invite.objects.filter(id=id).first()
@@ -76,9 +75,9 @@ class AcceptInvite(APIView):
             if user.status!='accepted':
                user.status='accepted'
                return Response({'message': 'Accepted'}, status=200)
-            return Response({'message': 'Already Accepted'}, status=404) 
+            return Response({'message': 'Already Accepted'}, status=404)
         return Response({'message': 'Invite Not Found'}, status=404)
-    
+
 class RejectInvite(APIView):
     def get(self, request,id):
         user = Invite.objects.filter(id=id).first()
@@ -86,5 +85,5 @@ class RejectInvite(APIView):
             if user.status!='rejected':
                user.status='rejected'
                return Response({'message': 'Rejected'}, status=200)
-            return Response({'message': 'Already Rejected'}, status=404) 
+            return Response({'message': 'Already Rejected'}, status=404)
         return Response({'message': 'Invite Not Found'}, status=404)
