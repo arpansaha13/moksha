@@ -45,12 +45,22 @@ import NotFound from './pages/404'
 // const ForgotPasswordPage = lazy(() => import('./pages/auth/forgot-password'))
 
 const isAuthenticated = async () => {
-  // Replace this with another designated api
   try {
-    await fetchWithCredentials('users/particular')
+    await fetchWithCredentials('auth/check-auth')
     return true
   } catch {
     return false
+  }
+}
+
+const getAuthUserData = async ({ request }) => {
+  try {
+    nprogress.start()
+    const res = await fetchWithCredentials('users/me')
+    nprogress.done()
+    return res.data
+  } catch {
+    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
 }
 
@@ -64,7 +74,6 @@ const allowIfAuthenticated = async ({ request }) => {
   nprogress.done()
 
   if (!authenticated) {
-    // redirect to login if not authenticated
     return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
   return null
@@ -76,7 +85,7 @@ const allowIfNotAuthenticated = async () => {
   nprogress.done()
 
   if (authenticated) {
-    return redirect('/') // redirect to home if authenticated
+    return redirect('/')
   }
   return null
 }
@@ -96,10 +105,10 @@ const router = createBrowserRouter(
 
         <Route path='/*' element={<NotFound />} />
 
-        <Route loader={allowIfAuthenticated} element={<AccountLayout />}>
-          <Route path='/account/profile' element={<Profile />} />
-          <Route path='/account/teams' element={<Teams />} />
-          <Route path='/account/registrations' element={<Registrations />} />
+        <Route element={<AccountLayout />}>
+          <Route loader={getAuthUserData} path='/account/profile' element={<Profile />} />
+          <Route loader={allowIfAuthenticated} path='/account/teams' element={<Teams />} />
+          <Route loader={allowIfAuthenticated} path='/account/registrations' element={<Registrations />} />
         </Route>
       </Route>
 

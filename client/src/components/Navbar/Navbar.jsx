@@ -28,7 +28,7 @@ const NavTab = memo(({ to, children }) => (
 ))
 
 function Navbar() {
-  const { appContext, resetAuthContext } = useAppContext()
+  const { appContext, resetAppContext } = useAppContext()
   const { windowWidth } = useWindowSize()
   const location = useLocation()
   const navigate = useNavigate()
@@ -36,7 +36,7 @@ function Navbar() {
 
   const logOut = useCallback(() => {
     fetchHook('auth/logout')
-    resetAuthContext()
+    resetAppContext()
 
     if (location.pathname.startsWith('/account/')) {
       navigate('/')

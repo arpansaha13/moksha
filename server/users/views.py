@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
@@ -11,9 +12,12 @@ class GetAuthUser(APIView):
 class GetUsers(APIView):
     def get(self, request):
         username = request.GET.get('username', None)
-        limit = request.GET.get('limit', None)
+        limit = request.GET.get('limit', 10)
 
-        users = User.objects.filter(username__icontains=username).all()[0:limit]
+        users = User.objects.filter(
+            Q(username__icontains=username)
+            & ~Q(user_id=request.auth_user.user_id)
+        ).all()[0:limit]
 
         data = []
         for user in users:

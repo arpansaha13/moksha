@@ -7,9 +7,9 @@ import contact from '../data/contact'
 
 export default function Contact() {
   return (
-    <Container as='main' className='space-y-16'>
+    <Container as='main'>
       <section id='moksha-2023-general-secretaries'>
-        <h1 className='mb-6 text-3xl text-center font-bold text-gray-50'>Contact us</h1>
+        <h1 className='pt-6 pb-12 text-4xl text-center font-bold text-gray-50'>Contact us</h1>
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
           <Card data={contact.generalSecretary} />

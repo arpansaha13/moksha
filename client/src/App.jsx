@@ -10,9 +10,8 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchWithCredentials('users/particular')
-      .then(res => {
-        setAppContext('authUser', res.data)
+    fetchWithCredentials('auth/check-auth')
+      .then(() => {
         setAppContext('authenticated', true)
         setLoading(false)
       })

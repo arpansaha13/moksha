@@ -182,7 +182,7 @@ const getFields = validationErrors => {
     },
     {
       id: 'phone',
-      name: 'phone',
+      name: 'phone_no',
       type: 'tel',
       autoComplete: 'tel',
       inputMode: 'numeric',

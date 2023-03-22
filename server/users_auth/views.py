@@ -18,73 +18,71 @@ import environ # Pylance does not recognize this import for some reason but the 
 env = environ.Env()
 environ.Env.read_env()
 
+class CheckAuth(APIView):
+    def get(self, request):
+        return Response({'authenticated': True}, status=200)
+
 class RegisterApi(APIView):
     def post(self, request):
         email = request.data['email']
-        response = Response()
-        if request.data['password'] == request.data['confirm_password']:
-            main_password = make_password(request.data['password'])
-            # print(main_password)
-            x = random.randint(1000, 9999)
-            otp_generated = str(x)
+
+        if request.data['password'] != request.data['confirm_password']:
+            return Response({'message': "Password and confirm password not matched."}, status=401)
+
+        main_password = make_password(request.data['password'])
+
+        x = random.randint(1000, 9999)
+        otp_generated = str(x)
+
+        user = User.objects.filter(
+            username=request.data['username']).first()
+        if user:
+            return Response({'message': "This username is already taken."}, status=409)
+
+        user = User.objects.filter(email=email).first()
+        uid = generate_uid()
+
+        if user is None or user.otp:
+            if user and user.otp:
+                user.delete()
+
+            temp_user = User.objects.filter(user_id=uid).first()
+            while temp_user:
+                uid = generate_uid()
+                temp_user = User.objects.filter(user_id=uid).first()
+
+            serializer = UserSerializers(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
             user = User.objects.filter(email=email).first()
-            user1 = User.objects.filter(
-                username=request.data['username']).first()
-            if user1:
-                response.data = {
-                    'message': "This username is already taken.",
-                }
-                response.status_code = 409
-                return response
-            uid = generate_UID()
-            if user is None or user.otp:
-                if user and user.otp:
-                    user.delete()
-                user1 = User.objects.filter(user_id=uid).first()
-                while user1:
-                    uid = generate_UID()
-                    user1 = User.objects.filter(user_id=uid).first()
-                serializer = UserSerializers(data=request.data)
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
-                user = User.objects.filter(email=email).first()
-                user.otp = otp_generated
-                user.user_id = uid
-                user.password = main_password
-                user.save()
+            user.otp = otp_generated
+            user.user_id = uid
+            user.password = main_password
+            user.save()
 
-                payload = {
-                    'id': uid,
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                    'iat': datetime.datetime.utcnow(),
-                }
-
-                token = jwt.encode(payload, 'secret00', algorithm='HS256')
-
-                response.set_cookie(key='otp', value=token, httponly=True)
-
-                send_mail(
-                    'Moksha OTP',
-                    otp_generated,
-                    env('EMAIL_HOST_USER'),
-                    [email],
-                    fail_silently=False,
-                )
-                response.data = {
-                    'message': "Otp validation link is sent.",
-                }
-                response.status_code = 201
-                return response
-            response.data = {
-                'message': "This email is already registered.",
+            payload = {
+                'id': uid,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                'iat': datetime.datetime.utcnow(),
             }
-            response.status_code = 409
+
+            token = jwt.encode(payload, 'secret00', algorithm='HS256')
+
+            response = Response()
+            response.set_cookie(key='otp', value=token, httponly=True)
+
+            send_mail(
+                'Moksha OTP',
+                otp_generated,
+                env('EMAIL_HOST_USER'),
+                [email],
+                fail_silently=False,
+            )
+            response.data = {'message': "Otp validation link is sent."}
+            response.status_code = 201
             return response
-        response.data = {
-            'message': "Password and confirm password not matched.",
-        }
-        response.status_code = 400
-        return response
+        return Response({'message': "This email is already registered."}, status=409)
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -92,44 +90,36 @@ class RegisterApi(APIView):
 
 class LoginApi(APIView):
     def post(self, request):
-        try:
-            token = request.COOKIES['jwt']
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-            return Response({'message': 'User already logged in.'}, status=200)
-        except:
-            email = request.data['email']
-            user = User.objects.filter(email=email).first()
+        email = request.data['email']
+        user = User.objects.filter(email=email).first()
 
-            if not user:
-                raise AuthenticationFailed({'message': 'Invalid email or password.'})
+        if not user:
+            raise AuthenticationFailed({'message': 'Invalid email or password.'})
 
-            payload = {
-                'id': user.user_id,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                'iat': datetime.datetime.utcnow(),
-            }
+        payload = {
+            'id': user.user_id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            'iat': datetime.datetime.utcnow(),
+        }
 
-            token = jwt.encode(payload, 'secret00', algorithm='HS256')
-            password_matched = check_password(request.data['password'], user.password)
+        token = jwt.encode(payload, 'secret00', algorithm='HS256')
+        password_matched = check_password(request.data['password'], user.password)
 
-            if password_matched == False:
-                raise AuthenticationFailed({'message': 'Invalid email or password.'})
+        if password_matched == False:
+            raise AuthenticationFailed({'message': 'Invalid email or password.'})
 
-            response = Response()
+        response = Response()
 
-            if user.otp == "":
-                response.set_cookie(key='jwt', value=token, httponly=True)
+        if user.otp == "":
+            response.set_cookie(key='jwt', value=token, httponly=True)
 
-                user.logged_in = True
-                user.save()
-
-                response.data = { 'message': "User logged in" }
-                response.status_code = 200
-                return response
-
-            response.data = { 'message': "Please validate your account using otp." }
-            response.status_code = 403
+            response.data = { 'message': "User logged in" }
+            response.status_code = 200
             return response
+
+        response.data = { 'message': "Please validate your account using otp." }
+        response.status_code = 403
+        return response
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -196,16 +186,11 @@ class ChangePasswordApi(APIView):
             new_password = request.data['new_password']
             user = User.objects.filter(user_id=payload['id']).first()
             if user:
-
                 user.password = make_password(new_password)
                 user.save()
                 response.set_cookie('reset', max_age=1, httponly=True)
-                # response.cookies['reset'].update(
-                #     {"samesite": "None", "secure": True})
-                # response.delete_cookie('reset')
-                response.data = {
-                    'message': "Password Changed.",
-                }
+
+                response.data = {'message': "Password Changed."}
                 response.status_code = 200
                 return response
             response.data = {
@@ -236,11 +221,7 @@ class LogoutApi(APIView):
                 raise AuthenticationFailed('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
             if user:
-                user.logged_in = False
-                user.save()
                 response.set_cookie('jwt', max_age=1, httponly=True)
-                # response.cookies['jwt'].update(
-                #     {"samesite": "None", "secure": True})
 
                 response.data = {
                     'message': 'User have successfully logged out.'
@@ -335,7 +316,7 @@ class ResendOtp(APIView):
 
 # Generating UIDs
 
-def generate_UID(length=8):
+def generate_uid(length=8):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
                   for i in range(length))
     return 'MOK-' + uid

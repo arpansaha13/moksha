@@ -36,12 +36,8 @@ const LoginPage = () => {
           setAppContext('authenticated', true)
           setNotification('show', false)
 
-          fetchHook('users/me').then(res => {
-            setAppContext('authUser', res.data)
-
-            if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')))
-            else navigate('/')
-          })
+          if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')))
+          else navigate('/')
         })
         .catch(err => {
           setLoading(false)

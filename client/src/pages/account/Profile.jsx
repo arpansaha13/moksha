@@ -1,27 +1,27 @@
 import { useMemo } from 'react'
+import { useLoaderData } from 'react-router-dom'
 import Sheet from '../../components/common/Sheet'
 import Avatar from '../../components/common/Avatar'
-import { useAppContext } from '../../containers/DataProvider'
 
 function Profile() {
-  const { appContext } = useAppContext()
+  const authUser = useLoaderData()
 
   const userDetails = useMemo(
     () => [
-      { label: 'Name', value: appContext.authUser.name },
-      { label: 'Username', value: appContext.authUser.username },
-      { label: 'Email', value: appContext.authUser.email },
-      { label: 'Institution', value: appContext.authUser.institution_name },
-      { label: 'Phone', value: appContext.authUser.phone_no },
+      { label: 'Name', value: authUser.name },
+      { label: 'Username', value: authUser.username },
+      { label: 'Email', value: authUser.email },
+      { label: 'Institution', value: authUser.institution_name },
+      { label: 'Phone', value: authUser.phone_no },
     ],
-    [appContext]
+    [authUser]
   )
 
   return (
     <Sheet as='main' className='p-4 sm:p-6'>
       <div>
         <div className='w-36 h-36'>
-          <Avatar avatarIdx={appContext.authUser.avatar_idx} />
+          <Avatar avatarIdx={authUser.avatar_idx} />
         </div>
 
         <div className='mt-4 grid grid-cols-2 gap-4 text-sm'>
