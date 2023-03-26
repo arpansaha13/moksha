@@ -1,5 +1,5 @@
 from django.utils.deprecation import MiddlewareMixin
-from django.http import HttpResponse
+from django.http import JsonResponse
 from functools import wraps
 import jwt
 import json
@@ -22,16 +22,16 @@ class JwtMiddleware(MiddlewareMixin):
         token = request.COOKIES.get('jwt')
 
         if not token:
-            return HttpResponse(json.dumps({'message': 'Unauthenticated'}), status=401)
+            return JsonResponse({'message': 'Unauthenticated'}, status=403)
         try:
             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            return HttpResponse(json.dumps({'message': 'Token Expired! Log in again.'}), status=401)
+            return JsonResponse({'message': 'Token Expired! Log in again.'}, status=403)
 
         auth_user = User.objects.filter(user_id=payload['id']).first()
 
         if not auth_user:
-            return HttpResponse(json.dumps({'message': 'Invalid token'}), status=404)
+            return JsonResponse({'message': 'Invalid token'}, status=404)
 
         request.auth_user = auth_user
 

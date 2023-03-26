@@ -66,7 +66,7 @@ class ViewInvite(APIView):
             response.status_code = 200
             return response
         except:
-            return Response({'message': 'Unauthorized.'}, status=401)
+            return Response({'message': 'Unauthorized.'}, status=403)
 
 class AcceptInvite(APIView):
     def get(self, request,id):

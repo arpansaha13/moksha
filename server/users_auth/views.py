@@ -1,4 +1,4 @@
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import APIException
 from users.serializers import *
 from users.models import User
 from rest_framework.views import APIView
@@ -94,7 +94,7 @@ class LoginApi(APIView):
         user = User.objects.filter(email=email).first()
 
         if not user:
-            raise AuthenticationFailed({'message': 'Invalid email or password.'})
+            raise unauthenticated('Invalid email or password.')
 
         payload = {
             'id': user.user_id,
@@ -106,7 +106,7 @@ class LoginApi(APIView):
         password_matched = check_password(request.data['password'], user.password)
 
         if password_matched == False:
-            raise AuthenticationFailed({'message': 'Invalid email or password.'})
+            raise unauthenticated('Invalid email or password.')
 
         response = Response()
 
@@ -177,12 +177,12 @@ class ChangePasswordApi(APIView):
             token = request.COOKIES['reset']
             response = Response()
             if not token:
-                raise AuthenticationFailed('Unauthenticated')
+                raise unauthenticated()
 
             try:
                 payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
-                raise AuthenticationFailed('Token Expired. Log in again.')
+                raise unauthenticated('Token Expired. Log in again.')
             new_password = request.data['new_password']
             user = User.objects.filter(user_id=payload['id']).first()
             if user:
@@ -213,12 +213,12 @@ class LogoutApi(APIView):
             token = request.COOKIES['jwt']
             response = Response()
             if not token:
-                raise AuthenticationFailed('Unauthenticated')
+                raise unauthenticated()
 
             try:
                 payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
-                raise AuthenticationFailed('Token Expired. Log in again.')
+                raise unauthenticated('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
             if user:
                 response.set_cookie('jwt', max_age=1, httponly=True)
@@ -244,12 +244,12 @@ class OTPValidation(APIView):
             token = request.COOKIES['otp']
             response = Response()
             if not token:
-                raise AuthenticationFailed('Unauthenticated')
+                raise unauthenticated()
 
             try:
                 payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
-                raise AuthenticationFailed('Token Expired. Log in again.')
+                raise unauthenticated('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
             otp = request.data['otp']
             if user:
@@ -287,12 +287,12 @@ class ResendOtp(APIView):
         try:
             token = request.COOKIES['otp']
             if not token:
-                raise AuthenticationFailed('Unauthenticated')
+                raise unauthenticated()
 
             try:
                 payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
-                raise AuthenticationFailed('Token Expired. Log in again.')
+                raise unauthenticated('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
 
             if user is None:
@@ -321,7 +321,12 @@ def generate_uid(length=8):
                   for i in range(length))
     return 'MOK-' + uid
 
-def generate_password(length=10):
-    uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
-                  for i in range(length))
-    return uid
+# def generate_password(length=10):
+#     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
+#                   for i in range(length))
+#     return uid
+
+def unauthenticated(message = 'Unauthenticated'):
+    exception = APIException({ 'message': message })
+    exception.status_code = 401
+    return exception
