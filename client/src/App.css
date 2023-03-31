@@ -31,7 +31,7 @@ body {
 .markdown {
   @apply prose prose-sm sm:prose-base prose-invert max-w-none;
 }
-.markdown :where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *)) {
+.markdown :is(:where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *))) {
   @apply first:mt-0;
 }
 

@@ -1,6 +1,10 @@
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements, redirect } from 'react-router-dom'
-import fetchWithCredentials from './utils/fetchWithCredentials'
-import nprogress from 'nprogress'
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+
+import { getTeamData } from './loader/teams/getTeamData'
+import { getAuthUserData } from './loader/getAuthUserData'
+import { getAuthUserTeams } from './loader/account/getAuthUserTeams'
+import { allowIfNoTeamCreated } from './loader/teams/allowIfNoTeamCreated'
+import { allowIfAuthenticated, allowIfNotAuthenticated } from './loader/checkAuth'
 
 import AuthProvider from './containers/AuthProvider'
 
@@ -8,6 +12,7 @@ import FloatingWindow from './layouts/floating-window'
 import DefaultLayout from './layouts/default'
 import AuthLayout from './layouts/auth'
 import AccountLayout from './layouts/account'
+import TeamsLayout from './layouts/teams'
 
 // const DefaultLayout = lazy(() => import('./layouts/default'))
 // const AuthLayout = lazy(() => import('./layouts/auth'))
@@ -16,11 +21,13 @@ import AccountLayout from './layouts/account'
 
 import Home from './pages/Home'
 import Events from './pages/Events'
-import Contests from './pages/Contests'
-import Contest from './pages/Contests/Contest'
+import Contests from './pages/contests'
+import Contest from './pages/contests/Contest'
 import Faqs from './pages/Faqs'
 import Sponsors from './pages/Sponsors'
 import Contact from './pages/Contact'
+import Team from './pages/teams/Team'
+import CreateTeam from './pages/teams/Create'
 
 import Profile from './pages/account/Profile'
 import Teams from './pages/account/Teams'
@@ -44,52 +51,6 @@ import NotFound from './pages/404'
 // const VerificationPage = lazy(() => import('./pages/auth/verification'))
 // const ForgotPasswordPage = lazy(() => import('./pages/auth/forgot-password'))
 
-const isAuthenticated = async () => {
-  try {
-    await fetchWithCredentials('auth/check-auth')
-    return true
-  } catch {
-    return false
-  }
-}
-
-const getAuthUserData = async ({ request }) => {
-  try {
-    nprogress.start()
-    const res = await fetchWithCredentials('users/me')
-    nprogress.done()
-    return res.data
-  } catch {
-    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
-  }
-}
-
-function getPathFromURL(url) {
-  return new URL(url).pathname
-}
-
-const allowIfAuthenticated = async ({ request }) => {
-  nprogress.start()
-  const authenticated = await isAuthenticated()
-  nprogress.done()
-
-  if (!authenticated) {
-    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
-  }
-  return null
-}
-
-const allowIfNotAuthenticated = async () => {
-  nprogress.start()
-  const authenticated = await isAuthenticated()
-  nprogress.done()
-
-  if (authenticated) {
-    return redirect('/')
-  }
-  return null
-}
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<FloatingWindow />}>
@@ -107,9 +68,14 @@ const router = createBrowserRouter(
 
         <Route element={<AccountLayout />}>
           <Route loader={getAuthUserData} path='/account/profile' element={<Profile />} />
-          <Route loader={allowIfAuthenticated} path='/account/teams' element={<Teams />} />
+          <Route loader={getAuthUserTeams} path='/account/teams' element={<Teams />} />
           <Route loader={allowIfAuthenticated} path='/account/registrations' element={<Registrations />} />
         </Route>
+      </Route>
+
+      <Route element={<TeamsLayout />}>
+        <Route loader={allowIfNoTeamCreated} path='/teams/create' element={<CreateTeam />} />
+        <Route loader={getTeamData} path='/teams/:team' element={<Team />} />
       </Route>
 
       <Route
