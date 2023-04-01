@@ -46,7 +46,7 @@ const Modal = ({ open, setOpen, children, onClose, maxWidth = 'lg' }) => {
             >
               <Dialog.Panel
                 className={classNames(
-                  'relative sm:my-8 sm:w-full overflow-hidden rounded-lg bg-brown text-left shadow-xl transform transition-all',
+                  'relative sm:my-8 w-full max-w-xs overflow-hidden rounded-lg bg-brown text-left shadow-xl transform transition-all',
                   maxWidths[maxWidth]
                 )}
               >
