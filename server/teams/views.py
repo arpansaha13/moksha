@@ -3,6 +3,7 @@ from rest_framework.serializers import ReturnDict, ReturnList
 from .serializers import TeamSerializers, TeamUserRegistrationsSerializers
 from .models import Team, TeamUserRegistrations
 from users.models import User
+from invites.models import Invite
 from users.serializers import SpecificSerializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -49,6 +50,28 @@ class GetTeamMembers(APIView):
         serializer = SpecificSerializers(users, many=True)
 
         return Response({ 'data': serializer.data }, status=200)
+
+class GetUninvitedUsers(APIView):
+    def get(self, request, team_id):
+        username = request.GET.get('username', None)
+        limit = request.GET.get('limit', 10)
+
+        team_members = TeamUserRegistrations.objects.filter(team_id=team_id).values_list('user_id', flat=True)
+        pending_invites = Invite.objects.filter(team_id=team_id).values_list('user_id', flat=True)
+
+        users = User.objects.filter(
+            Q(username__icontains=username)
+            & ~Q(user_id=request.auth_user.user_id)
+            & ~Q(user_id__in=team_members)
+            & ~Q(user_id__in=pending_invites)
+        ).all()[0:limit]
+
+        data = []
+        for user in users:
+            serializer = SpecificSerializers(user)
+            data.append(serializer.data)
+
+        return Response({ 'data': data }, status=200)
 
 class CreateTeam(APIView):
     def post(self, request):

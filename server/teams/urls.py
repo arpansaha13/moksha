@@ -7,5 +7,6 @@ urlpatterns = [
     path('joined', GetAuthUserJoinedTeams.as_view()),
     path('<slug:team_id>', GetTeam.as_view()),
     path('<slug:team_id>/members', GetTeamMembers.as_view()),
+    path('<slug:team_id>/search/uninvited-users', GetUninvitedUsers().as_view()),
     # path('team-contest/register',TeamContestRegister.as_view()),
 ]

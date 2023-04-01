@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'users_auth',
     'teams',
     'contests',
-    'invite',
+    'invites',
     'solo_events',
     'corsheaders',
 ]

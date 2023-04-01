@@ -1,7 +1,7 @@
 from django.db import models
 
 class User(models.Model):
-    id = models.AutoField(primary_key=True)
+    user_id = models.CharField(primary_key=True, max_length=100,blank=False, null=False)
     avatar_idx=models.IntegerField(default=0)
     name = models.CharField(max_length=100)
     institution_name = models.CharField(max_length=100)
@@ -9,8 +9,7 @@ class User(models.Model):
     email = models.EmailField(unique=False)
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
-    user_id = models.CharField(max_length=100,blank=True, null=False)
-    otp = models.CharField(max_length=100, default='', null=True, blank=True)
+    otp = models.CharField(max_length=100, default='', null=False, blank=False)
 
     def __str__(self):
         return self.user_id

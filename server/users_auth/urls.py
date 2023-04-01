@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import *
-from invite.views import *
 
 urlpatterns = [
     path('check-auth', CheckAuth.as_view()),
@@ -11,8 +10,4 @@ urlpatterns = [
     path('logout', LogoutApi.as_view()),
     path('otp', OTPValidation.as_view()),
     path('resend-otp', ResendOtp.as_view()),
-    path('particular/create-invite',CreateInvite.as_view()),
-    path('particular/invites',ViewInvite.as_view()),
-    path('particular/invites/<int:id>/accept',AcceptInvite.as_view()),
-    path('particular/invites/<int:id>/reject',RejectInvite.as_view()),
 ]

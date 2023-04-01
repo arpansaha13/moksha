@@ -32,9 +32,10 @@ class SoloContestRegister(APIView):
         if user_solo:
             return Response({'message': "User already registered for the contest."}, status=409)
 
-        format_data = {'user_id': request.auth_user.user_id, 'contest_slug': contest_slug}
-
-        serializer = SoloContestSerializers(data=format_data)
+        serializer = SoloContestSerializers({
+            'user_id': request.auth_user.user_id,
+            'contest_slug': contest_slug
+        })
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

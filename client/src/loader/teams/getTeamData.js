@@ -11,11 +11,12 @@ export async function getTeamData({ request }) {
     const res = await Promise.all([
       fetchWithCredentials(`teams/${teamId}`),
       fetchWithCredentials(`teams/${teamId}/members`),
+      fetchWithCredentials(`invites/${teamId}`),
     ])
 
     nprogress.done()
 
-    return { team: res[0].data, members: res[1].data }
+    return { team: res[0].data, members: res[1].data, pendingInvites: res[2].data }
   } catch {
     return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
