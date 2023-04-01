@@ -1,25 +1,13 @@
 from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import InviteSerializer, RelatedInviteUserSerializer
+from .serializers import RelatedInviteUserSerializer
 from .models import Invite, InviteStatus
 from teams.models import Team, TeamUserRegistrations
 from users.models import User
 
-class GetPendingInvites(APIView):
-    def get(self, request, team_id):
-        team = Team.objects.filter(team_id=team_id).only('leader_id').first()
-
-        verify_team_leader(team, request.auth_user)
-
-        invites = Invite.objects.select_related('team').filter(
-            Q(team_id=team_id) & Q(status=InviteStatus.PENDING)
-        ).all()
-
-        serializer = RelatedInviteUserSerializer(invites, many=True)
-        return Response({'data': serializer.data}, status=200)
-
-class CreateInvite(APIView):
+class BaseEndpoint(APIView):
+    # Create invite
     def post(self, request):
         team_id = request.data.get('team_id')
         user_id = request.data.get('user_id')
@@ -44,7 +32,7 @@ class CreateInvite(APIView):
 
         return Response({'message': 'Invited'}, status=200)
 
-class WithdrawInvite(APIView):
+    # Withdraw invite
     def delete(self, request):
         team_id = request.data.get('team_id')
         user_id = request.data.get('user_id')
@@ -67,6 +55,19 @@ class WithdrawInvite(APIView):
 
         invite.delete()
         return Response({'message': 'Invite has been withdrawn'}, status=200)
+
+class GetPendingInvites(APIView):
+    def get(self, request, team_id):
+        team = Team.objects.filter(team_id=team_id).only('leader_id').first()
+
+        verify_team_leader(team, request.auth_user)
+
+        invites = Invite.objects.select_related('team').filter(
+            Q(team_id=team_id) & Q(status=InviteStatus.PENDING)
+        ).all()
+
+        serializer = RelatedInviteUserSerializer(invites, many=True)
+        return Response({'data': serializer.data}, status=200)
 
 # class AcceptInvite(APIView):
 #     def get(self, request, invite_id):

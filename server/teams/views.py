@@ -10,6 +10,39 @@ from rest_framework.response import Response
 import secrets
 import string
 
+class BaseEndpoint(APIView):
+    def post(self, request):
+        auth_user_team = Team.objects.filter(leader_id=request.auth_user.user_id).first()
+
+        if not auth_user_team:
+            if not request.data['team_name']:
+                return Response({'message': 'No team name provided.'}, status=400)
+
+            uid = generate_uid()
+            temp_team = Team.objects.filter(team_id=uid).first()
+            while temp_team:
+                uid = generate_uid()
+                temp_team = Team.objects.filter(team_id=uid).first()
+
+            serializer = TeamSerializers({
+                'team_id': uid,
+                'team_name': request.data['team_name'],
+                'leader_id': request.auth_user.user_id
+            })
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            serializer = TeamUserRegistrationsSerializers({
+                'team_id': uid,
+                'user_id':request.auth_user.user_id
+            })
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response({'team_id': uid}, status=201)
+
+        return Response({'message': 'A team is already created by the user.'}, status=400)
+
 class GetTeam(APIView):
     def get(self, req, team_id):
         team = Team.objects.filter(team_id=team_id).first()
@@ -72,39 +105,6 @@ class GetUninvitedUsers(APIView):
             data.append(serializer.data)
 
         return Response({ 'data': data }, status=200)
-
-class CreateTeam(APIView):
-    def post(self, request):
-        auth_user_team = Team.objects.filter(leader_id=request.auth_user.user_id).first()
-
-        if not auth_user_team:
-            if not request.data['team_name']:
-                return Response({'message': 'No team name provided.'}, status=400)
-
-            uid = generate_uid()
-            temp_team = Team.objects.filter(team_id=uid).first()
-            while temp_team:
-                uid = generate_uid()
-                temp_team = Team.objects.filter(team_id=uid).first()
-
-            serializer = TeamSerializers({
-                'team_id': uid,
-                'team_name': request.data['team_name'],
-                'leader_id': request.auth_user.user_id
-            })
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-            serializer = TeamUserRegistrationsSerializers({
-                'team_id': uid,
-                'user_id':request.auth_user.user_id
-            })
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-            return Response({'team_id': uid}, status=201)
-
-        return Response({'message': 'A team is already created by the user.'}, status=400)
 
 # class JoinTeam(APIView):
 #     def post(self, request):

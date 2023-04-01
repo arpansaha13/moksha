@@ -19,7 +19,7 @@ export default function CreateTeam() {
 
     const formData = getFormData(formRef.current, { format: 'object' })
 
-    fetchHook('teams/create', {
+    fetchHook('teams', {
       method: 'POST',
       body: JSON.stringify(formData),
     }).then(res => {

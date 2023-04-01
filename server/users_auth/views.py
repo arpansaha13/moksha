@@ -1,18 +1,17 @@
 from rest_framework.exceptions import APIException
-from users.serializers import *
+from users.serializers import UserSerializers
 from users.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.mail import send_mail
+from datetime import datetime, timedelta
+from django.contrib.auth.hashers import make_password, check_password
+from django.utils.decorators import method_decorator
+from backend.middleware import jwt_exempt
 import random
 import secrets
 import string
 import jwt
-import datetime
-from django.contrib.auth.hashers import make_password, check_password
-from django.utils.decorators import method_decorator
-from backend.middleware import jwt_exempt
-
 import environ # Pylance does not recognize this import for some reason but the dev server runs perfectly
 
 env = environ.Env()
@@ -22,7 +21,7 @@ class CheckAuth(APIView):
     def get(self, request):
         return Response({'authenticated': True}, status=200)
 
-class RegisterApi(APIView):
+class Register(APIView):
     def post(self, request):
         email = request.data['email']
 
@@ -63,8 +62,8 @@ class RegisterApi(APIView):
 
             payload = {
                 'id': uid,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                'iat': datetime.datetime.utcnow(),
+                'exp': datetime.utcnow() + timedelta(minutes=60),
+                'iat': datetime.utcnow(),
             }
 
             token = jwt.encode(payload, 'secret00', algorithm='HS256')
@@ -88,7 +87,7 @@ class RegisterApi(APIView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-class LoginApi(APIView):
+class Login(APIView):
     def post(self, request):
         email = request.data['email']
         user = User.objects.filter(email=email).first()
@@ -98,8 +97,8 @@ class LoginApi(APIView):
 
         payload = {
             'id': user.user_id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow(),
+            'exp': datetime.utcnow() + timedelta(minutes=60),
+            'iat': datetime.utcnow(),
         }
 
         token = jwt.encode(payload, 'secret00', algorithm='HS256')
@@ -126,7 +125,7 @@ class LoginApi(APIView):
         return super().dispatch(*args, **kwargs)
 
 
-class ForgotApi(APIView):
+class ForgotPassword(APIView):
     def post(self, request):
         response = Response()
         user_id = request.data['email']
@@ -135,16 +134,14 @@ class ForgotApi(APIView):
             email = user.email
             payload = {
                 'id': user.user_id,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                'iat': datetime.datetime.utcnow(),
+                'exp': datetime.utcnow() + timedelta(minutes=60),
+                'iat': datetime.utcnow(),
             }
 
             token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
             response.set_cookie(key='reset', value=token, httponly=True)
-            # response.cookies['reset'].update(
-            #     {"samesite": "None", "secure": True})
-            # new_password = generate_password()
+
             send_mail(
                 'Subject here',
                 'Your reset password link is here.It will be valid for 1hr.',
@@ -152,8 +149,7 @@ class ForgotApi(APIView):
                 [email],
                 fail_silently=False,
             )
-            # user.password = new_password
-            # user.save()
+
             response.data = {
                 'message': "Reset Password Link is Sent.",
             }
@@ -171,7 +167,7 @@ class ForgotApi(APIView):
         return super().dispatch(*args, **kwargs)
 
 
-class ChangePasswordApi(APIView):
+class ChangePassword(APIView):
     def post(self, request):
         try:
             token = request.COOKIES['reset']
@@ -207,7 +203,7 @@ class ChangePasswordApi(APIView):
         return super().dispatch(*args, **kwargs)
 
 
-class LogoutApi(APIView):
+class Logout(APIView):
     def get(self, request):
         try:
             token = request.COOKIES['jwt']
@@ -257,8 +253,7 @@ class OTPValidation(APIView):
                     user.otp = ''
                     user.save()
                     response.set_cookie('otp', max_age=1, httponly=True)
-                    # response.cookies['otp'].update({"samesite": "None", "secure": True})
-                    # response.delete_cookie('otp')
+
                     response.data = {
                         'message': 'User Validated.'
                     }
@@ -313,18 +308,10 @@ class ResendOtp(APIView):
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
-
-# Generating UIDs
-
 def generate_uid(length=8):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
                   for i in range(length))
     return 'MOK-' + uid
-
-# def generate_password(length=10):
-#     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
-#                   for i in range(length))
-#     return uid
 
 def unauthenticated(message = 'Unauthenticated'):
     exception = APIException({ 'message': message })

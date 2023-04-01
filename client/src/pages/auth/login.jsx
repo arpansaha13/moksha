@@ -36,8 +36,8 @@ const LoginPage = () => {
           setAppContext('authenticated', true)
           setNotification('show', false)
 
-          if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')))
-          else navigate('/')
+          if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')), { replace: true })
+          else navigate('/', { replace: true })
         })
         .catch(err => {
           setLoading(false)

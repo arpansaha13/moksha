@@ -28,7 +28,7 @@ export default function Team() {
   }, [])
 
   const inviteCall = useCallback(async userId => {
-    await fetchHook('invites/create', {
+    await fetchHook('invites', {
       method: 'POST',
       body: JSON.stringify({
         team_id: team.team_id,
@@ -38,7 +38,7 @@ export default function Team() {
   }, [])
 
   const withdrawInviteCall = useCallback(async userId => {
-    await fetchHook('invites/withdraw', {
+    await fetchHook('invites', {
       method: 'DELETE',
       body: JSON.stringify({
         team_id: team.team_id,
@@ -289,7 +289,7 @@ const InviteButton = memo(({ loading, userId, invited, invite, withdrawInvite })
     </span>
 
     {loading && (
-      <div className='absolute w-3.5 lg:w-5 aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
+      <div className='absolute w-3.5 xl:w-5 aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
     )}
   </button>
 ))
