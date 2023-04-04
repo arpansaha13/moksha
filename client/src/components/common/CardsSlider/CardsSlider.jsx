@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSize } from '../../../hooks/useSize'
 import { useScrolling } from '../../../hooks/useScrolling'
 import { useData } from './Wrapper'
-import classNames from '../../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 import getValueByBreakpoint from '../../../utils/getValueAtBreakpoint'
 import styles from './style.module.css'
 
@@ -26,23 +26,19 @@ export default function CardsSlider({ children, className, gap, stretch = false 
   const isScrolling = useScrolling(rootRef)
 
   const cardWidth = useMemo(() => {
-      const effectiveExposeWidth = context.length <= context.visibleCount && stretch ? 0 : context.exposeWidth
-      const availableWidth = rootWidth - effectiveExposeWidth
+    const effectiveExposeWidth = context.length <= context.visibleCount && stretch ? 0 : context.exposeWidth
+    const availableWidth = rootWidth - effectiveExposeWidth
 
-      return Math.floor((availableWidth - (context.visibleCount - 1) * effectiveGap) / context.visibleCount)
-    },
-    [effectiveGap, rootWidth, context.visibleCount, context.exposeWidth, context.length]
-  )
+    return Math.floor((availableWidth - (context.visibleCount - 1) * effectiveGap) / context.visibleCount)
+  }, [effectiveGap, rootWidth, context.visibleCount, context.exposeWidth, context.length])
 
   useEffect(() => {
     if (typeof gap === 'number') {
       setGap(gap)
-    }
-    else if (typeof gap === 'object') {
+    } else if (typeof gap === 'object') {
       if (Object.keys(gap).length === 0) throw new Error('No breakpoints provided for prop `gap`.')
       setGap(getValueByBreakpoint(gap))
-    }
-    else {
+    } else {
       throw new Error('Invalid value for prop `gap`.')
     }
   }, [])
@@ -76,7 +72,7 @@ export default function CardsSlider({ children, className, gap, stretch = false 
         )}
         style={{ gap: `${effectiveGap}px` }}
       >
-        { children({cardWidth}) }
+        {children({ cardWidth })}
       </div>
     </div>
   )

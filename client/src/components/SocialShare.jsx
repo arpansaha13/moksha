@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 import copyIcon from '@iconify-icons/mdi/content-copy'
 import copiedIcon from '@iconify-icons/mdi/file-document-check-outline'
 import Modal from './common/Modal'
-import classNames from '../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 
 /** A width and height needs to be specified from parent */
 const SocialShare = memo(({ data, children }) => {

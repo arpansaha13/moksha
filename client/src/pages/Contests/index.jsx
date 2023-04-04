@@ -17,7 +17,7 @@ import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
 import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
 import contestsMap from '../../data/contests/moksha'
 import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 
 function Contests() {
   useHashLink()

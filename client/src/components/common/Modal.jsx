@@ -1,6 +1,6 @@
 import { Fragment, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 
 const maxWidths = {
   xs: 'sm:max-w-xs',

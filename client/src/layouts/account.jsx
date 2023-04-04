@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import Container from '../components/common/Container'
-import classNames from '../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 import { profileTabs, accountTabs } from '../data/tabs'
 import Sheet from '../components/common/Sheet'
 
@@ -17,7 +17,7 @@ function AccountLayout() {
                   to={tab.to}
                   className={({ isActive }) =>
                     classNames(
-                      'block px-4 py-2 rounded-md',
+                      'block px-4 py-2 rounded-md text-sm',
                       isActive
                         ? 'bg-gradient-to-r from-amber-900'
                         : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40'
@@ -34,7 +34,7 @@ function AccountLayout() {
                   to={tab.to}
                   className={({ isActive }) =>
                     classNames(
-                      'block px-4 py-2 rounded-md',
+                      'block px-4 py-2 rounded-md text-sm',
                       isActive
                         ? 'bg-gradient-to-r from-amber-900'
                         : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40'

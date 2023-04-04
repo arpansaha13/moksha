@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Icon } from '@iconify/react'
 import accountCircleIcon from '@iconify-icons/mdi/account-circle'
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 import avatarColors from '../../data/avatar-colors'
 
 /**
@@ -10,14 +10,8 @@ import avatarColors from '../../data/avatar-colors'
  */
 const Avatar = memo(({ avatarIdx, className }) => {
   return (
-    <div
-      className={classNames(
-        "w-full h-full rounded-full",
-        avatarColors[avatarIdx],
-        className
-      )}
-    >
-      <Icon icon={accountCircleIcon} className="block" color="inherit" width='100%' height='100%' />
+    <div className={classNames('w-full h-full rounded-full', avatarColors[avatarIdx], className)}>
+      <Icon icon={accountCircleIcon} className='block' color='inherit' width='100%' height='100%' />
     </div>
   )
 })

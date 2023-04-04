@@ -1,5 +1,5 @@
-import { createElement, forwardRef } from "react"
-import classNames from "../../utils/classNames"
+import { createElement, forwardRef } from 'react'
+import { classNames } from '@arpansaha13/utils'
 
 /** background-color should be provided from parent. */
 const Sheet = forwardRef(({ as = 'div', children, className, ...rest }, ref) => {
@@ -9,7 +9,7 @@ const Sheet = forwardRef(({ as = 'div', children, className, ...rest }, ref) => 
       ref,
       className: classNames(
         'bg-amber-900/30 shadow shadow-amber-900/60 rounded-md lg:rounded-lg backdrop-blur-sm',
-        className,
+        className
       ),
       ...rest,
     },

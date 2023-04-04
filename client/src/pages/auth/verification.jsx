@@ -8,7 +8,7 @@ import OtpInput from '../../components/common/OtpInput'
 import CsrfField from '../../components/common/CsrfField'
 import { useAppContext } from '../../containers/DataProvider'
 import { useAuthContext } from '../../containers/AuthProvider'
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 
 const VerificationPage = () => {
   const navigate = useNavigate()

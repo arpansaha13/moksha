@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Icon } from '@iconify/react'
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 
 const EmptyState = memo(({ icon, title, description }) => {
   return (

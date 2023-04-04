@@ -1,5 +1,6 @@
 {
   "name": "@moksha/client",
+  "description": "Official Moksha 2023 website, NIT Agartala",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -45,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@arpansaha13/utils": "^0.2.1",
     "@babel/eslint-parser": "^7.19.1",
     "@iconify-icons/mdi": "^1.2.41",
     "@iconify/react": "^4.1.0",

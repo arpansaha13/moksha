@@ -1,5 +1,5 @@
 import { FETCH_BASE_URL } from '../constants'
-import getCookie from './getCookie'
+import { getCookie } from '@arpansaha13/utils/browser'
 
 /**
  * Create request object for Fetch API with credentials allowed.

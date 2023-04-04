@@ -19,7 +19,7 @@ import Sheet from '../../components/common/Sheet'
 import Avatar from '../../components/common/Avatar'
 import Container from '../../components/common/Container'
 import EmptyState from '../../components/common/EmptyState'
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 import { useDebouncedFn } from '../../hooks/useDebouncedFn'
 
 export default function Team() {

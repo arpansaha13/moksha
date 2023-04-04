@@ -11,7 +11,7 @@ import { useFetch } from '../../hooks/useFetch'
 import { useWindowSize } from '../../hooks/useWindowSize'
 import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 import { navTabs } from '../../data/tabs'
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 
 const NavTab = memo(({ to, children }) => (
   <NavLink

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from 'react'
+import { createRef, useCallback, useEffect, useMemo, useState } from 'react'
 import { useList } from '../../../hooks/useList'
-import classNames from '../../../utils/classNames'
 import './style.css'
 
 // interface OtpInputProps {
@@ -14,14 +13,15 @@ import './style.css'
 // }
 
 const fieldAttrs = {
-  type: 'number',
+  type: 'text',
   min: 0,
   max: 9,
-  className: classNames(
-    "otp-field block w-full appearance-none rounded-md px-3 py-2 text-center text-xl placeholder-gray-400 bg-amber-900/70 border border-gray-300 shadow-sm focus:border-amber-500 focus:outline-none focus:ring-amber-500",
-  )
+  inputMode: 'numeric',
+  pattern: '[0-9]{1}',
+  className:
+    'otp-field block w-full appearance-none rounded-md px-3 py-2 text-center text-xl placeholder-gray-400 bg-amber-900/70 border border-gray-300 shadow-sm focus:border-amber-500 focus:outline-none focus:ring-amber-500',
 }
-const isEmpty = (val) => !val && val !== 0
+const isEmpty = val => !val && val !== 0
 
 export default function OtpInput({ value, length, label, setValue, required = true, validationError }) {
   const initialValues = value.split('')
@@ -36,19 +36,19 @@ export default function OtpInput({ value, length, label, setValue, required = tr
 
   const [fieldValues, { set: setFields }] = useList(initialValues)
 
-  const fieldRefs = []
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  for (let i = 0; i < length; i++) fieldRefs.push(useRef(null))
+  const fieldRefs = useMemo(() => {
+    const arr = []
+    for (let i = 0; i < length; i++) arr.push(createRef(null))
+    return arr
+  }, [])
 
-  const doFocus = () => fieldRefs[activeField].current.focus()
+  const doFocus = useCallback(() => fieldRefs[activeField].current.focus(), [fieldRefs, activeField])
   useEffect(doFocus, [activeField])
 
   useEffect(() => {
     // Update original state whenever fields update
     setValue(fieldValues.join(''))
   }, [fieldValues])
-
-  // FIXME: prevent pasting and ['e', 'E', '+', '-']
 
   function handleChange(idx, e) {
     const newVal = e.target.value
@@ -63,7 +63,7 @@ export default function OtpInput({ value, length, label, setValue, required = tr
           case length - 1:
             return state
           case 0:
-            return 0;
+            return 0
           default:
             return state - 1
         }
@@ -75,41 +75,34 @@ export default function OtpInput({ value, length, label, setValue, required = tr
   }
   function handleKeyDown(idx, e) {
     const key = e.key
-    if (key === "Backspace") {
-      if (isEmpty(fieldValues[idx]) && idx !== 0) {
-        e.preventDefault()
-        setFields(idx - 1, '')
-        setActiveField(state => state - 1)
-      }
+    if (key === 'Backspace' && isEmpty(fieldValues[idx]) && idx !== 0) {
+      e.preventDefault()
+      setFields(idx - 1, '')
+      setActiveField(state => state - 1)
     }
-    // key === "Delete"
   }
 
   return (
-    <div className="relative">
-      <label className="block text-sm font-medium text-gray-100">
-        {label}
-      </label>
-      <div className="mt-1">
-        <div className="flex justify-between items-center gap-4" onClick={ doFocus }>
-          {
-            fieldValues.map((value, i) => (
-              <input
-                key={i}
-                ref={fieldRefs[i]}
-                {...fieldAttrs}
-                required={required}
-                disabled={i !== activeField}
-                value={value}
-                onChange={ e => handleChange(i, e) }
-                onKeyDown={ e => handleKeyDown(i, e) }
-              />
-            ))
-          }
+    <div className='relative'>
+      <label className='block text-sm font-medium text-gray-100'>{label}</label>
+      <div className='mt-1'>
+        <div className='flex justify-between items-center gap-4' onClick={doFocus}>
+          {fieldValues.map((value, i) => (
+            <input
+              key={i}
+              ref={fieldRefs[i]}
+              {...fieldAttrs}
+              required={required}
+              disabled={i !== activeField}
+              value={value}
+              onChange={e => handleChange(i, e)}
+              onKeyDown={e => handleKeyDown(i, e)}
+            />
+          ))}
         </div>
       </div>
       {validationError !== null && (
-        <p className="text-xs text-red-400 absolute -bottom-5 left-0.5">{validationError}</p>
+        <p className='text-xs text-red-400 absolute -bottom-5 left-0.5'>{validationError}</p>
       )}
     </div>
   )

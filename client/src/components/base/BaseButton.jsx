@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import classNames from '../../utils/classNames'
+import { classNames } from '@arpansaha13/utils'
 
 const BaseButtonLoader = () => (
   <div className='absolute w-6 aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
