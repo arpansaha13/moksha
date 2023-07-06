@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { useHashLink } from '../hooks/useHashLink'
@@ -12,29 +12,14 @@ import faqs from '../data/faqs'
 function Faqs() {
   useHashLink()
 
-  const asideTable = useMemo(
-    () =>
-      faqs
-        .slice(faqs.length - 5, faqs.length)
-        .map(faq => (
-          <p key={slugify(faq.question)}>
-            <Link to={{ hash: slugify(faq.question) }} className='line-clamp-2 hover:text-amber-500 transition-colors'>
-              {faq.question}
-            </Link>
-          </p>
-        ))
-        .reverse(),
-    []
-  )
-
   return (
     <Container className='py-4'>
       <Helmet>
         <title>Moksha | FAQs</title>
       </Helmet>
 
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-        <section className='lg:col-span-2 markdown' id='moksha-faqs'>
+      <section className='markdown' id='moksha-faqs'>
+        <div className='mx-auto max-w-2xl'>
           <h1>Frequently Asked Questions</h1>
 
           <div className='space-y-6'>
@@ -44,14 +29,8 @@ function Faqs() {
               </Sheet>
             ))}
           </div>
-        </section>
-
-        <aside className='hidden lg:block lg:col-span-1' id='moksha-faqs-table-of-contents'>
-          <Sheet className='p-4 sticky top-4 markdown prose-a:no-underline prose-a:text-[inherit] prose-a:font-normal'>
-            {asideTable}
-          </Sheet>
-        </aside>
-      </div>
+        </div>
+      </section>
     </Container>
   )
 }
