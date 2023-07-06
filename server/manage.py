@@ -9,7 +9,6 @@ def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
     # Override default host for `runserver` command
-    # This is done so that set_cookie domain and dev server domain do match during development
     from django.core.management.commands.runserver import Command as runserver
     runserver.default_addr = 'localhost'
     runserver.default_port = 8000

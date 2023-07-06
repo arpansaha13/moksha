@@ -61,7 +61,7 @@ class CancelSoloRegistration(APIView):
 #         if not token:
 #             raise AuthenticationFailed('Unauthenticated')
 #         try:
-#             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+#             payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
 #         except jwt.ExpiredSignatureError:
 #             raise AuthenticationFailed('Token Expired! Log in again.')
 

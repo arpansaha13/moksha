@@ -20,7 +20,7 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "react-scripts start",
+    "start": "cross-env NODE_ENV=development && react-scripts start",
     "build": "react-scripts build && node ./scripts/postbuild.mjs",
     "serve": "serve -s build",
     "test": "react-scripts test",
@@ -29,8 +29,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -55,6 +54,7 @@
     "@tranzis/react-layouts": "file:packages/tranzis-react-layouts-0.1.0.tgz",
     "babel-eslint": "^10.1.0",
     "change-case": "^4.1.2",
+    "cross-env": "^7.0.3",
     "focus-trap": "^7.3.1",
     "ncp": "^2.0.0",
     "nprogress": "^0.2.0",

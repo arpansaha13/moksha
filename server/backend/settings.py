@@ -19,6 +19,8 @@ import environ # Pylance does not recognize this import for some reason but the 
 env = environ.Env()
 environ.Env.read_env()
 
+is_dev = env('DJANGO_ENV') == 'development'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,14 +31,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+DEBUG = is_dev
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', env('CLIENT_DOMAIN')]
 
 APPEND_SLASH = False
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,10 +69,6 @@ MIDDLEWARE = [
     'common.middleware.JwtMiddleware',
 ]
 
-# If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
-CORS_ALLOW_ALL_ORIGINS = True
-
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'backend.urls'
@@ -93,22 +89,16 @@ TEMPLATES = [
     },
 ]
 
-SESSION_COOKIE_SAMESITE_FORCE_ALL = True
-
 CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_SECURE = True
-
 CSRF_COOKIE_SAMESITE = 'None'
-
+CSRF_TRUSTED_ORIGINS = []
+SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'None'
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
-
 CORS_ALLOW_CREDENTIALS = True
-
-CORS_ORIGIN_ALLOW_ALL = True
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000' if is_dev else env('CLIENT_DOMAIN')
+]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -121,15 +111,13 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
-
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=env('DB_NEON'), conn_max_age=600),
+    'default': dj_database_url.config(default=env('DB_URL'), conn_max_age=86400),
 }
 
 # Password validation
@@ -154,11 +142,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 PASSWORD_HASHERS = [
@@ -173,7 +158,6 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
     'django.contrib.auth.hashers.CryptPasswordHasher',
 ]
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

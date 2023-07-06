@@ -3,6 +3,10 @@ from django.http import JsonResponse
 from functools import wraps
 import jwt
 from users.models import User
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 def jwt_exempt(view_func):
     def wrapped_view(*args, **kwargs):
@@ -23,7 +27,7 @@ class JwtMiddleware(MiddlewareMixin):
         if not token:
             return JsonResponse({'message': 'Unauthenticated'}, status=403)
         try:
-            payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             return JsonResponse({'message': 'Token Expired! Log in again.'}, status=403)
 
