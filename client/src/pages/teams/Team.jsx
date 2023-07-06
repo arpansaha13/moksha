@@ -155,8 +155,8 @@ const InviteModal = ({ open, setOpen, teamId, inviteCall, withdrawInviteCall, re
   const [modalText, setModalText] = useState(INITIAL_MODAL_TEXT)
   const [searching, setSearching] = useState(false)
 
-  const [, loading] = useSet([])
-  const [, invited] = useSet([])
+  const loading = useSet()
+  const invited = useSet()
 
   useEffect(() => {
     if (!open) {
@@ -214,9 +214,7 @@ const InviteModal = ({ open, setOpen, teamId, inviteCall, withdrawInviteCall, re
     <Modal open={open} setOpen={setOpen} maxWidth='sm'>
       <div className='mb-4 flex items-center justify-between'>
         <Dialog.Title className='text-base sm:text-xl text-white font-semibold'>Add team members</Dialog.Title>
-        {searching && (
-          <div className='w-6 xl:w-8 aspect-square border-y-2 border-amber-700 rounded-full animate-spin' />
-        )}
+        {searching && <div className='w-6 aspect-square border-y-2 border-amber-700 rounded-full animate-spin' />}
       </div>
 
       <BaseInput
@@ -269,8 +267,8 @@ const InviteModal = ({ open, setOpen, teamId, inviteCall, withdrawInviteCall, re
 }
 
 const PendingInvites = memo(({ pendingInvites, inviteCall, withdrawInviteCall }) => {
-  const [, loading] = useSet([])
-  const [, invited] = useSet(pendingInvites.map(inv => inv.user.user_id))
+  const loading = useSet()
+  const invited = useSet(pendingInvites.map(inv => inv.user.user_id))
 
   useEffect(() => {
     invited.setAll(pendingInvites.map(inv => inv.user.user_id))
