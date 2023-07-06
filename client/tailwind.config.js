@@ -18,5 +18,5 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'), require('@tailwindcss/line-clamp')],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 }
