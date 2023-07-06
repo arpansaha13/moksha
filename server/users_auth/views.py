@@ -48,6 +48,7 @@ class Register(APIView):
 
             new_user = User(
                 user_id = uid,
+                avatar_idx = request.data['avatar_idx'],
                 name = request.data['name'],
                 institution = request.data['institution'],
                 phone_no = request.data['phone_no'],

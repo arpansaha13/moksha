@@ -11,7 +11,7 @@ function Profile() {
       { label: 'Name', value: authUser.name },
       { label: 'Username', value: authUser.username },
       { label: 'Email', value: authUser.email },
-      { label: 'Institution', value: authUser.institution_name },
+      { label: 'Institution', value: authUser.institution },
       { label: 'Phone', value: authUser.phone_no },
     ],
     [authUser]

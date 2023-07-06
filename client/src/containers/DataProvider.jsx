@@ -9,7 +9,7 @@ const data = {
     username: '',
     email: '',
     avatar_idx: 0,
-    institution_name: '',
+    institution: '',
     phone_no: '',
   },
 }
