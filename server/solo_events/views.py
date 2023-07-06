@@ -254,7 +254,7 @@ class TeamUserDetails(APIView):
             return Response({'message': 'Success', 'payload': joined_teams}, status=200)
         for i in user1:
             user3=User.objects.filter(user_id=i.user_id).first()
-            serializer = SpecificSerializers(user3)
+            serializer = UserSerializer(user3)
             joined_teams.append(serializer.data)
         return Response({'message': 'Success', 'payload': joined_teams}, status=200)
 

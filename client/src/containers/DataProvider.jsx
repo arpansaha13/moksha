@@ -3,15 +3,8 @@ import { useMap } from '../hooks/useMap'
 
 const data = {
   authenticated: false,
-  authUser: {
-    user_id: '',
-    name: '',
-    username: '',
-    email: '',
-    avatar_idx: 0,
-    institution_name: '',
-    phone_no: '',
-  },
+  user_id: '',
+  avatar_idx: 0,
 }
 
 const DataContext = createContext(null)
@@ -19,6 +12,7 @@ const DataContext = createContext(null)
 const DataProvider = ({ children }) => {
   const [appContext, { set: setAppContext, reset: resetAppContext }] = useMap(data)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const providerContext = useMemo(() => ({ appContext, setAppContext, resetAppContext }), [appContext])
 
   return <DataContext.Provider value={providerContext}>{children}</DataContext.Provider>

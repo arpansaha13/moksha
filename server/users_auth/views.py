@@ -1,13 +1,13 @@
 from rest_framework.exceptions import APIException
-from users.serializers import UserSerializers
 from users.models import User
+from users.serializers import UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.mail import send_mail
 from datetime import datetime, timedelta
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.decorators import method_decorator
-from backend.middleware import jwt_exempt
+from common.middleware import jwt_exempt
 import random
 import secrets
 import string
@@ -19,25 +19,22 @@ environ.Env.read_env()
 
 class CheckAuth(APIView):
     def get(self, request):
-        return Response({'authenticated': True}, status=200)
+        return Response({
+            'avatar_idx': request.auth_user.avatar_idx,
+            'user_id': request.auth_user.user_id,
+        }, status=200)
 
 class Register(APIView):
     def post(self, request):
-        email = request.data['email']
-
         if request.data['password'] != request.data['confirm_password']:
-            return Response({'message': "Password and confirm password not matched."}, status=401)
+            return Response({'message': "Password and confirm password do not match."}, status=401)
 
-        main_password = make_password(request.data['password'])
+        user = User.objects.filter(username=request.data['username']).first()
 
-        x = random.randint(1000, 9999)
-        otp_generated = str(x)
-
-        user = User.objects.filter(
-            username=request.data['username']).first()
         if user:
             return Response({'message': "This username is already taken."}, status=409)
 
+        email = request.data['email']
         user = User.objects.filter(email=email).first()
         uid = generate_uid()
 
@@ -50,15 +47,21 @@ class Register(APIView):
                 uid = generate_uid()
                 temp_user = User.objects.filter(user_id=uid).first()
 
-            serializer = UserSerializers(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            otp_generated = str(random.randint(1000, 9999))
+            hashed_password = make_password(request.data['password'])
 
-            user = User.objects.filter(email=email).first()
-            user.otp = otp_generated
-            user.user_id = uid
-            user.password = main_password
-            user.save()
+            new_user = User(
+                user_id = uid,
+                avatar_idx = request.data['avatar_idx'],
+                name = request.data['name'],
+                institution = request.data['institution'],
+                phone_no = request.data['phone_no'],
+                email = email,
+                username = request.data['username'],
+                password = hashed_password,
+                otp = otp_generated
+            )
+            new_user.save()
 
             payload = {
                 'id': uid,
@@ -66,10 +69,7 @@ class Register(APIView):
                 'iat': datetime.utcnow(),
             }
 
-            token = jwt.encode(payload, 'secret00', algorithm='HS256')
-
-            response = Response()
-            response.set_cookie(key='otp', value=token, httponly=True)
+            token = jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
 
             send_mail(
                 'Moksha OTP',
@@ -78,9 +78,13 @@ class Register(APIView):
                 [email],
                 fail_silently=False,
             )
+
+            response = Response()
+            response.set_cookie(key='otp', value=token, httponly=True, domain=env('COOKIE_DOMAIN'))
             response.data = {'message': "Otp validation link is sent."}
             response.status_code = 201
             return response
+
         return Response({'message': "This email is already registered."}, status=409)
 
     @method_decorator(jwt_exempt)
@@ -101,7 +105,7 @@ class Login(APIView):
             'iat': datetime.utcnow(),
         }
 
-        token = jwt.encode(payload, 'secret00', algorithm='HS256')
+        token = jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
         password_matched = check_password(request.data['password'], user.password)
 
         if password_matched == False:
@@ -110,9 +114,9 @@ class Login(APIView):
         response = Response()
 
         if user.otp == "":
-            response.set_cookie(key='jwt', value=token, httponly=True)
+            response.set_cookie(key='jwt', value=token, httponly=True, domain=env('COOKIE_DOMAIN'))
 
-            response.data = { 'message': "User logged in" }
+            response.data = UserSerializer(user).data
             response.status_code = 200
             return response
 
@@ -138,13 +142,13 @@ class ForgotPassword(APIView):
                 'iat': datetime.utcnow(),
             }
 
-            token = jwt.encode(payload, 'secret00', algorithm='HS256')
+            token = jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
 
-            response.set_cookie(key='reset', value=token, httponly=True)
+            response.set_cookie(key='reset', value=token, httponly=True, domain=env('COOKIE_DOMAIN'))
 
             send_mail(
                 'Subject here',
-                'Your reset password link is here.It will be valid for 1hr.',
+                'Your reset password link is here. It will be valid for 1hr.',
                 'bhowmikarghajit@gmail.com',
                 [email],
                 fail_silently=False,
@@ -176,7 +180,7 @@ class ChangePassword(APIView):
                 raise unauthenticated()
 
             try:
-                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+                payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
                 raise unauthenticated('Token Expired. Log in again.')
             new_password = request.data['new_password']
@@ -184,7 +188,7 @@ class ChangePassword(APIView):
             if user:
                 user.password = make_password(new_password)
                 user.save()
-                response.set_cookie('reset', max_age=1, httponly=True)
+                response.set_cookie('reset', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
 
                 response.data = {'message': "Password Changed."}
                 response.status_code = 200
@@ -212,12 +216,12 @@ class Logout(APIView):
                 raise unauthenticated()
 
             try:
-                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+                payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
                 raise unauthenticated('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
             if user:
-                response.set_cookie('jwt', max_age=1, httponly=True)
+                response.set_cookie('jwt', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
 
                 response.data = {
                     'message': 'User have successfully logged out.'
@@ -243,7 +247,7 @@ class OTPValidation(APIView):
                 raise unauthenticated()
 
             try:
-                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+                payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
                 raise unauthenticated('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()
@@ -252,7 +256,7 @@ class OTPValidation(APIView):
                 if user.otp == otp:
                     user.otp = ''
                     user.save()
-                    response.set_cookie('otp', max_age=1, httponly=True)
+                    response.set_cookie('otp', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
 
                     response.data = {
                         'message': 'User Validated.'
@@ -285,7 +289,7 @@ class ResendOtp(APIView):
                 raise unauthenticated()
 
             try:
-                payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
+                payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
                 raise unauthenticated('Token Expired. Log in again.')
             user = User.objects.filter(user_id=payload['id']).first()

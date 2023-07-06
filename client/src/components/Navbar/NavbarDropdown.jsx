@@ -6,7 +6,7 @@ import Avatar from '../common/Avatar'
 import { classNames } from '@arpansaha13/utils'
 import { profileTabs } from '../../data/tabs'
 
-const Dropdown = memo(({ name, avatarIdx, onLogOut }) => {
+const Dropdown = memo(({ avatarIdx, onLogOut }) => {
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <div>

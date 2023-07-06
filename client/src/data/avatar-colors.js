@@ -11,12 +11,4 @@ const avatarColors = [
   'text-green-500',
 ]
 
-export const getAvatarIdx = string => {
-  let i = 0
-  for (let j = 0; j < string.length; j++) {
-    i = (i + string.charCodeAt(j) * (7 ** j)) % 59969537
-  }
-  return i % avatarColors.length
-}
-
 export default avatarColors

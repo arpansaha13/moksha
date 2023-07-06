@@ -4,6 +4,8 @@ import fetchWithCredentials from '../../utils/fetchWithCredentials'
 import nprogress from 'nprogress'
 
 export async function getTeamData({ request }) {
+  const data = {}
+
   try {
     nprogress.start()
 
@@ -11,13 +13,24 @@ export async function getTeamData({ request }) {
     const res = await Promise.all([
       fetchWithCredentials(`teams/${teamId}`),
       fetchWithCredentials(`teams/${teamId}/members`),
-      fetchWithCredentials(`invites/${teamId}`),
     ])
 
-    nprogress.done()
+    data.team = res[0].data
+    data.members = res[1].data
 
-    return { team: res[0].data, members: res[1].data, pendingInvites: res[2].data }
-  } catch {
+    // Will fail if not leader
+    data.pendingInvites = await fetchWithCredentials(`invites/${teamId}`).then(r => r.data)
+
+    nprogress.done()
+    return data
+  } catch (e) {
+    if (e.message === 'Forbidden') {
+      data.pendingInvites = []
+
+      nprogress.done()
+      return data
+    }
+
     return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
 }

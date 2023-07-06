@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable no-unused-vars */
 import { memo, useCallback } from 'react'
 import { createSearchParams, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
@@ -41,20 +39,8 @@ function Navbar() {
     if (location.pathname.startsWith('/account/')) {
       navigate('/')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchHook, location.pathname])
-
-  // const headerRef = useRef(null)
-
-  // const scrollListener = useCallback(() => {
-  //   console.log(headerRef)
-  //   headerRef.current.classList[window.scrollY > 100 ? 'add' : 'remove']('top-0')
-  // }, [headerRef])
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', scrollListener)
-
-  //   return () => { window.removeEventListener('scroll', scrollListener) }
-  // }, [scrollListener])
 
   if (windowWidth === null) return <></>
 
@@ -86,11 +72,7 @@ function Navbar() {
 
         {/* Common for both Mobile and Desktop */}
         {appContext.authenticated ? (
-          <NavbarDropdown
-            name={appContext.authUser.name}
-            avatarIdx={appContext.authUser.avatar_idx}
-            onLogOut={logOut}
-          />
+          <NavbarDropdown avatarIdx={appContext.avatar_idx} onLogOut={logOut} />
         ) : (
           <div className='flex gap-3 sm:gap-6'>
             <NavTab to={{ pathname: '/auth/login', search: `${createSearchParams({ from: location.pathname })}` }}>

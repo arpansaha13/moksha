@@ -15,13 +15,20 @@ function Teams() {
         {createdTeam !== null ? (
           <TeamCard key={createdTeam.team_id} team={createdTeam} />
         ) : (
-          <div className='mt-6'>
-            <EmptyState
-              icon={accountMultipleIcon}
-              title='You have not created any team yet'
-              description='You can create a team while registering for a team contest'
-            />
-          </div>
+          <>
+            <EmptyState icon={accountMultipleIcon} title='You have not created any team yet' />
+
+            <div className='mt-1 flex flex-col items-center text-sm text-gray-400'>
+              <p>You can create a team while registering for a team contest.</p>
+              <p>
+                Or you can{' '}
+                <Link to='/teams/create' className='text-amber-600 hover:text-amber-500 font-medium transition-colors'>
+                  create one now
+                </Link>
+                .
+              </p>
+            </div>
+          </>
         )}
       </div>
 

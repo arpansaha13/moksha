@@ -26,6 +26,7 @@ const SoloRegistration = memo(() => {
         setFetchedRegistrationState(true)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function soloRegister(e) {

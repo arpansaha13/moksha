@@ -7,7 +7,6 @@ import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
 import CsrfField from '../../components/common/CsrfField'
 import { useAuthContext } from '../../containers/AuthProvider'
-import { getAvatarIdx } from '../../data/avatar-colors'
 import getFormData from '../../utils/getFormData'
 
 const SignUpPage = () => {
@@ -32,7 +31,7 @@ const SignUpPage = () => {
       e.preventDefault()
 
       const formData = getFormData(formRef.current, { format: 'object' })
-      formData['avatar_idx'] = getAvatarIdx('email')
+      formData['avatar_idx'] = formData['phone_no'] % 10
       formData['username'] = formData['username'].toLowerCase() // force lowercase
 
       let hasError = false
@@ -73,6 +72,7 @@ const SignUpPage = () => {
           })
         })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [validationErrors, formRef]
   )
 
@@ -162,12 +162,12 @@ const getFields = validationErrors => {
     },
     {
       id: 'institution',
-      name: 'institution_name',
+      name: 'institution',
       type: 'text',
       autoComplete: 'organization',
       autoCapitalize: 'words',
       required: true,
-      label: 'Institution name',
+      label: 'Institution',
     },
     {
       id: 'password',

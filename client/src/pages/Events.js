@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 export default function () {
   const [events, setEvents] = useState()
-  const [eventNew, setEventNew] = useState(events)
+  const [, setEventNew] = useState(events)
 
   const filterEvents = category => {
     setEventNew(category)
@@ -27,7 +27,10 @@ export default function () {
       <div className='grid grid-cols-12 gap-8 mt-10'>
         {events?.map(event => {
           return (
-            <div className='flex flex-col col-span-12 bg-ochre/25 rounded-lg cursor-pointer md:col-span-6 xl:col-span-3 h-fit'>
+            <div
+              key={event.slug}
+              className='flex flex-col col-span-12 bg-ochre/25 rounded-lg cursor-pointer md:col-span-6 xl:col-span-3 h-fit'
+            >
               <Link to={`/events/${event.slug}`}>
                 <div className='flex flex-col bg-white z-30 rounded-md'>
                   <div className='w-full max-h-1/2'>

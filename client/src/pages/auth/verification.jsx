@@ -121,6 +121,7 @@ const ResendOtpCooldown = memo(({ onCooldownEnd }) => {
         return state - 1
       })
     }, 1000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

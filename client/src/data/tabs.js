@@ -15,18 +15,18 @@ export const navTabs = [
     to: '/faqs',
     name: 'FAQs',
   },
+  // {
+  //   to: '/merch', // this route doesn't exist yet
+  //   name: 'Merch',
+  // },
   {
-    to: '/sponsors',
-    name: 'Sponsors',
-  },
-  {
-    to: '/merch', // this route doesn't exist yet
-    name: 'Merch',
-  },
-  {
-    to: '/contact', // this route doesn't exist yet
+    to: '/contact',
     name: 'Contact',
   },
+  // {
+  //   to: '/sponsors',
+  //   name: 'Sponsors',
+  // },
 ]
 
 export const profileTabs = [
@@ -34,19 +34,23 @@ export const profileTabs = [
     name: 'Profile',
     to: '/account/profile',
   },
-  {
-    name: 'Registrations',
-    to: '/account/registrations', // this route doesn't exist yet
-  },
+  // {
+  //   name: 'Registrations',
+  //   to: '/account/registrations', // this route doesn't exist yet
+  // },
   {
     name: 'Teams',
-    to: '/account/teams', // this route doesn't exist yet
+    to: '/account/teams',
   },
+  // {
+  //   name: 'Merch',
+  //   to: '/account/merch', // this route doesn't exist yet
+  // },
 ]
 
 export const accountTabs = [
-  {
-    name: 'Change password',
-    to: '/account/change-password', // this route doesn't exist yet
-  },
+  // {
+  //   name: 'Change password',
+  //   to: '/account/change-password', // this route doesn't exist yet
+  // },
 ]
