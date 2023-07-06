@@ -10,8 +10,8 @@ class InviteStatus(StrEnum):
 
 class Invite(Model):
     id = AutoField(primary_key=True)
-    team = ForeignKey(Team, related_name='team', on_delete=CASCADE, null=False)
-    user = ForeignKey(User, related_name='user', on_delete=CASCADE, null=False)
+    team = ForeignKey(Team, related_name='%(class)s_team', on_delete=CASCADE, null=False)
+    user = ForeignKey(User, related_name='%(class)s_user', on_delete=CASCADE, null=False)
     status= CharField(max_length=100, blank=False, null=False, default=InviteStatus.PENDING)
 
     def __str__(self):

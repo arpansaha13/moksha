@@ -4,7 +4,7 @@ class User(models.Model):
     user_id = models.CharField(primary_key=True, max_length=100,blank=False, null=False)
     avatar_idx=models.IntegerField(default=0)
     name = models.CharField(max_length=100)
-    institution_name = models.CharField(max_length=100)
+    institution = models.CharField(max_length=100)
     phone_no = models.BigIntegerField(default=0)
     email = models.EmailField(unique=False)
     username = models.CharField(max_length=100)
