@@ -5,17 +5,17 @@ import Sheet from '../../components/common/Sheet'
 import ContestTypeBadge from '../../components/Contests/ContestTypeBadge'
 import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
 import EmptyState from '../../components/common/EmptyState'
-import { getContestData } from '../../data/contests'
+import { getMokshaContest } from '../../data/contests/moksha'
 
 function Registrations() {
-  const [registeredEvents, setRegisteredEvents] = useState([
+  const [registeredEvents] = useState([
     {
       team_id: 1,
       team_name: 'Created team name',
       leader_id: 21321,
     },
   ])
-  const [registeredContests, setRegisteredContests] = useState([
+  const [registeredContests] = useState([
     {
       club: 'malhar',
       contest_slug: 'solo-singing',
@@ -79,7 +79,7 @@ const RegisteredEventCard = memo(({ event }) => (
 ))
 
 const RegisteredContestCard = memo(({ clubName, contestSlug }) => {
-  const contest = getContestData(clubName, contestSlug)
+  const contest = getMokshaContest(clubName, contestSlug)
 
   return (
     <div className='flex rounded-md lg:rounded-lg overflow-hidden bg-amber-900/80'>
