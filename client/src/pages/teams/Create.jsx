@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import { useFetch } from '../../hooks/useFetch'
 import Sheet from '../../components/common/Sheet'
@@ -13,18 +13,21 @@ export default function CreateTeam() {
 
   const fetchHook = useFetch()
   const formRef = useRef(null)
+  const [loading, setLoading] = useState(false)
 
-  const createTeam = useCallback(e => {
+  const createTeam = useCallback(async e => {
     e.preventDefault()
 
+    setLoading(true)
     const formData = getFormData(formRef.current, { format: 'object' })
 
-    fetchHook('teams', {
+    const res = await fetchHook('teams', {
       method: 'POST',
       body: JSON.stringify(formData),
-    }).then(res => {
-      navigate(`/teams/${res.team_id}`)
     })
+
+    navigate(`/teams/${res.team_id}`)
+    setLoading(false)
   }, [])
 
   return (
@@ -61,7 +64,9 @@ export default function CreateTeam() {
             <CsrfField />
 
             <div className='mt-6 flex flex-col sm:flex-row sm:justify-end gap-4'>
-              <BaseButton type='submit'>Create team</BaseButton>
+              <BaseButton loading={loading} type='submit'>
+                Create team
+              </BaseButton>
             </div>
           </form>
         )}
