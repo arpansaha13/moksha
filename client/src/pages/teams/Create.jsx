@@ -28,6 +28,7 @@ export default function CreateTeam() {
 
     navigate(`/teams/${res.team_id}`)
     setLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

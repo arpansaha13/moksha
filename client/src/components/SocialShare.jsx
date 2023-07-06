@@ -26,6 +26,7 @@ const SocialShare = memo(({ data, children }) => {
     setTimeout(() => {
       setCopied(false)
     }, 4000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const social = useMemo(

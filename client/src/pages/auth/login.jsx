@@ -51,6 +51,7 @@ const LoginPage = () => {
           })
         })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [formRef]
   )
 
@@ -72,7 +73,8 @@ const LoginPage = () => {
           label='Password'
         />
 
-        <div className='text-sm flex items-center justify-between'>
+        {/* TODO */}
+        {/* <div className='text-sm flex items-center justify-between'>
           <div>
             <Link to='/auth/forgot-password'>
               <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
@@ -80,7 +82,7 @@ const LoginPage = () => {
               </span>
             </Link>
           </div>
-        </div>
+        </div> */}
 
         <CsrfField />
 

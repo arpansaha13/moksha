@@ -27,11 +27,6 @@
     "eject": "react-scripts eject",
     "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

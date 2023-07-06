@@ -5,6 +5,7 @@ export function useScrolling(ref) {
 
   useEffect(() => {
     if (ref.current) {
+      const refCurrent = ref.current
       let scrollingTimeout
 
       const handleScrollEnd = () => setScrolling(false)
@@ -15,16 +16,16 @@ export function useScrolling(ref) {
         scrollingTimeout = setTimeout(() => handleScrollEnd(), 150) // lasts for 150ms
       }
 
-      ref.current.addEventListener('scroll', handleScroll, false)
+      refCurrent.addEventListener('scroll', handleScroll, false)
 
       return () => {
-        if (ref.current) {
-          ref.current.removeEventListener('scroll', handleScroll, false)
+        if (refCurrent) {
+          refCurrent.removeEventListener('scroll', handleScroll, false)
         }
       }
     }
     return () => {}
   }, [ref])
 
-  return scrolling;
+  return scrolling
 }

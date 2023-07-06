@@ -1,17 +1,16 @@
-import { useCallback, useReducer } from "react"
-
+import { useCallback, useReducer } from 'react'
 
 function reducer(state, action) {
   const key = action.key
   const value = action.value
-  const newState = {...state}
+  const newState = { ...state }
 
   switch (action.type) {
     case 'set':
       newState[key] = value
       break
     case 'reset':
-      return {...action.initialValue}
+      return { ...action.initialValue }
     case 'all':
       return action.newMap
     default:
@@ -28,12 +27,13 @@ export function useMap(initialValue) {
     dispatch({ type: 'set', key, value })
   }, [])
 
-  const setAll = useCallback((newMap) => {
+  const setAll = useCallback(newMap => {
     dispatch({ type: 'all', newMap })
   }, [])
 
   const reset = useCallback(() => {
     dispatch({ type: 'reset', initialValue })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return [map, { set, setAll, reset }]

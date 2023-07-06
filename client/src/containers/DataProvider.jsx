@@ -12,6 +12,7 @@ const DataContext = createContext(null)
 const DataProvider = ({ children }) => {
   const [appContext, { set: setAppContext, reset: resetAppContext }] = useMap(data)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const providerContext = useMemo(() => ({ appContext, setAppContext, resetAppContext }), [appContext])
 
   return <DataContext.Provider value={providerContext}>{children}</DataContext.Provider>

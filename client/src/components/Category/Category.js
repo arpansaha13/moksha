@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Tab } from '@headlessui/react'
 
 function Category({ events, filterEvents }) {
-  const [items, setItems] = useState(events)
+  const [, setItems] = useState(events)
 
   const filter = cetItem => {
     const updatedItems = events.filter(event => {
@@ -11,6 +11,7 @@ function Category({ events, filterEvents }) {
     setItems(updatedItems)
     filterEvents(updatedItems)
   }
+
   return (
     <div className='w-full max-w-md px-2 mx-auto py-16 sm:px-0'>
       <Tab.Group>

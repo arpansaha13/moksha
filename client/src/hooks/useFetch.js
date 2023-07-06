@@ -41,6 +41,7 @@ export function useFetch() {
       throw jsonData
     }
     return jsonData
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return fetchHook
