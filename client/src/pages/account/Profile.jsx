@@ -20,11 +20,11 @@ function Profile() {
   return (
     <Sheet as='main' className='p-4 sm:p-6'>
       <div>
-        <div className='w-36 h-36'>
+        <div className='m-auto sm:m-0 w-36 h-36'>
           <Avatar avatarIdx={authUser.avatar_idx} />
         </div>
 
-        <div className='mt-4 grid grid-cols-2 gap-4 text-sm'>
+        <div className='mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
           {userDetails.map(item => (
             <div key={item.label}>
               <p className='font-semibold text-gray-400'>{item.label}</p>

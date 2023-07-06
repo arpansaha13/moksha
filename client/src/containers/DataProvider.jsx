@@ -3,15 +3,8 @@ import { useMap } from '../hooks/useMap'
 
 const data = {
   authenticated: false,
-  authUser: {
-    user_id: '',
-    name: '',
-    username: '',
-    email: '',
-    avatar_idx: 0,
-    institution: '',
-    phone_no: '',
-  },
+  user_id: '',
+  avatar_idx: 0,
 }
 
 const DataContext = createContext(null)

@@ -1,5 +1,6 @@
 from rest_framework.exceptions import APIException
 from users.models import User
+from users.serializers import UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.mail import send_mail
@@ -18,7 +19,10 @@ environ.Env.read_env()
 
 class CheckAuth(APIView):
     def get(self, request):
-        return Response({'authenticated': True}, status=200)
+        return Response({
+            'avatar_idx': request.auth_user.avatar_idx,
+            'user_id': request.auth_user.user_id,
+        }, status=200)
 
 class Register(APIView):
     def post(self, request):
@@ -112,7 +116,7 @@ class Login(APIView):
         if user.otp == "":
             response.set_cookie(key='jwt', value=token, httponly=True)
 
-            response.data = { 'message': "User logged in" }
+            response.data = UserSerializer(user).data
             response.status_code = 200
             return response
 

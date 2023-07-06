@@ -1,10 +1,10 @@
 from django.db.models import Q
 from rest_framework.serializers import ReturnDict, ReturnList
-from .serializers import TeamSerializers, TeamUserRegistrationsSerializers
+from .serializers import TeamSerializers
 from .models import Team, TeamUserRegistrations
 from users.models import User
-from invites.models import Invite
-from users.serializers import SpecificSerializers
+from invites.models import Invite, InviteStatus
+from users.serializers import UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import secrets
@@ -24,20 +24,18 @@ class BaseEndpoint(APIView):
                 uid = generate_uid()
                 temp_team = Team.objects.filter(team_id=uid).first()
 
-            serializer = TeamSerializers({
-                'team_id': uid,
-                'team_name': request.data['team_name'],
-                'leader_id': request.auth_user.user_id
-            })
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            new_team = Team(
+                team_id = uid,
+                team_name = request.data['team_name'],
+                leader_id = request.auth_user.user_id
+            )
+            new_team.save()
 
-            serializer = TeamUserRegistrationsSerializers({
-                'team_id': uid,
-                'user_id':request.auth_user.user_id
-            })
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            new_team_registration = TeamUserRegistrations(
+                team = new_team,
+                user = request.auth_user
+            )
+            new_team_registration.save()
 
             return Response({'team_id': uid}, status=201)
 
@@ -80,7 +78,7 @@ class GetTeamMembers(APIView):
         user_ids = TeamUserRegistrations.objects.filter(team_id=team_id).values_list('user_id')
         users = User.objects.filter(user_id__in=user_ids)
 
-        serializer = SpecificSerializers(users, many=True)
+        serializer = UserSerializer(users, many=True)
 
         return Response({ 'data': serializer.data }, status=200)
 
@@ -90,7 +88,10 @@ class GetUninvitedUsers(APIView):
         limit = request.GET.get('limit', 10)
 
         team_members = TeamUserRegistrations.objects.filter(team_id=team_id).values_list('user_id', flat=True)
-        pending_invites = Invite.objects.filter(team_id=team_id).values_list('user_id', flat=True)
+        pending_invites = Invite.objects.filter(
+            Q(team_id=team_id)
+            & Q(status=InviteStatus.PENDING)
+        ).values_list('user_id', flat=True)
 
         users = User.objects.filter(
             Q(username__icontains=username)
@@ -101,41 +102,10 @@ class GetUninvitedUsers(APIView):
 
         data = []
         for user in users:
-            serializer = SpecificSerializers(user)
+            serializer = UserSerializer(user)
             data.append(serializer.data)
 
         return Response({ 'data': data }, status=200)
-
-# class JoinTeam(APIView):
-#     def post(self, request):
-#         token = request.COOKIES['jwt']
-
-#         if not token:
-#             raise AuthenticationFailed('Unauthenticated')
-
-#         try:
-#             payload = jwt.decode(token, 'secret00', algorithms=['HS256'])
-#         except jwt.ExpiredSignatureError:
-#             raise AuthenticationFailed('Token Expired! Log in again.')
-
-#         user_id = payload['id']
-#         team_id = request.data['team_id']
-
-#         user = TeamUserRegistrations.objects.filter(team_id=team_id).all()
-
-#         user1 = Team.objects.filter(leader_id=user_id).first()
-#         if user1:
-#             return Response({'message': 'Each user can create only one team but join any!!'}, status=403)
-
-#         if user:
-#             if user.count < 5:
-#                 format_data = {'team_id': team_id,'user_id':user_id}
-#                 serializer = TeamUserRegistrationsSerializers(data=format_data)
-#                 serializer.is_valid(raise_exception=True)
-#                 serializer.save()
-#                 return Response({'message': 'Member Added!!'}, status=201)
-#             return Response({'message': 'Team Full!'}, status=400)
-#         return Response({'message': 'Team does not Exist.'}, status=404)
 
 def generate_uid(length=8):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)

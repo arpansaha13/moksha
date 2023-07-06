@@ -11,8 +11,10 @@ function App() {
 
   useEffect(() => {
     fetchWithCredentials('auth/check-auth')
-      .then(() => {
+      .then(res => {
         setAppContext('authenticated', true)
+        setAppContext('avatar_idx', res.avatar_idx)
+        setAppContext('user_id', res.user_id)
         setLoading(false)
       })
       .catch(() => {

@@ -86,11 +86,7 @@ function Navbar() {
 
         {/* Common for both Mobile and Desktop */}
         {appContext.authenticated ? (
-          <NavbarDropdown
-            name={appContext.authUser.name}
-            avatarIdx={appContext.authUser.avatar_idx}
-            onLogOut={logOut}
-          />
+          <NavbarDropdown avatarIdx={appContext.avatar_idx} onLogOut={logOut} />
         ) : (
           <div className='flex gap-3 sm:gap-6'>
             <NavTab to={{ pathname: '/auth/login', search: `${createSearchParams({ from: location.pathname })}` }}>

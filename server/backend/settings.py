@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'common',
     'users',
     'users_auth',
     'teams',
@@ -65,7 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'backend.middleware.JwtMiddleware',
+    'common.middleware.JwtMiddleware',
 ]
 
 # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
@@ -128,7 +129,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=env('DB_EXT_URL'), conn_max_age=600),
+    'default': dj_database_url.config(default=env('DB_NEON'), conn_max_age=600),
 }
 
 # Password validation

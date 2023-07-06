@@ -9,6 +9,8 @@ import accountClockIcon from '@iconify-icons/mdi/account-clock-outline'
 import accountSearchIcon from '@iconify-icons/mdi/account-search-outline'
 import accountQuestionIcon from '@iconify-icons/mdi/account-question-outline'
 import accountMultiplePlusIcon from '@iconify-icons/mdi/account-multiple-plus'
+import { classNames } from '@arpansaha13/utils'
+import { useAppContext } from '../../containers/DataProvider'
 import { useSet } from '../../hooks/useSet'
 import { useFetch } from '../../hooks/useFetch'
 import { useDebounce } from '../../hooks/useDebounce'
@@ -19,10 +21,10 @@ import Sheet from '../../components/common/Sheet'
 import Avatar from '../../components/common/Avatar'
 import Container from '../../components/common/Container'
 import EmptyState from '../../components/common/EmptyState'
-import { classNames } from '@arpansaha13/utils'
 import { useDebouncedFn } from '../../hooks/useDebouncedFn'
 
 export default function Team() {
+  const { appContext } = useAppContext()
   const { team, members, pendingInvites: initialPendingInvites } = useLoaderData()
   const [pendingInvites, setPendingInvites] = useState(initialPendingInvites)
   const [modalOpen, setModalOpen] = useState(false)
@@ -66,22 +68,25 @@ export default function Team() {
               <span className='hidden sm:inline'>Team </span>
               <span className='capitalize sm:lowercase'>members</span>
             </h2>
-            <BaseButton secondary onClick={() => setModalOpen(true)}>
-              <div className='flex items-center'>
-                <div className='w-6 h-6'>
-                  <Icon
-                    icon={accountMultiplePlusIcon}
-                    className='inline-block'
-                    color='inherit'
-                    width='100%'
-                    height='100%'
-                  />
+
+            {team.leader_id === appContext.user_id && (
+              <BaseButton secondary onClick={() => setModalOpen(true)}>
+                <div className='flex items-center'>
+                  <div className='w-6 h-6'>
+                    <Icon
+                      icon={accountMultiplePlusIcon}
+                      className='inline-block'
+                      color='inherit'
+                      width='100%'
+                      height='100%'
+                    />
+                  </div>
+                  <p className='ml-1.5'>
+                    Invite <span className='hidden lg:inline'> members</span>
+                  </p>
                 </div>
-                <p className='ml-1.5'>
-                  Invite <span className='hidden lg:inline'> members</span>
-                </p>
-              </div>
-            </BaseButton>
+              </BaseButton>
+            )}
           </div>
 
           <TeamMembers members={members} />
@@ -97,14 +102,16 @@ export default function Team() {
         />
       </main>
 
-      <section id='pending-invites'>
-        <h3 className='mb-4 text-xl font-bold text-gray-50'>Pending invites</h3>
-        <PendingInvites
-          pendingInvites={pendingInvites}
-          inviteCall={inviteCall}
-          withdrawInviteCall={withdrawInviteCall}
-        />
-      </section>
+      {team.leader_id === appContext.user_id && (
+        <section id='pending-invites'>
+          <h3 className='mb-4 text-xl font-bold text-gray-50'>Pending invites</h3>
+          <PendingInvites
+            pendingInvites={pendingInvites}
+            inviteCall={inviteCall}
+            withdrawInviteCall={withdrawInviteCall}
+          />
+        </section>
+      )}
     </Container>
   )
 }
@@ -130,7 +137,7 @@ const TeamData = memo(({ team }) => (
 
 const TeamMembers = memo(({ members }) => (
   <Sheet className='px-6 py-4 space-y-3'>
-    <ul className='divide-y divide-brown text-xs lg:text-sm'>
+    <ul className='divide-y divide-amber-900/60 text-xs lg:text-sm'>
       {members.map(member => (
         <li key={member.user_id} className='py-1.5 first:pt-0 last:pb-0'>
           <div className='text-gray-100 flex items-center'>
@@ -341,7 +348,7 @@ const InviteButton = memo(({ loading, userId, invited, invite, withdrawInvite })
       <Icon icon={invited ? minusIcon : plusIcon} className='inline-block' color='inherit' width='100%' height='100%' />
     </div>
 
-    <span className={classNames('hidden xl:inline-block ml-1 text-xs', loading && 'opacity-0')}>
+    <span className={classNames('hidden xl:inline-block xl:ml-1 text-xs', loading && 'opacity-0')}>
       {invited ? 'Withdraw' : 'Invite'}
     </span>
 

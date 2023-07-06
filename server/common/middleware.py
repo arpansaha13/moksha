@@ -2,7 +2,6 @@ from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 from functools import wraps
 import jwt
-import json
 from users.models import User
 
 def jwt_exempt(view_func):

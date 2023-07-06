@@ -31,9 +31,11 @@ const LoginPage = () => {
         method: 'POST',
         body: JSON.stringify(formData),
       })
-        .then(() => {
+        .then(res => {
           setLoading(false)
           setAppContext('authenticated', true)
+          setAppContext('avatar_idx', res.avatar_idx)
+          setAppContext('user_id', res.user_id)
           setNotification('show', false)
 
           if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')), { replace: true })
