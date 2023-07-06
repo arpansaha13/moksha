@@ -1,5 +1,4 @@
 from rest_framework.exceptions import APIException
-from users.serializers import UserSerializers
 from users.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,7 +6,7 @@ from django.core.mail import send_mail
 from datetime import datetime, timedelta
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.decorators import method_decorator
-from backend.middleware import jwt_exempt
+from common.middleware import jwt_exempt
 import random
 import secrets
 import string
@@ -23,21 +22,15 @@ class CheckAuth(APIView):
 
 class Register(APIView):
     def post(self, request):
-        email = request.data['email']
-
         if request.data['password'] != request.data['confirm_password']:
-            return Response({'message': "Password and confirm password not matched."}, status=401)
+            return Response({'message': "Password and confirm password do not match."}, status=401)
 
-        main_password = make_password(request.data['password'])
+        user = User.objects.filter(username=request.data['username']).first()
 
-        x = random.randint(1000, 9999)
-        otp_generated = str(x)
-
-        user = User.objects.filter(
-            username=request.data['username']).first()
         if user:
             return Response({'message': "This username is already taken."}, status=409)
 
+        email = request.data['email']
         user = User.objects.filter(email=email).first()
         uid = generate_uid()
 
@@ -50,15 +43,20 @@ class Register(APIView):
                 uid = generate_uid()
                 temp_user = User.objects.filter(user_id=uid).first()
 
-            serializer = UserSerializers(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            otp_generated = str(random.randint(1000, 9999))
+            hashed_password = make_password(request.data['password'])
 
-            user = User.objects.filter(email=email).first()
-            user.otp = otp_generated
-            user.user_id = uid
-            user.password = main_password
-            user.save()
+            new_user = User(
+                user_id = uid,
+                name = request.data['name'],
+                institution = request.data['institution'],
+                phone_no = request.data['phone_no'],
+                email = email,
+                username = request.data['username'],
+                password = hashed_password,
+                otp = otp_generated
+            )
+            new_user.save()
 
             payload = {
                 'id': uid,
@@ -68,9 +66,6 @@ class Register(APIView):
 
             token = jwt.encode(payload, 'secret00', algorithm='HS256')
 
-            response = Response()
-            response.set_cookie(key='otp', value=token, httponly=True)
-
             send_mail(
                 'Moksha OTP',
                 otp_generated,
@@ -78,9 +73,13 @@ class Register(APIView):
                 [email],
                 fail_silently=False,
             )
+
+            response = Response()
+            response.set_cookie(key='otp', value=token, httponly=True)
             response.data = {'message': "Otp validation link is sent."}
             response.status_code = 201
             return response
+
         return Response({'message': "This email is already registered."}, status=409)
 
     @method_decorator(jwt_exempt)
