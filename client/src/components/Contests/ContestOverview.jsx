@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
+import { useMediaQuery } from 'react-responsive'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import Sheet from '../common/Sheet'
-import { useWindowSize } from '../../hooks/useWindowSize'
 import ContestTypeBadge from './ContestTypeBadge'
 import SocialShare from '../SocialShare'
 import { getMokshaContest } from '../../data/contests/moksha'
@@ -11,9 +11,8 @@ import { getMokshaContest } from '../../data/contests/moksha'
 export default function TeamContestOverview() {
   const params = useParams()
   const location = useLocation()
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
   const contest = getMokshaContest(params.club, params.contest)
-
-  const { width } = useWindowSize()
 
   const shareData = useMemo(
     () => ({
@@ -36,7 +35,7 @@ export default function TeamContestOverview() {
           <div className='flex items-center justify-between'>
             <div className='flex gap-2'>
               {contest.type.map(type => (
-                <ContestTypeBadge small={width !== null && width < 1024} key={type} type={type} />
+                <ContestTypeBadge small={isTabletOrMobile} key={type} type={type} />
               ))}
             </div>
 
