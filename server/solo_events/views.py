@@ -201,7 +201,7 @@ class CreatedTeamsApi(APIView):
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
         user_id=payload['id']
-        user=Team.objects.filter(leader_id=user_id).all()
+        user=Team.objects.filter(leader=user_id).all()
         joined_teams=[]
         if not user:
             return Response({'message': 'Success', 'payload': joined_teams}, status=200)
@@ -223,7 +223,7 @@ class JoinedTeamsApi(APIView):
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token Expired! Log in again.')
         user_id=payload['id']
-        user=Team.objects.filter(leader_id=user_id).first()
+        user=Team.objects.filter(leader=user_id).first()
         if user:
             team_id=user.team_id
 

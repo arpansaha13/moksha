@@ -4,7 +4,7 @@ from users.models import User
 class Team(Model):
     team_id = CharField(primary_key=True, max_length=100, blank=False, null=False)
     team_name = TextField(blank=False, null=False)
-    leader_id = CharField(max_length=100, blank=False, null=False)
+    leader = ForeignKey(User, related_name='leader', on_delete=CASCADE, null=False, db_column='leader')
 
     def __str__(self):
         return self.team_id

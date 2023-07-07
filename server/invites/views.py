@@ -47,7 +47,7 @@ class BaseEndpoint(APIView):
         team_id = request.data.get('team_id')
         user_id = request.data.get('user_id')
 
-        team = Team.objects.filter(team_id=team_id).only('leader_id').first()
+        team = Team.objects.filter(team_id=team_id).only('leader').first()
 
         verify_team_leader(team, request.auth_user)
 
@@ -68,7 +68,7 @@ class BaseEndpoint(APIView):
 
 class GetPendingInvites(APIView):
     def get(self, request, team_id):
-        team = Team.objects.filter(team_id=team_id).only('leader_id').first()
+        team = Team.objects.filter(team_id=team_id).only('leader').first()
 
         verify_team_leader(team, request.auth_user)
 
@@ -114,7 +114,7 @@ def verify_team_leader(team, auth_user):
         raise NotFound({'message': 'Invalid team_id'})
 
     # Only team leader should be able to deal with invites
-    if auth_user.user_id != team.leader_id:
+    if auth_user.user_id != team.leader.user_id:
         raise PermissionDenied({'message': 'Forbidden'})
 
 def verify_invite(invite: Optional[Invite]) -> Invite:

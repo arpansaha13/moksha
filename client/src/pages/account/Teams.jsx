@@ -70,7 +70,7 @@ const TeamCard = ({ team }) => (
         </div>
         <div>
           <p className='font-semibold text-gray-400'>Leader id</p>
-          <p className='text-gray-100'>{team.leader_id}</p>
+          <p className='text-gray-100'>{team.leader}</p>
         </div>
         <div>
           <p className='font-semibold text-gray-400'>Member count</p>
