@@ -136,6 +136,7 @@ const getFields = validationErrors => {
       type: 'text',
       autoComplete: 'name',
       autoCapitalize: 'words',
+      maxLength: 20,
       required: true,
       label: 'Name',
     },
@@ -148,7 +149,7 @@ const getFields = validationErrors => {
       required: true,
       label: 'Username',
       minLength: 6,
-      maxLength: 20,
+      maxLength: 16,
       validationError: validationErrors.username,
       style: { textTransform: 'lowercase' }, // force lowercase
     },
@@ -167,6 +168,8 @@ const getFields = validationErrors => {
       autoComplete: 'organization',
       autoCapitalize: 'words',
       required: true,
+      minLength: 3,
+      maxLength: 8,
       label: 'Institution',
     },
     {
