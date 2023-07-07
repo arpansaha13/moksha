@@ -2,6 +2,8 @@ import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { capitalCase } from 'change-case'
+import { classNames } from '@arpansaha13/utils'
+import { isTouchDevice } from '@arpansaha13/utils/browser'
 import Container from '../../components/common/Container'
 import Sheet from '../../components/common/Sheet'
 import ContestTypeBadge from '../../components/Contests/ContestTypeBadge'
@@ -16,7 +18,6 @@ import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
 import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
 import contestsMap from '../../data/contests/moksha'
 import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
-import { classNames } from '@arpansaha13/utils'
 
 function Contests() {
   useHashLink()
@@ -88,7 +89,7 @@ const ClubContest = memo(({ clubName, contests }) => {
               }
             </CardsSlider>
 
-            {contests.length > visible && (
+            {!isTouchDevice() && contests.length > visible && (
               <div className='mx-auto mt-6 w-max flex items-center gap-4'>
                 <PaginateButton onClick={scrollToStart}>
                   <Icon icon={doubleLeftIcon} className='block' color='inherit' width='100%' height='100%' />

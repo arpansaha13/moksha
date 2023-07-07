@@ -12,7 +12,7 @@
     "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
   },
   "dependencies": {
-    "@arpansaha13/utils": "^0.2.4",
+    "@arpansaha13/utils": "^0.3.0",
     "@headlessui/react": "^1.7.13",
     "@iconify-icons/mdi": "^1.2.46",
     "@iconify/react": "^4.1.1",
