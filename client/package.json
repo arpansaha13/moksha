@@ -1,8 +1,16 @@
 {
   "name": "@moksha/client",
+  "private": true,
   "description": "Official Moksha 2023 website, NIT Agartala",
   "version": "0.1.0",
-  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
+  },
   "dependencies": {
     "@arpansaha13/utils": "^0.2.4",
     "@headlessui/react": "^1.7.13",
@@ -26,36 +34,17 @@
     "react-scripts": "^5.0.1",
     "tailwindcss": "^3.3.2"
   },
-  "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "cross-env NODE_ENV=development && react-scripts start",
-    "build": "react-scripts build",
-    "serve": "serve -s build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.19.1",
     "@tranzis/react": "file:packages/tranzis-react-0.1.0.tgz",
     "@tranzis/react-layouts": "file:packages/tranzis-react-layouts-0.1.0.tgz",
-    "babel-eslint": "^10.1.0",
-    "cross-env": "^7.0.3",
-    "ncp": "^2.0.0",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "@vitejs/plugin-react": "^4.0.2",
+    "eslint": "^8.44.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.1",
     "prettier": "^2.8.4",
-    "serve": "^14.2.0",
-    "source-map-explorer": "^2.5.3"
+    "vite": "^4.4.1"
   }
 }

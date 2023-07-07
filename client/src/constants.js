@@ -1,2 +1,1 @@
-export const FETCH_BASE_URL =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api/' : 'https://moksha-backend.onrender.com/api/'
+export const FETCH_BASE_URL = import.meta.env.DEV ? 'http://localhost:8000/api/' : import.meta.env.VITE_API_SERVER_URL

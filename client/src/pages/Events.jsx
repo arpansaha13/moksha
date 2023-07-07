@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { useEffect, useState } from 'react'
 import Container from '../components/common/Container'
 import { Client, urlFor } from '../utils/Client'
@@ -6,7 +5,7 @@ import { feedQuery } from '../utils/data'
 import Category from '../components/Category/Category'
 import { Link } from 'react-router-dom'
 
-export default function () {
+export default function Events() {
   const [events, setEvents] = useState()
   const [, setEventNew] = useState(events)
 

@@ -1,6 +1,8 @@
 # front end
 node_modules
 build
+dist
+dist-ssr
 package-lock.json
 
 # back end
