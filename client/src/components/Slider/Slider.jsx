@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 import Tilt from 'react-parallax-tilt'
 import Moksha from '../../assets/moksha.png'
 
@@ -12,7 +11,7 @@ export default function Slider() {
       </div>
 
       <div className='sm:w-[30rem] sm:h-[30rem] mt-4'>
-        <img className='w-full h-full' src='/static/images/man_with_bird.png' alt='' />
+        <img className='w-full h-full' src='/images/man_with_bird.png' alt='' />
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ import Modal from './common/Modal'
 import { classNames } from '@arpansaha13/utils'
 
 /** A width and height needs to be specified from parent */
-const SocialShare = memo(({ data, children }) => {
+function SocialShare({ data, children }) {
   const [modalOpen, setModalOpen] = useState(false)
   const locationOrigin = useRef('')
 
@@ -33,14 +33,14 @@ const SocialShare = memo(({ data, children }) => {
     () => [
       {
         name: 'WhatsApp',
-        logo: '/static/logos/whatsapp.svg',
+        logo: '/logos/whatsapp.svg',
         href: `https://api.whatsapp.com/send/?text=${encodeURIComponent(data.title)}%0A%0A${encodeURIComponent(
           locationOrigin.current + data.url
         )}%0A%0A${encodeURIComponent(data.text)}`,
       },
       {
         name: 'Facebook',
-        logo: '/static/logos/facebook.svg',
+        logo: '/logos/facebook.svg',
         href: `https://www.facebook.com/sharer.php?u=${encodeURIComponent(locationOrigin.current + data.url)}`,
       },
     ],
@@ -101,5 +101,5 @@ const SocialShare = memo(({ data, children }) => {
       </Modal>
     </>
   )
-})
-export default SocialShare
+}
+export default memo(SocialShare)

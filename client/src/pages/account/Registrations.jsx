@@ -66,6 +66,7 @@ function Registrations() {
 }
 export default Registrations
 
+// eslint-disable-next-line no-unused-vars
 const RegisteredEventCard = memo(({ event }) => (
   <div className='flex rounded-md lg:rounded-lg overflow-hidden bg-amber-900/80'>
     <div className='h-36 w-36 object-contain'>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Tab } from '@headlessui/react'
 
 function Category({ events, filterEvents }) {

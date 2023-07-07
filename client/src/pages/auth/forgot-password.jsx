@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from 'react-router-dom'
 import { useMap } from '../../hooks/useMap'
 import { useFetch } from '../../hooks/useFetch'
 import BaseInput from '../../components/base/BaseInput'
@@ -9,7 +9,6 @@ import { useAppContext } from '../../containers/DataProvider'
 const ForgotPasswordPage = () => {
   const { setAppContext } = useAppContext()
   const navigate = useNavigate()
-
 
   const fetchHook = useFetch()
 
@@ -23,9 +22,8 @@ const ForgotPasswordPage = () => {
     fetchHook('users/forgot-password', {
       method: 'POST',
       body: JSON.stringify(formData),
-    })
-    .then((res) => {
-      if (res.message === "User logged in!!") {
+    }).then(res => {
+      if (res.message === 'User logged in!!') {
         // TODO: replace with user data from designated api
         setAppContext(state => {
           const newState = { ...state }
@@ -35,9 +33,6 @@ const ForgotPasswordPage = () => {
         navigate('/')
       }
     })
-    .catch(err => {
-      // Failed
-    })
   }
 
   return (
@@ -46,28 +41,28 @@ const ForgotPasswordPage = () => {
         <title>Moksha | Forgot password</title>
       </Helmet>
 
-      <form className="space-y-6" onSubmit={signIn}>
+      <form className='space-y-6' onSubmit={signIn}>
         <BaseInput
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
+          id='email'
+          name='email'
+          type='email'
+          autoComplete='email'
           required
-          label="Email address"
+          label='Email address'
           value={formData.email}
           onChange={e => set('email', e.target.value)}
         />
 
         <div>
-          <BaseButton type="submit" stretch>
+          <BaseButton type='submit' stretch>
             Submit
           </BaseButton>
         </div>
 
-        <div className="flex items-center">
-          <div className="text-sm">
-            <Link to="/auth/login">
-              <span className="font-medium text-amber-600 hover:text-amber-500 cursor-pointer">Back to Login</span>
+        <div className='flex items-center'>
+          <div className='text-sm'>
+            <Link to='/auth/login'>
+              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>Back to Login</span>
             </Link>
           </div>
         </div>

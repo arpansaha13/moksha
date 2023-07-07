@@ -35,7 +35,7 @@ export function useSet(initialValues = []) {
 
   const has = useCallback(value => set.has(value), [set])
 
-  const clear = useCallback(value => {
+  const clear = useCallback(() => {
     dispatch({ type: 'clear' })
   }, [])
 
