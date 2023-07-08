@@ -2,7 +2,9 @@ import { Link, useLoaderData } from 'react-router-dom'
 import accountMultipleIcon from '@iconify-icons/mdi/account-multiple-remove-outline'
 import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '../../components/common/Sheet'
+import DLink from '../../components/common/Links/DLink'
 import EmptyState from '../../components/common/EmptyState'
+import MLink from '../../components/common/Links/MLink'
 
 function Teams() {
   const { createdTeam, joinedTeams } = useLoaderData()
@@ -57,26 +59,26 @@ function CreatedTeam({ team }) {
 }
 
 const TeamCard = ({ team }) => (
-  <div className='rounded-md lg:rounded-lg overflow-hidden bg-amber-900/80'>
-    <div className='px-6 py-4 space-y-3'>
-      <h3 className='text-lg font-semibold text-amber-500 hover:underline'>
-        <Link to={`/teams/${team.team_id}`}>{team.team_name}</Link>
-      </h3>
+  <MLink
+    as='div'
+    to={`/teams/${team.team_id}`}
+    className='block px-6 py-4 space-y-3 rounded-md lg:rounded-lg overflow-hidden bg-amber-900/80'
+  >
+    <h3 className='text-lg font-semibold text-amber-500'>
+      <DLink to={`/teams/${team.team_id}`} className='lg:hover:underline'>
+        {team.team_name}
+      </DLink>
+    </h3>
 
-      <div className='grid grid-cols-1 xs:grid-cols-2 gap-3 text-sm'>
-        <div>
-          <p className='font-semibold text-gray-400'>Leader</p>
-          <p className='text-gray-100'>{team.leader_name}</p>
-        </div>
-        <div>
-          <p className='font-semibold text-gray-400'>Leader id</p>
-          <p className='text-gray-100'>{team.leader}</p>
-        </div>
-        <div>
-          <p className='font-semibold text-gray-400'>Member count</p>
-          <p className='text-gray-100'>{team.member_count}</p>
-        </div>
+    <div className='grid grid-cols-1 xs:grid-cols-2 gap-3 text-sm'>
+      <div>
+        <p className='font-semibold text-gray-400'>Leader</p>
+        <p className='text-gray-100'>{team.leader_name}</p>
+      </div>
+      <div>
+        <p className='font-semibold text-gray-400'>Member count</p>
+        <p className='text-gray-100'>{team.member_count}</p>
       </div>
     </div>
-  </div>
+  </MLink>
 )

@@ -1,17 +1,17 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 import copyIcon from '@iconify-icons/mdi/content-copy'
 import copiedIcon from '@iconify-icons/mdi/file-document-check-outline'
-import Modal from './common/Modal'
 import { classNames } from '@arpansaha13/utils'
+import Modal from './common/Modal'
 
 /** A width and height needs to be specified from parent */
-function SocialShare({ data, children }) {
+export default function SocialShare({ data, children }) {
   const [modalOpen, setModalOpen] = useState(false)
   const locationOrigin = useRef('')
 
-  const openModal = useCallback(() => setModalOpen(true), [])
+  const openModal = () => setModalOpen(true)
 
   useEffect(() => {
     locationOrigin.current = window.location.origin
@@ -44,7 +44,8 @@ function SocialShare({ data, children }) {
         href: `https://www.facebook.com/sharer.php?u=${encodeURIComponent(locationOrigin.current + data.url)}`,
       },
     ],
-    [data, locationOrigin]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data.title, data.url, locationOrigin]
   )
 
   return (
@@ -102,4 +103,3 @@ function SocialShare({ data, children }) {
     </>
   )
 }
-export default memo(SocialShare)

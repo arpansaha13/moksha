@@ -15,8 +15,7 @@ const Modal = ({ open, setOpen, children, onClose, maxWidth = 'lg' }) => {
       setOpen(bool)
       onClose?.()
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onClose]
+    [onClose, setOpen]
   )
 
   return (
