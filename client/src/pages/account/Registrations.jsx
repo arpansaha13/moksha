@@ -12,7 +12,7 @@ function Registrations() {
     {
       team_id: 1,
       team_name: 'Created team name',
-      leader_id: 21321,
+      leader: 21321,
     },
   ])
   const [registeredContests] = useState([

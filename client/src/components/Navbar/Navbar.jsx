@@ -1,15 +1,16 @@
 import { memo, useCallback } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { createSearchParams, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { classNames } from '@arpansaha13/utils'
+import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
 import closeIcon from '@iconify-icons/mdi/close'
 import NavbarDropdown from './NavbarDropdown'
 import { useAppContext } from '../../containers/DataProvider'
 import { useFetch } from '../../hooks/useFetch'
-import { useWindowSize } from '../../hooks/useWindowSize'
-import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 import { navTabs } from '../../data/tabs'
-import { classNames } from '@arpansaha13/utils'
+import locationNeedsAuth from '../../utils/locationNeedsAuth'
 
 const NavTab = memo(({ to, children }) => (
   <NavLink
@@ -27,7 +28,7 @@ const NavTab = memo(({ to, children }) => (
 
 function Navbar() {
   const { appContext, resetAppContext } = useAppContext()
-  const { windowWidth } = useWindowSize()
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
   const location = useLocation()
   const navigate = useNavigate()
   const fetchHook = useFetch()
@@ -36,18 +37,16 @@ function Navbar() {
     fetchHook('auth/logout')
     resetAppContext()
 
-    if (location.pathname.startsWith('/account/')) {
+    if (locationNeedsAuth(location.pathname)) {
       navigate('/')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchHook, location.pathname])
 
-  if (windowWidth === null) return <></>
-
   return (
     <header className='relative z-40'>
       <nav className='px-4 sm:px-20 h-[100px] w-full flex items-center justify-between text-ochre'>
-        {windowWidth < 1024 ? (
+        {isTabletOrMobile ? (
           // Mobile Navbar
           <TzFloatingWindow.Button className='block p-1 w-10 h-10 focus:text-amber-600 border border-ochre rounded-md focus:ring-1 focus:ring-offset-1 focus:ring-offset-amber-200 focus:ring-amber-600 transition-colors relative'>
             {({ float }) => (

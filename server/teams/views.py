@@ -12,7 +12,7 @@ import string
 
 class BaseEndpoint(APIView):
     def post(self, request):
-        auth_user_team = Team.objects.filter(leader_id=request.auth_user.user_id).first()
+        auth_user_team = Team.objects.filter(leader=request.auth_user.user_id).first()
 
         if not auth_user_team:
             if not request.data['team_name']:
@@ -27,7 +27,7 @@ class BaseEndpoint(APIView):
             new_team = Team(
                 team_id = uid,
                 team_name = request.data['team_name'],
-                leader_id = request.auth_user.user_id
+                leader = request.auth_user.user_id
             )
             new_team.save()
 
@@ -50,7 +50,7 @@ class GetTeam(APIView):
 class GetAuthUserCreatedTeam(APIView):
     def get(self, request):
         auth_user_created_team = Team.objects.filter(
-            leader_id=request.auth_user.user_id
+            leader=request.auth_user.user_id
         ).first()
 
         if auth_user_created_team:
@@ -67,7 +67,7 @@ class GetAuthUserJoinedTeams(APIView):
 
         auth_user_joined_teams = Team.objects.filter(
             Q(team_id__in=auth_user_to_teams)
-            & ~Q(leader_id=request.auth_user.user_id)
+            & ~Q(leader=request.auth_user.user_id)
         ).all()
 
         serializer = TeamSerializers(auth_user_joined_teams, many=True)
@@ -115,8 +115,8 @@ def generate_uid(length=8):
 def get_member_count(team_id):
     return TeamUserRegistrations.objects.filter(team_id=team_id).count()
 
-def get_leader_name(leader_id):
-    return User.objects.filter(user_id=leader_id).values_list('name', flat=True)[0]
+def get_leader_name(leader):
+    return User.objects.filter(user_id=leader).values_list('name', flat=True)[0]
 
 def create_team_response(team_or_teams):
     def create_team_object(serialized):
@@ -124,8 +124,8 @@ def create_team_response(team_or_teams):
             'id': serialized.get('id'),
             'team_id': serialized.get('team_id'),
             'team_name': serialized.get('team_name'),
-            'leader_id': serialized.get('leader_id'),
-            'leader_name': get_leader_name(serialized.get('leader_id')),
+            'leader': serialized.get('leader'),
+            'leader_name': get_leader_name(serialized.get('leader')),
             'member_count': get_member_count(serialized.get('team_id')),
         }
 

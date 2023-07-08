@@ -67,7 +67,7 @@ export default function CardsSlider({ children, className, gap, stretch = false 
       <div
         ref={rootRef}
         className={classNames(
-          'py-2 w-full h-full flex overflow-x-scroll scroll-smooth snap-x',
+          'py-2 w-full h-full flex overflow-x-scroll scroll-smooth sm:snap-x',
           styles['cards-slider-scrollbar']
         )}
         style={{ gap: `${effectiveGap}px` }}

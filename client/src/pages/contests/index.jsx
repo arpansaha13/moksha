@@ -2,11 +2,15 @@ import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { capitalCase } from 'change-case'
-import Container from '../../components/common/Container'
+import { classNames } from '@arpansaha13/utils'
+import { isTouchDevice } from '@arpansaha13/utils/browser'
 import Sheet from '../../components/common/Sheet'
-import ContestTypeBadge from '../../components/Contests/ContestTypeBadge'
+import MLink from '../../components/common/Links/MLink'
+import DLink from '../../components/common/Links/DLink'
+import Container from '../../components/common/Container'
 import CardsSlider from '../../components/common/CardsSlider'
 import SocialShare from '../../components/SocialShare'
+import ContestTypeBadge from '../../components/Contests/ContestTypeBadge'
 import { useHashLink } from '../../hooks/useHashLink'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
@@ -16,7 +20,6 @@ import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
 import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
 import contestsMap from '../../data/contests/moksha'
 import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
-import { classNames } from '@arpansaha13/utils'
 
 function Contests() {
   useHashLink()
@@ -80,7 +83,7 @@ const ClubContest = memo(({ clubName, contests }) => {
       >
         {({ scrollToStart, scrollToEnd, prev, next, start, end, visible }) => (
           <>
-            <CardsSlider className='w-full h-96' gap={cardGap}>
+            <CardsSlider className='w-full' gap={cardGap}>
               {({ cardWidth }) =>
                 contests.map(contest => (
                   <ContestCard key={contest.slug} clubName={clubName} cardWidth={cardWidth} contest={contest} />
@@ -88,7 +91,7 @@ const ClubContest = memo(({ clubName, contests }) => {
               }
             </CardsSlider>
 
-            {contests.length > visible && (
+            {!isTouchDevice() && contests.length > visible && (
               <div className='mx-auto mt-6 w-max flex items-center gap-4'>
                 <PaginateButton onClick={scrollToStart}>
                   <Icon icon={doubleLeftIcon} className='block' color='inherit' width='100%' height='100%' />
@@ -129,44 +132,50 @@ const ClubContest = memo(({ clubName, contests }) => {
 })
 
 const ContestCard = memo(({ clubName, cardWidth, contest }) => (
-  <div className='flex-shrink-0 snap-center h-full' style={{ width: `${cardWidth}px` }}>
-    <Sheet className='w-full h-full flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
-      <div className='w-full h-48 flex items-center justify-center relative'>
-        <img src={CastleGate2} alt='' className='w-full h-full object-cover' />
-        <span
-          role='presentation'
-          className='absolute w-full h-full bg-gradient-to-bl from-brown via-transparent mix-blend-darken'
-          aria-hidden={true}
-        />
+  <div className='flex-shrink-0 snap-center' style={{ width: `${cardWidth}px` }}>
+    <Sheet className='w-full flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
+      <MLink to={`/contests/${clubName}/${contest.slug}`} as='div' className='block h-[304px]'>
+        <div className='w-full h-48 flex items-center justify-center relative'>
+          <img src={CastleGate2} alt='' className='w-full h-full object-cover' />
+          <span
+            role='presentation'
+            className='absolute w-full h-full bg-gradient-to-bl from-brown via-transparent mix-blend-darken'
+            aria-hidden={true}
+          />
 
-        <div className='absolute top-3 right-3 z-20 flex gap-2'>
-          {contest.type.map(type => (
-            <ContestTypeBadge key={type} small type={type} />
-          ))}
+          <div className='absolute top-3 right-3 z-20 flex gap-2'>
+            {contest.type.map(type => (
+              <ContestTypeBadge key={type} small type={type} />
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div className='flex-grow w-full px-4 pt-4'>
-        <h3 className='text-lg text-amber-500 font-semibold'>{contest.name}</h3>
+        <div className='w-full px-4 pt-4'>
+          <h3 className='text-lg text-amber-500 font-semibold'>
+            <DLink to={`/contests/${clubName}/${contest.slug}`} className='lg:hover:underline'>
+              {contest.name}
+            </DLink>
+          </h3>
 
-        {contest.subtitle && <p className='text-sm text-gray-400'>{contest.subtitle}</p>}
+          {contest.subtitle && <p className='text-sm text-gray-400'>{contest.subtitle}</p>}
 
-        <div
-          className={classNames(
-            'mt-2 text-sm text-gray-300 space-y-1',
-            contest.subtitle ? 'line-clamp-2' : 'line-clamp-3'
-          )}
-        >
-          {contest.description.map((para, i) => (
-            <p key={i}>{para.p}</p>
-          ))}
+          <div
+            className={classNames(
+              'mt-2 text-sm text-gray-300 space-y-1',
+              contest.subtitle ? 'line-clamp-2' : 'line-clamp-3'
+            )}
+          >
+            {contest.description.map((para, i) => (
+              <p key={i}>{para.p}</p>
+            ))}
+          </div>
         </div>
-      </div>
+      </MLink>
 
-      <div className='px-4 pb-4 w-full flex items-center justify-between'>
+      <div className='px-4 pt-2 pb-4 w-full flex items-center justify-end lg:justify-between'>
         <Link
           to={`/contests/${clubName}/${contest.slug}`}
-          className='block font-medium text-amber-600 hover:text-amber-500 transition-colors'
+          className='hidden lg:block font-medium text-amber-600 hover:text-amber-500 transition-colors'
         >
           <span>View contest</span>
           <span className='inline-block w-5 h-5'>

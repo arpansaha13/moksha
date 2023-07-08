@@ -69,7 +69,7 @@ export default function Team() {
               <span className='capitalize sm:lowercase'>members</span>
             </h2>
 
-            {team.leader_id === appContext.user_id && (
+            {team.leader === appContext.user_id && (
               <BaseButton secondary onClick={() => setModalOpen(true)}>
                 <div className='flex items-center'>
                   <div className='w-6 h-6'>
@@ -102,7 +102,7 @@ export default function Team() {
         />
       </main>
 
-      {team.leader_id === appContext.user_id && (
+      {team.leader === appContext.user_id && (
         <section id='pending-invites'>
           <h3 className='mb-4 text-xl font-bold text-gray-50'>Pending invites</h3>
           <PendingInvites
@@ -125,7 +125,7 @@ const TeamData = memo(({ team }) => (
       </div>
       <div>
         <p className='font-semibold text-gray-400'>Leader id</p>
-        <p className='text-gray-100'>{team.leader_id}</p>
+        <p className='text-gray-100'>{team.leader}</p>
       </div>
       <div>
         <p className='font-semibold text-gray-400'>Member count</p>
