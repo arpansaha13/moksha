@@ -1,68 +1,43 @@
-import { Fragment } from 'react'
-import { Tab } from '@headlessui/react'
-import accountAlertIcon from '@iconify-icons/mdi/account-alert'
-import { useAppContext } from '../../containers/DataProvider'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import accountMultipleIcon from '@iconify-icons/mdi/account-multiple-remove-outline'
 import Sheet from '../common/Sheet'
 import EmptyState from '../common/EmptyState'
-import ContestOverview from './ContestOverview'
-import TeamRegister from './TeamRegister'
+import fetchWithCredentials from '../../utils/fetchWithCredentials'
 
-const TeamRegistration = ({ contest }) => {
-  const { appContext } = useAppContext()
+export default function TeamRegister() {
+  const [loading, setLoading] = useState(true)
+  const [createdTeam, setCreatedTeam] = useState(null)
 
-  return (
-    <Tab.Group>
-      <Tab.List
-        as={Sheet}
-        className='my-4 sm:my-6 grid grid-cols-2 bg-amber-900/30 text-gray-200 text-sm font-medium divide-x divide-amber-900/70 overflow-hidden'
-      >
-        {['Overview', 'Register'].map(tabName => (
-          <Tab as={Fragment} key={tabName}>
-            {({ selected }) => (
-              <button className='px-4 py-3 w-full relative'>
-                {tabName}
-                {selected && (
-                  <span className='absolute left-0 bottom-0 inline-block w-full h-1 bg-amber-800' aria-hidden />
-                )}
-              </button>
-            )}
-          </Tab>
-        ))}
-      </Tab.List>
+  useEffect(() => {
+    fetchWithCredentials('teams/created').then(res => {
+      setLoading(false)
+      setCreatedTeam(res.data)
+    })
+  }, [])
 
-      <Tab.Panels>
-        <Tab.Panel>
-          <ContestOverview contest={contest} />
-        </Tab.Panel>
+  if (loading) {
+    return <div className='w-6 mx-auto aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
+  }
 
-        <Tab.Panel>
-          {appContext.authenticated ? (
-            <>
-              <Sheet className='mb-6 p-4 sm:p-6 markdown'>
-                <h2>How does it work?</h2>
+  if (createdTeam === null) {
+    return (
+      <>
+        <EmptyState icon={accountMultipleIcon} title='You are not the leader of any team' />
 
-                <p>
-                  Since this is a team contest, you need to register through a team. Now you may create your own team or
-                  join a team through an invite from the respective team leader. You can create, and be the leader, of
-                  only one team. But you can join as many teams as you want.
-                </p>
-              </Sheet>
+        <div className='mt-1 text-center text-sm text-gray-400'>
+          <p>Only the leader can register in a team contest on behalf of the team.</p>
+          <p>
+            You can create a team{' '}
+            <Link to='/teams/create' className='text-amber-600 hover:text-amber-500 font-medium transition-colors'>
+              here
+            </Link>
+            .
+          </p>
+        </div>
+      </>
+    )
+  }
 
-              <TeamRegister />
-            </>
-          ) : (
-            <div className='mt-6'>
-              <EmptyState
-                icon={accountAlertIcon}
-                title='Interested in this contest?'
-                description='Login to register in it...'
-              />
-            </div>
-          )}
-        </Tab.Panel>
-      </Tab.Panels>
-    </Tab.Group>
-  )
+  return <Sheet className='p-4 sm:p-6'>hello</Sheet>
 }
-
-export default TeamRegistration

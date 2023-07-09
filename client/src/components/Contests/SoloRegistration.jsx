@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import accountAlertIcon from '@iconify-icons/mdi/account-alert'
 import { useFetch } from '../../hooks/useFetch'
 import { useAppContext } from '../../containers/DataProvider'
 import BaseButton from '../base/BaseButton'
-import Sheet from '../common/Sheet'
-import EmptyState from '../common/EmptyState'
-import ContestOverview from './ContestOverview'
 import CsrfField from '../common/CsrfField'
 import getFormData from '../../utils/getFormData'
 
@@ -58,50 +54,34 @@ const SoloRegistration = ({ contest }) => {
   }
 
   return (
-    <>
-      <div className='mt-6'>
-        <ContestOverview contest={contest} />
-      </div>
+    <form ref={formRef} className='markdown markdown-a space-x-4' onSubmit={soloRegister}>
+      {fetchedRegistrationState ? (
+        registered ? (
+          <div>
+            <p>
+              Your registration has been recorded. You can see all your contest registrations{' '}
+              <Link to='/account/registrations'>here</Link>.
+            </p>
 
-      <Sheet className='mt-6 p-6'>
-        {appContext.authenticated ? (
-          <form ref={formRef} className='markdown markdown-a space-x-4' onSubmit={soloRegister}>
-            {fetchedRegistrationState ? (
-              registered ? (
-                <div>
-                  <p>
-                    Your registration has been recorded. You can see all your contest registrations{' '}
-                    <Link to='/account/registrations'>here</Link>.
-                  </p>
-
-                  <div className='not-prose'>
-                    <BaseButton secondary loading={loading} onClick={cancelRegistration}>
-                      Cancel registration
-                    </BaseButton>
-                  </div>
-                </div>
-              ) : (
-                <div className='not-prose'>
-                  <BaseButton type='submit' loading={loading}>
-                    Register
-                  </BaseButton>
-                </div>
-              )
-            ) : (
-              <div className='w-6 mx-auto aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
-            )}
-
-            <CsrfField />
-          </form>
+            <div className='not-prose'>
+              <BaseButton secondary loading={loading} onClick={cancelRegistration}>
+                Cancel registration
+              </BaseButton>
+            </div>
+          </div>
         ) : (
-          <EmptyState
-            icon={accountAlertIcon}
-            title='Interested in this contest?'
-            description='Login to register in it...'
-          />
-        )}
-      </Sheet>
-    </>
+          <div className='not-prose'>
+            <BaseButton type='submit' loading={loading}>
+              Register
+            </BaseButton>
+          </div>
+        )
+      ) : (
+        <div className='w-6 mx-auto aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
+      )}
+
+      <CsrfField />
+    </form>
   )
 }
 

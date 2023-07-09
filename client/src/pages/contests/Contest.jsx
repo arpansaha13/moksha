@@ -9,8 +9,8 @@ import Container from '../../components/common/Container'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
 import '@tranzis/react/styles/Tz3dCard'
 
-const SoloRegistration = lazy(() => import('../../components/Contests/SoloRegistration'))
-const TeamRegistration = lazy(() => import('../../components/Contests/TeamRegistration'))
+const SoloContest = lazy(() => import('../../components/Contests/SoloContest'))
+const TeamContest = lazy(() => import('../../components/Contests/TeamContest'))
 
 export default function Contest() {
   const contest = useLoaderData()
@@ -39,9 +39,9 @@ export default function Contest() {
 
           <Suspense fallback={null}>
             {contest.type.length === 1 && contest.type[0] === 'solo' ? (
-              <SoloRegistration contest={contest} />
+              <SoloContest contest={contest} />
             ) : (
-              <TeamRegistration contest={contest} />
+              <TeamContest contest={contest} />
             )}
           </Suspense>
         </div>

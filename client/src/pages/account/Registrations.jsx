@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useLoaderData } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import calendarRemoveIcon from '@iconify-icons/mdi/calendar-remove'
 import { capitalCase } from 'change-case'
 import Sheet from '../../components/common/Sheet'
@@ -31,11 +31,12 @@ function Registrations() {
         </section>
       ) : (
         <div className='mt-6'>
-          <EmptyState
-            icon={calendarRemoveIcon}
-            title='You have not registered for any contest yet'
-            description='You can join a team while registering for a team contest'
-          />
+          <EmptyState icon={calendarRemoveIcon} title='You have not registered for any contest yet' />
+          <p className='text-center'>
+            <Link to='/contests' className='text-sm text-amber-600 hover:text-amber-500 font-medium transition-colors'>
+              Browse contests
+            </Link>
+          </p>
         </div>
       )}
     </main>
