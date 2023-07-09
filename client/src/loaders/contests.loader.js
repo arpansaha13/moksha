@@ -1,4 +1,5 @@
-import contestsMap, { getMokshaContest } from '../data/contests/moksha'
+import { getMokshaContest } from '../data/contests/moksha'
+import contestsMap from '../data/contests/moksha-desc'
 
 export function getContest({ request }) {
   const pathSegments = new URL(request.url).pathname.split('/')

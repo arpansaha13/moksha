@@ -1,15 +1,24 @@
-from django.db.models import fields
-from rest_framework import serializers
-from .models import *
+from rest_framework.serializers import ModelSerializer
+from .models import Contest, SoloContestRegistration, TeamContestRegistration
 
-# Created modelSerializer for each user
-
-class SoloContestSerializers(serializers.ModelSerializer):
+class ContestSerializer(ModelSerializer):
     class Meta:
-        model = SoloContestRegistrations
+        model = Contest
         fields = '__all__'
 
-class TeamContestDetailsSerializers(serializers.ModelSerializer):
+class SoloContestSerializer(ModelSerializer):
     class Meta:
-        model = TeamContestRegistrations
+        model = SoloContestRegistration
+        fields = '__all__'
+
+class RelativeSoloContestSerializer(ModelSerializer):
+    team = ContestSerializer()
+
+    class Meta:
+        model = SoloContestRegistration
+        fields = '__all__'
+
+class TeamContestSerializer(ModelSerializer):
+    class Meta:
+        model = TeamContestRegistration
         fields = '__all__'

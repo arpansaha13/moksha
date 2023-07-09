@@ -1,18 +1,8 @@
 import { isNullOrUndefined } from '@arpansaha13/utils'
 
 const fineArts = [
-  // {
-  //   slug: 'open-canvas',
-  //   name: 'Open canvas',
-  //   type: ['solo'],
-  //   image: '', // Image link
-  //   description: [
-  //     {
-  //       p: 'Open Canvas is a Graphic Editor that has an analog-like quality and a simple or easy user interface. It is extensively suitable to beginners to advanced users. Addition to the basic performances, openCanvas has its unique "Event function" that records and replays a drawing procedure.',
-  //     },
-  //   ],
-  // },
   {
+    id: 1,
     slug: 'magic-of-fingers',
     name: 'Magic of fingers',
     type: ['solo'],
@@ -24,6 +14,7 @@ const fineArts = [
     ],
   },
   {
+    id: 2,
     slug: 'art-exhibition',
     name: 'Art exhibition',
     type: ['solo'],
@@ -35,6 +26,7 @@ const fineArts = [
     ],
   },
   {
+    id: 3,
     slug: 'instant-portrait',
     name: 'Instant portrait',
     type: ['solo'],
@@ -46,6 +38,7 @@ const fineArts = [
     ],
   },
   {
+    id: 4,
     slug: 'digital-illustration',
     name: 'Digital illustration',
     type: ['solo'],
@@ -60,6 +53,7 @@ const fineArts = [
 
 const malhar = [
   {
+    id: 5,
     slug: 'solo-singing',
     name: 'Solo singing',
     type: ['solo'],
@@ -105,6 +99,7 @@ const malhar = [
     ],
   },
   {
+    id: 6,
     slug: 'melody-mania',
     name: 'Melody mania',
     subtitle: 'Group singing',
@@ -152,6 +147,7 @@ const malhar = [
     ],
   },
   {
+    id: 7,
     slug: 'harmony-hunt',
     name: 'Harmony hunt',
     subtitle: 'Solo instrumental',
@@ -197,6 +193,7 @@ const malhar = [
     ],
   },
   {
+    id: 8,
     slug: 'rap-battle',
     name: 'Rap battle',
     type: ['solo'],
@@ -241,6 +238,7 @@ const malhar = [
     ],
   },
   {
+    id: 9,
     slug: 'beatnik',
     name: 'Beatnik',
     subtitle: 'Beatboxing',
@@ -286,6 +284,7 @@ const malhar = [
 
 const dzire = [
   {
+    id: 10,
     slug: 'shinigami-showdown',
     name: 'Shinigami Showdown',
     subtitle: 'Solo dance competition',
@@ -311,6 +310,7 @@ const dzire = [
     ],
   },
   {
+    id: 11,
     slug: 'dragon-ballroom',
     name: 'Dragon Ballroom',
     subtitle: 'Duet competition',
@@ -334,6 +334,7 @@ const dzire = [
     ],
   },
   {
+    id: 12,
     slug: 'hunter-x-hunter-hoedown',
     name: 'Hunter x Hunter Hoedown',
     subtitle: 'Group competition',
@@ -359,6 +360,7 @@ const dzire = [
     ],
   },
   {
+    id: 13,
     slug: 'bob-till-you-drop',
     name: "Bob 'Till you Drop'",
     subtitle: 'Open dance competition',
@@ -376,6 +378,7 @@ const dzire = [
 
 const pixel = [
   {
+    id: 14,
     slug: 'the-sunday-mystery',
     name: 'The Sunday Mystery',
     image: '', // Image link
@@ -394,6 +397,7 @@ const pixel = [
     ],
   },
   {
+    id: 15,
     slug: 'let-me-out-escape-room',
     name: 'LetMeOut (Escape Room)',
     image: '', // Image link
@@ -409,6 +413,7 @@ const pixel = [
     ],
   },
   {
+    id: 16,
     slug: 'click-a-story',
     name: 'Click a Story',
     image: '', // Image link
@@ -431,6 +436,7 @@ const pixel = [
 
 const dcc = [
   {
+    id: 17,
     slug: 'incredible-roll',
     name: 'Incredible Roll',
     image: '', // Image link
@@ -476,5 +482,3 @@ export function getMokshaContest(clubName, contestSlug) {
 
   return isNullOrUndefined(contest) ? null : contest
 }
-
-export default mokshaContests

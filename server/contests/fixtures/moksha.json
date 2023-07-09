@@ -1,0 +1,155 @@
+[
+  {
+    "model": "contests.contest",
+    "pk": 1,
+    "fields": {
+      "club_slug": "fine-arts",
+      "contest_slug": "magic-of-fingers",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 2,
+    "fields": {
+      "club_slug": "fine-arts",
+      "contest_slug": "art-exhibition",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 3,
+    "fields": {
+      "club_slug": "fine-arts",
+      "contest_slug": "instant-portrait",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 4,
+    "fields": {
+      "club_slug": "fine-arts",
+      "contest_slug": "digital-illustration",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 5,
+    "fields": {
+      "club_slug": "malhar",
+      "contest_slug": "solo-singing",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 6,
+    "fields": {
+      "club_slug": "malhar",
+      "contest_slug": "melody-mania",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 7,
+    "fields": {
+      "club_slug": "malhar",
+      "contest_slug": "harmony-hunt",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 8,
+    "fields": {
+      "club_slug": "malhar",
+      "contest_slug": "rap-battle",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 9,
+    "fields": {
+      "club_slug": "malhar",
+      "contest_slug": "beatnik",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 10,
+    "fields": {
+      "club_slug": "dzire",
+      "contest_slug": "shinigami-showdown",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 11,
+    "fields": {
+      "club_slug": "dzire",
+      "contest_slug": "dragon-ballroom",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 12,
+    "fields": {
+      "club_slug": "dzire",
+      "contest_slug": "hunter-x-hunter-hoedown",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 13,
+    "fields": {
+      "club_slug": "dzire",
+      "contest_slug": "bob-till-you-drop",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 14,
+    "fields": {
+      "club_slug": "pixel",
+      "contest_slug": "the-sunday-mystery",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 15,
+    "fields": {
+      "club_slug": "pixel",
+      "contest_slug": "let-me-out-escape-room",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 16,
+    "fields": {
+      "club_slug": "pixel",
+      "contest_slug": "click-a-story",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 17,
+    "fields": {
+      "club_slug": "dcc",
+      "contest_slug": "incredible-roll",
+      "is_solo": true
+    }
+  }
+]
