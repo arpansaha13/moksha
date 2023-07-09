@@ -1,10 +1,9 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
-import { getTeamData } from './loader/teams/getTeamData'
-import { getAuthUserData } from './loader/getAuthUserData'
-import { getAuthUserTeams } from './loader/account/getAuthUserTeams'
-import { allowIfNoTeamCreated } from './loader/teams/allowIfNoTeamCreated'
-import { allowIfAuthenticated, allowIfNotAuthenticated } from './loader/checkAuth'
+import { getContest, getContests } from './loaders/contests.loader'
+import { allowIfNoTeamCreated, getTeamData } from './loaders/teams.loader'
+import { allowIfNotAuthenticated, getAuthUserData } from './loaders/auth.loader'
+import { getAuthUserContests, getAuthUserTeams } from './loaders/account.loader'
 
 import AuthProvider from './containers/AuthProvider'
 
@@ -61,15 +60,15 @@ const router = createBrowserRouter(
         <Route path='/sponsors' element={<Sponsors />} />
         <Route path='/contact' element={<Contact />} />
 
-        <Route path='/contests' element={<Contests />} />
-        <Route path='/contests/:club/:contest' element={<Contest />} />
+        <Route loader={getContests} path='/contests' element={<Contests />} />
+        <Route loader={getContest} path='/contests/:club/:contest' element={<Contest />} />
 
         <Route path='/*' element={<NotFound />} />
 
         <Route element={<AccountLayout />}>
           <Route loader={getAuthUserData} path='/account/profile' element={<Profile />} />
           <Route loader={getAuthUserTeams} path='/account/teams' element={<Teams />} />
-          <Route loader={allowIfAuthenticated} path='/account/registrations' element={<Registrations />} />
+          <Route loader={getAuthUserContests} path='/account/registrations' element={<Registrations />} />
         </Route>
       </Route>
 

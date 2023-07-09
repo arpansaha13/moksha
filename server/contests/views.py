@@ -1,58 +1,71 @@
-from .serializers import *
-from .models import *
-from users.models import User
-from users.serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-events = {'E-1': ["dance", 3], 'E-2': ["singing", 2],
-          'E-3': ["drama", 5], 'E-4': ["acting", 1]}
+from rest_framework.exceptions import NotFound
+from common.exceptions import BadRequest, Conflict
+from .models import Contest, SoloContestRegistration
 
 # SOLO CONTEST APIs
 
 class CheckSoloRegistration(APIView):
-    def get(self, request, contest_slug):
-        solo_registration = SoloContestRegistrations.objects.filter(
-            user_id = request.auth_user.user_id, contest_slug=contest_slug).first()
-        if solo_registration:
+    def get(self, request, contest_id):
+        contest = get_contest(contest_id)
+
+        solo_reg = SoloContestRegistration.objects.filter(
+            user = request.auth_user,
+            contest = contest
+        ).first()
+
+        if solo_reg:
             return Response({'registered': True}, status=200)
+
         return Response({'registered': False}, status=200)
 
 class SoloContestRegister(APIView):
     def post(self, request):
-        contest_slug = str(request.data.get('contest_slug'))
+        contest_id = request.POST['contest_id']
+        contest = get_contest(contest_id)
 
-        if not contest_slug:
-            return Response({'message': 'No contest_slug provided.'}, status=400)
+        solo_reg_exists = SoloContestRegistration.objects.filter(
+            user = request.auth_user,
+            contest = contest
+        ).exists()
 
-        user_solo = SoloContestRegistrations.objects.filter(
-            user_id=request.auth_user.user_id, contest_slug=contest_slug
-        ).first()
+        if solo_reg_exists:
+            raise Conflict({'message': "User already registered for the contest."})
 
-        if user_solo:
-            return Response({'message': "User already registered for the contest."}, status=409)
-
-        serializer = SoloContestSerializers({
-            'user_id': request.auth_user.user_id,
-            'contest_slug': contest_slug
-        })
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        solo_reg = SoloContestRegistration(
+            user = request.auth_user,
+            contest = contest
+        )
+        solo_reg.save()
 
         return Response({'message': 'User registered successfully for contest.'}, status=201)
 
 class CancelSoloRegistration(APIView):
-    def delete(self, request, contest_slug):
-        solo_registration = SoloContestRegistrations.objects.filter(
-            user_id=request.auth_user.user_id, contest_slug=contest_slug).first()
+    def delete(self, request, contest_id):
+        contest = get_contest(contest_id)
 
-        if solo_registration:
-            solo_registration.delete()
+        solo_reg = SoloContestRegistration.objects.filter(
+            user = request.auth_user,
+            contest = contest
+        ).first()
+
+        if solo_reg:
+            solo_reg.delete()
             return Response({'message': 'Registration for this contest has been cancelled.'}, status=200)
 
-        return Response({'message': 'No registration found for this contest.'}, status=404)
+        return NotFound({'message': 'No registration found for this contest.'})
 
-# SOLO CONTEST APIs
+def get_contest(contest_id):
+    if not contest_id:
+        raise BadRequest({'message': 'No contest_id provided.'})
+
+    contest = Contest.objects.filter(id=contest_id).first()
+
+    if not contest:
+        raise BadRequest({'message': 'Invalid contest id'})
+
+    return contest
 
 # class TeamContestRegister(APIView):
 #     def post(self, request):
@@ -70,7 +83,7 @@ class CancelSoloRegistration(APIView):
 #         team = Team.objects.filter(leader=user.user_id).first()
 
 #         if user:
-#             user_solo = TeamContestRegistrations.objects.filter(
+#             user_solo = TeamContestRegistration.objects.filter(
 #                 team_id=team.team_id, contest_slug=contest_slug).first()
 #             if user_solo:
 #                 return Response({'message': "Team already registered for the contest!"}, status=409)

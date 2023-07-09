@@ -33,7 +33,7 @@ export default function CreateTeam() {
 
   return (
     <main className='max-w-xl mx-auto'>
-      <Sheet className='py-4 p-4 sm:p-6 markdown prose-a:no-underline prose-a:font-medium prose-a:text-amber-600'>
+      <Sheet className='py-4 p-4 sm:p-6 markdown markdown-a'>
         {createdTeam !== null ? (
           <>
             <h2>Cannot create another team</h2>
@@ -43,10 +43,7 @@ export default function CreateTeam() {
             </p>
 
             <p>
-              You have already created a team{' '}
-              <Link to={`/teams/${createdTeam.team_id}`} className='hover:text-amber-500 transition-colors'>
-                {createdTeam.team_name}
-              </Link>{' '}
+              You have already created a team <Link to={`/teams/${createdTeam.team_id}`}>{createdTeam.team_name}</Link>{' '}
               with team-id <span className='text-gray-100 font-semibold'>{createdTeam.team_id}</span>
             </p>
           </>

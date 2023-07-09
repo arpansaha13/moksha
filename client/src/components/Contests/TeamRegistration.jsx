@@ -1,4 +1,4 @@
-import { Fragment, memo } from 'react'
+import { Fragment } from 'react'
 import { Tab } from '@headlessui/react'
 import accountAlertIcon from '@iconify-icons/mdi/account-alert'
 import { useAppContext } from '../../containers/DataProvider'
@@ -7,7 +7,7 @@ import EmptyState from '../common/EmptyState'
 import ContestOverview from './ContestOverview'
 import TeamRegister from './TeamRegister'
 
-const TeamRegistration = () => {
+const TeamRegistration = ({ contest }) => {
   const { appContext } = useAppContext()
 
   return (
@@ -32,7 +32,7 @@ const TeamRegistration = () => {
 
       <Tab.Panels>
         <Tab.Panel>
-          <ContestOverview />
+          <ContestOverview contest={contest} />
         </Tab.Panel>
 
         <Tab.Panel>
@@ -65,4 +65,4 @@ const TeamRegistration = () => {
   )
 }
 
-export default memo(TeamRegistration)
+export default TeamRegistration

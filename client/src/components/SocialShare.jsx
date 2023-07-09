@@ -7,7 +7,7 @@ import { classNames } from '@arpansaha13/utils'
 import Modal from './common/Modal'
 
 /** A width and height needs to be specified from parent */
-export default function SocialShare({ data, children }) {
+export default function SocialShare({ data, children, ...attrs }) {
   const [modalOpen, setModalOpen] = useState(false)
   const locationOrigin = useRef('')
 
@@ -50,7 +50,7 @@ export default function SocialShare({ data, children }) {
 
   return (
     <>
-      <button type='button' onClick={openModal}>
+      <button type='button' {...attrs} onClick={openModal}>
         {children}
       </button>
 

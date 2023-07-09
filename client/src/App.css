@@ -31,8 +31,14 @@ body {
 .markdown {
   @apply prose prose-sm sm:prose-base prose-invert max-w-none;
 }
-.markdown :is(:where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *))) {
+.markdown :is(:where(h1, h2, h3, h4, h5, h6, p):not(:where([class~='not-prose'] *))) {
   @apply first:mt-0;
+}
+.markdown :is(:where(p):not(:where([class~='not-prose'] *))) {
+  @apply last:mb-0;
+}
+.markdown.markdown-a :is(:where(a):not(:where([class~='not-prose'] *))) {
+  @apply text-amber-600 hover:text-amber-500 font-medium transition-colors no-underline;
 }
 
 /* Scrollbar */
