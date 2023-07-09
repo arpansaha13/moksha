@@ -1,5 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 import accountAlertIcon from '@iconify-icons/mdi/account-alert'
 import { useFetch } from '../../hooks/useFetch'
 import { useAppContext } from '../../containers/DataProvider'
@@ -10,9 +9,8 @@ import ContestOverview from './ContestOverview'
 import CsrfField from '../common/CsrfField'
 import getFormData from '../../utils/getFormData'
 
-const SoloRegistration = memo(() => {
+const SoloRegistration = ({ contest }) => {
   const { appContext } = useAppContext()
-  const params = useParams()
   const fetchHook = useFetch()
   const [fetchedRegistrationState, setFetchedRegistrationState] = useState(false)
   const [registered, setRegistered] = useState(false)
@@ -21,7 +19,7 @@ const SoloRegistration = memo(() => {
 
   useEffect(() => {
     if (appContext.authenticated) {
-      fetchHook(`contests/solo/register/check/${params.contest}`).then(res => {
+      fetchHook(`contests/solo/register/check/${contest.slug}`).then(res => {
         setRegistered(res.registered)
         setFetchedRegistrationState(true)
       })
@@ -34,21 +32,23 @@ const SoloRegistration = memo(() => {
     setLoading(true)
 
     const formData = getFormData(formRef.current, { format: 'object' })
-    formData.contest_slug = params.contest
+    formData.contest_slug = contest.slug
 
     fetchHook('contests/solo/register', {
       method: 'POST',
       body: JSON.stringify(formData),
-    }).then(() => {
-      setRegistered(true)
-      setLoading(false)
     })
+      .then(() => {
+        setRegistered(true)
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
   }
 
   function cancelRegistration() {
     setLoading(true)
 
-    fetchHook(`contests/solo/register/cancel/${params.contest}`, {
+    fetchHook(`contests/solo/register/cancel/${contest.slug}`, {
       method: 'DELETE',
     }).then(() => {
       setRegistered(false)
@@ -59,7 +59,7 @@ const SoloRegistration = memo(() => {
   return (
     <>
       <div className='mt-6'>
-        <ContestOverview />
+        <ContestOverview contest={contest} />
       </div>
 
       <Sheet className='mt-6 p-6'>
@@ -99,5 +99,6 @@ const SoloRegistration = memo(() => {
       </Sheet>
     </>
   )
-})
+}
+
 export default SoloRegistration

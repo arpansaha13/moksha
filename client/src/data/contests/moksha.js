@@ -1,3 +1,5 @@
+import { isNullOrUndefined } from '@arpansaha13/utils'
+
 const fineArts = [
   // {
   //   slug: 'open-canvas',
@@ -460,7 +462,7 @@ const dcc = [
 ]
 
 const mokshaContests = {
-  'fine-arts-club': fineArts,
+  'fine-arts': fineArts,
   malhar: malhar,
   dzire: dzire,
   pixel: pixel,
@@ -468,7 +470,11 @@ const mokshaContests = {
 }
 
 export function getMokshaContest(clubName, contestSlug) {
-  return mokshaContests[clubName].find(contest => contest.slug === contestSlug)
+  if (isNullOrUndefined(mokshaContests[clubName])) return null
+
+  const contest = mokshaContests[clubName].find(contest => contest.slug === contestSlug)
+
+  return isNullOrUndefined(contest) ? null : contest
 }
 
 export default mokshaContests

@@ -1,21 +1,25 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
+import { isNullOrUndefined } from '@arpansaha13/utils'
+import NotFound from '../404'
 import Container from '../../components/common/Container'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
-import { getMokshaContest } from '../../data/contests/moksha'
 import '@tranzis/react/styles/Tz3dCard'
 
 const SoloRegistration = lazy(() => import('../../components/Contests/SoloRegistration'))
 const TeamRegistration = lazy(() => import('../../components/Contests/TeamRegistration'))
 
 export default function Contest() {
-  const params = useParams()
-  const contest = getMokshaContest(params.club, params.contest)
+  const contest = useLoaderData()
 
-  useEffect(() => window.scrollTo({ top: 0 }))
+  useEffect(() => window.scrollTo({ top: 0 }), [])
+
+  if (isNullOrUndefined(contest)) {
+    return <NotFound />
+  }
 
   return (
     <Container as='section' className='py-4' id={`contest-${contest}`}>
@@ -34,7 +38,11 @@ export default function Contest() {
           </Link>
 
           <Suspense fallback={null}>
-            {contest.type.length === 1 && contest.type[0] === 'solo' ? <SoloRegistration /> : <TeamRegistration />}
+            {contest.type.length === 1 && contest.type[0] === 'solo' ? (
+              <SoloRegistration contest={contest} />
+            ) : (
+              <TeamRegistration contest={contest} />
+            )}
           </Suspense>
         </div>
 

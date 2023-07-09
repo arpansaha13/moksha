@@ -1,18 +1,15 @@
 import { useMemo } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import Sheet from '../common/Sheet'
 import ContestTypeBadge from './ContestTypeBadge'
 import SocialShare from '../SocialShare'
-import { getMokshaContest } from '../../data/contests/moksha'
 
-export default function TeamContestOverview() {
-  const params = useParams()
+export default function ContestOverview({ contest }) {
   const location = useLocation()
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
-  const contest = getMokshaContest(params.club, params.contest)
 
   const shareData = useMemo(
     () => ({
@@ -23,7 +20,8 @@ export default function TeamContestOverview() {
           ? contest.description[0].p.length
           : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
     }),
-    [contest.name, contest.description, location.pathname]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [location.pathname]
   )
 
   return (
@@ -39,15 +37,13 @@ export default function TeamContestOverview() {
               ))}
             </div>
 
-            <SocialShare data={shareData}>
-              <div className='group inline-flex items-center lg:gap-1'>
-                <div className='w-6 h-6 text-amber-700 group-hover:text-amber-600 transition-colors'>
-                  <Icon icon={shareIcon} className='block' color='inherit' width='100%' height='100%' aria-hidden />
-                </div>
-                <p className='sr-only lg:not-sr-only text-sm font-medium text-amber-600 group-hover:text-amber-500 transition-colors'>
-                  Share
-                </p>
+            <SocialShare data={shareData} className='group flex items-center lg:gap-1'>
+              <div className='w-6 h-6 text-amber-700 group-hover:text-amber-600 transition-colors'>
+                <Icon icon={shareIcon} className='block' color='inherit' width='100%' height='100%' aria-hidden />
               </div>
+              <p className='sr-only lg:not-sr-only text-sm font-medium text-amber-600 group-hover:text-amber-500 transition-colors'>
+                Share
+              </p>
             </SocialShare>
           </div>
 

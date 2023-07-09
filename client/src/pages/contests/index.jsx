@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import { capitalCase } from 'change-case'
 import { classNames } from '@arpansaha13/utils'
 import { isTouchDevice } from '@arpansaha13/utils/browser'
@@ -18,11 +18,12 @@ import leftIcon from '@iconify-icons/mdi/chevron-left'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
 import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
 import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
-import contestsMap from '../../data/contests/moksha'
 import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
 
 function Contests() {
   useHashLink()
+
+  const contestsMap = useLoaderData()
 
   return (
     <>
@@ -192,13 +193,12 @@ const ContestCard = memo(({ clubName, cardWidth, contest }) => (
                 ? contest.description[0].p.length
                 : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
           }}
+          className='block text-amber-600 hover:text-amber-500'
         >
-          <div className='text-amber-600 hover:text-amber-500'>
-            <div className='w-6 h-6 transition-colors'>
-              <Icon icon={shareIcon} className='block' color='inherit' width='100%' height='100%' aria-hidden />
-            </div>
-            <span className='sr-only'>Share</span>
+          <div className='w-6 h-6 transition-colors'>
+            <Icon icon={shareIcon} className='block' color='inherit' width='100%' height='100%' aria-hidden />
           </div>
+          <span className='sr-only'>Share</span>
         </SocialShare>
       </div>
     </Sheet>
