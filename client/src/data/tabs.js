@@ -16,7 +16,7 @@ export const navTabs = [
     name: 'FAQs',
   },
   // {
-  //   to: '/merch', // this route doesn't exist yet
+  //   to: '/merch',
   //   name: 'Merch',
   // },
   {
@@ -34,23 +34,23 @@ export const profileTabs = [
     name: 'Profile',
     to: '/account/profile',
   },
-  // {
-  //   name: 'Registrations',
-  //   to: '/account/registrations', // this route doesn't exist yet
-  // },
+  {
+    name: 'Registrations',
+    to: '/account/registrations',
+  },
   {
     name: 'Teams',
     to: '/account/teams',
   },
   // {
   //   name: 'Merch',
-  //   to: '/account/merch', // this route doesn't exist yet
+  //   to: '/account/merch',
   // },
 ]
 
 export const accountTabs = [
   // {
   //   name: 'Change password',
-  //   to: '/account/change-password', // this route doesn't exist yet
+  //   to: '/account/change-password',
   // },
 ]

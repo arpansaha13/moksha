@@ -11,8 +11,8 @@ class SoloContestSerializer(ModelSerializer):
         model = SoloContestRegistration
         fields = '__all__'
 
-class RelativeSoloContestSerializer(ModelSerializer):
-    team = ContestSerializer()
+class RelatedSoloContestSerializer(ModelSerializer):
+    contest = ContestSerializer()
 
     class Meta:
         model = SoloContestRegistration

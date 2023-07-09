@@ -4,7 +4,7 @@ import { classNames } from '@arpansaha13/utils'
 const ContestTypeBadge = memo(({ type, small = false }) => (
   <span
     className={classNames(
-      'px-2 py-0.5 rounded-md font-semibold',
+      'inline-block px-2 py-0.5 rounded-md font-semibold',
       small ? 'text-xs' : 'text-sm',
       type === 'solo' && 'bg-indigo-300 text-indigo-900',
       type === 'team' && 'bg-rose-300 text-rose-900',

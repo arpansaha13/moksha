@@ -25,12 +25,12 @@ export async function getAuthUserContests({ request }) {
   try {
     nprogress.start()
 
-    const data = { soloContests: [], teamContests: [] }
+    const data = { soloRegistrations: [], teamRegistrations: [] }
 
-    const res = await Promise.all([fetchWithCredentials('/me/contests/solo')])
+    const res = await Promise.all([fetchWithCredentials('users/me/contests/solo')])
 
-    data.soloContests = res[0].data
-    // data.teamContests = res[1].data
+    data.soloRegistrations = res[0].data
+    // data.teamRegistrations = res[1].data
 
     nprogress.done()
     return data

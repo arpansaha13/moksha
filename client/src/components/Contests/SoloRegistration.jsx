@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import accountAlertIcon from '@iconify-icons/mdi/account-alert'
 import { useFetch } from '../../hooks/useFetch'
 import { useAppContext } from '../../containers/DataProvider'
@@ -64,11 +65,14 @@ const SoloRegistration = ({ contest }) => {
 
       <Sheet className='mt-6 p-6'>
         {appContext.authenticated ? (
-          <form ref={formRef} className='markdown space-x-4' onSubmit={soloRegister}>
+          <form ref={formRef} className='markdown markdown-a space-x-4' onSubmit={soloRegister}>
             {fetchedRegistrationState ? (
               registered ? (
                 <div>
-                  <p>Your registration has been recorded.</p>
+                  <p>
+                    Your registration has been recorded. You can see all your contest registrations{' '}
+                    <Link to='/account/registrations'>here</Link>.
+                  </p>
 
                   <div className='not-prose'>
                     <BaseButton secondary loading={loading} onClick={cancelRegistration}>
