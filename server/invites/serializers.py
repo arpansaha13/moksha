@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Invite
-from teams.serializers import TeamSerializers
+from teams.serializers import TeamSerializer
 from users.serializers import UserSerializer
 
 class InviteSerializer(ModelSerializer):
@@ -9,7 +9,7 @@ class InviteSerializer(ModelSerializer):
         fields = ['id', 'team', 'user']
 
 class RelatedInviteTeamSerializer(ModelSerializer):
-    team = TeamSerializers()
+    team = TeamSerializer()
 
     class Meta:
         model = Invite

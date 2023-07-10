@@ -5,15 +5,16 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, NotFound
 from .serializers import RelatedInviteUserSerializer
 from .models import Invite, InviteStatus
-from teams.models import Team, TeamUserRegistrations
+from teams.models import Team, TeamUserRegistration
 from users.models import User
 from common.exceptions import Conflict, BadRequest
+
 
 class BaseEndpoint(APIView):
     # Create invite
     def post(self, request):
-        team_id = request.data.get('team_id')
-        user_id = request.data.get('user_id')
+        team_id = request.POST['team_id']
+        user_id = request.POST['user_id']
 
         team = Team.objects.filter(team_id=team_id).first()
 
@@ -24,7 +25,7 @@ class BaseEndpoint(APIView):
         if not user:
             raise BadRequest({'message': 'Invalid user_id'})
 
-        if TeamUserRegistrations.objects.filter(
+        if TeamUserRegistration.objects.filter(
             Q(user_id=user_id)
             & Q(team_id=team_id)
         ).exists():
@@ -66,6 +67,7 @@ class BaseEndpoint(APIView):
         invite.delete()
         return Response({'message': 'Invite has been withdrawn'}, status=200)
 
+
 class GetPendingInvites(APIView):
     def get(self, request, team_id):
         team = Team.objects.filter(team_id=team_id).only('leader').first()
@@ -79,24 +81,27 @@ class GetPendingInvites(APIView):
         serializer = RelatedInviteUserSerializer(invites, many=True)
         return Response({'data': serializer.data}, status=200)
 
+
 class AcceptInvite(APIView):
     def patch(self, req, invite_id):
         invite = Invite.objects.filter(id=invite_id).first()
 
         invite = verify_invite(invite)
 
-        #TODO: wrap this in a transaction
-
-        team = Team.objects.filter(team_id=invite.team.team_id).first()
-        user = User.objects.filter(user_id=invite.user.user_id).first()
+        # TODO: wrap this in a transaction
 
         invite.status = InviteStatus.ACCEPTED
         invite.save()
 
-        joined_user = TeamUserRegistrations(team=team, user=user)
+        joined_user = TeamUserRegistration(team=invite.team, user=invite.user)
         joined_user.save()
 
+        team = get_team(invite.team.team_id)
+        team.member_count += 1
+        team.save()
+
         return Response({'message': 'Invite accepted'}, status=200)
+
 
 class RejectInvite(APIView):
     def patch(self, req, invite_id):
@@ -109,6 +114,7 @@ class RejectInvite(APIView):
 
         return Response({'message': 'Invite rejected'}, status=200)
 
+
 def verify_team_leader(team, auth_user):
     if team is None:
         raise NotFound({'message': 'Invalid team_id'})
@@ -116,6 +122,7 @@ def verify_team_leader(team, auth_user):
     # Only team leader should be able to deal with invites
     if auth_user.user_id != team.leader.user_id:
         raise PermissionDenied({'message': 'Forbidden'})
+
 
 def verify_invite(invite: Optional[Invite]) -> Invite:
     if invite is None:
@@ -125,3 +132,12 @@ def verify_invite(invite: Optional[Invite]) -> Invite:
         raise BadRequest({'message': 'Invalid invite'})
 
     return invite
+
+
+def get_team(team_id) -> Team:
+    team = Team.objects.filter(team_id=team_id).first()
+
+    if team is None:
+        raise NotFound({'message': 'Invalid team id'})
+
+    return team
