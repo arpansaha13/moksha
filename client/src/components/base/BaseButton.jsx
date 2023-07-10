@@ -1,9 +1,8 @@
 import { memo } from 'react'
 import { classNames } from '@arpansaha13/utils'
+import Loader from '../common/Loader'
 
-const BaseButtonLoader = () => (
-  <div className='absolute w-6 aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
-)
+const BaseButtonLoader = () => <Loader className='absolute w-6' />
 
 const BaseButton = memo(
   ({ children, type = 'button', loading = false, disabled = false, stretch = false, secondary = false, ...attrs }) => {

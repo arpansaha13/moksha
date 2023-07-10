@@ -19,6 +19,7 @@ import BaseButton from '../../components/base/BaseButton'
 import Modal from '../../components/common/Modal'
 import Sheet from '../../components/common/Sheet'
 import Avatar from '../../components/common/Avatar'
+import Loader from '../../components/common/Loader'
 import Container from '../../components/common/Container'
 import EmptyState from '../../components/common/EmptyState'
 import { useDebouncedFn } from '../../hooks/useDebouncedFn'
@@ -221,7 +222,7 @@ const InviteModal = ({ open, setOpen, teamId, inviteCall, withdrawInviteCall, re
     <Modal open={open} setOpen={setOpen} maxWidth='sm'>
       <div className='mb-4 flex items-center justify-between'>
         <Dialog.Title className='text-base sm:text-xl text-white font-semibold'>Add team members</Dialog.Title>
-        {searching && <div className='w-6 aspect-square border-y-2 border-amber-700 rounded-full animate-spin' />}
+        {searching && <Loader className='w-6 !border-amber-700' />}
       </div>
 
       <BaseInput
@@ -352,8 +353,6 @@ const InviteButton = memo(({ loading, userId, invited, invite, withdrawInvite })
       {invited ? 'Withdraw' : 'Invite'}
     </span>
 
-    {loading && (
-      <div className='absolute w-3.5 xl:w-5 aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
-    )}
+    {loading && <Loader className='absolute w-3.5 xl:w-5' />}
   </button>
 ))

@@ -9,6 +9,7 @@ import { classNames } from '@arpansaha13/utils'
 import { useSet } from '../hooks/useSet'
 import { useFetch } from '../hooks/useFetch'
 import Sheet from '../components/common/Sheet'
+import Loader from '../components/common/Loader'
 import Container from '../components/common/Container'
 import EmptyState from '../components/common/EmptyState'
 import { profileTabs, accountTabs } from '../data/tabs'
@@ -154,8 +155,6 @@ const IconButton = ({ loading, action, icon, id, desc }) => (
 
     <span className='sr-only'>{desc}</span>
 
-    {loading && (
-      <div className='absolute w-3.5 xl:w-5 aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
-    )}
+    {loading && <Loader className='absolute w-3.5 xl:w-5' />}
   </button>
 )

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useFetch } from '../../hooks/useFetch'
 import { useAppContext } from '../../containers/DataProvider'
 import BaseButton from '../base/BaseButton'
+import Loader from '../common/Loader'
 import CsrfField from '../common/CsrfField'
 import getFormData from '../../utils/getFormData'
 
@@ -77,7 +78,7 @@ const SoloRegistration = ({ contest }) => {
           </div>
         )
       ) : (
-        <div className='w-6 mx-auto aspect-square border-y-2 border-gray-50 rounded-full animate-spin' />
+        <Loader className='w-6 mx-auto' />
       )}
 
       <CsrfField />
