@@ -16,7 +16,7 @@ const SoloContest = ({ contest }) => {
 
       <Sheet className='mt-6 p-6'>
         {appContext.authenticated ? (
-          <SoloRegistration />
+          <SoloRegistration contest={contest} />
         ) : (
           <EmptyState
             icon={accountAlertIcon}

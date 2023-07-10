@@ -39,15 +39,21 @@ const TeamContest = ({ contest }) => {
           <Sheet className='mb-6 p-4 sm:p-6 markdown'>
             <h2>How does it work?</h2>
 
+            <p>Since this is a team contest, you need to register through a team. Now you may either:</p>
+            <ul>
+              <li>Create your own team, or</li>
+              <li>
+                Join a team through an <strong>invite</strong> from the respective team leader.
+              </li>
+            </ul>
             <p>
-              Since this is a team contest, you need to register through a team. Now you may <strong>create</strong>{' '}
-              your own team or <strong>join</strong> a team through an <strong>invite</strong> from the respective team
-              leader. You can create, and be the leader, of only one team. But you can join as many teams as you want.
+              You can create, and be the leader, of only <strong>one team</strong>. But you can join as many teams as
+              you want.
             </p>
           </Sheet>
 
           {appContext.authenticated ? (
-            <TeamRegistration />
+            <TeamRegistration contest={contest} />
           ) : (
             <div className='mt-6'>
               <EmptyState
