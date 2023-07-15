@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
-import environ # Pylance does not recognize this import for some reason but the dev server runs perfectly
+import environ  # Pylance does not recognize this import for some reason but the dev server runs perfectly
 
 # Initialise environment variables
 env = environ.Env()
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'teams',
     'contests',
     'invites',
-    'solo_events',
     'corsheaders',
 ]
 
@@ -116,7 +115,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=env('DB_URL'), conn_max_age=86400),
+    'default': dj_database_url.config(default=env('DB_URL'), conn_max_age=60),
 }
 
 # Password validation
@@ -164,8 +163,8 @@ PASSWORD_HASHERS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_HOST=env('EMAIL_HOST')
-EMAIL_PORT=env('EMAIL_PORT')
-EMAIL_HOST_USER=env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD=env('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS=True
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
