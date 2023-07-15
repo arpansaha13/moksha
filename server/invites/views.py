@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, NotFound
 from .serializers import RelatedInviteUserSerializer
 from .models import Invite, InviteStatus
-from teams.models import Team, TeamUserRegistration
+from teams.models import Team, TeamMember
 from users.models import User
 from common.exceptions import Conflict, BadRequest
 
@@ -25,9 +25,9 @@ class BaseEndpoint(APIView):
         if not user:
             raise BadRequest({'message': 'Invalid user_id'})
 
-        if TeamUserRegistration.objects.filter(
-            Q(user_id=user_id)
-            & Q(team_id=team_id)
+        if TeamMember.objects.filter(
+            Q(user=user_id)
+            & Q(team=team_id)
         ).exists():
             raise Conflict({'message': 'User is already in team'})
 
@@ -93,7 +93,7 @@ class AcceptInvite(APIView):
         invite.status = InviteStatus.ACCEPTED
         invite.save()
 
-        joined_user = TeamUserRegistration(team=invite.team, user=invite.user)
+        joined_user = TeamMember(team=invite.team, user=invite.user)
         joined_user.save()
 
         team = get_team(invite.team.team_id)

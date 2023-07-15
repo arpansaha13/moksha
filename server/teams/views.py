@@ -1,7 +1,6 @@
 from django.db.models import Q
-from rest_framework.serializers import ReturnDict, ReturnList
 from .serializers import TeamSerializer
-from .models import Team, TeamUserRegistration
+from .models import Team, TeamMember
 from users.models import User
 from invites.models import Invite, InviteStatus
 from users.serializers import UserSerializer
@@ -28,16 +27,16 @@ class BaseEndpoint(APIView):
 
             new_team = Team(
                 team_id=uid,
-                team_name=request.data['team_name'],
+                team_name=request.POST['team_name'],
                 leader=request.auth_user
             )
             new_team.save()
 
-            new_team_registration = TeamUserRegistration(
+            new_team_member = TeamMember(
                 team=new_team,
                 user=request.auth_user
             )
-            new_team_registration.save()
+            new_team_member.save()
 
             return Response({'team_id': uid}, status=201)
 
@@ -64,9 +63,9 @@ class GetAuthUserCreatedTeam(APIView):
 
 class GetAuthUserJoinedTeams(APIView):
     def get(self, request):
-        auth_user_to_teams = TeamUserRegistration.objects.filter(
-            user_id=request.auth_user.user_id
-        ).values_list('team_id', flat=True)
+        auth_user_to_teams = TeamMember.objects.filter(
+            user=request.auth_user.user_id
+        ).values_list('team', flat=True)
 
         auth_user_joined_teams = Team.objects.filter(
             Q(team_id__in=auth_user_to_teams)
@@ -79,7 +78,7 @@ class GetAuthUserJoinedTeams(APIView):
 
 class GetTeamMembers(APIView):
     def get(self, req, team_id):
-        user_ids = TeamUserRegistration.objects.filter(team_id=team_id).values_list('user_id')
+        user_ids = TeamMember.objects.filter(team_id=team_id).values_list('user_id')
         users = User.objects.filter(user_id__in=user_ids)
 
         serializer = UserSerializer(users, many=True)
@@ -92,7 +91,7 @@ class GetUninvitedUsers(APIView):
         username = request.GET.get('username', None)
         limit = request.GET.get('limit', 10)
 
-        team_members = TeamUserRegistration.objects.filter(team_id=team_id).values_list('user_id', flat=True)
+        team_members = TeamMember.objects.filter(team=team_id).values_list('user', flat=True)
         pending_invites = Invite.objects.filter(
             Q(team_id=team_id)
             & Q(status=InviteStatus.PENDING)

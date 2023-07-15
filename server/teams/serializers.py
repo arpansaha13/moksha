@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Team, TeamUserRegistration
+from .models import Team, TeamMember
 from .models import User
 
 
@@ -16,7 +16,7 @@ class TeamSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class TeamUserRegistrationSerializer(ModelSerializer):
+class TeamMemberSerializer(ModelSerializer):
     class Meta:
-        model = TeamUserRegistration
+        model = TeamMember
         fields = '__all__'
