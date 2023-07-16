@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Contest, SoloContestRegistration, TeamContestRegistration, TeamContestUserRegistration
 from users.serializers import UserSerializer
+from common.serializers import DynamicFieldsModelSerializer
 
 
 class ContestSerializer(ModelSerializer):
@@ -9,18 +10,10 @@ class ContestSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class SoloContestSerializer(ModelSerializer):
+class SoloContestRegistrationSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = SoloContestRegistration
-        fields = '__all__'
-
-
-class RelatedSoloContestSerializer(ModelSerializer):
-    contest = ContestSerializer()
-
-    class Meta:
-        model = SoloContestRegistration
-        fields = '__all__'
+        fields = ['id']
 
 
 class TeamContestUserRegistrationSerializer(ModelSerializer):
@@ -31,9 +24,7 @@ class TeamContestUserRegistrationSerializer(ModelSerializer):
         fields = ['user']
 
 
-class TeamContestRegistrationSerializer(ModelSerializer):
-    registered_members = TeamContestUserRegistrationSerializer(read_only=True, many=True)
-
+class TeamContestRegistrationSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = TeamContestRegistration
-        fields = '__all__'
+        fields = ['id']

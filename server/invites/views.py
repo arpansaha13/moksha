@@ -3,11 +3,13 @@ from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, NotFound
-from .serializers import RelatedInviteUserSerializer
+from .serializers import InviteSerializer
 from .models import Invite, InviteStatus
 from teams.models import Team, TeamMember
 from users.models import User
+from users.serializers import UserSerializer
 from common.exceptions import Conflict, BadRequest
+from teams.helpers import get_team
 
 
 class BaseEndpoint(APIView):
@@ -78,7 +80,11 @@ class GetPendingInvites(APIView):
             Q(team_id=team_id) & Q(status=InviteStatus.PENDING)
         ).all()
 
-        serializer = RelatedInviteUserSerializer(invites, many=True)
+        serializer = InviteSerializer(
+            invites,
+            many=True,
+            fields={'user': UserSerializer(read_only=True)}
+        )
         return Response({'data': serializer.data}, status=200)
 
 
@@ -132,12 +138,3 @@ def verify_invite(invite: Optional[Invite]) -> Invite:
         raise BadRequest({'message': 'Invalid invite'})
 
     return invite
-
-
-def get_team(team_id) -> Team:
-    team = Team.objects.filter(team_id=team_id).first()
-
-    if team is None:
-        raise NotFound({'message': 'Invalid team id'})
-
-    return team
