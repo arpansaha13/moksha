@@ -15,8 +15,8 @@ class Contest(Model):
 
 class SoloContestRegistration(Model):
     id = AutoField(primary_key=True)
-    user = ForeignKey(User, related_name='%(class)s_user', on_delete=CASCADE, null=False, db_column='user')
-    contest = ForeignKey(Contest, related_name='%(class)s_contest', on_delete=CASCADE, null=False, db_column='contest')
+    user = ForeignKey(User, related_name='registered_solo_contests', on_delete=CASCADE, null=False, db_column='user')
+    contest = ForeignKey(Contest, related_name='registered_users', on_delete=CASCADE, null=False, db_column='contest')
 
     def __str__(self):
         return str(self.id)
@@ -24,8 +24,8 @@ class SoloContestRegistration(Model):
 
 class TeamContestRegistration(Model):
     id = AutoField(primary_key=True)
-    team = ForeignKey(Team, related_name='%(class)s_team', on_delete=CASCADE, null=False, db_column='team')
-    contest = ForeignKey(Contest, related_name='%(class)s_contest', on_delete=CASCADE, null=False, db_column='contest')
+    team = ForeignKey(Team, related_name='registered_team_contests', on_delete=CASCADE, null=False, db_column='team')
+    contest = ForeignKey(Contest, related_name='registered_teams', on_delete=CASCADE, null=False, db_column='contest')
 
     def __str__(self):
         return str(self.id)
