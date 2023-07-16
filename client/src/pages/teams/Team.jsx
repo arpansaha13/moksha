@@ -14,6 +14,7 @@ import { useAppContext } from '../../containers/DataProvider'
 import { useSet } from '../../hooks/useSet'
 import { useFetch } from '../../hooks/useFetch'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useDebouncedFn } from '../../hooks/useDebouncedFn'
 import BaseInput from '../../components/base/BaseInput'
 import BaseButton from '../../components/base/BaseButton'
 import Modal from '../../components/common/Modal'
@@ -22,7 +23,7 @@ import Avatar from '../../components/common/Avatar'
 import Loader from '../../components/common/Loader'
 import Container from '../../components/common/Container'
 import EmptyState from '../../components/common/EmptyState'
-import { useDebouncedFn } from '../../hooks/useDebouncedFn'
+import TeamMemberListItem from '../../components/Teams/TeamMemberListItem'
 
 export default function Team() {
   const { appContext } = useAppContext()
@@ -138,7 +139,7 @@ const TeamMembers = memo(({ members }) => (
       {members.map(member => (
         <li key={member.user_id} className='py-1.5 first:pt-0 last:pb-0'>
           <div className='text-gray-100 flex items-center'>
-            <UserListItem user={member} />
+            <TeamMemberListItem user={member} />
           </div>
         </li>
       ))}

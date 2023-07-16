@@ -1,10 +1,10 @@
 import { Fragment } from 'react'
 import { Tab } from '@headlessui/react'
 import accountAlertIcon from '@iconify-icons/mdi/account-alert'
-import { useAppContext } from '../../containers/DataProvider'
-import Sheet from '../common/Sheet'
-import EmptyState from '../common/EmptyState'
-import ContestOverview from './ContestOverview'
+import { useAppContext } from '../../../containers/DataProvider'
+import Sheet from '../../common/Sheet'
+import EmptyState from '../../common/EmptyState'
+import ContestOverview from '../ContestOverview'
 import TeamRegistration from './TeamRegistration'
 
 const TeamContest = ({ contest }) => {

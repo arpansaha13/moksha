@@ -30,6 +30,9 @@ export function useFetch() {
     const request = createRequest(url, options)
 
     const res = await fetch(request)
+
+    if (res.status === 204) return
+
     const jsonData = await res.json()
 
     if (res.status >= 400) {

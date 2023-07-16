@@ -12,8 +12,8 @@ function Teams() {
   return (
     <main
       className={classNames(
-        'gap-y-8',
-        isNullOrUndefined(createdTeam) && joinedTeams.length > 0 ? 'flex flex-col-reverse' : ''
+        'flex gap-y-8',
+        isNullOrUndefined(createdTeam) && joinedTeams.length > 0 ? 'flex-col-reverse' : 'flex-col'
       )}
     >
       <div>

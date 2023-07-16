@@ -8,7 +8,7 @@ import DLink from '../../components/common/Links/DLink'
 import ContestTypeBadge from '../../components/Contests/ContestTypeBadge'
 import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
 import EmptyState from '../../components/common/EmptyState'
-import { getMokshaContest } from '../../data/contests/moksha'
+import { getMokshaContest } from '../../utils/getMokshaContest'
 
 function Registrations() {
   const { soloRegistrations } = useLoaderData()

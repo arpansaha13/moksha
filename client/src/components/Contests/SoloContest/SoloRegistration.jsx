@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useFetch } from '../../hooks/useFetch'
-import { useAppContext } from '../../containers/DataProvider'
-import BaseButton from '../base/BaseButton'
-import Loader from '../common/Loader'
-import CsrfField from '../common/CsrfField'
-import getFormData from '../../utils/getFormData'
+import { useFetch } from '../../../hooks/useFetch'
+import { useAppContext } from '../../../containers/DataProvider'
+import BaseButton from '../../base/BaseButton'
+import Loader from '../../common/Loader'
+import CsrfField from '../../common/CsrfField'
+import getFormData from '../../../utils/getFormData'
 
 const SoloRegistration = ({ contest }) => {
   const { appContext } = useAppContext()

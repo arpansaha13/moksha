@@ -1,5 +1,3 @@
-import { isNullOrUndefined } from '@arpansaha13/utils'
-
 const fineArts = [
   {
     id: 1,
@@ -105,13 +103,14 @@ const malhar = [
     subtitle: 'Group singing',
     type: ['team'],
     image: '', // Image link
+    allowedTeamSize: { min: 3, max: 6 },
     description: [
       {
         p: 'Have you been into group singing recently? Then Melody mania is the perfect platform to showcase your vocal talents The competition invites some of the best musicians from across India to blend their voices at the auditorium stage. This competition consists of two rounds: a preliminary round (online) from which a chosen group of contestants will advance to the final round(Auditorium).',
       },
       {
         bold: true,
-        p: 'Classical , Folk and western music will be judged separately, and the winner will be announced respectively.',
+        p: 'Classical, Folk and western music will be judged separately, and the winner will be announced respectively.',
       },
       {
         p: "VISION: Malhar's mission has always been to provide a platform for talented singers to showcase their musical abilities. The competition can provide a way for these singers to gain exposure and recognition, and potentially even launch a career in the music industry. In addition, this competition will help to develop important teamwork skills, such as communication, collaboration, and respect for each other. As icing on the cake, this will promote cultural diversity by featuring groups with different backgrounds, musical traditions, and styles of music.",
@@ -291,12 +290,8 @@ const dzire = [
     type: ['solo'],
     image: '', // Image link
     description: [
-      {
-        p: 'It is a solo dance competition, any form of dance can be performed.',
-      },
-      {
-        ul: ['Prelims will be online.', 'Finals will be offline.', 'Venue will be updated later on.'],
-      },
+      { p: 'It is a solo dance competition, any form of dance can be performed.' },
+      { ul: ['Prelims will be online.', 'Finals will be offline.', 'Venue will be updated later on.'] },
     ],
     instructions: [
       { heading: 'Rules for prelims and finals.' },
@@ -316,6 +311,7 @@ const dzire = [
     subtitle: 'Duet competition',
     type: ['duet'],
     image: '', // Image link
+    allowedTeamSize: 2,
     description: [
       {
         p: 'It is a duet dance competition, any form of dance can be performed, duet can be either of same sex or different sex.',
@@ -340,16 +336,13 @@ const dzire = [
     subtitle: 'Group competition',
     type: ['team'],
     image: '', // Image link
-    description: [
-      {
-        p: 'It is a group dance competition where  any form of dance can be performed.',
-      },
-    ],
+    allowedTeamSize: { min: 4, max: 15 },
+    description: [{ p: 'It is a group dance competition where  any form of dance can be performed.' }],
     instructions: [
       { heading: 'Rules for prelims and finals.' },
       {
         ul: [
-          "Song shouldn't exceed 3 mins, from playing on to off. After 15 secs points shall be deducted , on crossing 30 secs further participant shall be disqualified.",
+          "Song shouldn't exceed 3 mins, from playing on to off. After 15 secs points shall be deducted, on crossing 30 secs further participant shall be disqualified.",
           'The choice of costume and song must be decent. Use of vulgarity is strictly prohibited and subjected to disqualification.',
           "The act shouldn't promote any sort of violence or cruelty. Use of props such as fire or any sharp objects is prohibited.",
           'Min no of participants are 4 and max no of participants are 15.',
@@ -367,9 +360,7 @@ const dzire = [
     type: ['open'],
     image: '', // Image link
     description: [
-      {
-        p: "It's a dance competition which is open for all, any form of dance can be performed.",
-      },
+      { p: "It's a dance competition which is open for all, any form of dance can be performed." },
       { p: 'Anybody from the crowd can come up and dance on any song.' },
       { p: 'Time limit - 1 to 2 mins.' },
     ],
@@ -383,6 +374,7 @@ const pixel = [
     name: 'The Sunday Mystery',
     image: '', // Image link
     type: ['solo', 'duo'],
+    allowedTeamSize: [1, 2],
     description: [
       {
         p: 'Similar to the Treasure hunt done this Aayam, In this event, The participants have to find clues in a room/event place for solving a murder mystery and help the Superhero get out of the jail which he/she has been wrongly accused of. The person has to find clues in single/multiple location depending on the size of the team management.',
@@ -402,6 +394,7 @@ const pixel = [
     name: 'LetMeOut (Escape Room)',
     image: '', // Image link
     type: ['duo', 'squad'],
+    allowedTeamSize: [2, 4],
     description: [{ p: 'Escape from the room. Quickest runner wins.' }],
     instructions: [
       { heading: 'What do the participants have to do?' },
@@ -418,11 +411,7 @@ const pixel = [
     name: 'Click a Story',
     image: '', // Image link
     type: ['solo'],
-    description: [
-      {
-        p: 'Click multiple pictures that make a short story (Maximum 10 Pictures).',
-      },
-    ],
+    description: [{ p: 'Click multiple pictures that make a short story (Maximum 10 Pictures).' }],
     instructions: [
       { heading: 'What do the participants have to do?' },
       { p: 'Upload on instagram, tag & follow @pixels.nita.' },
@@ -475,10 +464,4 @@ const mokshaContests = {
   dcc: dcc,
 }
 
-export function getMokshaContest(clubName, contestSlug) {
-  if (isNullOrUndefined(mokshaContests[clubName])) return null
-
-  const contest = mokshaContests[clubName].find(contest => contest.slug === contestSlug)
-
-  return isNullOrUndefined(contest) ? null : contest
-}
+export default mokshaContests

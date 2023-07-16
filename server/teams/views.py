@@ -93,9 +93,9 @@ class GetUninvitedUsers(APIView):
 
         team_members = TeamMember.objects.filter(team=team_id).values_list('user', flat=True)
         pending_invites = Invite.objects.filter(
-            Q(team_id=team_id)
+            Q(team=team_id)
             & Q(status=InviteStatus.PENDING)
-        ).values_list('user_id', flat=True)
+        ).values_list('user', flat=True)
 
         users = User.objects.filter(
             Q(username__icontains=username)
