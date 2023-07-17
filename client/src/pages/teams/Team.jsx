@@ -24,10 +24,11 @@ import Loader from '../../components/common/Loader'
 import Container from '../../components/common/Container'
 import EmptyState from '../../components/common/EmptyState'
 import TeamMemberListItem from '../../components/Teams/TeamMemberListItem'
+import RegisteredContestCard from '../../components/Contests/RegisteredContestCard'
 
 export default function Team() {
   const { appContext } = useAppContext()
-  const { team, members, pendingInvites: initialPendingInvites } = useLoaderData()
+  const { team, members, pendingInvites: initialPendingInvites, contests } = useLoaderData()
   const [pendingInvites, setPendingInvites] = useState(initialPendingInvites)
   const [modalOpen, setModalOpen] = useState(false)
   const fetchHook = useFetch()
@@ -92,6 +93,14 @@ export default function Team() {
           </div>
 
           <TeamMembers members={members} />
+
+          <div className='h-[42px] flex items-center'>
+            <h2 className='text-xl lg:text-2xl font-bold text-gray-50'>Registered contests</h2>
+          </div>
+
+          {contests.map(({ contest }) => (
+            <RegisteredContestCard key={contest.id} clubName={contest.club_slug} contestSlug={contest.contest_slug} />
+          ))}
         </div>
 
         <InviteModal
@@ -135,7 +144,7 @@ const TeamData = memo(({ team }) => (
 
 const TeamMembers = memo(({ members }) => (
   <Sheet className='px-6 py-4 space-y-3'>
-    <ul className='divide-y divide-amber-900/60 text-xs lg:text-sm'>
+    <ul className='grid grid-cols-1 sm:grid-cols-2 text-xs lg:text-sm'>
       {members.map(member => (
         <li key={member.user_id} className='py-1.5 first:pt-0 last:pb-0'>
           <div className='text-gray-100 flex items-center'>

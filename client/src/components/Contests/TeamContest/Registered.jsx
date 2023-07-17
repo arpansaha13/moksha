@@ -33,7 +33,7 @@ export default function Registered({ contestId, team, registration, setRegistrat
         <ParticipatingMembers members={registration.registered_members} />
       </div>
 
-      <form className='ml-auto w-max' onSubmit={cancelRegistration}>
+      <form className='mt-3 ml-auto w-max' onSubmit={cancelRegistration}>
         <BaseButton type='submit' secondary loading={loading}>
           Cancel registration
         </BaseButton>

@@ -4,8 +4,10 @@ from .models import Team, TeamMember
 from users.models import User
 from invites.models import Invite, InviteStatus
 from users.serializers import UserSerializer
+from contests.serializers import ContestSerializer, TeamContestRegistrationSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from teams.helpers import get_team
 import secrets
 import string
 
@@ -110,6 +112,25 @@ class GetUninvitedUsers(APIView):
             data.append(serializer.data)
 
         return Response({'data': data}, status=200)
+
+
+class GetRegisteredTeamContests(APIView):
+    def get(self, request, team_id):
+        team = get_team(team_id)
+
+        serializer = TeamSerializer(
+            team,
+            empty=True,
+            fields={
+                'registered_team_contests': TeamContestRegistrationSerializer(
+                    read_only=True,
+                    many=True,
+                    fields={'contest': ContestSerializer(read_only=True)}
+                )
+            }
+        )
+
+        return Response({'data': serializer.data['registered_team_contests']}, status=200)  # type: ignore
 
 
 def generate_uid(length=8):
