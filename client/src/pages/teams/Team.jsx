@@ -32,7 +32,7 @@ export default function Team() {
 
   useEffect(() => {
     if (isLeader) {
-      fetchHook(`invites/${team.team_id}`).then(r => {
+      fetchHook(`teams/${team.team_id}/pending-invites`).then(r => {
         setPendingInvites(r.data)
         startTransition(() => setLoadingInvites(false))
       })

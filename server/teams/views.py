@@ -4,10 +4,12 @@ from .models import Team, TeamMember
 from users.models import User
 from invites.models import Invite, InviteStatus
 from users.serializers import UserSerializer
+from invites.serializers import InviteSerializer
 from contests.serializers import ContestSerializer, TeamContestRegistrationSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from teams.helpers import get_team
+from .helpers import get_team
+from invites.helpers import verify_team_leader
 import secrets
 import string
 
@@ -130,7 +132,24 @@ class GetRegisteredTeamContests(APIView):
             }
         )
 
-        return Response({'data': serializer.data['registered_team_contests']}, status=200)  # type: ignore
+        return Response({'data': serializer.data['registered_team_contests']}, status=200)
+
+
+class GetPendingInvites(APIView):
+    def get(self, request, team_id):
+        team = Team.objects.filter(team_id=team_id).only('leader').first()
+
+        verify_team_leader(team, request.auth_user)
+
+        pending_invites = team.pending_invites.filter(status=InviteStatus.PENDING).all()  # type: ignore
+
+        serializer = InviteSerializer(
+            pending_invites,
+            many=True,
+            fields={'user': UserSerializer()}
+        )
+
+        return Response({'data': serializer.data}, status=200)
 
 
 def generate_uid(length=8):

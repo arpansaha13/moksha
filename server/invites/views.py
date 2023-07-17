@@ -1,15 +1,13 @@
-from typing import Optional
+
 from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied, NotFound
-from .serializers import InviteSerializer
 from .models import Invite, InviteStatus
 from teams.models import Team, TeamMember
 from users.models import User
-from users.serializers import UserSerializer
 from common.exceptions import Conflict, BadRequest
 from teams.helpers import get_team
+from .helpers import verify_invite, verify_team_leader
 
 
 class BaseEndpoint(APIView):
@@ -70,24 +68,6 @@ class BaseEndpoint(APIView):
         return Response({'message': 'Invite has been withdrawn'}, status=200)
 
 
-class GetPendingInvites(APIView):
-    def get(self, request, team_id):
-        team = Team.objects.filter(team_id=team_id).only('leader').first()
-
-        verify_team_leader(team, request.auth_user)
-
-        invites = Invite.objects.select_related('team').filter(
-            Q(team_id=team_id) & Q(status=InviteStatus.PENDING)
-        ).all()
-
-        serializer = InviteSerializer(
-            invites,
-            many=True,
-            fields={'user': UserSerializer(read_only=True)}
-        )
-        return Response({'data': serializer.data}, status=200)
-
-
 class AcceptInvite(APIView):
     def patch(self, req, invite_id):
         invite = Invite.objects.filter(id=invite_id).first()
@@ -119,22 +99,3 @@ class RejectInvite(APIView):
         invite.save()
 
         return Response({'message': 'Invite rejected'}, status=200)
-
-
-def verify_team_leader(team, auth_user):
-    if team is None:
-        raise NotFound({'message': 'Invalid team_id'})
-
-    # Only team leader should be able to deal with invites
-    if auth_user.user_id != team.leader.user_id:
-        raise PermissionDenied({'message': 'Forbidden'})
-
-
-def verify_invite(invite: Optional[Invite]) -> Invite:
-    if invite is None:
-        raise NotFound({'message': 'Invalid invite'})
-
-    if invite.status != InviteStatus.PENDING:
-        raise BadRequest({'message': 'Invalid invite'})
-
-    return invite
