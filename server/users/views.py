@@ -1,9 +1,10 @@
 from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.serializers import CharField
 from .models import User
 from .serializers import AuthUserSerializer, UserSerializer
-from invites.models import Invite, InviteStatus
+from invites.models import InviteStatus
 from invites.serializers import InviteSerializer
 from teams.serializers import TeamSerializer
 from contests.models import SoloContestRegistration
@@ -34,17 +35,18 @@ class GetUsers(APIView):
         return Response({'data': serializer.data}, status=200)
 
 
-class GetAuthUserReceivedInvites(APIView):
+class GetAuthUserReceivedTeamInvites(APIView):
     def get(self, request):
-        invites = Invite.objects.filter(
-            Q(user=request.auth_user.user_id)
-            & Q(status=InviteStatus.PENDING)
-        ).all()
+        received_invites = request.auth_user.received_invites.filter(status=InviteStatus.PENDING).all()
 
         serializer = InviteSerializer(
-            invites,
+            received_invites,
             many=True,
-            fields={'team': TeamSerializer(read_only=True)}
+            fields={'team': TeamSerializer(
+                read_only=True,
+                empty=True,
+                fields={'team_id': CharField(), 'team_name': CharField()}
+            )}
         )
 
         return Response({'data': serializer.data}, status=200)

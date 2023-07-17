@@ -21,7 +21,7 @@ function AccountLayout() {
   const loading = useSet()
 
   useEffect(() => {
-    fetchHook('users/me/invites').then(res => {
+    fetchHook('users/me/received-team-invites').then(res => {
       setReceivedInvites(res.data)
     })
   }, [])
