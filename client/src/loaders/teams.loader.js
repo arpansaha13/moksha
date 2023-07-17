@@ -27,27 +27,14 @@ export async function getTeamData({ request }) {
     const res = await Promise.all([
       fetchWithCredentials(`teams/${teamId}`),
       fetchWithCredentials(`teams/${teamId}/members`),
-      fetchWithCredentials(`teams/${teamId}/registered-contests`),
     ])
 
     data.team = res[0].data
     data.members = res[1].data
-    data.contests = res[2].data
-
-    // Will fail if not leader
-    // TODO: Refactor this url to "teams/:id/pending-invites"
-    data.pendingInvites = await fetchWithCredentials(`invites/${teamId}`).then(r => r.data)
 
     nprogress.done()
     return data
-  } catch (e) {
-    if (e.message === 'Forbidden') {
-      data.pendingInvites = []
-
-      nprogress.done()
-      return data
-    }
-
+  } catch {
     return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
 }
