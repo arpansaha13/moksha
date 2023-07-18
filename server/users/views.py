@@ -7,8 +7,7 @@ from .serializers import AuthUserSerializer, UserSerializer
 from invites.models import InviteStatus
 from invites.serializers import InviteSerializer
 from teams.serializers import TeamSerializer
-from contests.models import SoloContestRegistration
-from contests.serializers import ContestSerializer, SoloContestRegistrationSerializer
+from contests.serializers import ContestSerializer, SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
 
 
 class GetAuthUser(APIView):
@@ -54,10 +53,31 @@ class GetAuthUserReceivedTeamInvites(APIView):
 
 class GetAuthUserSoloContests(APIView):
     def get(self, request):
-        solo_regs = SoloContestRegistration.objects.select_related('contest').filter(user=request.auth_user).all()
+        solo_contest_regs = request.auth_user.registered_solo_contests.only('contest').all()
 
         serializer = SoloContestRegistrationSerializer(
-            solo_regs, many=True,
+            solo_contest_regs,
+            read_only=True,
+            many=True,
             fields={'contest': ContestSerializer(read_only=True)}
+        )
+        return Response({'data': serializer.data}, status=200)
+
+
+class GetAuthUserTeamContests(APIView):
+    def get(self, request):
+        team_contest_regs = request.auth_user.team_contest_registrations.only('team_contest_registration').all()
+
+        serializer = TeamContestUserRegistrationSerializer(
+            team_contest_regs,
+            read_only=True,
+            empty=True,
+            many=True,
+            fields={
+                'team_contest_registration': TeamContestRegistrationSerializer(
+                    read_only=True,
+                    fields={'contest': ContestSerializer(read_only=True)}
+                )
+            }
         )
         return Response({'data': serializer.data}, status=200)

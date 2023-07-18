@@ -16,7 +16,7 @@ class SoloContestRegistrationSerializer(DynamicFieldsModelSerializer):
         fields = ['id']
 
 
-class TeamContestUserRegistrationSerializer(ModelSerializer):
+class TeamContestUserRegistrationSerializer(DynamicFieldsModelSerializer):
     user = UserSerializer()
 
     class Meta:

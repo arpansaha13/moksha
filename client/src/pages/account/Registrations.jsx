@@ -4,21 +4,11 @@ import EmptyState from '../../components/common/EmptyState'
 import RegisteredContestCard from '../../components/Contests/RegisteredContestCard'
 
 function Registrations() {
-  const { soloRegistrations } = useLoaderData()
+  const { soloContests, teamContests } = useLoaderData()
 
-  return (
-    <main className='space-y-8'>
-      {soloRegistrations.length > 0 ? (
-        <section>
-          <h2 className='mb-6 text-2xl font-bold text-gray-50'>Registered contests - Solo</h2>
-
-          <div className='space-y-4'>
-            {soloRegistrations.map(({ contest }) => (
-              <RegisteredContestCard key={contest.id} clubName={contest.club_slug} contestSlug={contest.contest_slug} />
-            ))}
-          </div>
-        </section>
-      ) : (
+  if (soloContests.length === 0 && teamContests.length === 0) {
+    return (
+      <main>
         <div className='mt-6'>
           <EmptyState icon={calendarRemoveIcon} title='You have not registered for any contest yet' />
           <p className='text-center'>
@@ -27,6 +17,34 @@ function Registrations() {
             </Link>
           </p>
         </div>
+      </main>
+    )
+  }
+
+  return (
+    <main className='space-y-8'>
+      {soloContests.length > 0 && (
+        <section id='registered-solo-contests'>
+          <h2 className='mb-6 text-2xl font-bold text-gray-50'>Registered contests - Solo</h2>
+
+          <div className='space-y-4'>
+            {soloContests.map(({ contest }) => (
+              <RegisteredContestCard key={contest.id} clubName={contest.club_slug} contestSlug={contest.contest_slug} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {teamContests.length > 0 && (
+        <section id='registered-team-contests'>
+          <h2 className='mb-6 text-2xl font-bold text-gray-50'>Registered contests - Team</h2>
+
+          <div className='space-y-4'>
+            {teamContests.map(({ team_contest_registration: { contest } }) => (
+              <RegisteredContestCard key={contest.id} clubName={contest.club_slug} contestSlug={contest.contest_slug} />
+            ))}
+          </div>
+        </section>
       )}
     </main>
   )
