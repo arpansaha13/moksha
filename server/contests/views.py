@@ -3,16 +3,18 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from common.exceptions import BadRequest, Conflict
 from users.models import User
-from .models import Contest, SoloContestRegistration as SoloContestRegistrationModel, TeamContestRegistration as TeamContestRegistrationModel, TeamContestUserRegistration
-from .serializers import TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
+from .models import SoloContestRegistration as SoloContestRegistrationModel, TeamContestRegistration as TeamContestRegistrationModel, TeamContestUserRegistration
+from .serializers import SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
 from teams.helpers import get_team
 from contests.helpers import get_contest, get_team_reg
 
 # SOLO CONTEST APIs
 
 
-class CheckSoloRegistration(APIView):
-    def get(self, request, contest_id):
+class SoloContestRegistration(APIView):
+    def get(self, request):
+        contest_id = request.GET['contest_id']
+
         contest = get_contest(contest_id)
 
         solo_reg = SoloContestRegistrationModel.objects.filter(
@@ -20,13 +22,12 @@ class CheckSoloRegistration(APIView):
             contest=contest
         ).first()
 
-        if solo_reg:
-            return Response({'registered': True}, status=200)
+        if not solo_reg:
+            raise NotFound('No registration found.')
 
-        return Response({'registered': False}, status=200)
+        serializer = SoloContestRegistrationSerializer(solo_reg)
+        return Response({'data': serializer.data}, status=200)
 
-
-class SoloContestRegister(APIView):
     def post(self, request):
         contest_id = request.POST['contest_id']
         contest = get_contest(contest_id)
@@ -45,23 +46,19 @@ class SoloContestRegister(APIView):
         )
         solo_reg.save()
 
-        return Response({'message': 'User registered successfully for contest.'}, status=201)
+        serializer = SoloContestRegistrationSerializer(solo_reg)
+        return Response({'data': serializer.data}, status=201)
 
+    def delete(self, request):
+        solo_reg_id = request.POST['solo_reg_id']
 
-class CancelSoloRegistration(APIView):
-    def delete(self, request, contest_id):
-        contest = get_contest(contest_id)
+        solo_reg = SoloContestRegistrationModel.objects.filter(id=solo_reg_id).first()
 
-        solo_reg = SoloContestRegistrationModel.objects.filter(
-            user=request.auth_user,
-            contest=contest
-        ).first()
+        if not solo_reg:
+            raise NotFound({'message': 'No registration found for this contest.'})
 
-        if solo_reg:
-            solo_reg.delete()
-            return Response(status=204)
-
-        return NotFound({'message': 'No registration found for this contest.'})
+        solo_reg.delete()
+        return Response(status=204)
 
 
 class TeamContestRegistration(APIView):
