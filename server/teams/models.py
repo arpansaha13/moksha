@@ -1,12 +1,21 @@
-from django.db.models import Model, AutoField, IntegerField, CharField, TextField, ForeignKey, CASCADE
+from django.db.models import Model, AutoField, IntegerField, CharField, TextField, ForeignKey, CASCADE, UniqueConstraint
+from django.db.models.functions import Lower
 from users.models import User
 
 
 class Team(Model):
     team_id = CharField(primary_key=True, max_length=100, null=False)
-    team_name = TextField(blank=False, null=False)
+    team_name = TextField(null=False)
     leader = ForeignKey(User, related_name='created_teams', on_delete=CASCADE, null=False, db_column='leader')
     member_count = IntegerField(default=1, null=False)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                Lower('team_name'),
+                name='unique_team_name',
+            ),
+        ]
 
     def __str__(self):
         return self.team_id

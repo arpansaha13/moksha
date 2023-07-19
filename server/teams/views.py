@@ -1,4 +1,5 @@
 from django.db.models import Q
+from common.exceptions import BadRequest, Conflict
 from .serializers import TeamSerializer
 from .models import Team, TeamMember
 from users.models import User
@@ -17,39 +18,42 @@ import string
 class BaseEndpoint(APIView):
     # Create team
     def post(self, request):
-        auth_user_team = Team.objects.filter(leader=request.auth_user.user_id).first()
+        team_name = request.POST['team_name']
 
-        if not auth_user_team:
-            if not request.data['team_name']:
-                return Response({'message': 'No team name provided.'}, status=400)
+        if not team_name:
+            raise BadRequest({'message': 'No team name provided.'})
 
+        if Team.objects.filter(leader=request.auth_user.user_id).exists():
+            raise Conflict({'message': 'A team is already created by the user.'})
+
+        if Team.objects.filter(team_name__iexact=team_name).exists():
+            raise Conflict(message='This team name is already taken.')
+
+        uid = generate_uid()
+
+        while Team.objects.filter(team_id=uid).exists():
             uid = generate_uid()
-            temp_team = Team.objects.filter(team_id=uid).first()
-            while temp_team:
-                uid = generate_uid()
-                temp_team = Team.objects.filter(team_id=uid).first()
 
-            new_team = Team(
-                team_id=uid,
-                team_name=request.POST['team_name'],
-                leader=request.auth_user
-            )
-            new_team.save()
+        # transaction
+        new_team = Team(
+            team_id=uid,
+            team_name=team_name,
+            leader=request.auth_user
+        )
+        new_team.save()
 
-            new_team_member = TeamMember(
-                team=new_team,
-                user=request.auth_user
-            )
-            new_team_member.save()
+        new_team_member = TeamMember(
+            team=new_team,
+            user=request.auth_user
+        )
+        new_team_member.save()
 
-            return Response({'team_id': uid}, status=201)
-
-        return Response({'message': 'A team is already created by the user.'}, status=400)
+        return Response({'team_id': uid}, status=201)
 
 
 class GetTeam(APIView):
     def get(self, req, team_id):
-        team = Team.objects.filter(team_id=team_id).first()
+        team = get_team(team_id)
         serializer = TeamSerializer(team)
         return Response({'data': serializer.data}, status=200)
 
