@@ -1,11 +1,11 @@
 import { startTransition, useState } from 'react'
 import { classNames } from '@arpansaha13/utils'
-import { useSet } from '../../../hooks/useSet'
-import { useFetch } from '../../../hooks/useFetch'
-import BaseButton from '../../base/BaseButton'
-import Sheet from '../../common/Sheet'
-import Callout from '../../common/Callout'
-import TeamMemberListItem from '../../Teams/TeamMemberListItem'
+import { useSet } from '../../../../hooks/useSet'
+import { useFetch } from '../../../../hooks/useFetch'
+import BaseButton from '../../../base/BaseButton'
+import Sheet from '../../../common/Sheet'
+import Callout from '../../../common/Callout'
+import TeamMemberListItem from '../../../Teams/TeamMemberListItem'
 
 export default function Register({ contest, team, members, setRegistration }) {
   const fetchHook = useFetch()
