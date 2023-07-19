@@ -69,7 +69,10 @@ export default function Team() {
       className={classNames('py-4', isLeader && 'grid grid-cols-1 lg:grid-cols-3 gap-y-6 lg:gap-x-8 lg:gap-y-0')}
     >
       <main className={isLeader ? 'col-span-2' : 'mx-auto max-w-2xl'}>
-        <h1 className='mb-6 text-3xl lg:text-4xl font-bold text-gray-50'>{team.team_name}</h1>
+        <div className='mb-6'>
+          <h1 className='text-3xl lg:text-4xl font-bold text-gray-50'>{team.team_name}</h1>
+          <p className='text-gray-400'>{team.team_id}</p>
+        </div>
 
         <div className='space-y-6'>
           <TeamData team={team} />
