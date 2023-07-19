@@ -1,10 +1,10 @@
 import { Link, useLoaderData } from 'react-router-dom'
 import accountMultipleIcon from '@iconify-icons/mdi/account-multiple-remove-outline'
 import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
-import Sheet from '../../components/common/Sheet'
-import DLink from '../../components/common/Links/DLink'
-import EmptyState from '../../components/common/EmptyState'
-import MLink from '../../components/common/Links/MLink'
+import Sheet from '~common/Sheet'
+import DLink from '~common/Links/DLink'
+import EmptyState from '~common/EmptyState'
+import MLink from '~common/Links/MLink'
 
 function Teams() {
   const { createdTeam, joinedTeams } = useLoaderData()

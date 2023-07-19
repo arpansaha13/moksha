@@ -2,9 +2,9 @@ import { lazy, useEffect, useState, startTransition } from 'react'
 import { Link } from 'react-router-dom'
 import accountMultipleIcon from '@iconify-icons/mdi/account-multiple-remove-outline'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { useFetch } from '../../../../hooks/useFetch'
-import Loader from '../../../common/Loader'
-import EmptyState from '../../../common/EmptyState'
+import { useFetch } from '~/hooks/useFetch'
+import Loader from '~common/Loader'
+import EmptyState from '~common/EmptyState'
 
 const Register = lazy(() => import('./Register'))
 const Registered = lazy(() => import('./Registered'))

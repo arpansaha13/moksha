@@ -1,4 +1,4 @@
-import Avatar from '../../components/common/Avatar'
+import Avatar from '~common/Avatar'
 
 const UserListItem = ({ user }) => (
   <>

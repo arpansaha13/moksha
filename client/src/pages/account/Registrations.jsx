@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from 'react-router-dom'
 import calendarRemoveIcon from '@iconify-icons/mdi/calendar-remove'
-import EmptyState from '../../components/common/EmptyState'
-import RegisteredContestCard from '../../components/Contests/RegisteredContestCard'
+import EmptyState from '~common/EmptyState'
+import RegisteredContestCard from '~/components/Contests/RegisteredContestCard'
 
 function Registrations() {
   const { soloContests, teamContests } = useLoaderData()

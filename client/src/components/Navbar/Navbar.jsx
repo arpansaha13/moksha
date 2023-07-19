@@ -7,10 +7,10 @@ import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
 import closeIcon from '@iconify-icons/mdi/close'
 import NavbarDropdown from './NavbarDropdown'
-import { useAppContext } from '../../containers/DataProvider'
-import { useFetch } from '../../hooks/useFetch'
-import { navTabs } from '../../data/tabs'
-import locationNeedsAuth from '../../utils/locationNeedsAuth'
+import { useAppContext } from '~/containers/DataProvider'
+import { useFetch } from '~/hooks/useFetch'
+import { navTabs } from '~/data/tabs'
+import locationNeedsAuth from '~/utils/locationNeedsAuth'
 
 const NavTab = memo(({ to, children }) => (
   <NavLink

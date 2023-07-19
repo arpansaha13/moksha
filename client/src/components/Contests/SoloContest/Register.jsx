@@ -1,8 +1,8 @@
 import { startTransition, useRef, useState } from 'react'
-import { useFetch } from '../../../hooks/useFetch'
-import BaseButton from '../../base/BaseButton'
-import CsrfField from '../../common/CsrfField'
-import getFormData from '../../../utils/getFormData'
+import { useFetch } from '~/hooks/useFetch'
+import BaseButton from '~base/BaseButton'
+import CsrfField from '~common/CsrfField'
+import getFormData from '~/utils/getFormData'
 
 export default function Register({ setRegistrationId, contestId }) {
   const fetchHook = useFetch()

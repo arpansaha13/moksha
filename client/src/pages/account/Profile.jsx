@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import Sheet from '../../components/common/Sheet'
-import Avatar from '../../components/common/Avatar'
+import Sheet from '~common/Sheet'
+import Avatar from '~common/Avatar'
 
 function Profile() {
   const authUser = useLoaderData()

@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useSize } from '../../../hooks/useSize'
-import { useScrolling } from '../../../hooks/useScrolling'
+import { useSize } from '~/hooks/useSize'
+import { useScrolling } from '~/hooks/useScrolling'
 import { useData } from './Wrapper'
 import { classNames } from '@arpansaha13/utils'
-import getValueByBreakpoint from '../../../utils/getValueAtBreakpoint'
+import getValueByBreakpoint from '~/utils/getValueAtBreakpoint'
 import styles from './style.module.css'
 
 // interface CardsSliderProps {

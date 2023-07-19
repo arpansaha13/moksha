@@ -38,6 +38,7 @@
   "devDependencies": {
     "@tranzis/react": "file:packages/tranzis-react-0.1.0.tgz",
     "@tranzis/react-layouts": "file:packages/tranzis-react-layouts-0.1.0.tgz",
+    "@types/node": "^20.4.2",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",

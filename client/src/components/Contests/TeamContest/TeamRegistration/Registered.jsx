@@ -1,7 +1,7 @@
 import { startTransition, useState } from 'react'
-import { useFetch } from '../../../../hooks/useFetch'
-import BaseButton from '../../../base/BaseButton'
-import Sheet from '../../../common/Sheet'
+import { useFetch } from '~/hooks/useFetch'
+import BaseButton from '~base/BaseButton'
+import Sheet from '~common/Sheet'
 import TeamMemberListItem from '../../../Teams/TeamMemberListItem'
 
 export default function Registered({ contestId, team, registration, setRegistration }) {

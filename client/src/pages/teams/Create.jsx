@@ -1,14 +1,14 @@
 import { useCallback, useRef, useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { useMap } from '../../hooks/useMap'
-import { useFetch } from '../../hooks/useFetch'
-import Sheet from '../../components/common/Sheet'
-import BaseButton from '../../components/base/BaseButton'
-import BaseInput from '../../components/base/BaseInput'
-import CsrfField from '../../components/common/CsrfField'
-import Notification from '../../components/common/Notification'
-import getFormData from '../../utils/getFormData'
+import { useMap } from '~/hooks/useMap'
+import { useFetch } from '~/hooks/useFetch'
+import Sheet from '~common/Sheet'
+import BaseButton from '~base/BaseButton'
+import BaseInput from '~base/BaseInput'
+import CsrfField from '~common/CsrfField'
+import Notification from '~common/Notification'
+import getFormData from '~/utils/getFormData'
 
 export default function CreateTeam() {
   const createdTeam = useLoaderData()

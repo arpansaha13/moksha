@@ -1,8 +1,8 @@
 import { lazy, startTransition, useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { useFetch } from '../../../hooks/useFetch'
-import { useAppContext } from '../../../containers/DataProvider'
-import Loader from '../../common/Loader'
+import { useFetch } from '~/hooks/useFetch'
+import { useAppContext } from '~/containers/DataProvider'
+import Loader from '~common/Loader'
 
 const Register = lazy(() => import('./Register'))
 const CancelRegistration = lazy(() => import('./CancelRegistration'))

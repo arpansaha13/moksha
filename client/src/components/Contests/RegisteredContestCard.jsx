@@ -1,10 +1,10 @@
 import { memo } from 'react'
 import { capitalCase } from 'change-case'
-import Sheet from '../../components/common/Sheet'
-import MLink from '../../components/common/Links/MLink'
-import DLink from '../../components/common/Links/DLink'
-import CastleGate2 from '../../assets/castle-gate-2.svg' // Reference image for now
-import { getMokshaContest } from '../../utils/getMokshaContest'
+import Sheet from '~common/Sheet'
+import MLink from '~common/Links/MLink'
+import DLink from '~common/Links/DLink'
+import CastleGate2 from '~/assets/castle-gate-2.svg' // Reference image for now
+import { getMokshaContest } from '~/utils/getMokshaContest'
 
 const RegisteredContestCard = memo(({ clubName, contestSlug }) => {
   const contest = getMokshaContest(clubName, contestSlug)

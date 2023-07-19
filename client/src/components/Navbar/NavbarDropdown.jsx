@@ -1,10 +1,10 @@
 import { Fragment, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Transition } from '@headlessui/react'
-import Sheet from '../common/Sheet'
-import Avatar from '../common/Avatar'
+import Sheet from '~common/Sheet'
+import Avatar from '~common/Avatar'
 import { classNames } from '@arpansaha13/utils'
-import { profileTabs } from '../../data/tabs'
+import { profileTabs } from '~/data/tabs'
 
 const Dropdown = memo(({ avatarIdx, onLogOut }) => {
   return (

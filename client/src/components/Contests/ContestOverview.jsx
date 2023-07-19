@@ -1,7 +1,7 @@
 import { useMediaQuery } from 'react-responsive'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '../common/Sheet'
-import ContestTypeBadge from '../../components/Contests/ContestTypeBadge'
+import ContestTypeBadge from '../Contests/ContestTypeBadge'
 
 export default function ContestOverview({ contest }) {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })

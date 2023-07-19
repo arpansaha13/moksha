@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import plusIcon from '@iconify-icons/mdi/plus'
 import minusIcon from '@iconify-icons/mdi/minus'
 import { classNames } from '@arpansaha13/utils'
-import Loader from '../../components/common/Loader'
+import Loader from '~common/Loader'
 
 const InviteButton = memo(({ loading, userId, invited, invite, withdrawInvite }) => (
   <button

@@ -7,8 +7,8 @@ import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import NotFound from '../404'
-import SocialShare from '../../components/SocialShare'
-import Container from '../../components/common/Container'
+import SocialShare from '~/components/SocialShare'
+import Container from '~common/Container'
 import '@tranzis/react/styles/Tz3dCard'
 
 const SoloContest = lazy(() => import('../../components/Contests/SoloContest'))

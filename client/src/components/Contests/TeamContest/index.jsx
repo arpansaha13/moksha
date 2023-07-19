@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Tab } from '@headlessui/react'
-import Sheet from '../../common/Sheet'
+import Sheet from '~common/Sheet'
 import ContestOverview from '../ContestOverview'
 import RegisterPanel from './RegisterPanel'
 

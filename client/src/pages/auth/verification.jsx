@@ -1,14 +1,14 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useMap } from '../../hooks/useMap'
-import { useFetch } from '../../hooks/useFetch'
-import BaseButton from '../../components/base/BaseButton'
-import OtpInput from '../../components/common/OtpInput'
-import CsrfField from '../../components/common/CsrfField'
-import { useAppContext } from '../../containers/DataProvider'
-import { useAuthContext } from '../../containers/AuthProvider'
 import { classNames } from '@arpansaha13/utils'
+import { useMap } from '~/hooks/useMap'
+import { useFetch } from '~/hooks/useFetch'
+import BaseButton from '~base/BaseButton'
+import OtpInput from '~common/OtpInput'
+import CsrfField from '~common/CsrfField'
+import { useAppContext } from '~/containers/DataProvider'
+import { useAuthContext } from '~/containers/AuthProvider'
 
 const VerificationPage = () => {
   const navigate = useNavigate()
