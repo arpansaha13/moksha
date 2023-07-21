@@ -10,7 +10,6 @@ import NavbarDropdown from './NavbarDropdown'
 import { useAppContext } from '~/containers/DataProvider'
 import { useFetch } from '~/hooks/useFetch'
 import { navTabs } from '~/data/tabs'
-import locationNeedsAuth from '~/utils/locationNeedsAuth'
 
 const NavTab = memo(({ to, children }) => (
   <NavLink
@@ -88,3 +87,12 @@ function Navbar() {
   )
 }
 export default Navbar
+
+function locationNeedsAuth(path) {
+  if (path.startsWith('/account/')) return true
+  if (path.startsWith('/teams/')) return true
+
+  // TODO: Add contests registration panel
+
+  return false
+}
