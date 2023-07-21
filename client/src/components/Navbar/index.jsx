@@ -1,3 +1,4 @@
+import nprogress from 'nprogress'
 import { memo, useCallback } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { createSearchParams, NavLink, useLocation, useNavigate } from 'react-router-dom'
@@ -6,7 +7,7 @@ import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
 import closeIcon from '@iconify-icons/mdi/close'
-import NavbarDropdown from './NavbarDropdown'
+import AccountMenu from './AccountMenu'
 import { useAppContext } from '~/containers/DataProvider'
 import { useFetch } from '~/hooks/useFetch'
 import { navTabs } from '~/data/tabs'
@@ -26,21 +27,21 @@ const NavTab = memo(({ to, children }) => (
 ))
 
 function Navbar() {
-  const { appContext, resetAppContext } = useAppContext()
+  const { appContext } = useAppContext()
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
   const location = useLocation()
   const navigate = useNavigate()
   const fetchHook = useFetch()
 
   const logOut = useCallback(() => {
-    fetchHook('auth/logout')
-    resetAppContext()
+    nprogress.start()
 
-    if (locationNeedsAuth(location.pathname)) {
-      navigate('/')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchHook, location.pathname])
+    fetchHook('auth/logout').then(() => {
+      nprogress.done()
+      if (locationNeedsAuth(location.pathname)) navigate('/')
+      navigate(0)
+    })
+  }, [fetchHook, location.pathname, navigate])
 
   return (
     <header className='relative z-40'>
@@ -70,7 +71,7 @@ function Navbar() {
 
         {/* Common for both Mobile and Desktop */}
         {appContext.authenticated ? (
-          <NavbarDropdown avatarIdx={appContext.avatar_idx} onLogOut={logOut} />
+          <AccountMenu avatarIdx={appContext.avatar_idx} onLogOut={logOut} />
         ) : (
           <div className='flex gap-3 sm:gap-6'>
             <NavTab to={{ pathname: '/auth/login', search: `${createSearchParams({ from: location.pathname })}` }}>

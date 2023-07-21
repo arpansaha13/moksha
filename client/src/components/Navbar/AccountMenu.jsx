@@ -1,9 +1,9 @@
 import { Fragment, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Transition } from '@headlessui/react'
+import { classNames } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import Avatar from '~common/Avatar'
-import { classNames } from '@arpansaha13/utils'
 import { profileTabs } from '~/data/tabs'
 
 const Dropdown = memo(({ avatarIdx, onLogOut }) => {
@@ -14,6 +14,7 @@ const Dropdown = memo(({ avatarIdx, onLogOut }) => {
           <Avatar avatarIdx={avatarIdx} />
         </Menu.Button>
       </div>
+
       <Transition
         as={Fragment}
         enter='transition ease-out duration-100'
@@ -39,6 +40,7 @@ const Dropdown = memo(({ avatarIdx, onLogOut }) => {
               )}
             </Menu.Item>
           ))}
+
           <Menu.Item>
             {({ active }) => (
               <button
