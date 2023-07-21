@@ -68,7 +68,6 @@ function CreateTeamForm() {
         setShowNotification(false)
       })
       .catch(err => {
-        console.log(err)
         if (Number(err.status) !== 409) throw err
 
         setAll({

@@ -5,7 +5,7 @@ import { useFetch } from '~/hooks/useFetch'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
 import Callout from '~common/Callout'
-import TeamMemberListItem from '../../../Teams/TeamMemberListItem'
+import UserListItem from '../../../Teams/UserListItem'
 
 export default function Register({ contest, team, members, setRegistration }) {
   const fetchHook = useFetch()
@@ -31,8 +31,13 @@ export default function Register({ contest, team, members, setRegistration }) {
         selected_members: toArray(),
       }),
     })
-      .then(res => startTransition(() => setRegistration(res.data)))
-      .finally(() => setLoading(false))
+      .then(res =>
+        startTransition(() => {
+          setRegistration(res.data)
+          setLoading(false)
+        })
+      )
+      .catch(() => setLoading(false))
   }
 
   return (
@@ -84,7 +89,7 @@ function TeamMembers({ members, add, del, has }) {
             className='p-1 w-full text-gray-100 text-left flex items-center'
             onClick={() => toggle(member.user_id)}
           >
-            <TeamMemberListItem user={member} />
+            <UserListItem user={member} />
           </button>
         </li>
       ))}

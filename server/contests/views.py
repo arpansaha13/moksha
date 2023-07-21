@@ -23,7 +23,7 @@ class SoloContestRegistration(APIView):
         ).first()
 
         if not solo_reg:
-            raise NotFound('No registration found.')
+            return Response({'data': None, 'message': 'No registration found.'})
 
         serializer = SoloContestRegistrationSerializer(solo_reg)
         return Response({'data': serializer.data}, status=200)
@@ -55,7 +55,7 @@ class SoloContestRegistration(APIView):
         solo_reg = SoloContestRegistrationModel.objects.filter(id=solo_reg_id).first()
 
         if not solo_reg:
-            raise NotFound({'message': 'No registration found for this contest.'})
+            raise NotFound({'message': 'No registration found.'})
 
         solo_reg.delete()
         return Response(status=204)
@@ -67,6 +67,9 @@ class TeamContestRegistration(APIView):
         contest_id = request.GET['contest_id']
 
         team_reg = get_team_reg(team_id, contest_id)
+
+        if not team_reg:
+            return Response({'data': None, 'message': 'No registration found.'})
 
         serializer = TeamContestRegistrationSerializer(
             team_reg,
@@ -111,6 +114,9 @@ class TeamContestRegistration(APIView):
 
         team_reg = get_team_reg(team_id, contest_id)
 
+        if team_reg is None:
+            return Response({'data': None, 'message': 'No registration found.'})
+
         serializer = TeamContestRegistrationSerializer(
             team_reg,
             fields={'registered_members': TeamContestUserRegistrationSerializer(
@@ -126,6 +132,10 @@ class TeamContestRegistration(APIView):
         contest_id = request.POST['contest_id']
 
         team_reg = get_team_reg(team_id, contest_id)
+
+        if team_reg is None:
+            raise NotFound({'message': 'No registration found.'})
+
         team_reg.delete()
 
         return Response(status=204)

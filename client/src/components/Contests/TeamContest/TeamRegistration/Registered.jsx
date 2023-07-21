@@ -2,7 +2,7 @@ import { startTransition, useState } from 'react'
 import { useFetch } from '~/hooks/useFetch'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
-import TeamMemberListItem from '../../../Teams/TeamMemberListItem'
+import RegisteredContestMembers from '~/components/Teams/RegisteredContestMembers'
 
 export default function Registered({ contestId, team, registration, setRegistration }) {
   const fetchHook = useFetch()
@@ -19,8 +19,13 @@ export default function Registered({ contestId, team, registration, setRegistrat
         contest_id: contestId,
       }),
     })
-      .then(() => startTransition(() => setRegistration(null)))
-      .finally(() => setLoading(false))
+      .then(() =>
+        startTransition(() => {
+          setRegistration(null)
+          setLoading(false)
+        })
+      )
+      .catch(() => setLoading(false))
   }
 
   return (
@@ -30,7 +35,7 @@ export default function Registered({ contestId, team, registration, setRegistrat
       <h3>Participating members</h3>
 
       <div className='not-prose'>
-        <ParticipatingMembers members={registration.registered_members} />
+        <RegisteredContestMembers members={registration.registered_members} />
       </div>
 
       <form className='mt-3 ml-auto w-max' onSubmit={cancelRegistration}>
@@ -39,20 +44,5 @@ export default function Registered({ contestId, team, registration, setRegistrat
         </BaseButton>
       </form>
     </Sheet>
-  )
-}
-
-function ParticipatingMembers({ members }) {
-  return (
-    <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs lg:text-sm'>
-      {members.map(({ user: member }) => (
-        <li
-          key={member.user_id}
-          className='p-1 w-full text-gray-100 text-left flex items-center rounded-sm sm:rounded select-none'
-        >
-          <TeamMemberListItem user={member} />
-        </li>
-      ))}
-    </ul>
   )
 }

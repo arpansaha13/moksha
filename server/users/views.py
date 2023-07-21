@@ -66,17 +66,44 @@ class GetAuthUserSoloContests(APIView):
 
 class GetAuthUserTeamContests(APIView):
     def get(self, request):
-        team_contest_regs = request.auth_user.team_contest_registrations.only('team_contest_registration').all()
+        contest_id = request.GET.get('contest_id', None)
+
+        # All registered contest of auth user's created team
+        if contest_id is None:
+            team_contest_regs = request.auth_user.team_contest_registrations.only('team_contest_registration').all()
+
+            serializer = TeamContestUserRegistrationSerializer(
+                team_contest_regs,
+                read_only=True,
+                empty=True,
+                many=True,
+                fields={
+                    'team_contest_registration': TeamContestRegistrationSerializer(
+                        read_only=True,
+                        fields={'contest': ContestSerializer(read_only=True)}
+                    )
+                }
+            )
+
+            return Response({'data': serializer.data}, status=200)
+
+        # A particular contest registration of auth user's created team
+        team_contest_reg = request.auth_user.team_contest_registrations.only('team_contest_registration').filter(team_contest_registration__contest=contest_id).first()
+
+        if team_contest_reg is None:
+            return Response({'data': None, 'message': 'No registration found'})
 
         serializer = TeamContestUserRegistrationSerializer(
-            team_contest_regs,
+            team_contest_reg,
             read_only=True,
             empty=True,
-            many=True,
             fields={
                 'team_contest_registration': TeamContestRegistrationSerializer(
                     read_only=True,
-                    fields={'contest': ContestSerializer(read_only=True)}
+                    fields={
+                        'team': TeamSerializer(read_only=True),
+                        'registered_members': TeamContestUserRegistrationSerializer(many=True)
+                    }
                 )
             }
         )

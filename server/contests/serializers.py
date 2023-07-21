@@ -7,7 +7,7 @@ from common.serializers import DynamicFieldsModelSerializer
 class ContestSerializer(ModelSerializer):
     class Meta:
         model = Contest
-        fields = '__all__'
+        exclude = ['is_solo']
 
 
 class SoloContestRegistrationSerializer(DynamicFieldsModelSerializer):

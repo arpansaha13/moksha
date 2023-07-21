@@ -28,8 +28,8 @@ export async function getAuthUserContests({ request }) {
     const data = { soloRegistrations: [], teamRegistrations: [] }
 
     const res = await Promise.all([
-      fetchWithCredentials('users/me/registered-contests/solo'),
-      fetchWithCredentials('users/me/registered-contests/team'),
+      fetchWithCredentials('users/me/registered-solo-contests'),
+      fetchWithCredentials('users/me/registered-team-contests'),
     ])
 
     data.soloContests = res[0].data

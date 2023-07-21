@@ -13,7 +13,8 @@ import Sheet from '~common/Sheet'
 import Loader from '~common/Loader'
 import Container from '~common/Container'
 import EmptyState from '~common/EmptyState'
-import TeamMemberListItem from '~/components/Teams/TeamMemberListItem'
+import TeamData from '~/components/Teams/TeamData'
+import UserListItem from '~/components/Teams/UserListItem'
 
 const InviteModal = lazy(() => import('../../components/Teams/InviteModal'))
 const PendingInvites = lazy(() => import('../../components/Teams/PendingInvites'))
@@ -75,7 +76,9 @@ export default function Team() {
         </div>
 
         <div className='space-y-6'>
-          <TeamData team={team} />
+          <Sheet className='px-6 py-4 space-y-3'>
+            <TeamData team={team} />
+          </Sheet>
 
           <div className='h-[42px] flex items-center justify-between'>
             <h2 className='text-xl lg:text-2xl font-bold text-gray-50'>
@@ -85,20 +88,18 @@ export default function Team() {
 
             {isLeader && (
               <BaseButton secondary onClick={() => setModalOpen(true)}>
-                <div className='flex items-center'>
-                  <div className='w-6 h-6'>
-                    <Icon
-                      icon={accountMultiplePlusIcon}
-                      className='inline-block'
-                      color='inherit'
-                      width='100%'
-                      height='100%'
-                    />
-                  </div>
-                  <p className='ml-1.5'>
-                    Invite <span className='hidden lg:inline'> members</span>
-                  </p>
+                <div className='w-6 h-6'>
+                  <Icon
+                    icon={accountMultiplePlusIcon}
+                    className='inline-block'
+                    color='inherit'
+                    width='100%'
+                    height='100%'
+                  />
                 </div>
+                <p className='ml-1.5'>
+                  Invite <span className='hidden lg:inline'> members</span>
+                </p>
               </BaseButton>
             )}
           </div>
@@ -141,28 +142,13 @@ export default function Team() {
   )
 }
 
-const TeamData = memo(({ team }) => (
-  <Sheet className='px-6 py-4 space-y-3'>
-    <div className='grid grid-cols-1 xs:grid-cols-2 gap-3 text-sm'>
-      <div>
-        <p className='font-semibold text-gray-400'>Leader</p>
-        <p className='text-gray-100'>{team.leader.name}</p>
-      </div>
-      <div>
-        <p className='font-semibold text-gray-400'>Member count</p>
-        <p className='text-gray-100'>{team.member_count}</p>
-      </div>
-    </div>
-  </Sheet>
-))
-
 const TeamMembers = memo(({ members }) => (
   <Sheet className='px-6 py-4 space-y-3'>
     <ul className='grid grid-cols-1 sm:grid-cols-2 text-xs lg:text-sm'>
       {members.map(member => (
         <li key={member.user_id} className='py-1.5 first:pt-0 last:pb-0'>
           <div className='text-gray-100 flex items-center'>
-            <TeamMemberListItem user={member} />
+            <UserListItem user={member} />
           </div>
         </li>
       ))}

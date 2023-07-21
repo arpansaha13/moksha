@@ -50,7 +50,14 @@ export default function Contest() {
 
             <SocialShare data={shareData} className='group flex items-center lg:gap-1'>
               <div className='w-6 h-6 text-amber-700 group-hover:text-amber-600 transition-colors'>
-                <Icon icon={shareIcon} className='block' color='inherit' width='100%' height='100%' aria-hidden />
+                <Icon
+                  icon={shareIcon}
+                  className='block'
+                  color='inherit'
+                  width='100%'
+                  height='100%'
+                  aria-hidden='true'
+                />
               </div>
               <p className='sr-only lg:not-sr-only text-sm font-medium text-amber-600 group-hover:text-amber-500 transition-colors'>
                 Share
@@ -75,7 +82,7 @@ export default function Contest() {
           </Suspense>
         </div>
 
-        <div className='lg:col-span-2 order-first sm:order-2'>
+        <div className='lg:col-span-2 order-first lg:order-2'>
           <div className='sm:sticky sm:top-8'>
             <div className='mx-auto w-64 h-64 sm:w-80 sm:h-80'>
               <Tz3dCard

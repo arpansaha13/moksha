@@ -1,4 +1,5 @@
 from django.db.models import Q
+from rest_framework.exceptions import NotFound
 from common.exceptions import BadRequest, Conflict
 from .serializers import TeamSerializer
 from .models import Team, TeamMember
@@ -6,7 +7,7 @@ from users.models import User
 from invites.models import Invite, InviteStatus
 from users.serializers import UserSerializer
 from invites.serializers import InviteSerializer
-from contests.serializers import ContestSerializer, TeamContestRegistrationSerializer
+from contests.serializers import ContestSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .helpers import get_team
@@ -66,7 +67,7 @@ class GetAuthUserCreatedTeam(APIView):
             serializer = TeamSerializer(auth_user_created_team)
             return Response({'data': serializer.data}, status=200)
 
-        return Response({'data': None}, status=200)
+        return Response({'data': None, 'message': 'No team found'}, status=200)
 
 
 class GetAuthUserJoinedTeams(APIView):
@@ -124,19 +125,40 @@ class GetRegisteredTeamContests(APIView):
     def get(self, request, team_id):
         team = get_team(team_id)
 
-        serializer = TeamSerializer(
-            team,
-            empty=True,
+        contest_id = request.GET.get('contest_id', None)
+
+        # All registered contests of a team
+        if contest_id is None:
+            team_contest_regs = team.registered_team_contests.all()  # type: ignore
+
+            serializer = TeamContestRegistrationSerializer(
+                team_contest_regs,
+                read_only=True,
+                many=True,
+                fields={
+                    'contest': ContestSerializer(),
+                    # TODO 'registered_members': TeamContestUserRegistrationSerializer(many=True)
+                }
+            )
+
+            return Response({'data': serializer.data}, status=200)
+
+        # A particular contest registration of a team
+        team_contest_reg = team.registered_team_contests.filter(contest=contest_id).first()  # type: ignore
+
+        if team_contest_reg is None:
+            return Response({'data': None, 'message': 'No registration found'})
+
+        serializer = TeamContestRegistrationSerializer(
+            team_contest_reg,
+            read_only=True,
             fields={
-                'registered_team_contests': TeamContestRegistrationSerializer(
-                    read_only=True,
-                    many=True,
-                    fields={'contest': ContestSerializer(read_only=True)}
-                )
+                'team': TeamSerializer(),
+                'registered_members': TeamContestUserRegistrationSerializer(many=True)
             }
         )
 
-        return Response({'data': serializer.data['registered_team_contests']}, status=200)
+        return Response({'data': serializer.data}, status=200)
 
 
 class GetPendingInvites(APIView):

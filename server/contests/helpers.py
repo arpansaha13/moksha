@@ -27,7 +27,4 @@ def get_team_reg(team_id: str, contest_id: int):
         contest=contest_id
     ).first()
 
-    if not team_reg:
-        raise NotFound({'message': 'No registration found.'})
-
     return team_reg
