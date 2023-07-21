@@ -137,7 +137,7 @@ class GetRegisteredTeamContests(APIView):
                 many=True,
                 fields={
                     'contest': ContestSerializer(),
-                    # TODO 'registered_members': TeamContestUserRegistrationSerializer(many=True)
+                    'registered_members': TeamContestUserRegistrationSerializer(many=True)
                 }
             )
 

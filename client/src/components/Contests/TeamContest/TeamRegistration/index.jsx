@@ -23,10 +23,11 @@ export default function TeamRegistration({ contest }) {
       if (isNullOrUndefined(team)) return
       setCreatedTeam(team)
 
-      try {
-        const registration = await fetchRegistration(fetchHook, team.team_id, contest.id)
+      const registration = await fetchRegistration(fetchHook, team.team_id, contest.id)
+
+      if (!isNullOrUndefined(registration)) {
         setRegistration(registration)
-      } catch (e) {
+      } else {
         const { data: members } = await fetchHook(`teams/${team.team_id}/members`)
         setTeamMembers(members)
       }

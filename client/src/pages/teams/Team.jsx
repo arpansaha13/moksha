@@ -18,7 +18,7 @@ import UserListItem from '~/components/Teams/UserListItem'
 
 const InviteModal = lazy(() => import('../../components/Teams/InviteModal'))
 const PendingInvites = lazy(() => import('../../components/Teams/PendingInvites'))
-const RegisteredContestCard = lazy(() => import('../../components/Contests/RegisteredContestCard'))
+const RegisteredTeamContestCard = lazy(() => import('../../components/Contests/RegisteredTeamContestCard'))
 
 export default function Team() {
   const fetchHook = useFetch()
@@ -159,23 +159,20 @@ const TeamMembers = memo(({ members }) => (
 const RegisteredContests = memo(({ teamId }) => {
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(true)
-  const [contests, setContests] = useState([])
+  const [registrations, setRegistrations] = useState([])
 
   useEffect(() => {
     fetchHook(`teams/${teamId}/registered-contests`)
-      .then(r => setContests(r.data))
+      .then(r => setRegistrations(r.data))
       .finally(() => {
         startTransition(() => setLoading(false))
       })
   }, [])
 
-  const heading = useMemo(
-    () => (
-      <div className='h-[42px] flex items-center'>
-        <h2 className='text-xl lg:text-2xl font-bold text-gray-50'>Registered contests</h2>
-      </div>
-    ),
-    []
+  const heading = (
+    <div className='h-[42px] flex items-center'>
+      <h2 className='text-xl lg:text-2xl font-bold text-gray-50'>Registered contests</h2>
+    </div>
   )
 
   if (loading) {
@@ -191,10 +188,8 @@ const RegisteredContests = memo(({ teamId }) => {
     <>
       {heading}
 
-      {contests.length > 0 ? (
-        contests.map(({ contest }) => (
-          <RegisteredContestCard key={contest.id} clubName={contest.club_slug} contestSlug={contest.contest_slug} />
-        ))
+      {registrations.length > 0 ? (
+        registrations.map(reg => <RegisteredTeamContestCard key={reg.id} reg={reg} />)
       ) : (
         <div className='mt-6'>
           <EmptyState icon={calendarRemoveIcon} title='Your team has not registered for any contest yet' />

@@ -13,10 +13,17 @@ module.exports = {
         'prime-yell': '#6B3600',
         'sec-yell': '#8A6524',
       },
+      containers: {
+        '2xs': '16rem',
+      },
     },
   },
   future: {
     hoverOnlyWhenSupported: true,
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/container-queries'),
+  ],
 }

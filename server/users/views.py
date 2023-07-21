@@ -41,8 +41,8 @@ class GetAuthUserReceivedTeamInvites(APIView):
         serializer = InviteSerializer(
             received_invites,
             many=True,
+            read_only=True,
             fields={'team': TeamSerializer(
-                read_only=True,
                 empty=True,
                 fields={'team_id': CharField(), 'team_name': CharField()}
             )}
@@ -79,8 +79,13 @@ class GetAuthUserTeamContests(APIView):
                 many=True,
                 fields={
                     'team_contest_registration': TeamContestRegistrationSerializer(
-                        read_only=True,
-                        fields={'contest': ContestSerializer(read_only=True)}
+                        fields={
+                            'contest': ContestSerializer(),
+                            'team': TeamSerializer(
+                                empty=True,
+                                fields={'team_id': CharField(), 'team_name': CharField()}
+                            )
+                        }
                     )
                 }
             )

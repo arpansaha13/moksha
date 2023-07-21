@@ -1,7 +1,8 @@
 import { Link, useLoaderData } from 'react-router-dom'
 import calendarRemoveIcon from '@iconify-icons/mdi/calendar-remove'
 import EmptyState from '~common/EmptyState'
-import RegisteredContestCard from '~/components/Contests/RegisteredContestCard'
+import RegisteredSoloContestCard from '~/components/Contests/RegisteredSoloContestCard'
+import RegisteredTeamContestCard from '~/components/Contests/RegisteredTeamContestCard'
 
 function Registrations() {
   const { soloContests, teamContests } = useLoaderData()
@@ -29,7 +30,11 @@ function Registrations() {
 
           <div className='space-y-4'>
             {soloContests.map(({ contest }) => (
-              <RegisteredContestCard key={contest.id} clubName={contest.club_slug} contestSlug={contest.contest_slug} />
+              <RegisteredSoloContestCard
+                key={contest.id}
+                clubName={contest.club_slug}
+                contestSlug={contest.contest_slug}
+              />
             ))}
           </div>
         </section>
@@ -40,8 +45,8 @@ function Registrations() {
           <h2 className='mb-6 text-2xl font-bold text-gray-50'>Registered contests - Team</h2>
 
           <div className='space-y-4'>
-            {teamContests.map(({ team_contest_registration: { contest } }) => (
-              <RegisteredContestCard key={contest.id} clubName={contest.club_slug} contestSlug={contest.contest_slug} />
+            {teamContests.map(({ team_contest_registration: reg }) => (
+              <RegisteredTeamContestCard key={reg.id} reg={reg} showRegisteredMembers={false} />
             ))}
           </div>
         </section>
