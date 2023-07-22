@@ -109,7 +109,7 @@ const Registration = memo(({ reg }) => {
 async function fetchAuthUserReg(fetchHook, contestId) {
   const params = new URLSearchParams({ contest_id: contestId }).toString()
   const res = await fetchHook(`users/me/registered-team-contests?${params}`)
-  return res.data.team_contest_registration
+  return res.data?.team_contest_registration
 }
 
 async function fetchCreatedTeamReg(fetchHook, contestId) {
