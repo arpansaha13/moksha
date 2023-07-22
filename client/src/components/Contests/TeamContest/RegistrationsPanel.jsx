@@ -113,7 +113,7 @@ async function fetchAuthUserReg(fetchHook, contestId) {
 }
 
 async function fetchCreatedTeamReg(fetchHook, contestId) {
-  const { data: team } = await fetchHook('teams/created')
+  const { data: team } = await fetchHook('users/me/created-team')
 
   if (isNullOrUndefined(team)) return { hasCreatedTeam: false, data: null }
 

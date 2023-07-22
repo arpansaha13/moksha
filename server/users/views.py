@@ -6,7 +6,7 @@ from .models import User
 from .serializers import AuthUserSerializer, UserSerializer
 from invites.models import InviteStatus
 from invites.serializers import InviteSerializer
-from teams.serializers import TeamSerializer
+from teams.serializers import TeamSerializer, TeamMemberSerializer
 from contests.serializers import ContestSerializer, SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
 
 
@@ -31,6 +31,31 @@ class GetUsers(APIView):
 
         serializer = UserSerializer(users, many=True)
 
+        return Response({'data': serializer.data}, status=200)
+
+
+class GetAuthUserCreatedTeam(APIView):
+    def get(self, request):
+        created_team = request.auth_user.created_team.first()
+
+        if created_team:
+            serializer = TeamSerializer(created_team)
+            return Response({'data': serializer.data}, status=200)
+
+        return Response({'data': None, 'message': 'No team found'}, status=200)
+
+
+class GetAuthUserJoinedTeams(APIView):
+    def get(self, request):
+        created_team = request.auth_user.created_team
+        user_memberships = request.auth_user.user_memberships.filter(~Q(team__team_id=created_team)).all()
+
+        serializer = TeamMemberSerializer(
+            user_memberships,
+            many=True,
+            read_only=True,
+            fields={'team': TeamSerializer()}
+        )
         return Response({'data': serializer.data}, status=200)
 
 

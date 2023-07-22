@@ -6,7 +6,7 @@ from users.models import User
 class Team(Model):
     team_id = CharField(primary_key=True, max_length=100, null=False)
     team_name = TextField(null=False)
-    leader = ForeignKey(User, related_name='created_teams', on_delete=CASCADE, null=False, db_column='leader')
+    leader = ForeignKey(User, related_name='created_team', on_delete=CASCADE, null=False, db_column='leader')
     member_count = IntegerField(default=1, null=False)
 
     class Meta:

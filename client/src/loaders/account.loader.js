@@ -9,7 +9,7 @@ export async function getAuthUserTeams({ request }) {
 
     const data = { createdTeam: null, joinedTeams: null }
 
-    const res = await Promise.all([fetchWithCredentials('teams/created'), fetchWithCredentials('teams/joined')])
+    const res = await Promise.all([fetchWithCredentials('users/me/created-team'), fetchWithCredentials('users/me/joined-teams')])
 
     data.createdTeam = res[0].data
     data.joinedTeams = res[1].data

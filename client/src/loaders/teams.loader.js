@@ -7,7 +7,7 @@ export async function allowIfNoTeamCreated({ request }) {
   try {
     nprogress.start()
 
-    const res = await fetchWithCredentials('teams/created')
+    const res = await fetchWithCredentials('users/me/created-team')
 
     nprogress.done()
 

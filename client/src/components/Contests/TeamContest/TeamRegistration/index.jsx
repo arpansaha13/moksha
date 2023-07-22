@@ -73,7 +73,7 @@ export default function TeamRegistration({ contest }) {
 }
 
 async function fetchCreatedTeam(fetchHook) {
-  return fetchHook('teams/created').then(r => r.data)
+  return fetchHook('users/me/created-team').then(r => r.data)
 }
 
 async function fetchRegistration(fetchHook, teamId, contestId) {

@@ -25,7 +25,7 @@ function Teams() {
         <div>
           <h2 className='mb-6 text-2xl font-bold text-gray-50'>Teams that I have joined</h2>
 
-          {joinedTeams.map(team => (
+          {joinedTeams.map(({team}) => (
             <TeamCard key={team.team_id} team={team} />
           ))}
         </div>

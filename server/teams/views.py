@@ -1,5 +1,4 @@
 from django.db.models import Q
-from rest_framework.exceptions import NotFound
 from common.exceptions import BadRequest, Conflict
 from .serializers import TeamSerializer
 from .models import Team, TeamMember
@@ -56,32 +55,6 @@ class GetTeam(APIView):
     def get(self, req, team_id):
         team = get_team(team_id)
         serializer = TeamSerializer(team)
-        return Response({'data': serializer.data}, status=200)
-
-
-class GetAuthUserCreatedTeam(APIView):
-    def get(self, request):
-        auth_user_created_team = Team.objects.filter(leader=request.auth_user.user_id).first()
-
-        if auth_user_created_team:
-            serializer = TeamSerializer(auth_user_created_team)
-            return Response({'data': serializer.data}, status=200)
-
-        return Response({'data': None, 'message': 'No team found'}, status=200)
-
-
-class GetAuthUserJoinedTeams(APIView):
-    def get(self, request):
-        auth_user_to_teams = TeamMember.objects.filter(
-            user=request.auth_user.user_id
-        ).values_list('team', flat=True)
-
-        auth_user_joined_teams = Team.objects.filter(
-            Q(team_id__in=auth_user_to_teams)
-            & ~Q(leader=request.auth_user.user_id)
-        ).all()
-
-        serializer = TeamSerializer(auth_user_joined_teams, many=True)
         return Response({'data': serializer.data}, status=200)
 
 

@@ -13,7 +13,7 @@ class TeamSerializer(DynamicFieldsModelSerializer):
         fields = '__all__'
 
 
-class TeamMemberSerializer(ModelSerializer):
+class TeamMemberSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = TeamMember
-        fields = '__all__'
+        fields = ['id']
