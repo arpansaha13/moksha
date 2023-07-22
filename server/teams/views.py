@@ -10,6 +10,7 @@ from contests.serializers import ContestSerializer, TeamContestRegistrationSeria
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .helpers import get_team
+from contests.helpers import get_contest
 from invites.helpers import verify_team_leader
 import secrets
 import string
@@ -66,6 +67,22 @@ class GetTeamMembers(APIView):
         serializer = UserSerializer(users, many=True)
 
         return Response({'data': serializer.data}, status=200)
+
+
+class GetContestRegisteredTeamMembers(APIView):
+    def get(self, req, team_id, contest_id):
+        team = get_team(team_id)
+        contest = get_contest(contest_id)
+
+        team_members = team.team_members.values_list('user__user_id', flat=True)  # type: ignore
+        registered_users_in_contest = contest.registered_teams.filter(  # type: ignore
+            registered_members__user__user_id__in=team_members
+        ).values_list(
+            'registered_members__user__user_id',
+            flat=True
+        ).all()
+
+        return Response({'data': registered_users_in_contest}, status=200)
 
 
 class GetUninvitedUsers(APIView):

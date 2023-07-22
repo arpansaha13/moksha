@@ -1,4 +1,5 @@
-import { startTransition, useState } from 'react'
+import { startTransition, useMemo, useState } from 'react'
+import { Disclosure } from '@headlessui/react'
 import { classNames } from '@arpansaha13/utils'
 import { useSet } from '~/hooks/useSet'
 import { useFetch } from '~/hooks/useFetch'
@@ -7,12 +8,19 @@ import Sheet from '~common/Sheet'
 import Callout from '~common/Callout'
 import UserListItem from '../../../Teams/UserListItem'
 
-export default function Register({ contest, team, members, setRegistration }) {
+export default function Register({ contest, team, members, alreadyRegisteredMemberIds, setRegistration }) {
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
   const { add, delete: del, has, size: selectedCount, toArray } = useSet([])
 
   const minMembersRequired = getMinMembersRequiredCount(contest.allowedTeamSize)
+  const hasAlreadyRegisteredMembers = alreadyRegisteredMemberIds.size > 0
+
+  const { filteredMembers, alreadyRegisteredMembers } = useMemo(
+    () => filterMembers(members, alreadyRegisteredMemberIds),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
 
   function teamRegister(e) {
     e.preventDefault()
@@ -41,30 +49,50 @@ export default function Register({ contest, team, members, setRegistration }) {
   }
 
   return (
-    <Sheet className='p-4 sm:p-6 markdown'>
-      <h2>Register with {team.team_name}</h2>
+    <Sheet className='p-4 sm:p-6'>
+      <h2 className='mb-6 text-xl sm:text-2xl font-bold wrap-balance'>Register with {team.team_name}</h2>
 
-      {members.length < minMembersRequired && (
-        <ParticipationNotPossibleWarning minMembersRequired={minMembersRequired} />
-      )}
+      <div className='space-y-4'>
+        {filteredMembers.length < minMembersRequired && (
+          <ParticipationNotPossibleWarning minMembersRequired={minMembersRequired} />
+        )}
 
-      <h3>Select members</h3>
+        {hasAlreadyRegisteredMembers && <AlreadyRegisteredMembersInfo />}
 
-      <div className='not-prose mb-4 space-y-4'>
-        <div>
-          <TeamMembers members={members} add={add} del={del} has={has} />
+        <h3 className='my-4 text-lg sm:text-xl font-bold'>Select members</h3>
+
+        <div className='mb-4 text-xs sm:text-sm space-y-4'>
+          <TeamMembers members={filteredMembers} add={add} del={del} has={has} />
+
+          <ConditionalWrapper renderDisclosure={hasAlreadyRegisteredMembers}>
+            <div className='flex flex-col sm:flex-row items-end sm:justify-between gap-1 sm:gap-0'>
+              <p>Members selected: {selectedCount}</p>
+
+              {hasAlreadyRegisteredMembers && (
+                <Disclosure.Button className='block text-amber-600 hover:text-amber-500 font-medium transition-colors'>
+                  {({ open }) => (open ? 'Hide registered members' : 'Show registered members')}
+                </Disclosure.Button>
+              )}
+            </div>
+
+            {hasAlreadyRegisteredMembers && (
+              <Disclosure.Panel>
+                <h3 className='mb-4 text-lg sm:text-xl font-bold'>Already registered members</h3>
+
+                <AlreadyRegisteredMembers members={alreadyRegisteredMembers} />
+              </Disclosure.Panel>
+            )}
+          </ConditionalWrapper>
+
+          <AllowedTeamSizes sizes={contest.allowedTeamSize} />
         </div>
 
-        <p className='text-sm'>Members selected: {selectedCount}</p>
-
-        <AllowedTeamSizes sizes={contest.allowedTeamSize} />
+        <form className='ml-auto w-max' onSubmit={teamRegister}>
+          <BaseButton type='submit' loading={loading}>
+            Register
+          </BaseButton>
+        </form>
       </div>
-
-      <form className='ml-auto w-max' onSubmit={teamRegister}>
-        <BaseButton type='submit' loading={loading}>
-          Register
-        </BaseButton>
-      </form>
     </Sheet>
   )
 }
@@ -97,11 +125,34 @@ function TeamMembers({ members, add, del, has }) {
   )
 }
 
+function AlreadyRegisteredMembers({ members }) {
+  return (
+    <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs lg:text-sm'>
+      {members.map(member => (
+        <li
+          key={member.user_id}
+          className='p-1 w-full text-gray-100 text-left flex items-center rounded-sm sm:rounded select-none'
+        >
+          <UserListItem user={member} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 function ParticipationNotPossibleWarning({ minMembersRequired }) {
   return (
-    <Callout type='warning' className='not-prose'>
+    <Callout type='warning' className='not-prose wrap-balance'>
       Your team does not have enough members to participate in this contest. A minimum of{' '}
       <strong>{minMembersRequired} members</strong> are required.
+    </Callout>
+  )
+}
+
+function AlreadyRegisteredMembersInfo() {
+  return (
+    <Callout className='not-prose wrap-balance'>
+      Some members are already registered in this contest from some other team. They are not shown in the list below.
     </Callout>
   )
 }
@@ -141,6 +192,10 @@ function AllowedTeamSizes({ sizes }) {
   )
 }
 
+function ConditionalWrapper({ renderDisclosure, children }) {
+  return renderDisclosure ? <Disclosure>{children}</Disclosure> : children
+}
+
 function getMinMembersRequiredCount(sizes) {
   let minMembersRequired = 0
 
@@ -161,4 +216,16 @@ function isTeamSizeValid(sizes, selectedCount) {
   if (typeof sizes === 'number') return sizes === selectedCount
 
   return sizes.min <= selectedCount && selectedCount <= sizes.max
+}
+
+function filterMembers(members, alreadyRegisteredMemberIds) {
+  const filteredMembers = []
+  const alreadyRegisteredMembers = []
+
+  for (const member of members) {
+    if (alreadyRegisteredMemberIds.has(member.user_id)) alreadyRegisteredMembers.push(member)
+    else filteredMembers.push(member)
+  }
+
+  return { filteredMembers, alreadyRegisteredMembers }
 }

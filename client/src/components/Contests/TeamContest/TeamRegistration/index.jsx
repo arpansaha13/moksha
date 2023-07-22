@@ -14,6 +14,7 @@ export default function TeamRegistration({ contest }) {
   const [loading, setLoading] = useState(true)
   const [createdTeam, setCreatedTeam] = useState(null)
   const [teamMembers, setTeamMembers] = useState(null)
+  const [alreadyRegisteredMemberIds, setAlreadyRegisteredMemberIds] = useState(null)
   const [registration, setRegistration] = useState(null)
 
   useEffect(() => {
@@ -28,8 +29,12 @@ export default function TeamRegistration({ contest }) {
       if (!isNullOrUndefined(registration)) {
         setRegistration(registration)
       } else {
-        const { data: members } = await fetchHook(`teams/${team.team_id}/members`)
-        setTeamMembers(members)
+        const res = await Promise.all([
+          fetchHook(`teams/${team.team_id}/members`),
+          fetchHook(`teams/${team.team_id}/members/${contest.id}`),
+        ])
+        setTeamMembers(res[0].data)
+        setAlreadyRegisteredMemberIds(new Set(res[1].data))
       }
     }
 
@@ -61,7 +66,13 @@ export default function TeamRegistration({ contest }) {
   }
 
   return isNullOrUndefined(registration) ? (
-    <Register contest={contest} team={createdTeam} members={teamMembers} setRegistration={setRegistration} />
+    <Register
+      contest={contest}
+      team={createdTeam}
+      members={teamMembers}
+      alreadyRegisteredMemberIds={alreadyRegisteredMemberIds}
+      setRegistration={setRegistration}
+    />
   ) : (
     <Registered
       contestId={contest.id}
