@@ -1,6 +1,6 @@
 import Tilt from 'react-parallax-tilt'
 import { useMediaQuery } from 'react-responsive'
-import Moksha from '../../assets/moksha.png'
+import Moksha from '~/assets/moksha.png'
 
 export default function Slider() {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })

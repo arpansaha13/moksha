@@ -7,7 +7,7 @@ export async function allowIfNoTeamCreated({ request }) {
   try {
     nprogress.start()
 
-    const res = await fetchWithCredentials('teams/created')
+    const res = await fetchWithCredentials('users/me/created-team')
 
     nprogress.done()
 
@@ -32,19 +32,9 @@ export async function getTeamData({ request }) {
     data.team = res[0].data
     data.members = res[1].data
 
-    // Will fail if not leader
-    data.pendingInvites = await fetchWithCredentials(`invites/${teamId}`).then(r => r.data)
-
     nprogress.done()
     return data
-  } catch (e) {
-    if (e.message === 'Forbidden') {
-      data.pendingInvites = []
-
-      nprogress.done()
-      return data
-    }
-
+  } catch {
     return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
 }

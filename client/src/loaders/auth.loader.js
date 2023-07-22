@@ -1,15 +1,12 @@
 import nprogress from 'nprogress'
 import { redirect } from 'react-router-dom'
+import { isNullOrUndefined } from '@arpansaha13/utils'
 import getPathFromURL from '../utils/getPathFromURL'
 import fetchWithCredentials from '../utils/fetchWithCredentials'
 
 const isAuthenticated = async () => {
-  try {
-    await fetchWithCredentials('auth/check-auth')
-    return true
-  } catch {
-    return false
-  }
+  const { data } = await fetchWithCredentials('auth/check-auth')
+  return !isNullOrUndefined(data)
 }
 
 export const allowIfNotAuthenticated = async () => {

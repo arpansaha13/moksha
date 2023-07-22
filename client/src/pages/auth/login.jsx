@@ -1,13 +1,13 @@
 import { useCallback, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useFetch } from '../../hooks/useFetch'
-import BaseInput from '../../components/base/BaseInput'
-import BaseButton from '../../components/base/BaseButton'
-import CsrfField from '../../components/common/CsrfField'
-import { useAppContext } from '../../containers/DataProvider'
-import { useAuthContext } from '../../containers/AuthProvider'
-import getFormData from '../../utils/getFormData'
+import { useFetch } from '~/hooks/useFetch'
+import BaseInput from '~base/BaseInput'
+import BaseButton from '~base/BaseButton'
+import CsrfField from '~common/CsrfField'
+import { useAppContext } from '~/containers/DataProvider'
+import { useAuthContext } from '~/containers/AuthProvider'
+import getFormData from '~/utils/getFormData'
 
 const LoginPage = () => {
   const { setAppContext } = useAppContext()
@@ -32,7 +32,6 @@ const LoginPage = () => {
         body: JSON.stringify(formData),
       })
         .then(res => {
-          setLoading(false)
           setAppContext('authenticated', true)
           setAppContext('avatar_idx', res.avatar_idx)
           setAppContext('user_id', res.user_id)
@@ -42,7 +41,6 @@ const LoginPage = () => {
           else navigate('/', { replace: true })
         })
         .catch(err => {
-          setLoading(false)
           setAllNotification({
             show: true,
             title: 'Login failed',
@@ -50,6 +48,7 @@ const LoginPage = () => {
             status: 'error',
           })
         })
+        .finally(() => setLoading(false))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [formRef]

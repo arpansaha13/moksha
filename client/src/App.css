@@ -27,6 +27,10 @@ body {
   @apply !border-x !border-amber-700;
 }
 
+.wrap-balance {
+  text-wrap: balance;
+}
+
 /* Markdown/Prose modifications */
 .markdown {
   @apply prose prose-sm sm:prose-base prose-invert max-w-none;

@@ -26,22 +26,22 @@ export default function Contact() {
 const Card = ({ data }) => (
   <Sheet className='p-4 overflow-hidden'>
     <p className='text-lg sm:text-xl text-amber-500 font-semibold'>{data.name}</p>
-    <p className='text-xs xs:text-sm text-gray-400 uppercase'>{data.designation}</p>
+    <p className='text-xs 2xs:text-sm text-gray-400 uppercase'>{data.designation}</p>
 
     <div className='mt-4 flex items-center'>
-      <div className='flex-shrink-0 mr-2 w-5 h-5 xs:w-6 xs:h-6 text-emerald-500'>
+      <div className='flex-shrink-0 mr-2 w-5 h-5 2xs:w-6 2xs:h-6 text-emerald-500'>
         <Icon icon={whatsappIcon} className='block' color='inherit' width='100%' height='100%' />
       </div>
-      <p className='text-sm xs:text-base text-gray-200'>{data.whatsApp}</p>
+      <p className='text-sm 2xs:text-base text-gray-200'>{data.whatsApp}</p>
     </div>
 
     <div className='mt-2 flex items-center text-rose-500'>
-      <div className='flex-shrink-0 mr-2 w-5 h-5 xs:w-6 xs:h-6'>
+      <div className='flex-shrink-0 mr-2 w-5 h-5 2xs:w-6 2xs:h-6'>
         <Icon icon={gmailIcon} className='block' color='inherit' width='100%' height='100%' />
       </div>
       <div className='text-gray-200'>
-        <p className='inline-block text-sm xs:text-base'>{data.email.split('@')[0]}</p>
-        <p className='inline-block text-xs xs:text-sm text-gray-400'>@{data.email.split('@')[1]}</p>
+        <p className='inline-block text-sm 2xs:text-base'>{data.email.split('@')[0]}</p>
+        <p className='inline-block text-xs 2xs:text-sm text-gray-400'>@{data.email.split('@')[1]}</p>
       </div>
     </div>
   </Sheet>

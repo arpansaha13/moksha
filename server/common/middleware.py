@@ -8,11 +8,13 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
+
 def jwt_exempt(view_func):
     def wrapped_view(*args, **kwargs):
         return view_func(*args, **kwargs)
     wrapped_view.jwt_exempt_flag = True
     return wraps(view_func)(wrapped_view)
+
 
 class JwtMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, *view_args, **view_kwargs):
@@ -27,7 +29,7 @@ class JwtMiddleware(MiddlewareMixin):
         if not token:
             return JsonResponse({'message': 'Unauthenticated'}, status=403)
         try:
-            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
+            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
         except jwt.ExpiredSignatureError:
             return JsonResponse({'message': 'Token Expired! Log in again.'}, status=403)
 

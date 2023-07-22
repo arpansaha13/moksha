@@ -1,13 +1,13 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useMap } from '../../hooks/useMap'
-import { useFetch } from '../../hooks/useFetch'
-import BaseInput from '../../components/base/BaseInput'
-import BaseButton from '../../components/base/BaseButton'
-import CsrfField from '../../components/common/CsrfField'
-import { useAuthContext } from '../../containers/AuthProvider'
-import getFormData from '../../utils/getFormData'
+import { useMap } from '~/hooks/useMap'
+import { useFetch } from '~/hooks/useFetch'
+import BaseInput from '~base/BaseInput'
+import BaseButton from '~base/BaseButton'
+import CsrfField from '~common/CsrfField'
+import { useAuthContext } from '~/containers/AuthProvider'
+import getFormData from '~/utils/getFormData'
 
 const SignUpPage = () => {
   const navigate = useNavigate()

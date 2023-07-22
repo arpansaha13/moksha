@@ -1,12 +1,19 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Team, TeamUserRegistrations
+from common.serializers import DynamicFieldsModelSerializer
+from .models import Team, TeamMember
+from users.serializers import UserSerializer
 
-class TeamSerializers(ModelSerializer):
+
+class TeamSerializer(DynamicFieldsModelSerializer):
+
+    leader = UserSerializer()
+
     class Meta:
         model = Team
         fields = '__all__'
 
-class TeamUserRegistrationsSerializers(ModelSerializer):
+
+class TeamMemberSerializer(DynamicFieldsModelSerializer):
     class Meta:
-        model = TeamUserRegistrations
-        fields = '__all__'
+        model = TeamMember
+        fields = ['id']

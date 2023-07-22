@@ -9,8 +9,6 @@ function Home() {
       </Helmet>
 
       <Slider />
-
-      {/* <Timeline /> */}
     </>
   )
 }

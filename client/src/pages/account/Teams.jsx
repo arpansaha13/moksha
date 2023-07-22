@@ -1,10 +1,10 @@
 import { Link, useLoaderData } from 'react-router-dom'
 import accountMultipleIcon from '@iconify-icons/mdi/account-multiple-remove-outline'
 import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
-import Sheet from '../../components/common/Sheet'
-import DLink from '../../components/common/Links/DLink'
-import EmptyState from '../../components/common/EmptyState'
-import MLink from '../../components/common/Links/MLink'
+import Sheet from '~common/Sheet'
+import DLink from '~common/Links/DLink'
+import EmptyState from '~common/EmptyState'
+import MLink from '~common/Links/MLink'
 
 function Teams() {
   const { createdTeam, joinedTeams } = useLoaderData()
@@ -12,23 +12,26 @@ function Teams() {
   return (
     <main
       className={classNames(
-        'gap-y-8',
-        isNullOrUndefined(createdTeam) && joinedTeams.length > 0 ? 'flex flex-col-reverse' : ''
+        'flex gap-y-8',
+        isNullOrUndefined(createdTeam) && joinedTeams.length > 0 ? 'flex-col-reverse' : 'flex-col'
       )}
     >
-      <div>
-        <h2 className='mb-6 text-2xl font-bold text-gray-50'>Team created by me</h2>
+      <section id='created-team'>
+        <h2 className='mb-6 text-xl sm:text-2xl font-bold text-gray-50'>Team created by me</h2>
+
         <CreatedTeam team={createdTeam} />
-      </div>
+      </section>
 
       {joinedTeams.length > 0 && (
-        <div>
-          <h2 className='mb-6 text-2xl font-bold text-gray-50'>Teams that I have joined</h2>
+        <section id='joined-teams'>
+          <h2 className='mb-6 text-xl sm:text-2xl font-bold text-gray-50'>Teams that I have joined</h2>
 
-          {joinedTeams.map(team => (
-            <TeamCard key={team.team_id} team={team} />
-          ))}
-        </div>
+          <div className='space-y-6'>
+            {joinedTeams.map(({ team }) => (
+              <TeamCard key={team.team_id} team={team} />
+            ))}
+          </div>
+        </section>
       )}
     </main>
   )
@@ -37,9 +40,11 @@ function Teams() {
 export default Teams
 
 function CreatedTeam({ team }) {
-  return !isNullOrUndefined(team) ? (
-    <TeamCard key={team.team_id} team={team} />
-  ) : (
+  if (!isNullOrUndefined(team)) {
+    return <TeamCard key={team.team_id} team={team} />
+  }
+
+  return (
     <>
       <EmptyState icon={accountMultipleIcon} title='You have not created any team yet' />
 
@@ -67,10 +72,10 @@ const TeamCard = ({ team }) => (
         </DLink>
       </h3>
 
-      <div className='grid grid-cols-1 xs:grid-cols-2 gap-3 text-sm'>
+      <div className='grid grid-cols-1 2xs:grid-cols-2 gap-3 text-sm'>
         <div>
           <p className='font-semibold text-gray-400'>Leader</p>
-          <p className='text-gray-100'>{team.leader_name}</p>
+          <p className='text-gray-100'>{team.leader.name}</p>
         </div>
         <div>
           <p className='font-semibold text-gray-400'>Member count</p>

@@ -1,10 +1,10 @@
 import { Fragment, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Transition } from '@headlessui/react'
-import Sheet from '../common/Sheet'
-import Avatar from '../common/Avatar'
 import { classNames } from '@arpansaha13/utils'
-import { profileTabs } from '../../data/tabs'
+import Sheet from '~common/Sheet'
+import Avatar from '~common/Avatar'
+import { profileTabs } from '~/data/tabs'
 
 const Dropdown = memo(({ avatarIdx, onLogOut }) => {
   return (
@@ -14,6 +14,7 @@ const Dropdown = memo(({ avatarIdx, onLogOut }) => {
           <Avatar avatarIdx={avatarIdx} />
         </Menu.Button>
       </div>
+
       <Transition
         as={Fragment}
         enter='transition ease-out duration-100'
@@ -25,24 +26,25 @@ const Dropdown = memo(({ avatarIdx, onLogOut }) => {
       >
         <Menu.Items
           as={Sheet}
-          className='absolute right-0 mt-2 py-2 w-56 origin-top-right rounded-md text-sm text-gray-300 bg-amber-900/95 shadow-md shadow-darkBrown focus:outline-none backdrop-blur-sm'
+          className='absolute right-0 mt-2 py-2 w-56 origin-top-right rounded-md text-sm text-gray-300 bg-amber-900/95 shadow-lg shadow-darkBrown ring-1 ring-darkBrown ring-opacity-5 focus:outline-none backdrop-blur-sm'
         >
           {profileTabs.map(item => (
             <Menu.Item key={item.to}>
               {({ active }) => (
                 <Link
                   to={item.to}
-                  className={classNames(active ? 'bg-brown/40' : '', 'group flex w-full items-center px-3 py-2')}
+                  className={classNames(active ? 'bg-brown/40' : '', 'flex w-full items-center px-3 py-2')}
                 >
                   {item.name}
                 </Link>
               )}
             </Menu.Item>
           ))}
+
           <Menu.Item>
             {({ active }) => (
               <button
-                className={classNames(active ? 'bg-brown/40' : '', 'group flex w-full items-center px-3 py-2')}
+                className={classNames(active ? 'bg-brown/40' : '', 'flex w-full items-center px-3 py-2')}
                 onClick={onLogOut}
               >
                 Log out

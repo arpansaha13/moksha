@@ -4,7 +4,7 @@ import { classNames } from '@arpansaha13/utils'
 
 const EmptyState = memo(({ icon, title, description }) => {
   return (
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col items-center text-center wrap-balance'>
       {icon && (
         <div className='w-12 h-12 text-gray-400'>
           <Icon icon={icon} className='block' color='inherit' width='100%' height='100%' />

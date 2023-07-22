@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, useCallback, useContext, useEffect, useMemo } from "react"
-import { useMap } from '../../../hooks/useMap'
-import getValueByBreakpoint from '../../../utils/getValueAtBreakpoint'
+import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
+import { useMap } from '~/hooks/useMap'
+import getValueByBreakpoint from '~/utils/getValueAtBreakpoint'
 
 const DataContext = createContext(null)
 
 const Wrapper = ({ length, children, visibleCount, exposeWidth = 0 }) => {
-  const [context, {set: setContext}] = useMap({
+  const [context, { set: setContext }] = useMap({
     rootRef: null,
     rootWidth: 0,
     visibleCount: 5,
@@ -21,14 +21,12 @@ const Wrapper = ({ length, children, visibleCount, exposeWidth = 0 }) => {
 
     if (typeof visibleCount === 'number') {
       effectiveVisibleCount = visibleCount
-    }
-    else if (typeof visibleCount === 'object') {
+    } else if (typeof visibleCount === 'object') {
       if (Object.keys(visibleCount).length === 0) {
         throw new Error('No breakpoints provided for prop `visibleCount`.')
       }
       effectiveVisibleCount = getValueByBreakpoint(visibleCount)
-    }
-    else {
+    } else {
       throw new Error('Invalid value for prop `visibleCount`.')
     }
     setContext('visibleCount', effectiveVisibleCount)
@@ -38,21 +36,19 @@ const Wrapper = ({ length, children, visibleCount, exposeWidth = 0 }) => {
 
     if (typeof exposeWidth === 'number') {
       effectiveExposeWidth = exposeWidth
-    }
-    else if (typeof exposeWidth === 'object') {
+    } else if (typeof exposeWidth === 'object') {
       if (Object.keys(exposeWidth).length === 0) {
         throw new Error('No breakpoints provided for prop `exposeWidth`.')
       }
       effectiveExposeWidth = getValueByBreakpoint(exposeWidth)
-    }
-    else {
+    } else {
       throw new Error('Invalid value for prop `exposeWidth`.')
     }
     setContext('exposeWidth', effectiveExposeWidth)
   }, [])
 
   const scrollToStart = useCallback(() => {
-    if(context.rootRef.current) {
+    if (context.rootRef.current) {
       context.rootRef.current.scrollTo({ left: 0 })
     }
   }, [context.rootRef])
@@ -64,7 +60,7 @@ const Wrapper = ({ length, children, visibleCount, exposeWidth = 0 }) => {
   }, [context.rootRef])
 
   const next = useCallback(() => {
-    if(context.rootRef.current) {
+    if (context.rootRef.current) {
       const scrollLeft = context.rootRef.current.scrollLeft
       const scrollWidth = context.rootRef.current.scrollWidth
 
@@ -74,7 +70,7 @@ const Wrapper = ({ length, children, visibleCount, exposeWidth = 0 }) => {
   }, [context.rootRef, context.rootWidth, scrollToEnd])
 
   const prev = useCallback(() => {
-    if(context.rootRef.current) {
+    if (context.rootRef.current) {
       const scrollLeft = context.rootRef.current.scrollLeft
 
       if (scrollLeft < context.rootWidth) scrollToStart()
@@ -82,21 +78,20 @@ const Wrapper = ({ length, children, visibleCount, exposeWidth = 0 }) => {
     }
   }, [context.rootRef, context.rootWidth, scrollToStart])
 
-  const slotProps = useMemo(() => ({
-    next,
-    prev,
-    scrollToStart,
-    scrollToEnd,
-    start: context.start,
-    end: context.end,
-    visible: context.visibleCount,
-  }), [next, prev, scrollToStart, scrollToEnd, context.start, context.end, context.visibleCount])
-
-  return (
-    <DataContext.Provider value={{ context, setContext }}>
-      { children(slotProps) }
-    </DataContext.Provider>
+  const slotProps = useMemo(
+    () => ({
+      next,
+      prev,
+      scrollToStart,
+      scrollToEnd,
+      start: context.start,
+      end: context.end,
+      visible: context.visibleCount,
+    }),
+    [next, prev, scrollToStart, scrollToEnd, context.start, context.end, context.visibleCount]
   )
+
+  return <DataContext.Provider value={{ context, setContext }}>{children(slotProps)}</DataContext.Provider>
 }
 
 export const useData = () => {

@@ -9,7 +9,7 @@ export async function getAuthUserTeams({ request }) {
 
     const data = { createdTeam: null, joinedTeams: null }
 
-    const res = await Promise.all([fetchWithCredentials('teams/created'), fetchWithCredentials('teams/joined')])
+    const res = await Promise.all([fetchWithCredentials('users/me/created-team'), fetchWithCredentials('users/me/joined-teams')])
 
     data.createdTeam = res[0].data
     data.joinedTeams = res[1].data
@@ -27,10 +27,13 @@ export async function getAuthUserContests({ request }) {
 
     const data = { soloRegistrations: [], teamRegistrations: [] }
 
-    const res = await Promise.all([fetchWithCredentials('users/me/contests/solo')])
+    const res = await Promise.all([
+      fetchWithCredentials('users/me/registered-solo-contests'),
+      fetchWithCredentials('users/me/registered-team-contests'),
+    ])
 
-    data.soloRegistrations = res[0].data
-    // data.teamRegistrations = res[1].data
+    data.soloContests = res[0].data
+    data.teamContests = res[1].data
 
     nprogress.done()
     return data

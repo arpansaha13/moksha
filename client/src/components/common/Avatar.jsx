@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Icon } from '@iconify/react'
 import accountCircleIcon from '@iconify-icons/mdi/account-circle'
 import { classNames } from '@arpansaha13/utils'
-import avatarColors from '../../data/avatar-colors'
+import avatarColors from '~/data/avatar-colors'
 
 /**
  * The avatar will take up the full size of parent element.

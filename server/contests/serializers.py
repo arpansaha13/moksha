@@ -1,24 +1,30 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Contest, SoloContestRegistration, TeamContestRegistration
+from .models import Contest, SoloContestRegistration, TeamContestRegistration, TeamContestUserRegistration
+from users.serializers import UserSerializer
+from common.serializers import DynamicFieldsModelSerializer
+
 
 class ContestSerializer(ModelSerializer):
     class Meta:
         model = Contest
-        fields = '__all__'
+        exclude = ['is_solo']
 
-class SoloContestSerializer(ModelSerializer):
+
+class SoloContestRegistrationSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = SoloContestRegistration
-        fields = '__all__'
+        fields = ['id']
 
-class RelatedSoloContestSerializer(ModelSerializer):
-    contest = ContestSerializer()
+
+class TeamContestUserRegistrationSerializer(DynamicFieldsModelSerializer):
+    user = UserSerializer()
 
     class Meta:
-        model = SoloContestRegistration
-        fields = '__all__'
+        model = TeamContestUserRegistration
+        fields = ['user']
 
-class TeamContestSerializer(ModelSerializer):
+
+class TeamContestRegistrationSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = TeamContestRegistration
-        fields = '__all__'
+        fields = ['id']

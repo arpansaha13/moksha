@@ -1,28 +1,51 @@
-from rest_framework.exceptions import APIException
-from users.models import User
-from users.serializers import UserSerializer
+from django.core.mail import send_mail
+from django.utils.decorators import method_decorator
+from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core.mail import send_mail
-from datetime import datetime, timedelta
-from django.contrib.auth.hashers import make_password, check_password
-from django.utils.decorators import method_decorator
+from rest_framework.exceptions import APIException
+from users.models import User
+from users.serializers import AuthUserSerializer
 from common.middleware import jwt_exempt
+from common.exceptions import Conflict
+from datetime import datetime, timedelta
 import random
 import secrets
 import string
 import jwt
-import environ # Pylance does not recognize this import for some reason but the dev server runs perfectly
+import environ  # Pylance does not recognize this import for some reason but the dev server runs perfectly
 
 env = environ.Env()
 environ.Env.read_env()
 
+
 class CheckAuth(APIView):
     def get(self, request):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            return Response({'data': None, 'message': 'Unauthenticated'})
+        try:
+            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
+        except jwt.ExpiredSignatureError:
+            return Response({'data': None, 'message': 'Unauthenticated'})
+
+        auth_user = User.objects.filter(user_id=payload['id']).first()
+
+        if not auth_user:
+            return Response({'data': None, 'message': 'Unauthenticated'})
+
         return Response({
-            'avatar_idx': request.auth_user.avatar_idx,
-            'user_id': request.auth_user.user_id,
-        }, status=200)
+            'data': {
+                'avatar_idx': auth_user.avatar_idx,
+                'user_id': auth_user.user_id,
+            }
+        })
+
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 class Register(APIView):
     def post(self, request):
@@ -32,7 +55,7 @@ class Register(APIView):
         user = User.objects.filter(username=request.data['username']).first()
 
         if user:
-            return Response({'message': "This username is already taken."}, status=409)
+            return Conflict({'message': "This username is already taken."})
 
         email = request.data['email']
         user = User.objects.filter(email=email).first()
@@ -51,15 +74,15 @@ class Register(APIView):
             hashed_password = make_password(request.data['password'])
 
             new_user = User(
-                user_id = uid,
-                avatar_idx = request.data['avatar_idx'],
-                name = request.data['name'],
-                institution = request.data['institution'],
-                phone_no = request.data['phone_no'],
-                email = email,
-                username = request.data['username'],
-                password = hashed_password,
-                otp = otp_generated
+                user_id=uid,
+                avatar_idx=request.data['avatar_idx'],
+                name=request.data['name'],
+                institution=request.data['institution'],
+                phone_no=request.data['phone_no'],
+                email=email,
+                username=request.data['username'],
+                password=hashed_password,
+                otp=otp_generated
             )
             new_user.save()
 
@@ -85,15 +108,17 @@ class Register(APIView):
             response.status_code = 201
             return response
 
-        return Response({'message': "This email is already registered."}, status=409)
+        return Conflict({'message': "This email is already registered."})
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
+
 class Login(APIView):
     def post(self, request):
-        email = request.data['email']
+
+        email = request.POST['email']
         user = User.objects.filter(email=email).first()
 
         if not user:
@@ -106,7 +131,7 @@ class Login(APIView):
         }
 
         token = jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
-        password_matched = check_password(request.data['password'], user.password)
+        password_matched = check_password(request.POST['password'], user.password)
 
         if password_matched == False:
             raise unauthenticated('Invalid email or password.')
@@ -116,11 +141,11 @@ class Login(APIView):
         if user.otp == "":
             response.set_cookie(key='jwt', value=token, httponly=True, domain=env('COOKIE_DOMAIN'))
 
-            response.data = UserSerializer(user).data
+            response.data = AuthUserSerializer(user).data
             response.status_code = 200
             return response
 
-        response.data = { 'message': "Please validate your account using otp." }
+        response.data = {'message': "Please validate your account using otp."}
         response.status_code = 403
         return response
 
@@ -165,7 +190,6 @@ class ForgotPassword(APIView):
         response.status_code = 404
         return response
 
-
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -200,7 +224,6 @@ class ChangePassword(APIView):
             return response
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
-
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -312,12 +335,14 @@ class ResendOtp(APIView):
         except:
             return Response({'message': 'Unauthorized.'}, status=401)
 
+
 def generate_uid(length=8):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
                   for i in range(length))
     return 'MOK-' + uid
 
-def unauthenticated(message = 'Unauthenticated'):
-    exception = APIException({ 'message': message })
+
+def unauthenticated(message='Unauthenticated'):
+    exception = APIException({'message': message})
     exception.status_code = 401
     return exception

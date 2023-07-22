@@ -2,95 +2,140 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from common.exceptions import BadRequest, Conflict
-from .models import Contest, SoloContestRegistration
+from users.models import User
+from .models import SoloContestRegistration as SoloContestRegistrationModel, TeamContestRegistration as TeamContestRegistrationModel, TeamContestUserRegistration
+from .serializers import SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
+from teams.helpers import get_team
+from contests.helpers import get_contest, get_team_reg
 
 # SOLO CONTEST APIs
 
-class CheckSoloRegistration(APIView):
-    def get(self, request, contest_id):
+
+class SoloContestRegistration(APIView):
+    def get(self, request):
+        contest_id = request.GET['contest_id']
+
         contest = get_contest(contest_id)
 
-        solo_reg = SoloContestRegistration.objects.filter(
-            user = request.auth_user,
-            contest = contest
+        solo_reg = SoloContestRegistrationModel.objects.filter(
+            user=request.auth_user,
+            contest=contest
         ).first()
 
-        if solo_reg:
-            return Response({'registered': True}, status=200)
+        if not solo_reg:
+            return Response({'data': None, 'message': 'No registration found.'})
 
-        return Response({'registered': False}, status=200)
+        serializer = SoloContestRegistrationSerializer(solo_reg)
+        return Response({'data': serializer.data}, status=200)
 
-class SoloContestRegister(APIView):
     def post(self, request):
         contest_id = request.POST['contest_id']
         contest = get_contest(contest_id)
 
-        solo_reg_exists = SoloContestRegistration.objects.filter(
-            user = request.auth_user,
-            contest = contest
+        solo_reg_exists = SoloContestRegistrationModel.objects.filter(
+            user=request.auth_user,
+            contest=contest
         ).exists()
 
         if solo_reg_exists:
             raise Conflict({'message': "User already registered for the contest."})
 
-        solo_reg = SoloContestRegistration(
-            user = request.auth_user,
-            contest = contest
+        solo_reg = SoloContestRegistrationModel(
+            user=request.auth_user,
+            contest=contest
         )
         solo_reg.save()
 
-        return Response({'message': 'User registered successfully for contest.'}, status=201)
+        serializer = SoloContestRegistrationSerializer(solo_reg)
+        return Response({'data': serializer.data}, status=201)
 
-class CancelSoloRegistration(APIView):
-    def delete(self, request, contest_id):
+    def delete(self, request):
+        solo_reg_id = request.POST['solo_reg_id']
+
+        solo_reg = SoloContestRegistrationModel.objects.filter(id=solo_reg_id).first()
+
+        if not solo_reg:
+            raise NotFound({'message': 'No registration found.'})
+
+        solo_reg.delete()
+        return Response(status=204)
+
+
+class TeamContestRegistration(APIView):
+    def get(self, request):
+        team_id = request.GET['team_id']
+        contest_id = request.GET['contest_id']
+
+        team_reg = get_team_reg(team_id, contest_id)
+
+        if not team_reg:
+            return Response({'data': None, 'message': 'No registration found.'})
+
+        serializer = TeamContestRegistrationSerializer(
+            team_reg,
+            fields={'registered_members': TeamContestUserRegistrationSerializer(
+                read_only=True,
+                many=True
+            )}
+        )
+
+        return Response({'data': serializer.data})
+
+    def post(self, request):
+        team_id = request.POST['team_id']
+        contest_id = request.POST['contest_id']
+        selected_members = request.POST['selected_members'].split(',')
+
+        team_reg_exists = TeamContestRegistrationModel.objects.filter(
+            team=team_id,
+            contest=contest_id
+        ).exists()
+
+        if team_reg_exists:
+            raise Conflict({'message': "Team already registered for the contest."})
+
+        # TODO: Put this in transaction
+
+        team = get_team(team_id)
         contest = get_contest(contest_id)
 
-        solo_reg = SoloContestRegistration.objects.filter(
-            user = request.auth_user,
-            contest = contest
-        ).first()
+        team_reg = TeamContestRegistrationModel(team=team, contest=contest)
+        team_reg.save()
 
-        if solo_reg:
-            solo_reg.delete()
-            return Response({'message': 'Registration for this contest has been cancelled.'}, status=200)
+        team_reg_members = []
 
-        return NotFound({'message': 'No registration found for this contest.'})
+        for member_id in selected_members:
+            team_reg_members.append(TeamContestUserRegistration(
+                team_contest_registration=team_reg,
+                user=User.objects.filter(user_id=member_id).first()
+            ))
 
-def get_contest(contest_id):
-    if not contest_id:
-        raise BadRequest({'message': 'No contest_id provided.'})
+        TeamContestUserRegistration.objects.bulk_create(team_reg_members)
 
-    contest = Contest.objects.filter(id=contest_id).first()
+        team_reg = get_team_reg(team_id, contest_id)
 
-    if not contest:
-        raise BadRequest({'message': 'Invalid contest id'})
+        if team_reg is None:
+            return Response({'data': None, 'message': 'No registration found.'})
 
-    return contest
+        serializer = TeamContestRegistrationSerializer(
+            team_reg,
+            fields={'registered_members': TeamContestUserRegistrationSerializer(
+                read_only=True,
+                many=True
+            )}
+        )
 
-# class TeamContestRegister(APIView):
-#     def post(self, request):
-#         token = request.COOKIES.get('jwt')
+        return Response({'data': serializer.data}, status=201)
 
-#         if not token:
-#             raise AuthenticationFailed('Unauthenticated')
-#         try:
-#             payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
-#         except jwt.ExpiredSignatureError:
-#             raise AuthenticationFailed('Token Expired! Log in again.')
+    def delete(self, request):
+        team_id = request.POST['team_id']
+        contest_id = request.POST['contest_id']
 
-#         user = User.objects.filter(user_id=payload['id']).first()
-#         contest_slug = request.data.get('contest_slug')
-#         team = Team.objects.filter(leader=user.user_id).first()
+        team_reg = get_team_reg(team_id, contest_id)
 
-#         if user:
-#             user_solo = TeamContestRegistration.objects.filter(
-#                 team_id=team.team_id, contest_slug=contest_slug).first()
-#             if user_solo:
-#                 return Response({'message': "Team already registered for the contest!"}, status=409)
-#             format_data = {'team_id': team.team_id, 'contest_slug': contest_slug}
-#             serializer = TeamContestDetailsSerializers(data=format_data)
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save()
-#             return Response({'message': 'User registered successfully!!'}, status=201)
+        if team_reg is None:
+            raise NotFound({'message': 'No registration found.'})
 
-#         return Response({'message': 'User not found!'}, status=404)
+        team_reg.delete()
+
+        return Response(status=204)

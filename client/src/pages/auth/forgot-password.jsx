@@ -1,10 +1,10 @@
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from 'react-router-dom'
-import { useMap } from '../../hooks/useMap'
-import { useFetch } from '../../hooks/useFetch'
-import BaseInput from '../../components/base/BaseInput'
-import BaseButton from '../../components/base/BaseButton'
-import { useAppContext } from '../../containers/DataProvider'
+import { useMap } from '~/hooks/useMap'
+import { useFetch } from '~/hooks/useFetch'
+import BaseInput from '~base/BaseInput'
+import BaseButton from '~base/BaseButton'
+import { useAppContext } from '~/containers/DataProvider'
 
 const ForgotPasswordPage = () => {
   const { setAppContext } = useAppContext()

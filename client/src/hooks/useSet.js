@@ -43,5 +43,7 @@ export function useSet(initialValues = []) {
     dispatch({ type: 'all', newSet })
   }, [])
 
-  return { add, delete: del, has, clear, setAll }
+  const toArray = useCallback(() => Array.from(set), [set])
+
+  return { add, delete: del, has, clear, setAll, size: set.size, toArray }
 }

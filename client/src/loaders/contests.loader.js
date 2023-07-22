@@ -1,4 +1,4 @@
-import { getMokshaContest } from '../data/contests/moksha'
+import { getMokshaContest } from '../utils/getMokshaContest'
 import contestsMap from '../data/contests/moksha-desc'
 
 export function getContest({ request }) {
