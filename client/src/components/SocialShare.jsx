@@ -58,7 +58,7 @@ export default function SocialShare({ data, children, ...attrs }) {
         <Dialog.Title className='mb-4 text-base lg:text-xl text-white font-semibold'>Share</Dialog.Title>
 
         <div className='divide-y divide-amber-900'>
-          <div className='grid grid-cols-3 xs:grid-cols-2 gap-4'>
+          <div className='grid grid-cols-3 2xs:grid-cols-2 gap-4'>
             {social.map(item => (
               <a
                 key={item.name}
@@ -67,7 +67,7 @@ export default function SocialShare({ data, children, ...attrs }) {
                 rel='noopener noreferrer'
                 className='p-4 flex bg-amber-900/60 hover:bg-amber-800/50 shadow shadow-amber-900 rounded-md transition-colors'
               >
-                <div className='m-auto w-full h-full xs:w-16 xs:h-16'>
+                <div className='m-auto w-full h-full 2xs:w-16 2xs:h-16'>
                   <img src={item.logo} alt={`${item.name} Logo`} className='w-full h-full' aria-hidden />
                 </div>
                 <span className='sr-only'>Share on {item.name}</span>
@@ -82,7 +82,7 @@ export default function SocialShare({ data, children, ...attrs }) {
             >
               <div
                 className={classNames(
-                  'm-auto p-1 w-full h-full xs:w-16 xs:h-16',
+                  'm-auto p-1 w-full h-full 2xs:w-16 2xs:h-16',
                   copied ? 'text-sky-500 transform rotate-6' : 'text-gray-100'
                 )}
               >

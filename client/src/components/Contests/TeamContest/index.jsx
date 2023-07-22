@@ -8,7 +8,7 @@ const ContestOverview = lazy(() => import('../ContestOverview'))
 const RegisterPanel = lazy(() => import('./RegisterPanel'))
 const RegistrationsPanel = lazy(() => import('./RegistrationsPanel'))
 
-const panels = [
+const panels = Object.freeze([
   {
     name: 'Overview',
     query: '',
@@ -24,13 +24,12 @@ const panels = [
     query: new URLSearchParams({ panel: 'registrations' }).toString(),
     requiresAuth: true,
   },
-]
+])
 
 const TeamContest = ({ contest }) => {
   const { appContext } = useAppContext()
   const [selectedIndex, setSelectedIndex] = useState(0)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const showPanel = useMemo(
     () => panels.map(panel => !panel.requiresAuth || appContext.authenticated),
     [appContext.authenticated]
@@ -38,7 +37,7 @@ const TeamContest = ({ contest }) => {
   const switchTab = useCallback(i => startTransition(() => setSelectedIndex(i)), [])
 
   return (
-    <Tab.Group manual selectedIndex={selectedIndex} onChange={switchTab}>
+    <Tab.Group selectedIndex={selectedIndex} onChange={switchTab}>
       <Tab.List
         as={Sheet}
         className={classNames(
@@ -81,7 +80,7 @@ export default TeamContest
 const TabPanelButton = memo(({ name }) => (
   <Tab as={Fragment}>
     {({ selected }) => (
-      <button type='button' className='px-4 py-3 w-full relative focus:outline-none'>
+      <button type='button' className='px-1 xs:px-4 py-3 w-full relative focus:outline-none'>
         {name}
         {selected && (
           <span className='absolute left-0 bottom-0 inline-block w-full h-1 bg-amber-800' aria-hidden='true' />

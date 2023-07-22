@@ -4,14 +4,13 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        xs: '360px',
+        '2xs': '360px',
+        xs: '420px',
       },
       colors: {
         darkBrown: '#241711', // background
         brown: '#34190d', // auth background
         ochre: '#ffbd59', // navbar items
-        'prime-yell': '#6B3600',
-        'sec-yell': '#8A6524',
       },
       containers: {
         '2xs': '16rem',
