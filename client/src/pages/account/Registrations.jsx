@@ -44,7 +44,7 @@ function Registrations() {
         <section id='registered-team-contests'>
           <h2 className='mb-6 text-2xl font-bold text-gray-50'>Registered contests - Team</h2>
 
-          <div className='space-y-4'>
+          <div className='space-y-6'>
             {teamContests.map(({ team_contest_registration: reg }) => (
               <RegisteredTeamContestCard key={reg.id} reg={reg} showRegisteredMembers={false} />
             ))}

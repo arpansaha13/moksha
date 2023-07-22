@@ -16,19 +16,22 @@ function Teams() {
         isNullOrUndefined(createdTeam) && joinedTeams.length > 0 ? 'flex-col-reverse' : 'flex-col'
       )}
     >
-      <div>
+      <section id='created-team'>
         <h2 className='mb-6 text-2xl font-bold text-gray-50'>Team created by me</h2>
+
         <CreatedTeam team={createdTeam} />
-      </div>
+      </section>
 
       {joinedTeams.length > 0 && (
-        <div>
+        <section id='joined-teams'>
           <h2 className='mb-6 text-2xl font-bold text-gray-50'>Teams that I have joined</h2>
 
-          {joinedTeams.map(({team}) => (
-            <TeamCard key={team.team_id} team={team} />
-          ))}
-        </div>
+          <div className='space-y-6'>
+            {joinedTeams.map(({ team }) => (
+              <TeamCard key={team.team_id} team={team} />
+            ))}
+          </div>
+        </section>
       )}
     </main>
   )
@@ -37,9 +40,11 @@ function Teams() {
 export default Teams
 
 function CreatedTeam({ team }) {
-  return !isNullOrUndefined(team) ? (
-    <TeamCard key={team.team_id} team={team} />
-  ) : (
+  if (!isNullOrUndefined(team)) {
+    return <TeamCard key={team.team_id} team={team} />
+  }
+
+  return (
     <>
       <EmptyState icon={accountMultipleIcon} title='You have not created any team yet' />
 

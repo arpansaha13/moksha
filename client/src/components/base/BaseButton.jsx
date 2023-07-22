@@ -20,7 +20,7 @@ const BaseButton = forwardRef((props, ref) => {
       disabled={disabled || loading} // disable while loading
       {...attrs}
       className={classNames(
-        'inline-flex justify-center rounded-md border py-2 px-4 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 transition-colors relative',
+        'inline-flex justify-center rounded-md border py-1.5 sm:py-2 px-3.5 sm:px-4 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 transition-colors relative',
         !secondary
           ? 'text-white bg-amber-700 hover:bg-amber-800 border-transparent'
           : 'text-amber-600 bg-transparent hover:bg-amber-600/20 border-amber-600',

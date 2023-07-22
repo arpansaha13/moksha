@@ -52,7 +52,7 @@ function MyRegistration({ reg, fromCreatedTeam }) {
   return (
     <div>
       <div className='mb-6'>
-        <h2 className='text-2xl font-bold'>My registration</h2>
+        <h2 className='text-xl sm:text-2xl font-bold'>My registration</h2>
         <p className='text-sm text-gray-400'>Registration specific to your participation in this contest.</p>
 
         {fromCreatedTeam && (
@@ -63,7 +63,9 @@ function MyRegistration({ reg, fromCreatedTeam }) {
       </div>
 
       {isNullOrUndefined(reg) ? (
-        <EmptyState title='No registration found' description='You have not registered in this contest' />
+        <Sheet className='p-4'>
+          <EmptyState title='No registration found' description='You have not registered in this contest' />
+        </Sheet>
       ) : (
         <Registration reg={reg} />
       )}
@@ -75,12 +77,14 @@ function CreatedTeamRegistration({ reg }) {
   return (
     <div>
       <div className='mb-6'>
-        <h2 className='text-2xl font-bold'>My created team</h2>
+        <h2 className='text-xl sm:text-2xl font-bold'>My created team</h2>
         <p className='text-sm text-gray-400'>Registration in this contest from your created team.</p>
       </div>
 
       {isNullOrUndefined(reg) ? (
-        <EmptyState title='No registration found' description='Your team has not registered in this contest' />
+        <Sheet className='p-4'>
+          <EmptyState title='No registration found' description='Your team has not registered in this contest' />
+        </Sheet>
       ) : (
         <Registration reg={reg} />
       )}
