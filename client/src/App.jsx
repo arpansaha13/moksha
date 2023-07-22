@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useAppContext } from './containers/DataProvider'
 import Routes from './routes'
 import fetchWithCredentials from './utils/fetchWithCredentials'
@@ -11,14 +12,16 @@ function App() {
 
   useEffect(() => {
     fetchWithCredentials('auth/check-auth')
-      .then(res => {
+      .then(({ data }) => {
+        if (isNullOrUndefined(data)) {
+          setAppContext('authenticated', false)
+          return
+        }
         setAppContext('authenticated', true)
-        setAppContext('avatar_idx', res.avatar_idx)
-        setAppContext('user_id', res.user_id)
-        setLoading(false)
+        setAppContext('avatar_idx', data.avatar_idx)
+        setAppContext('user_id', data.user_id)
       })
-      .catch(() => {
-        setAppContext('authenticated', false)
+      .finally(() => {
         setLoading(false)
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps

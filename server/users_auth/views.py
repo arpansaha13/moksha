@@ -21,10 +21,30 @@ environ.Env.read_env()
 
 class CheckAuth(APIView):
     def get(self, request):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            return Response({'data': None, 'message': 'Unauthenticated'})
+        try:
+            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
+        except jwt.ExpiredSignatureError:
+            return Response({'data': None, 'message': 'Unauthenticated'})
+
+        auth_user = User.objects.filter(user_id=payload['id']).first()
+
+        if not auth_user:
+            return Response({'data': None, 'message': 'Unauthenticated'})
+
         return Response({
-            'avatar_idx': request.auth_user.avatar_idx,
-            'user_id': request.auth_user.user_id,
-        }, status=200)
+            'data': {
+                'avatar_idx': auth_user.avatar_idx,
+                'user_id': auth_user.user_id,
+            }
+        })
+
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 class Register(APIView):
