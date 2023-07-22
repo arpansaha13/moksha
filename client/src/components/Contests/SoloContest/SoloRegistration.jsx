@@ -17,12 +17,12 @@ const SoloRegistration = ({ contest }) => {
     if (appContext.authenticated) {
       const params = new URLSearchParams({ contest_id: contest.id })
 
-      fetchHook(`contests/solo/registration?${params.toString()}`)
-        .then(res => {
-          setRegistrationId(res.data.id)
-          startTransition(() => setLoading(false))
-        })
-        .catch(() => setRegistrationId(null))
+      fetchHook(`contests/solo/registration?${params.toString()}`).then(({ data }) => {
+        if (isNullOrUndefined(data)) setRegistrationId(null)
+        else setRegistrationId(data.id)
+
+        startTransition(() => setLoading(false))
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
