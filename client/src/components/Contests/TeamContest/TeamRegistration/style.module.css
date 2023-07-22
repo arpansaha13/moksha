@@ -1,0 +1,22 @@
+.error {
+  @apply bg-red-600;
+  animation: flash-error 400ms forwards cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes flash-error {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  75% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+  }
+}

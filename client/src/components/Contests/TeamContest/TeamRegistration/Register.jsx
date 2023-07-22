@@ -7,10 +7,12 @@ import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
 import Callout from '~common/Callout'
 import UserListItem from '../../../Teams/UserListItem'
+import styles from './style.module.css'
 
 export default function Register({ contest, team, members, alreadyRegisteredMemberIds, setRegistration }) {
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
+  const [error, showError] = useState(false)
   const { add, delete: del, has, size: selectedCount, toArray } = useSet([])
 
   const minMembersRequired = getMinMembersRequiredCount(contest.allowedTeamSize)
@@ -25,8 +27,11 @@ export default function Register({ contest, team, members, alreadyRegisteredMemb
   function teamRegister(e) {
     e.preventDefault()
 
+    if (error) return
+
     if (!isTeamSizeValid(contest.allowedTeamSize, selectedCount)) {
-      // TODO: add indicator
+      showError(true)
+      setTimeout(() => showError(false), 500)
       return
     }
     setLoading(true)
@@ -84,7 +89,11 @@ export default function Register({ contest, team, members, alreadyRegisteredMemb
             )}
           </ConditionalWrapper>
 
-          <AllowedTeamSizes sizes={contest.allowedTeamSize} />
+          <div className='relative rounded overflow-hidden'>
+            <AllowedTeamSizesInfo sizes={contest.allowedTeamSize} />
+
+            <span className={classNames('absolute inset-0', error && styles['error'])} />
+          </div>
         </div>
 
         <form className='ml-auto w-max' onSubmit={teamRegister}>
@@ -157,7 +166,7 @@ function AlreadyRegisteredMembersInfo() {
   )
 }
 
-function AllowedTeamSizes({ sizes }) {
+function AllowedTeamSizesInfo({ sizes }) {
   if (Array.isArray(sizes)) {
     return (
       <Callout>
