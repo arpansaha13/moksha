@@ -4,9 +4,9 @@ import { Transition } from '@headlessui/react'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 import closeIcon from '@iconify-icons/mdi/close'
 import checkIcon from '@iconify-icons/mdi/check-circle-outline'
-import { isNullOrUndefined } from '@arpansaha13/utils'
+import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
 
-const Notification = memo(({ title, description, show, setShow, timeout, status = 'success' }) => {
+const Notification = memo(({ title, description, show, setShow, timeout, className, status = 'success' }) => {
   const timeoutId = useRef(null)
 
   useEffect(() => {
@@ -27,7 +27,10 @@ const Notification = memo(({ title, description, show, setShow, timeout, status 
   }, [show])
 
   return (
-    <div aria-live='assertive' className='pointer-events-none fixed inset-0 z-40 flex items-start px-4 py-6 sm:p-6'>
+    <div
+      aria-live='assertive'
+      className={classNames('pointer-events-none fixed inset-0 z-40 flex items-start px-4 py-6 sm:p-6', className)}
+    >
       <div className='w-full flex flex-col items-center space-y-4'>
         <Transition
           show={show}

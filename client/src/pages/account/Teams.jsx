@@ -17,14 +17,14 @@ function Teams() {
       )}
     >
       <section id='created-team'>
-        <h2 className='mb-6 text-2xl font-bold text-gray-50'>Team created by me</h2>
+        <h2 className='mb-6 text-xl sm:text-2xl font-bold text-gray-50'>Team created by me</h2>
 
         <CreatedTeam team={createdTeam} />
       </section>
 
       {joinedTeams.length > 0 && (
         <section id='joined-teams'>
-          <h2 className='mb-6 text-2xl font-bold text-gray-50'>Teams that I have joined</h2>
+          <h2 className='mb-6 text-xl sm:text-2xl font-bold text-gray-50'>Teams that I have joined</h2>
 
           <div className='space-y-6'>
             {joinedTeams.map(({ team }) => (
