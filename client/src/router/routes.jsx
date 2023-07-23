@@ -3,15 +3,13 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import { getContest, getContests } from './loaders/contests.loader'
 import { allowIfNoTeamCreated, getTeamData } from './loaders/teams.loader'
 import { allowIfNotAuthenticated, getAuthUserData } from './loaders/auth.loader'
-import { getAuthUserContests, getAuthUserTeams } from './loaders/account.loader'
+import { getReceivedTeamInvites, getAuthUserContests, getAuthUserTeams } from './loaders/account.loader'
 
-import AuthProvider from './containers/AuthProvider'
-
-import FloatingWindow from './layouts/floating-window'
-import DefaultLayout from './layouts/default'
-import AuthLayout from './layouts/auth'
-import AccountLayout from './layouts/account'
-import TeamsLayout from './layouts/teams'
+import FloatingWindow from '../layouts/floating-window'
+import DefaultLayout from '../layouts/default'
+import AuthLayout from '../layouts/auth'
+import AccountLayout from '../layouts/account'
+import TeamsLayout from '../layouts/teams'
 
 // const FloatingWindow = lazy(() => import('./layouts/floating-window'))
 // const DefaultLayout = lazy(() => import('./layouts/default'))
@@ -19,15 +17,15 @@ import TeamsLayout from './layouts/teams'
 // const AccountLayout = lazy(() => import('./layouts/account'))
 // const TeamsLayout = lazy(() => import('./layouts/teams'))
 
-import Home from './pages/Home'
-import Events from './pages/Events'
-import Contests from './pages/contests'
-import Contest from './pages/contests/Contest'
-import Faqs from './pages/Faqs'
-import Sponsors from './pages/Sponsors'
-import Contact from './pages/Contact'
-import Team from './pages/teams/Team'
-import CreateTeam from './pages/teams/Create'
+import Home from '../pages/Home'
+import Events from '../pages/Events'
+import Contests from '../pages/contests'
+import Contest from '../pages/contests/Contest'
+import Faqs from '../pages/Faqs'
+import Sponsors from '../pages/Sponsors'
+import Contact from '../pages/Contact'
+import Team from '../pages/teams/Team'
+import CreateTeam from '../pages/teams/Create'
 
 // const Home = lazy(() => import('./pages/Home'))
 // const Events = lazy(() => import('./pages/Events'))
@@ -39,25 +37,25 @@ import CreateTeam from './pages/teams/Create'
 // const Team = lazy(() => import('./pages/teams/Team'))
 // const CreateTeam = lazy(() => import('./pages/teams/Create'))
 
-import Profile from './pages/account/Profile'
-import Teams from './pages/account/Teams'
-import Registrations from './pages/account/Registrations'
+import Profile from '../pages/account/Profile'
+import Teams from '../pages/account/Teams'
+import Registrations from '../pages/account/Registrations'
 
 // const Profile = lazy(() => import('./pages/account/Profile'))
 // const Teams = lazy(() => import('./pages/account/Teams'))
 // const Registrations = lazy(() => import('./pages/account/Registrations'))
 
-import Login from './pages/auth/login'
-import Registration from './pages/auth/register'
-import Verification from './pages/auth/verification'
-import ForgotPassword from './pages/auth/forgot-password'
+import Login from '../pages/auth/login'
+import Registration from '../pages/auth/register'
+import Verification from '../pages/auth/verification'
+import ForgotPassword from '../pages/auth/forgot-password'
 
 // const Login = lazy(() => import('./pages/auth/login'))
 // const Registration = lazy(() => import('./pages/auth/register'))
 // const Verification = lazy(() => import('./pages/auth/verification'))
 // const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'))
 
-import NotFound from './pages/404'
+import NotFound from '../pages/404'
 
 // const NotFound = lazy(() => import('./pages/404'))
 
@@ -75,7 +73,7 @@ const routes = createRoutesFromElements(
 
       <Route path='/*' element={<NotFound />} />
 
-      <Route element={<AccountLayout />}>
+      <Route loader={getReceivedTeamInvites} element={<AccountLayout />}>
         <Route loader={getAuthUserData} path='/account/profile' element={<Profile />} />
         <Route loader={getAuthUserTeams} path='/account/teams' element={<Teams />} />
         <Route loader={getAuthUserContests} path='/account/registrations' element={<Registrations />} />
@@ -87,14 +85,7 @@ const routes = createRoutesFromElements(
       <Route loader={getTeamData} path='/teams/:team' element={<Team />} />
     </Route>
 
-    <Route
-      loader={allowIfNotAuthenticated}
-      element={
-        <AuthProvider>
-          <AuthLayout />
-        </AuthProvider>
-      }
-    >
+    <Route loader={allowIfNotAuthenticated} element={<AuthLayout />}>
       <Route path='/auth/login' element={<Login />} />
       <Route path='/auth/register' element={<Registration />} />
       <Route path='/auth/verification' element={<Verification />} />

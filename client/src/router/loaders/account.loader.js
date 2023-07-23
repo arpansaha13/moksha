@@ -1,15 +1,29 @@
 import nprogress from 'nprogress'
 import { redirect } from 'react-router-dom'
-import getPathFromURL from '../utils/getPathFromURL'
-import fetchWithCredentials from '../utils/fetchWithCredentials'
+import getPathFromURL from '~/utils/getPathFromURL'
+import fetchWithCredentials from '~/utils/fetchWithCredentials'
+
+export async function getReceivedTeamInvites({ request }) {
+  nprogress.start()
+
+  try {
+    const { data } = await fetchWithCredentials('users/me/received-team-invites')
+    return { receivedInvites: data }
+  } catch {
+    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
+  }
+}
 
 export async function getAuthUserTeams({ request }) {
   try {
-    nprogress.start()
+    if (!nprogress.isStarted()) nprogress.start()
 
     const data = { createdTeam: null, joinedTeams: null }
 
-    const res = await Promise.all([fetchWithCredentials('users/me/created-team'), fetchWithCredentials('users/me/joined-teams')])
+    const res = await Promise.all([
+      fetchWithCredentials('users/me/created-team'),
+      fetchWithCredentials('users/me/joined-teams'),
+    ])
 
     data.createdTeam = res[0].data
     data.joinedTeams = res[1].data
@@ -23,7 +37,7 @@ export async function getAuthUserTeams({ request }) {
 
 export async function getAuthUserContests({ request }) {
   try {
-    nprogress.start()
+    if (!nprogress.isStarted()) nprogress.start()
 
     const data = { soloRegistrations: [], teamRegistrations: [] }
 

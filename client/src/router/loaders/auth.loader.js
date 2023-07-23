@@ -1,8 +1,8 @@
 import nprogress from 'nprogress'
 import { redirect } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import getPathFromURL from '../utils/getPathFromURL'
-import fetchWithCredentials from '../utils/fetchWithCredentials'
+import getPathFromURL from '~/utils/getPathFromURL'
+import fetchWithCredentials from '~/utils/fetchWithCredentials'
 
 const isAuthenticated = async () => {
   const { data } = await fetchWithCredentials('auth/check-auth')

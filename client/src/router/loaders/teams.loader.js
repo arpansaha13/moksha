@@ -1,7 +1,7 @@
 import nprogress from 'nprogress'
 import { redirect } from 'react-router-dom'
-import getPathFromURL from '../utils/getPathFromURL'
-import fetchWithCredentials from '../utils/fetchWithCredentials'
+import getPathFromURL from '~/utils/getPathFromURL'
+import fetchWithCredentials from '~/utils/fetchWithCredentials'
 
 export async function allowIfNoTeamCreated({ request }) {
   try {

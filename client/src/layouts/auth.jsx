@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import Notification from '../components/common/Notification'
-import CastleGate3 from '../assets/castle-gate-3.svg'
-import { useAuthContext } from '../containers/AuthProvider'
+import { useMap } from '~/hooks/useMap'
+import Notification from '~/components/common/Notification'
+import CastleGate3 from '~/assets/castle-gate-3.svg'
 
 const getHeading = route => {
   switch (route) {
@@ -21,7 +21,13 @@ const getHeading = route => {
 }
 
 export default function AuthLayout() {
-  const { notification, setNotification } = useAuthContext()
+  const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
+    show: false,
+    title: '',
+    description: '',
+    status: 'success',
+  })
+
   const setShowNotification = useCallback(bool => setNotification('show', bool), [])
 
   const location = useLocation()
@@ -31,6 +37,8 @@ export default function AuthLayout() {
     setHeading(getHeading(location.pathname))
     setShowNotification(false)
   }, [location.pathname])
+
+  const authContext = useMemo(() => ({ notification, setNotification, setAllNotification }), [notification])
 
   return (
     <div className='relative min-w-screen min-h-screen text-white'>
@@ -61,7 +69,7 @@ export default function AuthLayout() {
 
         <div className='mt-8 w-full [&>*]:sm:mx-auto [&>*]:py-8 [&>*]px-4 [&>*]:sm:px-10 [&>*]:sm:w-full [&>*]:bg-amber-900/50 [&>*]:sm:rounded-lg [&>*]:shadow'>
           {/* Use appropriate max-w-{size} on the root of this children */}
-          <Outlet />
+          <Outlet context={authContext} />
         </div>
       </div>
     </div>

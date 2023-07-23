@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { classNames } from '@arpansaha13/utils'
 import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
@@ -8,13 +8,12 @@ import BaseButton from '~base/BaseButton'
 import OtpInput from '~common/OtpInput'
 import CsrfField from '~common/CsrfField'
 import { useAppContext } from '~/containers/DataProvider'
-import { useAuthContext } from '~/containers/AuthProvider'
 
 const VerificationPage = () => {
   const navigate = useNavigate()
   let [searchParams] = useSearchParams()
   const { setAppContext } = useAppContext()
-  const { setNotification, setAllNotification } = useAuthContext()
+  const { setNotification, setAllNotification } = useOutletContext()
 
   const fetchHook = useFetch()
 
