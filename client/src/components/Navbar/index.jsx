@@ -1,7 +1,7 @@
 import nprogress from 'nprogress'
 import { memo, useCallback } from 'react'
 import { useMediaQuery } from 'react-responsive'
-import { createSearchParams, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { createSearchParams, NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { classNames } from '@arpansaha13/utils'
 import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 import { Icon } from '@iconify/react'
@@ -56,9 +56,9 @@ function Navbar() {
         ) : (
           // Desktop Navbar
           <div className='flex items-center'>
-            <div className='sm:mr-8 w-12 h-12'>
-              <img src='/moksha-logo.svg' alt='Moksha logo' className='w-full h-full' />
-            </div>
+            <Link to='/' className='block sm:mr-8 w-12 h-12'>
+              <img src='/moksha/moksha-192x192.png' alt='Moksha logo' className='w-full h-full' />
+            </Link>
             <ul className='flex gap-3 sm:gap-6'>
               {navTabs.map(tab => (
                 <li key={tab.to}>

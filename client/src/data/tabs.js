@@ -1,9 +1,5 @@
 export const navTabs = [
   {
-    to: '/',
-    name: 'Home',
-  },
-  {
     to: '/events',
     name: 'Events',
   },

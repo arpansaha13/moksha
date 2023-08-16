@@ -9,6 +9,16 @@ export default function Sidebar() {
 
   return (
     <aside className='pl-2 py-8 w-full h-full text-gray-50'>
+      {/* TODO: don't put anchor tag inside button */}
+      <TzFloatingWindow.Button className='block mb-6 mx-auto w-16 h-16'>
+        {() => (
+          <Link to='/' className='block relative'>
+            <img src='/moksha/moksha-192x192.png' alt='Moksha logo' className='w-full h-full' />
+            <span className='absolute inset-0 -z-10 bg-amber-800/40 filter blur-lg' />
+          </Link>
+        )}
+      </TzFloatingWindow.Button>
+
       <ul className='space-y-2'>
         {navTabs.map(tab => (
           <li key={tab.to}>

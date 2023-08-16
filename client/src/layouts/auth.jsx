@@ -62,7 +62,7 @@ export default function AuthLayout() {
 
         <div className='sm:mx-auto sm:w-full sm:max-w-md'>
           <Link to='/' className='block mx-auto w-16 h-16 relative'>
-            <img src='/moksha-logo.svg' alt='Moksha logo' className='w-full h-full' />
+            <img src='/moksha/moksha-192x192.png' alt='Moksha logo' className='w-full h-full' />
           </Link>
           <h2 className='mt-6 px-2 sm:px-0 text-center text-3xl font-bold tracking-tight'>{heading}</h2>
         </div>

@@ -22,9 +22,9 @@ const CURRENT_YEAR = new Date().getFullYear()
 function Footer() {
   return (
     <footer className='mt-6 py-12 bg-darkBrown/70 backdrop-blur-sm text-gray-400 text-sm flex flex-col items-center gap-y-6 shadow-inner shadow-amber-900/20'>
-      <div className='w-12 h-12'>
-        <img src='/moksha-logo.svg' alt='Moksha logo' className='w-full h-full' />
-      </div>
+      <Link to='/' className='block w-12 h-12'>
+        <img src='/moksha/moksha-192x192.png' alt='Moksha logo' className='w-full h-full' />
+      </Link>
 
       <ul className='hidden sm:flex gap-12'>
         {navTabs.map(tab => (
