@@ -18,7 +18,6 @@ import leftIcon from '@iconify-icons/mdi/chevron-left'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
 import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
 import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
-import CastleGate2 from '~/assets/castle-gate-2.svg' // Reference image for now
 
 function Contests() {
   useHashLink()
@@ -51,7 +50,7 @@ function Contests() {
       </Container>
 
       {Object.keys(contestsMap).map(clubName => (
-        <ClubContest key={clubName} clubName={clubName} contests={contestsMap[clubName]} />
+        <ClubContests key={clubName} clubName={clubName} contests={contestsMap[clubName]} />
       ))}
     </>
   )
@@ -72,7 +71,7 @@ const PaginateButton = memo(({ children, onClick }) => (
 const cardGap = { base: 16, sm: 20, xl: 28 }
 
 /** Display contests of a particular club */
-const ClubContest = memo(({ clubName, contests }) => {
+const ClubContests = memo(({ clubName, contests }) => {
   return (
     <Container as='section' className='flex-grow py-4 w-full' id={`${clubName}-contests`}>
       <h2 className='mb-6 text-4xl font-semibold'>{capitalCase(clubName)}</h2>
@@ -87,7 +86,7 @@ const ClubContest = memo(({ clubName, contests }) => {
             <CardsSlider className='w-full' gap={cardGap}>
               {({ cardWidth }) =>
                 contests.map(contest => (
-                  <ContestCard key={contest.slug} clubName={clubName} cardWidth={cardWidth} contest={contest} />
+                  <ContestCard key={contest.id} clubName={clubName} cardWidth={cardWidth} contest={contest} />
                 ))
               }
             </CardsSlider>
@@ -137,7 +136,7 @@ const ContestCard = memo(({ clubName, cardWidth, contest }) => (
     <Sheet className='w-full flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
       <MLink to={`/contests/${clubName}/${contest.slug}`} as='div' className='block h-[304px]'>
         <div className='w-full h-48 flex items-center justify-center relative'>
-          <img src={CastleGate2} alt='' className='w-full h-full object-cover' />
+          <img src={contest.image.src} alt={`moksha-contest-${contest.slug}-poster`} className='w-full h-full object-cover' />
           <span
             role='presentation'
             className='absolute w-full h-full bg-gradient-to-bl from-brown via-transparent mix-blend-darken'

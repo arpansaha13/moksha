@@ -86,7 +86,7 @@ export default function Contest() {
           <div className='sm:sticky sm:top-8'>
             <div className='mx-auto w-64 h-64 sm:w-80 sm:h-80'>
               <Tz3dCard
-                src='https://images-platform.99static.com/J66rJkV_HyDRL8BvSnYAexqqKB8=/500x500/top/smart/99designs-contests-attachments/55/55370/attachment_55370577'
+                src={contest.image.src}
                 alt={`moksha-contest-${contest}-poster`}
                 rotation={{ base: -30, sm: -30 }}
                 elevation={{ base: 8, sm: 10 }}
