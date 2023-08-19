@@ -1,0 +1,33 @@
+.home {
+  --yellow700-33: #a1620733;
+  --yellow700-44: #a1620744;
+}
+
+.hero-bg {
+  background: linear-gradient(to top left, var(--yellow700-44), transparent, transparent),
+    linear-gradient(to top right, black, transparent, transparent);
+  background-blend-mode: screen;
+}
+
+.specials-bg {
+  background: linear-gradient(to bottom left, var(--yellow700-44), transparent, transparent),
+    linear-gradient(to bottom right, black, transparent, transparent);
+  background-blend-mode: screen;
+}
+
+/*
+.hero-bg {
+  background: linear-gradient(to bottom, var(--yellow700-33), transparent),
+    linear-gradient(to top left, var(--yellow700-44), transparent, transparent),
+    linear-gradient(to top right, black, transparent);
+  background-blend-mode: screen;
+}
+*/
+/*
+.specials-bg {
+  background: linear-gradient(to top, var(--yellow700-33), transparent),
+    linear-gradient(to bottom left, var(--yellow700-44), transparent, transparent),
+    linear-gradient(to bottom right, black, transparent);
+  background-blend-mode: screen;
+}
+*/

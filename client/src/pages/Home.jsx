@@ -1,5 +1,7 @@
 import { Helmet } from 'react-helmet'
-import Slider from '../components/Slider/Slider'
+import Hero from '~/components/Home/Hero'
+import Specials from '~/components/Home/Specials'
+import styles from '~/components/Home/styles.module.css'
 
 export function Component() {
   return (
@@ -8,7 +10,10 @@ export function Component() {
         <title>Moksha | Home</title>
       </Helmet>
 
-      <Slider />
+      <main className={styles['home']}>
+        <Hero />
+        <Specials />
+      </main>
     </>
   )
 }
