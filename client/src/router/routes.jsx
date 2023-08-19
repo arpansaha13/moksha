@@ -1,6 +1,7 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
 import { getContest, getContests } from './loaders/contests.loader'
+import { getEvent, getEvents } from './loaders/events.loader'
 import { allowIfNoTeamCreated, getTeamData } from './loaders/teams.loader'
 import { allowIfNotAuthenticated, getAuthUserData } from './loaders/auth.loader'
 import { getReceivedTeamInvites, getAuthUserContests, getAuthUserTeams } from './loaders/account.loader'
@@ -18,7 +19,8 @@ import TeamsLayout from '../layouts/teams'
 // const TeamsLayout = lazy(() => import('./layouts/teams'))
 
 import Home from '../pages/Home'
-import Events from '../pages/Events'
+import Events from '../pages/events'
+import Event from '../pages/events/Event'
 import Contests from '../pages/contests'
 import Contest from '../pages/contests/Contest'
 import Faqs from '../pages/Faqs'
@@ -63,10 +65,12 @@ const routes = createRoutesFromElements(
   <Route element={<FloatingWindow />}>
     <Route element={<DefaultLayout />}>
       <Route path='/' element={<Home />} />
-      <Route path='/events' element={<Events />} />
       <Route path='/faqs' element={<Faqs />} />
       <Route path='/sponsors' element={<Sponsors />} />
       <Route path='/contact' element={<Contact />} />
+
+      <Route loader={getEvents} path='/events' element={<Events />} />
+      <Route loader={getEvent} path='/events/:club/:event' element={<Event />} />
 
       <Route loader={getContests} path='/contests' element={<Contests />} />
       <Route loader={getContest} path='/contests/:club/:contest' element={<Contest />} />
@@ -93,7 +97,7 @@ const routes = createRoutesFromElements(
     </Route>
   </Route>
 )
-
+// https://stackoverflow.com/questions/66039626/react-lazy-suspens-react-router-dont-change-route-until-component-is-fetched
 const router = createBrowserRouter(routes)
 
 function AppRoutes() {
