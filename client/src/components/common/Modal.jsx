@@ -1,5 +1,6 @@
 import { Fragment, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { useScrollbarWidth } from '~/hooks/useScrollbarWidth'
 import { classNames } from '@arpansaha13/utils'
 
 const maxWidths = {
@@ -10,6 +11,8 @@ const maxWidths = {
 }
 
 const Modal = ({ open, setOpen, children, onClose, maxWidth = 'lg' }) => {
+  const scrollbarWidth = useScrollbarWidth()
+
   const doOnClose = useCallback(
     bool => {
       setOpen(bool)
@@ -33,7 +36,7 @@ const Modal = ({ open, setOpen, children, onClose, maxWidth = 'lg' }) => {
           <div className='fixed inset-0 bg-darkBrown/75 transition-opacity' />
         </Transition.Child>
 
-        <div className='fixed inset-0 z-10 overflow-y-auto'>
+        <div className='fixed inset-0 z-10 overflow-y-auto' style={{ marginRight: open ? scrollbarWidth.current : 0 }}>
           <div className='flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0'>
             <Transition.Child
               as={Fragment}

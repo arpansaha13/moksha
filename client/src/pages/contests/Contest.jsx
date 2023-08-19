@@ -19,14 +19,17 @@ export default function Contest() {
   const location = useLocation()
 
   const shareData = useMemo(
-    () => ({
-      url: location.pathname,
-      title: `Moksha contest - ${contest.name}`,
-      text:
-        contest.description[0].p.length <= 100
-          ? contest.description[0].p.length
-          : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
-    }),
+    () =>
+      isNullOrUndefined(contest)
+        ? {}
+        : {
+            url: location.pathname,
+            title: `Moksha contest - ${contest.name}`,
+            text:
+              contest.description[0].p.length <= 100
+                ? contest.description[0].p.length
+                : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+          },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location.pathname]
   )

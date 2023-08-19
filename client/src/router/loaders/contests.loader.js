@@ -1,5 +1,8 @@
 import { getMokshaContest } from '~/utils/getMokshaContest'
-import contestsMap from '~/data/contests/moksha-desc'
+import { getUdaanContest } from '~/utils/getUdaanContest'
+import udaanContestsList from '~/data/contests/udaan-desc'
+import mokshaContestsMap from '~/data/contests/moksha-desc'
+import { isNullOrUndefined } from '@arpansaha13/utils'
 
 export function getContest({ request }) {
   const pathSegments = new URL(request.url).pathname.split('/')
@@ -7,9 +10,11 @@ export function getContest({ request }) {
   const clubSlug = pathSegments.at(-2)
   const contestSlug = pathSegments.at(-1)
 
-  return getMokshaContest(clubSlug, contestSlug)
+  const contest = getMokshaContest(clubSlug, contestSlug)
+
+  return isNullOrUndefined(contest) ? getUdaanContest(contestSlug) : contest
 }
 
 export function getContests() {
-  return contestsMap
+  return { mokshaContestsMap, udaanContestsList }
 }
