@@ -12,8 +12,11 @@ import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
+import { getContests } from '~loaders/contests.loader'
 
-function Contests() {
+export const loader = getContests
+
+export function Component() {
   const { mokshaContestsMap, udaanContestsList } = useLoaderData()
 
   return (
@@ -40,7 +43,7 @@ function Contests() {
   )
 }
 
-export default Contests
+Component.displayName = 'Contests'
 
 const UdaanContests = memo(
   ({ udaanContestsList, className }) => (

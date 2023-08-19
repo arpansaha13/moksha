@@ -15,6 +15,54 @@ const dzire = [
   },
 ]
 
+const pixel = [
+  {
+    id: 6,
+    slug: 'let-me-shoot-you',
+    name: 'Let Me Shoot You',
+    club: 'pixel',
+    image: {
+      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+    },
+    description: [
+      {
+        p: '',
+      },
+    ],
+  },
+]
+
+const fineArts = [
+  {
+    id: 5,
+    slug: 'art-exhibition',
+    name: 'Art exhibition',
+    club: 'fine-arts',
+    image: {
+      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+    },
+    description: [
+      {
+        p: 'An art exhibition is traditionally the space in which art objects (in the most general sense) meet an audience. The exhibit is universally understood to be for some temporary period unless, as is rarely true, it they may be called "exhibit", "exposition" (the French word) or "show".',
+      },
+    ],
+  },
+  {
+    id: 7,
+    slug: 'open-canvas',
+    name: 'Open canvas',
+    club: 'fine-arts',
+    image: {
+      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+    },
+    description: [
+      {
+        p: 'Open Canvas is a Graphic Editor that has an analog-like quality and a simple or easy user interface. It is extensively suitable to beginners to advanced users. Addition to the basic performances, openCanvas has its unique "Event function" that records and replays a drawing procedure.',
+      },
+    ],
+  },
+]
+
 const dcc = [
   {
     id: 20,
@@ -45,53 +93,6 @@ const dcc = [
           'If a player gives the wrong answer he/she will have to go back to the previous position . Incase of no answer, the position remains unchanged.',
           'A player cannot take more than 1-2 minute to answer a question.',
         ],
-      },
-    ],
-  },
-]
-
-const pixel = [
-  {
-    id: 6,
-    slug: 'let-me-shoot-you',
-    name: 'Let Me Shoot You',
-    club: 'pixel',
-    image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
-    },
-    description: [
-      {
-        p: '',
-      },
-    ],
-  },
-]
-
-const fineArts = [
-  {
-    id: 7,
-    slug: 'art-exhibition',
-    name: 'Art exhibition',
-    club: 'fine-arts',
-    image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
-    },
-    description: [
-      {
-        p: 'An art exhibition is traditionally the space in which art objects (in the most general sense) meet an audience. The exhibit is universally understood to be for some temporary period unless, as is rarely true, it they may be called "exhibit", "exposition" (the French word) or "show".',
-      },
-    ],
-  },
-  {
-    slug: 'open-canvas',
-    name: 'Open canvas',
-    club: 'fine-arts',
-    image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
-    },
-    description: [
-      {
-        p: 'Open Canvas is a Graphic Editor that has an analog-like quality and a simple or easy user interface. It is extensively suitable to beginners to advanced users. Addition to the basic performances, openCanvas has its unique "Event function" that records and replays a drawing procedure.',
       },
     ],
   },

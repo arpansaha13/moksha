@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
@@ -6,15 +6,17 @@ import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import NotFound from '../404'
-import SocialShare from '~/components/SocialShare'
+import { Component as NotFound } from '../404'
 import Container from '~common/Container'
+import SocialShare from '~/components/SocialShare'
+import SoloContest from '~/components/Contests/SoloContest'
+import TeamContest from '~/components/Contests/TeamContest'
 import '@tranzis/react/styles/Tz3dCard'
+import { getContest } from '~loaders/contests.loader'
 
-const SoloContest = lazy(() => import('../../components/Contests/SoloContest'))
-const TeamContest = lazy(() => import('../../components/Contests/TeamContest'))
+export const loader = getContest
 
-export default function Contest() {
+export function Component() {
   const contest = useLoaderData()
   const location = useLocation()
 
@@ -101,3 +103,5 @@ export default function Contest() {
     </Container>
   )
 }
+
+Component.displayName = 'Contest'

@@ -6,13 +6,16 @@ import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import NotFound from '../404'
+import { Component as NotFound } from '../404'
 import SocialShare from '~/components/SocialShare'
 import Container from '~common/Container'
 import Sheet from '~/components/common/Sheet'
 import '@tranzis/react/styles/Tz3dCard'
+import { getEvent } from '~loaders/events.loader'
 
-export default function Event() {
+export const loader = getEvent
+
+export function Component() {
   const event = useLoaderData()
   const location = useLocation()
 
@@ -93,6 +96,8 @@ export default function Event() {
     </Container>
   )
 }
+
+Component.displayName = 'Event'
 
 function EventInfo({ event }) {
   return (

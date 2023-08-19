@@ -8,7 +8,7 @@ import CsrfField from '~common/CsrfField'
 import { useAppContext } from '~/containers/DataProvider'
 import getFormData from '~/utils/getFormData'
 
-const LoginPage = () => {
+export function Component() {
   const { setAppContext } = useAppContext()
   const { setNotification, setAllNotification } = useOutletContext()
 
@@ -101,4 +101,4 @@ const LoginPage = () => {
     </main>
   )
 }
-export default LoginPage
+Component.displayName = 'LoginPage'

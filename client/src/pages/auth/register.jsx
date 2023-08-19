@@ -8,7 +8,7 @@ import BaseButton from '~base/BaseButton'
 import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
 
-const SignUpPage = () => {
+export function Component() {
   const navigate = useNavigate()
   let [searchParams] = useSearchParams()
   const { setNotification, setAllNotification } = useOutletContext()
@@ -108,7 +108,7 @@ const SignUpPage = () => {
     </main>
   )
 }
-export default SignUpPage
+Component.displayName = 'SignUpPage'
 
 function validateUsername(username, setError) {
   const spacialChars = /[ `!@#$%^&*()+\-=[\]{};':"\\|,<>/?~]/

@@ -5,7 +5,7 @@ import Sheet from '~common/Sheet'
 import Container from '~common/Container'
 import faqs from '~/data/faqs'
 
-function Faqs() {
+export function Component() {
   return (
     <Container className='py-4'>
       <Helmet>
@@ -29,7 +29,7 @@ function Faqs() {
   )
 }
 
-export default Faqs
+Component.displayName = 'Faqs'
 
 const Faq = memo(
   ({ faq, slug }) => (

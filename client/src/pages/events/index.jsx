@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link, useLoaderData } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
@@ -9,9 +10,11 @@ import Sheet from '~common/Sheet'
 import Container from '~common/Container'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
-import { Helmet } from 'react-helmet'
+import { getEvents } from '~loaders/events.loader'
 
-export default function Events() {
+export const loader = getEvents
+
+export function Component() {
   const { mokshaEventsList, udaanEventsList } = useLoaderData()
 
   return (
@@ -29,6 +32,8 @@ export default function Events() {
     </>
   )
 }
+
+Component.displayName = 'Events'
 
 const UdaanEvents = memo(
   ({ udaanEventsList }) => (

@@ -9,7 +9,7 @@ import OtpInput from '~common/OtpInput'
 import CsrfField from '~common/CsrfField'
 import { useAppContext } from '~/containers/DataProvider'
 
-const VerificationPage = () => {
+export function Component() {
   const navigate = useNavigate()
   let [searchParams] = useSearchParams()
   const { setAppContext } = useAppContext()
@@ -103,7 +103,7 @@ const VerificationPage = () => {
     </main>
   )
 }
-export default VerificationPage
+Component.displayName = 'VerificationPage'
 
 const ResendOtpCooldown = memo(({ onCooldownEnd }) => {
   const [count, setCount] = useState(30)

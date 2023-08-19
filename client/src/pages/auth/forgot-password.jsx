@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from 'react-router-dom'
 import { useFetch } from '~/hooks/useFetch'
@@ -6,13 +7,13 @@ import BaseButton from '~base/BaseButton'
 import { useAppContext } from '~/containers/DataProvider'
 import getFormData from '~/utils/getFormData'
 
-const ForgotPasswordPage = () => {
+export function Component() {
   const { setAppContext } = useAppContext()
   const navigate = useNavigate()
 
   const fetchHook = useFetch()
 
-  const [formRef, { set }] = useRef(null)
+  const formRef = useRef(null)
 
   function forgotPassword(e) {
     e.preventDefault()
@@ -60,4 +61,5 @@ const ForgotPasswordPage = () => {
     </div>
   )
 }
-export default ForgotPasswordPage
+
+Component.displayName = 'ForgotPasswordPage'

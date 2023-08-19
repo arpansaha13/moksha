@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet'
 import Slider from '../components/Slider/Slider'
 
-function Home() {
+export function Component() {
   return (
     <>
       <Helmet>
@@ -13,4 +13,4 @@ function Home() {
   )
 }
 
-export default Home
+Component.displayName = 'Home'

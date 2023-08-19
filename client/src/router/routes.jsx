@@ -1,10 +1,7 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
-import { getContest, getContests } from './loaders/contests.loader'
-import { getEvent, getEvents } from './loaders/events.loader'
-import { allowIfNoTeamCreated, getTeamData } from './loaders/teams.loader'
-import { allowIfNotAuthenticated, getAuthUserData } from './loaders/auth.loader'
-import { getReceivedTeamInvites, getAuthUserContests, getAuthUserTeams } from './loaders/account.loader'
+import { allowIfNotAuthenticated } from '~loaders/auth.loader'
+import { getReceivedTeamInvites } from '~loaders/account.loader'
 
 import FloatingWindow from '../layouts/floating-window'
 import DefaultLayout from '../layouts/default'
@@ -18,82 +15,61 @@ import TeamsLayout from '../layouts/teams'
 // const AccountLayout = lazy(() => import('./layouts/account'))
 // const TeamsLayout = lazy(() => import('./layouts/teams'))
 
-import Home from '../pages/Home'
-import Events from '../pages/events'
-import Event from '../pages/events/Event'
-import Contests from '../pages/contests'
-import Contest from '../pages/contests/Contest'
-import Faqs from '../pages/Faqs'
-import Sponsors from '../pages/Sponsors'
-import Contact from '../pages/Contact'
-import Team from '../pages/teams/Team'
-import CreateTeam from '../pages/teams/Create'
+const Home = () => import('../pages/Home')
+const Events = () => import('../pages/events')
+const Event = () => import('../pages/events/Event')
+const Contests = () => import('../pages/contests')
+const Contest = () => import('../pages/contests/Contest')
+const Faqs = () => import('../pages/Faqs')
+// const Sponsors = () => import('../pages/Sponsors')
+const Contact = () => import('../pages/Contact')
+const Team = () => import('../pages/teams/Team')
+const CreateTeam = () => import('../pages/teams/Create')
 
-// const Home = lazy(() => import('./pages/Home'))
-// const Events = lazy(() => import('./pages/Events'))
-// const Contests = lazy(() => import('./pages/contests'))
-// const Contest = lazy(() => import('./pages/contests/Contest'))
-// const Faqs = lazy(() => import('./pages/Faqs'))
-// const Sponsors = lazy(() => import('./pages/Sponsors'))
-// const Contact = lazy(() => import('./pages/Contact'))
-// const Team = lazy(() => import('./pages/teams/Team'))
-// const CreateTeam = lazy(() => import('./pages/teams/Create'))
+const Profile = () => import('../pages/account/Profile')
+const Teams = () => import('../pages/account/Teams')
+const Registrations = () => import('../pages/account/Registrations')
 
-import Profile from '../pages/account/Profile'
-import Teams from '../pages/account/Teams'
-import Registrations from '../pages/account/Registrations'
+const Login = () => import('../pages/auth/login')
+const Registration = () => import('../pages/auth/register')
+const Verification = () => import('../pages/auth/verification')
+const ForgotPassword = () => import('../pages/auth/forgot-password')
 
-// const Profile = lazy(() => import('./pages/account/Profile'))
-// const Teams = lazy(() => import('./pages/account/Teams'))
-// const Registrations = lazy(() => import('./pages/account/Registrations'))
-
-import Login from '../pages/auth/login'
-import Registration from '../pages/auth/register'
-import Verification from '../pages/auth/verification'
-import ForgotPassword from '../pages/auth/forgot-password'
-
-// const Login = lazy(() => import('./pages/auth/login'))
-// const Registration = lazy(() => import('./pages/auth/register'))
-// const Verification = lazy(() => import('./pages/auth/verification'))
-// const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'))
-
-import NotFound from '../pages/404'
-
-// const NotFound = lazy(() => import('./pages/404'))
+const NotFound = () => import('../pages/404')
 
 const routes = createRoutesFromElements(
   <Route element={<FloatingWindow />}>
     <Route element={<DefaultLayout />}>
-      <Route path='/' element={<Home />} />
-      <Route path='/faqs' element={<Faqs />} />
-      <Route path='/sponsors' element={<Sponsors />} />
-      <Route path='/contact' element={<Contact />} />
+      <Route path='/' lazy={Home} />
+      <Route path='/faqs' lazy={Faqs} />
+      {/* <Route path='/sponsors' element={<Sponsors />} /> */}
+      <Route path='/contact' lazy={Contact} />
 
-      <Route loader={getEvents} path='/events' element={<Events />} />
-      <Route loader={getEvent} path='/events/:club/:event' element={<Event />} />
+      <Route path='/events' lazy={Events} />
+      <Route path='/events/:club/:event' lazy={Event} />
 
-      <Route loader={getContests} path='/contests' element={<Contests />} />
-      <Route loader={getContest} path='/contests/:club/:contest' element={<Contest />} />
+      <Route path='/contests' lazy={Contests} />
+      <Route path='/contests/:club/:contest' lazy={Contest} />
 
-      <Route path='/*' element={<NotFound />} />
+      <Route path='/*' lazy={NotFound} />
 
       <Route loader={getReceivedTeamInvites} element={<AccountLayout />}>
-        <Route loader={getAuthUserData} path='/account/profile' element={<Profile />} />
-        <Route loader={getAuthUserTeams} path='/account/teams' element={<Teams />} />
-        <Route loader={getAuthUserContests} path='/account/registrations' element={<Registrations />} />
+        <Route path='/account/profile' lazy={Profile} />
+        <Route path='/account/teams' lazy={Teams} />
+        <Route path='/account/registrations' lazy={Registrations} />
       </Route>
     </Route>
 
     <Route element={<TeamsLayout />}>
-      <Route loader={allowIfNoTeamCreated} path='/teams/create' element={<CreateTeam />} />
-      <Route loader={getTeamData} path='/teams/:team' element={<Team />} />
+      <Route path='/teams/create' lazy={CreateTeam} />
+      <Route path='/teams/:team' lazy={Team} />
     </Route>
 
     <Route loader={allowIfNotAuthenticated} element={<AuthLayout />}>
-      <Route path='/auth/login' element={<Login />} />
-      <Route path='/auth/register' element={<Registration />} />
-      <Route path='/auth/verification' element={<Verification />} />
-      <Route path='/auth/forgot-password' element={<ForgotPassword />} />
+      <Route path='/auth/login' lazy={Login} />
+      <Route path='/auth/register' lazy={Registration} />
+      <Route path='/auth/verification' lazy={Verification} />
+      <Route path='/auth/forgot-password' lazy={ForgotPassword} />
     </Route>
   </Route>
 )

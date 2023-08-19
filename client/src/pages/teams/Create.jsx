@@ -9,8 +9,11 @@ import BaseInput from '~base/BaseInput'
 import CsrfField from '~common/CsrfField'
 import Notification from '~common/Notification'
 import getFormData from '~/utils/getFormData'
+import { allowIfNoTeamCreated } from '~loaders/teams.loader'
 
-export default function CreateTeam() {
+export const loader = allowIfNoTeamCreated
+
+export function Component() {
   const createdTeam = useLoaderData()
 
   const [notification, { set, setAll }] = useMap({
@@ -59,6 +62,8 @@ export default function CreateTeam() {
     </main>
   )
 }
+
+Component.displayName = 'CreateTeam'
 
 function CreateTeamForm({ setShowNotification, setAll }) {
   const navigate = useNavigate()
