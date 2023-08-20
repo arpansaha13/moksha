@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData } from 'react-router-dom'
 // import { capitalCase } from 'change-case'
-import { classNames } from '@arpansaha13/utils'
+import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
@@ -101,11 +101,17 @@ const ContestCard = memo(
     <Sheet className='flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
       <MLink to={`/contests/${clubName}/${contest.slug}`} as='div' className='block h-[304px]'>
         <div className='w-full h-48 flex items-center justify-center relative'>
-          <img
-            src={contest.image.src}
-            alt={`moksha-contest-${contest.slug}-poster`}
-            className='w-full h-full object-cover'
-          />
+          <picture className='w-full h-full'>
+            {!isNullOrUndefined(contest.image.sources) &&
+              contest.image.sources.map((source, i) => (
+                <source key={i} media={source.media} srcSet={source.srcSet} type={source.type} />
+              ))}
+            <img
+              src={contest.image.src}
+              alt={`moksha-contest-${contest.slug}-poster`}
+              className='w-full h-full object-cover'
+            />
+          </picture>
           <span
             role='presentation'
             className='absolute w-full h-full bg-gradient-to-bl from-brown via-transparent mix-blend-darken'

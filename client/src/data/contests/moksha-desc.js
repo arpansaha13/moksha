@@ -6,7 +6,7 @@ const mokshaContestsDesc = {
       name: 'Magic of fingers',
       type: ['solo'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -20,7 +20,7 @@ const mokshaContestsDesc = {
       name: 'Instant portrait',
       type: ['solo'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -34,7 +34,7 @@ const mokshaContestsDesc = {
       name: 'Digital illustration',
       type: ['solo'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -65,7 +65,7 @@ const mokshaContestsDesc = {
       subtitle: 'Group singing',
       type: ['team'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -80,7 +80,7 @@ const mokshaContestsDesc = {
       subtitle: 'Solo instrumental',
       type: ['solo'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -94,7 +94,7 @@ const mokshaContestsDesc = {
       name: 'Rap battle',
       type: ['solo'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -109,7 +109,7 @@ const mokshaContestsDesc = {
       subtitle: 'Beatboxing',
       type: ['solo'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -126,7 +126,7 @@ const mokshaContestsDesc = {
       subtitle: 'Solo dance competition',
       type: ['solo'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -141,7 +141,7 @@ const mokshaContestsDesc = {
       subtitle: 'Duet competition',
       type: ['duet'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -156,7 +156,7 @@ const mokshaContestsDesc = {
       subtitle: 'Group competition',
       type: ['team'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -171,7 +171,7 @@ const mokshaContestsDesc = {
       subtitle: 'Open dance competition',
       type: ['open'],
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
       description: [
         {
@@ -183,43 +183,16 @@ const mokshaContestsDesc = {
   pixel: [
     {
       id: 14,
-      slug: 'the-sunday-mystery',
-      name: 'The Sunday Mystery',
+      slug: 'snap-quest',
+      name: 'Snap Quest',
+      subtitle: 'Treasure Hunt',
       image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+        src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
       },
-      type: ['solo', 'duo'],
+      type: ['team'],
       description: [
         {
-          p: 'Similar to the Treasure hunt done this Aayam, In this event, The participants have to find clues in a room/event place for solving a murder mystery and help the Superhero get out of the jail which he/she has been wrongly accused of. The person has to find clues in single/multiple location depending on the size of the team management.',
-        },
-      ],
-    },
-    {
-      id: 15,
-      slug: 'let-me-out-escape-room',
-      name: 'LetMeOut (Escape Room)',
-      image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
-      },
-      type: ['duo', 'squad'],
-      description: [
-        {
-          p: 'Escape from the room. Quickest runner wins.',
-        },
-      ],
-    },
-    {
-      id: 16,
-      slug: 'click-a-story',
-      name: 'Click a Story',
-      image: {
-        src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
-      },
-      type: ['solo'],
-      description: [
-        {
-          p: 'Click multiple pictures that make a short story (Maximum 10 Pictures).',
+          p: 'Teams must solve the puzzles in order to find the next clue. Teams must take a selfie with the said thing in the puzzle.',
         },
       ],
     },

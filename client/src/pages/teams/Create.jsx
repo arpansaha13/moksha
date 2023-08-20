@@ -27,7 +27,7 @@ export function Component() {
   const setShowNotification = useCallback(bool => set('show', bool), [])
 
   return (
-    <main className='max-w-xl mx-auto h-[calc(100vh-100px)] flex flex-col justify-center relative'>
+    <main className='max-w-xl mx-auto h-cover flex flex-col justify-center relative'>
       <Notification
         show={notification.show}
         setShow={setShowNotification}

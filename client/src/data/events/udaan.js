@@ -5,7 +5,11 @@ const dzire = [
     name: 'Flash Mob',
     club: 'dzire',
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      sources: [
+        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.webp', type: 'image/webp' },
+        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.jpeg', type: 'image/jpeg' },
+      ],
+      src: '/images/events/dzire/flash-mob/poster-1024x1024.jpeg',
     },
     description: [
       {
@@ -22,7 +26,11 @@ const malhar = [
     name: 'Street Jam',
     club: 'malhar',
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      sources: [
+        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.webp', type: 'image/webp' },
+        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.jpeg', type: 'image/jpeg' },
+      ],
+      src: '/images/events/malhar/street-jam/poster-1024x1024.jpeg',
     },
     description: [
       {
@@ -32,11 +40,15 @@ const malhar = [
   },
   {
     id: 3,
-    slug: 'theme-song-moksha',
+    slug: 'theme-song',
     name: 'Theme song of Moksha',
     club: 'malhar',
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      sources: [
+        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.webp', type: 'image/webp' },
+        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.jpeg', type: 'image/jpeg' },
+      ],
+      src: '/images/events/malhar/theme-song/poster-1024x1024.jpeg',
     },
     description: [
       {

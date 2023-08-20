@@ -35,7 +35,7 @@ const fineArts = [
     name: 'Art exhibition',
     club: 'fine-arts',
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     description: [
       {
@@ -49,7 +49,7 @@ const fineArts = [
     name: 'Open canvas',
     club: 'fine-arts',
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     description: [
       {

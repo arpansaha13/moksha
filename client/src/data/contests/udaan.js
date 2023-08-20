@@ -1,13 +1,21 @@
 const malhar = [
   {
-    id: 17,
+    id: 15,
     slug: 'battle-of-bands',
     name: 'Battle of Bands',
-    type: ['solo'],
+    type: ['team'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      sources: [
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.webp', type: 'image/webp' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.jpeg', type: 'image/jpeg' },
+      ],
+      src: '/images/contests/malhar/battle-of-bands/poster-1024x1024.jpeg',
     },
-    description: [{ p: '' }],
+    description: [
+      {
+        p: 'Harmonious Collision! Battle of the Beats! Get ready to witness an electrifying showdown of campus melodies as top musical bands clash in a symphonic spectacle. The stage is set, the amps are buzzing, and the atmosphere is charged with musical magic. Who will strike the perfect chord and claim the title of ultimate campus conqueror? Join us at Moksha for a night of rhythmic rivalry that will leave you dancing to the pulsating cadence of creativity!',
+      },
+    ],
   },
 ]
 
@@ -18,7 +26,11 @@ const fineArts = [
     name: 'Art Competition',
     type: ['solo'],
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      sources: [
+        { srcSet: '/images/contests/fine-arts/art-competition/poster-1024x1024.webp', type: 'image/webp' },
+        { srcSet: '/images/contests/fine-arts/art-competition/poster-1024x1024.jpeg', type: 'image/jpeg' },
+      ],
+      src: '/images/contests/fine-arts/art-competition/poster-1024x1024.jpeg',
     },
     description: [
       {

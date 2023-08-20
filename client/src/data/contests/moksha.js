@@ -5,7 +5,7 @@ const fineArts = [
     name: 'Magic of fingers',
     type: ['solo'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     description: [
       {
@@ -19,7 +19,7 @@ const fineArts = [
     name: 'Instant portrait',
     type: ['solo'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     description: [
       {
@@ -33,7 +33,7 @@ const fineArts = [
     name: 'Digital illustration',
     type: ['solo'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     description: [
       {
@@ -293,7 +293,7 @@ const dzire = [
     subtitle: 'Solo dance competition',
     type: ['solo'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     description: [
       { p: 'It is a solo dance competition, any form of dance can be performed.' },
@@ -317,7 +317,7 @@ const dzire = [
     subtitle: 'Duet competition',
     type: ['duet'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     allowedTeamSize: 2,
     description: [
@@ -344,7 +344,7 @@ const dzire = [
     subtitle: 'Group competition',
     type: ['team'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     allowedTeamSize: { min: 4, max: 15 },
     description: [{ p: 'It is a group dance competition where  any form of dance can be performed.' }],
@@ -369,7 +369,7 @@ const dzire = [
     subtitle: 'Open dance competition',
     type: ['open'],
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
     description: [
       { p: "It's a dance competition which is open for all, any form of dance can be performed." },
@@ -382,61 +382,36 @@ const dzire = [
 const pixel = [
   {
     id: 14,
-    slug: 'the-sunday-mystery',
-    name: 'The Sunday Mystery',
+    slug: 'snap-quest',
+    name: 'Snap Quest',
+    subtitle: 'Treasure Hunt',
     image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
     },
-    type: ['solo', 'duo'],
-    allowedTeamSize: [1, 2],
+    type: ['team'],
+    allowedTeamSize: 4, // needs verification
     description: [
       {
-        p: 'Similar to the Treasure hunt done this Aayam, In this event, The participants have to find clues in a room/event place for solving a murder mystery and help the Superhero get out of the jail which he/she has been wrongly accused of. The person has to find clues in single/multiple location depending on the size of the team management.',
+        p: 'Teams must solve the puzzles in order to find the next clue. Teams must take a selfie with the said thing in the puzzle.',
       },
-      { p: 'Fastest recorded team to solve the mystery wins.' },
     ],
     instructions: [
-      { heading: 'What do the participants have to do?' },
-      { p: 'Solve riddles/find clues depending on the main story line.' },
-      { heading: 'What will the club provide to the participants?' },
-      { p: 'Pen and paper to solve the mystery.' },
-    ],
-  },
-  {
-    id: 15,
-    slug: 'let-me-out-escape-room',
-    name: 'LetMeOut (Escape Room)',
-    image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
-    },
-    type: ['duo', 'squad'],
-    allowedTeamSize: [2, 4],
-    description: [{ p: 'Escape from the room. Quickest runner wins.' }],
-    instructions: [
-      { heading: 'What do the participants have to do?' },
-      { p: 'Find clues and unlock the room.' },
-      { heading: 'What will the club provide to the participants?' },
-      { p: 'A Mystery Room.' },
-      { heading: 'What should be the size of the team?' },
-      { p: 'It may be a duo or a squad of 4.' },
-    ],
-  },
-  {
-    id: 16,
-    slug: 'click-a-story',
-    name: 'Click a Story',
-    image: {
-      src: '/images/contests/fine_arts/magic_of_fingers/poster-1164x1164.jpeg',
-    },
-    type: ['solo'],
-    description: [{ p: 'Click multiple pictures that make a short story (Maximum 10 Pictures).' }],
-    instructions: [
-      { heading: 'What do the participants have to do?' },
-      { p: 'Upload on instagram, tag & follow @pixels.nita.' },
-      { heading: 'What will the club provide to the participants?' },
-      { p: 'An online platform.' },
-      { heading: 'What should be the size of the team?' },
-      { p: 'No restrictions. But winner will be the account where the post has been posted on.' },
+      { heading: 'Puzzle Stations' },
+      {
+        p: 'The college campus is divided into several zones, each containing a puzzle station. At each station, teams solve a puzzle to unveil a clue that hints at the location of an item on campus.',
+      },
+      { heading: 'Clue Solving' },
+      {
+        p: 'Teams decipher the puzzles to reveal clues. Puzzles can involve riddles, anagrams, wordplay, or visual challenges. Successfully solving a puzzle leads the team to the next station.',
+      },
+      { heading: 'Selfie Challenge' },
+      {
+        p: "Upon reaching a station, teams must locate the specific item hinted at in the previous puzzle's clue. Teams creatively stage a selfie with the item that aligns with the theme or hint provided. Selfies should be fun, imaginative, and showcase the team's creativity.",
+      },
+      { heading: 'Submission and Validation' },
+      {
+        p: "Teams submit their selfie via a designated event app or platform. A panel of judges reviews the submitted selfies to ensure they meet the challenge's criteria.",
+      },
     ],
   },
 ]
