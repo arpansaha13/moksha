@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useMap } from '~/hooks/useMap'
 import Notification from '~/components/common/Notification'
-import CastleGate3 from '~/assets/castle-gate-3.svg'
 
 const getHeading = route => {
   switch (route) {
@@ -44,7 +43,7 @@ export default function AuthLayout() {
     <div className='relative min-w-screen min-h-screen text-white'>
       <img
         role='presentation'
-        src={CastleGate3}
+        src='/images/bg/castle-gate-1024x758.png'
         alt=''
         className='fixed w-screen h-screen object-cover'
         aria-hidden={true}

@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import Castle from '../assets/castle.svg'
 
 export default function TeamsLayout() {
   return (
     <div className='min-w-screen min-h-screen'>
       <img
         role='presentation'
-        src={Castle}
+        src='/images/bg/castle-974x846'
         alt=''
         className='fixed w-screen h-screen object-cover'
         aria-hidden={true}

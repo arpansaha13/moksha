@@ -7,7 +7,6 @@ import Sheet from '~common/Sheet'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import RegisteredContestMembers from '../Teams/RegisteredContestMembers'
-import CastleGate2 from '~/assets/castle-gate-2.svg' // Reference image for now
 import { getMokshaContest } from '~/utils/getMokshaContest'
 
 const RegisteredTeamContestCard = memo(
@@ -26,7 +25,7 @@ const RegisteredTeamContestCard = memo(
         <div className='flex'>
           <MLink to={link} as='div' className='flex-shrink-0 block h-36 w-36 relative'>
             {/* Replace this image with contest poster */}
-            <img src={CastleGate2} alt='' className='w-full h-full object-cover' />
+            <img src={contest.image.src} alt='' className='w-full h-full object-cover' />
           </MLink>
 
           <div className='@container flex-grow px-4 sm:px-6 py-3 sm:py-4 flex flex-col justify-between'>
