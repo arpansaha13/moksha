@@ -1,13 +1,14 @@
 import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData } from 'react-router-dom'
-import { capitalCase } from 'change-case'
+// import { capitalCase } from 'change-case'
 import { classNames } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
+import StayTunedBanner from '~/components/StayTunedBanner'
 import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
@@ -63,35 +64,37 @@ const UdaanContests = memo(
 )
 
 const MokshaContests = memo(
-  ({ mokshaContestsMap, className }) => (
+  ({ className }) => (
     <Container className={className}>
       <h2 className='text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
 
-      {Object.keys(mokshaContestsMap).map(clubName => (
+      <StayTunedBanner />
+
+      {/* {Object.keys(mokshaContestsMap).map(clubName => (
         <ClubContests key={clubName} clubName={clubName} contests={mokshaContestsMap[clubName]} />
-      ))}
+      ))} */}
     </Container>
   ),
   () => true
 )
 
 /** Display contests of a particular club */
-const ClubContests = memo(
-  ({ clubName, contests }) => (
-    <section className='flex-grow w-full' id={`${clubName}-contests`}>
-      <h3 className='mb-6 text-4xl font-semibold'>{capitalCase(clubName)}</h3>
+// const ClubContests = memo(
+//   ({ clubName, contests }) => (
+//     <section className='flex-grow w-full' id={`${clubName}-contests`}>
+//       <h3 className='mb-6 text-4xl font-semibold'>{capitalCase(clubName)}</h3>
 
-      <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-        {contests.map(contest => (
-          <div key={contest.id} className='min-w-[16rem]'>
-            <ContestCard clubName={clubName} contest={contest} />
-          </div>
-        ))}
-      </div>
-    </section>
-  ),
-  (prev, next) => prev.clubName === next.clubName
-)
+//       <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+//         {contests.map(contest => (
+//           <div key={contest.id} className='min-w-[16rem]'>
+//             <ContestCard clubName={clubName} contest={contest} />
+//           </div>
+//         ))}
+//       </div>
+//     </section>
+//   ),
+//   (prev, next) => prev.clubName === next.clubName
+// )
 
 const ContestCard = memo(
   ({ clubName, contest }) => (

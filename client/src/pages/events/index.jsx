@@ -10,6 +10,7 @@ import Sheet from '~common/Sheet'
 import Container from '~common/Container'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
+import StayTunedBanner from '~/components/StayTunedBanner'
 import { getEvents } from '~loaders/events.loader'
 
 export const loader = getEvents
@@ -23,7 +24,7 @@ export function Component() {
         <title>Moksha | Events</title>
       </Helmet>
 
-      <Container className='w-full max-w-md px-2 py-16 sm:px-0'>
+      <Container>
         <h1 className='sr-only'>Events</h1>
 
         <UdaanEvents udaanEventsList={udaanEventsList} />
@@ -53,17 +54,19 @@ const UdaanEvents = memo(
 )
 
 const MokshaEvents = memo(
-  ({ mokshaEventsList }) => (
+  () => (
     <section id='moksha-events'>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
 
-      <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+      <StayTunedBanner />
+
+      {/* <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {mokshaEventsList.map(event => (
           <div key={event.id} className='min-w-[16rem]'>
             <EventCard event={event} />
           </div>
         ))}
-      </div>
+      </div> */}
     </section>
   ),
   () => true

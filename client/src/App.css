@@ -67,3 +67,10 @@ body {
 .h-scroll::-webkit-scrollbar-track-piece {
   @apply block h-1 w-auto;
 }
+
+@supports (-webkit-text-stroke: 1px currentcolor) {
+  .text-stroke {
+    -webkit-text-stroke: 1px currentcolor;
+    -webkit-text-fill-color: transparent;
+  }
+}
