@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useAppContext } from './containers/DataProvider'
-import Routes from './routes'
+import Routes from './router/routes'
 import fetchWithCredentials from './utils/fetchWithCredentials'
 import './App.css'
 import 'nprogress/nprogress.css'

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
@@ -6,32 +6,35 @@ import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import NotFound from '../404'
-import SocialShare from '~/components/SocialShare'
+import { Component as NotFound } from '../404'
 import Container from '~common/Container'
+import SocialShare from '~/components/SocialShare'
+import SoloContest from '~/components/Contests/SoloContest'
+import TeamContest from '~/components/Contests/TeamContest'
 import '@tranzis/react/styles/Tz3dCard'
+import { getContest } from '~loaders/contests.loader'
 
-const SoloContest = lazy(() => import('../../components/Contests/SoloContest'))
-const TeamContest = lazy(() => import('../../components/Contests/TeamContest'))
+export const loader = getContest
 
-export default function Contest() {
+export function Component() {
   const contest = useLoaderData()
   const location = useLocation()
 
   const shareData = useMemo(
-    () => ({
-      url: location.pathname,
-      title: `Moksha contest - ${contest.name}`,
-      text:
-        contest.description[0].p.length <= 100
-          ? contest.description[0].p.length
-          : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
-    }),
+    () =>
+      isNullOrUndefined(contest)
+        ? {}
+        : {
+            url: location.pathname,
+            title: `Moksha contest - ${contest.name}`,
+            text:
+              contest.description[0].p.length <= 100
+                ? contest.description[0].p.length
+                : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+          },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location.pathname]
   )
-
-  useEffect(() => window.scrollTo({ top: 0 }), [])
 
   if (isNullOrUndefined(contest)) {
     return <NotFound />
@@ -86,7 +89,7 @@ export default function Contest() {
           <div className='sm:sticky sm:top-8'>
             <div className='mx-auto w-64 h-64 sm:w-80 sm:h-80'>
               <Tz3dCard
-                src='https://images-platform.99static.com/J66rJkV_HyDRL8BvSnYAexqqKB8=/500x500/top/smart/99designs-contests-attachments/55/55370/attachment_55370577'
+                src={contest.image.src}
                 alt={`moksha-contest-${contest}-poster`}
                 rotation={{ base: -30, sm: -30 }}
                 elevation={{ base: 8, sm: 10 }}
@@ -98,3 +101,5 @@ export default function Contest() {
     </Container>
   )
 }
+
+Component.displayName = 'Contest'

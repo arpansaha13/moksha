@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { memo, useCallback, useEffect, useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { memo, useCallback, useState } from 'react'
+import { NavLink, Outlet, useLoaderData } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import checkIcon from '@iconify-icons/mdi/check'
 import closeIcon from '@iconify-icons/mdi/close'
@@ -15,37 +15,7 @@ import EmptyState from '../components/common/EmptyState'
 import { profileTabs, accountTabs } from '../data/tabs'
 
 function AccountLayout() {
-  const fetchHook = useFetch()
-  const [receivedInvites, setReceivedInvites] = useState([])
-
-  const loading = useSet()
-
-  useEffect(() => {
-    fetchHook('users/me/received-team-invites').then(res => {
-      setReceivedInvites(res.data)
-    })
-  }, [])
-
-  const acceptInvite = useCallback(async id => {
-    loading.add(id)
-    await fetchHook(`invites/${id}/accept`, { method: 'PATCH' })
-    loading.delete(id)
-    // TODO: show link to team profile instead of deleting
-    setReceivedInvites(arr => {
-      const idx = arr.findIndex(inv => inv.id === id)
-      arr.splice(idx, 1)
-      return [...arr]
-    })
-  }, [])
-
-  const rejectInvite = useCallback(id => {
-    fetchHook(`invites/${id}/reject`, { method: 'PATCH' })
-    setReceivedInvites(arr => {
-      const idx = arr.findIndex(inv => inv.id === id)
-      arr.splice(idx, 1)
-      return [...arr]
-    })
-  }, [])
+  const { receivedInvites } = useLoaderData()
 
   return (
     <Container className='xl:!max-w-7xl py-4'>
@@ -90,38 +60,79 @@ function AccountLayout() {
           </ul>
         </aside>
 
-        <section className='lg:col-span-6'>
+        <div className='lg:col-span-6'>
           <Outlet />
-        </section>
+        </div>
 
-        <section className='lg:col-span-3' id='received-invites'>
-          <h3 className='mb-4 text-xl font-bold text-gray-50'>Received invites</h3>
-
-          <Sheet className='px-2 py-4'>
-            {receivedInvites.length === 0 ? (
-              <EmptyState icon={accountClockIcon} description='No invites received' />
-            ) : (
-              <ul className='px-4 divide-y divide-amber-800/80 text-xs lg:text-sm lg:max-h-96 lg:overflow-auto scrollbar'>
-                {receivedInvites.map(inv => (
-                  <li key={inv.id} className='py-1.5 first:pt-0 last:pb-0'>
-                    <div className='text-gray-100 flex items-center space-x-2'>
-                      <InviteListItem invite={inv} />
-
-                      <AcceptButton id={inv.id} action={acceptInvite} loading={loading.has(inv.id)} />
-
-                      <RejectButton id={inv.id} action={rejectInvite} loading={false} />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Sheet>
-        </section>
+        <aside className='lg:col-span-3' id='received-invites'>
+          <ReceivedInvites invites={receivedInvites} />
+        </aside>
       </div>
     </Container>
   )
 }
 export default AccountLayout
+
+const ReceivedInvites = ({ invites }) => {
+  const fetchHook = useFetch()
+  const loading = useSet()
+  const [receivedInvites, setReceivedInvites] = useState(invites)
+
+  const acceptInvite = useCallback(async id => {
+    loading.add(id)
+    await fetchHook(`invites/${id}/accept`, { method: 'PATCH' })
+    loading.delete(id)
+    // TODO: show link to team profile instead of deleting
+    setReceivedInvites(arr => {
+      const idx = arr.findIndex(inv => inv.id === id)
+      arr.splice(idx, 1)
+      return [...arr]
+    })
+  }, [])
+
+  const rejectInvite = useCallback(id => {
+    fetchHook(`invites/${id}/reject`, { method: 'PATCH' })
+    setReceivedInvites(arr => {
+      const idx = arr.findIndex(inv => inv.id === id)
+      arr.splice(idx, 1)
+      return [...arr]
+    })
+  }, [])
+
+  const heading = <h3 className='mb-4 text-xl font-bold text-gray-50'>Received invites</h3>
+
+  if (receivedInvites.length === 0) {
+    return (
+      <>
+        {heading}
+        <Sheet className='px-2 py-4'>
+          <EmptyState icon={accountClockIcon} description='No invites received' />
+        </Sheet>
+      </>
+    )
+  }
+
+  return (
+    <>
+      {heading}
+      <Sheet className='px-2 py-4'>
+        <ul className='px-4 divide-y divide-amber-800/80 text-xs lg:text-sm lg:max-h-96 lg:overflow-auto scrollbar'>
+          {receivedInvites.map(inv => (
+            <li key={inv.id} className='py-1.5 first:pt-0 last:pb-0'>
+              <div className='text-gray-100 flex items-center space-x-2'>
+                <InviteListItem invite={inv} />
+
+                <AcceptButton id={inv.id} action={acceptInvite} loading={loading.has(inv.id)} />
+
+                <RejectButton id={inv.id} action={rejectInvite} loading={false} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Sheet>
+    </>
+  )
+}
 
 const InviteListItem = ({ invite }) => (
   <div className='ml-1 lg:ml-2 flex-grow'>

@@ -12,7 +12,7 @@ const asstGeneralSecretaries = [
     image: '',
     designation: 'Asst. General Secretary',
     whatsApp: '+91 97745 92613',
-    email: 'anirbanghosh530@gmail.com',
+    email: 'anirbanghoshs30@gmail.com',
   },
   {
     name: 'Rumana Akter',

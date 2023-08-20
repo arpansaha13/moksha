@@ -4,22 +4,12 @@ const fineArts = [
     slug: 'magic-of-fingers',
     name: 'Magic of fingers',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
     description: [
       {
         p: 'Who says a painter needs brush to unleash his imagination. All that was needed in this event were some water colours on one’s fingers and that’s how we crowned the Leonardo of finger painting.',
-      },
-    ],
-  },
-  {
-    id: 2,
-    slug: 'art-exhibition',
-    name: 'Art exhibition',
-    type: ['solo'],
-    image: '', // Image link
-    description: [
-      {
-        p: 'An art exhibition is traditionally the space in which art objects (in the most general sense) meet an audience. The exhibit is universally understood to be for some temporary period unless, as is rarely true, it they may be called "exhibit", "exposition" (the French word) or "show".',
       },
     ],
   },
@@ -28,7 +18,9 @@ const fineArts = [
     slug: 'instant-portrait',
     name: 'Instant portrait',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
     description: [
       {
         p: 'A portrait is a painting, photograph, sculpture, or other artistic representation of a person, in which the face and its expressions are predominant. The intent is to display the likeness, personality, and even the mood of the person.',
@@ -40,7 +32,9 @@ const fineArts = [
     slug: 'digital-illustration',
     name: 'Digital illustration',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
     description: [
       {
         p: 'Digital illustration or computer illustration is the use of digital tools to produce images under the direct manipulation of the artist, usually through a pointing device such as a graphics tablet or, less commonly, a mouse. It is distinguished from computer-generated art, which is produced by a computer using mathematical models created by the artist. It is also distinct from digital manipulation of photographs, in that it is an original construction "from scratch". Photographic elements such as background or texture may be incorporated into such works, but they are not necessarily the primary basis.',
@@ -55,7 +49,9 @@ const malhar = [
     slug: 'solo-singing',
     name: 'Solo singing',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+    },
     description: [
       {
         p: 'This solo singing competition will be held in two stages: the preliminary round the and final round, contestants will have to submit their video of a maximum of 5 minutes for the preliminary round. selected candidates from the preliminary round will be competing in the Finals.',
@@ -102,7 +98,9 @@ const malhar = [
     name: 'Melody mania',
     subtitle: 'Group singing',
     type: ['team'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+    },
     allowedTeamSize: { min: 3, max: 6 },
     description: [
       {
@@ -151,7 +149,9 @@ const malhar = [
     name: 'Harmony hunt',
     subtitle: 'Solo instrumental',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+    },
     description: [
       {
         p: 'This solo instrumental competition will be held in 2 stages: a preliminary round, from which selected contestants will advance to the final round and compete in the main event of ‘Moksha’, which will take place in the Auditorium.',
@@ -196,7 +196,9 @@ const malhar = [
     slug: 'rap-battle',
     name: 'Rap battle',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+    },
     description: [
       {
         p: 'This rap battle competition will be held in two stages: a preliminary round, from which a chosen group of contestants will advance to the final round, which will take place in the auditorium.',
@@ -242,7 +244,9 @@ const malhar = [
     name: 'Beatnik',
     subtitle: 'Beatboxing',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+    },
     description: [
       {
         p: 'Gear up! Beatboxers release your adrenalines to insane limits. Showcase your mini orchestra living in your throats by creating a wide range of sounds.',
@@ -288,7 +292,9 @@ const dzire = [
     name: 'Shinigami Showdown',
     subtitle: 'Solo dance competition',
     type: ['solo'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
     description: [
       { p: 'It is a solo dance competition, any form of dance can be performed.' },
       { ul: ['Prelims will be online.', 'Finals will be offline.', 'Venue will be updated later on.'] },
@@ -310,7 +316,9 @@ const dzire = [
     name: 'Dragon Ballroom',
     subtitle: 'Duet competition',
     type: ['duet'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
     allowedTeamSize: 2,
     description: [
       {
@@ -335,7 +343,9 @@ const dzire = [
     name: 'Hunter x Hunter Hoedown',
     subtitle: 'Group competition',
     type: ['team'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
     allowedTeamSize: { min: 4, max: 15 },
     description: [{ p: 'It is a group dance competition where  any form of dance can be performed.' }],
     instructions: [
@@ -358,7 +368,9 @@ const dzire = [
     name: "Bob 'Till you Drop'",
     subtitle: 'Open dance competition',
     type: ['open'],
-    image: '', // Image link
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
     description: [
       { p: "It's a dance competition which is open for all, any form of dance can be performed." },
       { p: 'Anybody from the crowd can come up and dance on any song.' },
@@ -370,87 +382,35 @@ const dzire = [
 const pixel = [
   {
     id: 14,
-    slug: 'the-sunday-mystery',
-    name: 'The Sunday Mystery',
-    image: '', // Image link
-    type: ['solo', 'duo'],
-    allowedTeamSize: [1, 2],
+    slug: 'snap-quest',
+    name: 'Snap Quest',
+    subtitle: 'Treasure Hunt',
+    image: {
+      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+    },
+    type: ['team'],
+    allowedTeamSize: 4, // needs verification
     description: [
       {
-        p: 'Similar to the Treasure hunt done this Aayam, In this event, The participants have to find clues in a room/event place for solving a murder mystery and help the Superhero get out of the jail which he/she has been wrongly accused of. The person has to find clues in single/multiple location depending on the size of the team management.',
-      },
-      { p: 'Fastest recorded team to solve the mystery wins.' },
-    ],
-    instructions: [
-      { heading: 'What do the participants have to do?' },
-      { p: 'Solve riddles/find clues depending on the main story line.' },
-      { heading: 'What will the club provide to the participants?' },
-      { p: 'Pen and paper to solve the mystery.' },
-    ],
-  },
-  {
-    id: 15,
-    slug: 'let-me-out-escape-room',
-    name: 'LetMeOut (Escape Room)',
-    image: '', // Image link
-    type: ['duo', 'squad'],
-    allowedTeamSize: [2, 4],
-    description: [{ p: 'Escape from the room. Quickest runner wins.' }],
-    instructions: [
-      { heading: 'What do the participants have to do?' },
-      { p: 'Find clues and unlock the room.' },
-      { heading: 'What will the club provide to the participants?' },
-      { p: 'A Mystery Room.' },
-      { heading: 'What should be the size of the team?' },
-      { p: 'It may be a duo or a squad of 4.' },
-    ],
-  },
-  {
-    id: 16,
-    slug: 'click-a-story',
-    name: 'Click a Story',
-    image: '', // Image link
-    type: ['solo'],
-    description: [{ p: 'Click multiple pictures that make a short story (Maximum 10 Pictures).' }],
-    instructions: [
-      { heading: 'What do the participants have to do?' },
-      { p: 'Upload on instagram, tag & follow @pixels.nita.' },
-      { heading: 'What will the club provide to the participants?' },
-      { p: 'An online platform.' },
-      { heading: 'What should be the size of the team?' },
-      { p: 'No restrictions. But winner will be the account where the post has been posted on.' },
-    ],
-  },
-]
-
-const dcc = [
-  {
-    id: 17,
-    slug: 'incredible-roll',
-    name: 'Incredible Roll',
-    image: '', // Image link
-    type: ['solo'],
-    description: [
-      {
-        p: 'The INCREDIBLE ROLL is a fun-game similar to the usual game of Ludo we play. In this game, 4 people can play at a time individually and no teams are allowed. Each participant will start from position Zero and can move to the next positions by answering simple tech-related or comic-related questions. The number of places a player can move depends on the number of points of the questions asked to each player. The one to reach the finishing point,i.e, the centre of the board first wins.',
+        p: 'Teams must solve the puzzles in order to find the next clue. Teams must take a selfie with the said thing in the puzzle.',
       },
     ],
     instructions: [
-      { heading: 'Stages & timelines' },
+      { heading: 'Puzzle Stations' },
       {
-        ul: [
-          'Mode: Offline (Onsite)',
-          'The game will be open to all on the 1st or 2nd day of Moksha (date) from 11:00 AM onwards',
-        ],
+        p: 'The college campus is divided into several zones, each containing a puzzle station. At each station, teams solve a puzzle to unveil a clue that hints at the location of an item on campus.',
       },
-      { heading: 'Rules' },
+      { heading: 'Clue Solving' },
       {
-        ul: [
-          'Each player will start from position Zero of the game-board . There will be colored boxes for each player position wise. One player can move forward to the next position only by answering the simple short answer question based on technology/comics/Dance/Music/famous personalities.',
-          'Partially correct answers might be accepted based on situation',
-          'If a player gives the wrong answer he/she will have to go back to the previous position . Incase of no answer, the position remains unchanged.',
-          'A player cannot take more than 1-2 minute to answer a question.',
-        ],
+        p: 'Teams decipher the puzzles to reveal clues. Puzzles can involve riddles, anagrams, wordplay, or visual challenges. Successfully solving a puzzle leads the team to the next station.',
+      },
+      { heading: 'Selfie Challenge' },
+      {
+        p: "Upon reaching a station, teams must locate the specific item hinted at in the previous puzzle's clue. Teams creatively stage a selfie with the item that aligns with the theme or hint provided. Selfies should be fun, imaginative, and showcase the team's creativity.",
+      },
+      { heading: 'Submission and Validation' },
+      {
+        p: "Teams submit their selfie via a designated event app or platform. A panel of judges reviews the submitted selfies to ensure they meet the challenge's criteria.",
       },
     ],
   },
@@ -461,7 +421,6 @@ const mokshaContests = {
   malhar: malhar,
   dzire: dzire,
   pixel: pixel,
-  dcc: dcc,
 }
 
 export default mokshaContests

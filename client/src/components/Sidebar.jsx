@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { navTabs } from '../data/tabs'
 import { classNames } from '@arpansaha13/utils'
+import MokshaLogo from '~/components/pictures/MokshaLogo'
 import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
 
 export default function Sidebar() {
@@ -9,6 +10,16 @@ export default function Sidebar() {
 
   return (
     <aside className='pl-2 py-8 w-full h-full text-gray-50'>
+      {/* TODO: don't put anchor tag inside button */}
+      <TzFloatingWindow.Button className='block mb-6 mx-auto w-16 h-16'>
+        {() => (
+          <Link to='/' className='block relative'>
+            <MokshaLogo />
+            <span className='absolute inset-0 -z-10 bg-amber-800/40 filter blur-lg' />
+          </Link>
+        )}
+      </TzFloatingWindow.Button>
+
       <ul className='space-y-2'>
         {navTabs.map(tab => (
           <li key={tab.to}>

@@ -5,7 +5,7 @@ import gmailIcon from '@iconify-icons/mdi/gmail'
 import whatsappIcon from '@iconify-icons/mdi/whatsapp'
 import contact from '../data/contact'
 
-export default function Contact() {
+export function Component() {
   return (
     <Container as='main'>
       <section id='moksha-2023-general-secretaries'>
@@ -22,6 +22,8 @@ export default function Contact() {
     </Container>
   )
 }
+
+Component.displayName = 'Contact'
 
 const Card = ({ data }) => (
   <Sheet className='p-4 overflow-hidden'>

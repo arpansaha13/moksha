@@ -3,8 +3,11 @@ import calendarRemoveIcon from '@iconify-icons/mdi/calendar-remove'
 import EmptyState from '~common/EmptyState'
 import RegisteredSoloContestCard from '~/components/Contests/RegisteredSoloContestCard'
 import RegisteredTeamContestCard from '~/components/Contests/RegisteredTeamContestCard'
+import { getAuthUserContests } from '~loaders/account.loader'
 
-function Registrations() {
+export const loader = getAuthUserContests
+
+export function Component() {
   const { soloContests, teamContests } = useLoaderData()
 
   if (soloContests.length === 0 && teamContests.length === 0) {
@@ -55,4 +58,4 @@ function Registrations() {
   )
 }
 
-export default Registrations
+Component.displayName = 'Registrations'

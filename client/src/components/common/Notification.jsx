@@ -1,7 +1,6 @@
 import { Fragment, memo, useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import { Transition } from '@headlessui/react'
-import { AiOutlineExclamationCircle } from 'react-icons/ai'
 import closeIcon from '@iconify-icons/mdi/close'
 import checkIcon from '@iconify-icons/mdi/check-circle-outline'
 import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
@@ -52,7 +51,7 @@ const Notification = memo(({ title, description, show, setShow, timeout, classNa
                     </div>
                   ) : (
                     <div className='h-7 w-7 text-red-600' aria-hidden='true'>
-                      <AiOutlineExclamationCircle className='w-full h-full' />
+                      <ExclamationCircle className='w-full h-full' />
                     </div>
                   )}
                 </div>
@@ -81,3 +80,20 @@ const Notification = memo(({ title, description, show, setShow, timeout, classNa
   )
 })
 export default Notification
+
+const ExclamationCircle = ({ className }) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    strokeWidth={1.5}
+    stroke='currentColor'
+    className={className}
+  >
+    <path
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
+    />
+  </svg>
+)

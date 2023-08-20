@@ -1,18 +1,17 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import CsrfField from '~common/CsrfField'
-import { useAuthContext } from '~/containers/AuthProvider'
 import getFormData from '~/utils/getFormData'
 
-const SignUpPage = () => {
+export function Component() {
   const navigate = useNavigate()
   let [searchParams] = useSearchParams()
-  const { setNotification, setAllNotification } = useAuthContext()
+  const { setNotification, setAllNotification } = useOutletContext()
 
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
@@ -109,7 +108,7 @@ const SignUpPage = () => {
     </main>
   )
 }
-export default SignUpPage
+Component.displayName = 'SignUpPage'
 
 function validateUsername(username, setError) {
   const spacialChars = /[ `!@#$%^&*()+\-=[\]{};':"\\|,<>/?~]/

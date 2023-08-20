@@ -1,17 +1,16 @@
 import { useCallback, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import CsrfField from '~common/CsrfField'
 import { useAppContext } from '~/containers/DataProvider'
-import { useAuthContext } from '~/containers/AuthProvider'
 import getFormData from '~/utils/getFormData'
 
-const LoginPage = () => {
+export function Component() {
   const { setAppContext } = useAppContext()
-  const { setNotification, setAllNotification } = useAuthContext()
+  const { setNotification, setAllNotification } = useOutletContext()
 
   const navigate = useNavigate()
   let [searchParams] = useSearchParams()
@@ -72,8 +71,7 @@ const LoginPage = () => {
           label='Password'
         />
 
-        {/* TODO */}
-        {/* <div className='text-sm flex items-center justify-between'>
+        <div className='text-sm flex items-center justify-between'>
           <div>
             <Link to='/auth/forgot-password'>
               <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
@@ -81,7 +79,7 @@ const LoginPage = () => {
               </span>
             </Link>
           </div>
-        </div> */}
+        </div>
 
         <CsrfField />
 
@@ -103,4 +101,4 @@ const LoginPage = () => {
     </main>
   )
 }
-export default LoginPage
+Component.displayName = 'LoginPage'
