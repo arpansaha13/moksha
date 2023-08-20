@@ -1,10 +1,42 @@
-import Container from '~common/Container'
+import { classNames } from '@arpansaha13/utils'
 import styles from './styles.module.css'
 
 export default function Hero() {
   return (
-    <section className={styles['hero-bg']}>
-      <Container className='h-cover flex items-center justify-center'></Container>
+    <section className={classNames('-mt-[100px] pt-[100px] pb-4', styles['hero-bg'])}>
+      <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 place-items-center'>
+        {/* Half of Container widths */}
+        <div className='mx-auto px-4 xs:max-w-md sm:ml-auto sm:mr-0 sm:px-0 sm:max-w-[18rem] lg:max-w-md xl:max-w-xl'>
+          <h1 className='mt-1 text-lg text-red-500 font-semibold'>Moksha</h1>
+          <p className='text-5xl font-bold'>Rise like a Phoenix</p>
+
+          <div className='mt-4 md:mt-6 markdown'>
+            <p>
+              Imagine a mythical bird, the Phoenix, that&apos;s about to come back to life. It&apos;s like it&apos;s
+              waking up from ashes after burning away.
+            </p>
+          </div>
+        </div>
+
+        <div className='mix-blend-lighten'>
+          <picture>
+            <source
+              srcSet='/images/home/hero/hero-512x512.webp, /images/home/hero/hero-1080x1080.webp 2x'
+              type='image/webp'
+            />
+            <source
+              srcSet='/images/home/hero/hero-512x512.png, /images/home/hero/hero-1080x1080.png 2x'
+              type='image/png'
+            />
+
+            <img
+              src='/images/home/hero/hero-1080x1080.png'
+              alt='Flaming Phoenix - Hero Image'
+              className='w-56 h-56 sm:w-96 sm:h-96 lg:w-[30rem] lg:h-[30rem] xl:w-[34rem] xl:h-[34rem]'
+            />
+          </picture>
+        </div>
+      </div>
     </section>
   )
 }
