@@ -6,14 +6,11 @@
 
 :root {
   font-family: Poppins, sans-serif;
+  color-scheme: dark;
 }
 
 body {
   @apply bg-gradient-to-tr from-darkBrown via-darkBrown to-brown;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
 
 /* NProgress */
@@ -51,10 +48,29 @@ body {
 .scrollbar::-webkit-scrollbar-track-piece {
   @apply block w-1.5;
 }
-
 .scrollbar::-webkit-scrollbar-button {
   @apply hidden;
 }
 .scrollbar::-webkit-scrollbar-thumb {
   @apply block bg-orange-800/70;
+}
+
+.h-scroll {
+  @apply pb-2 flex overflow-auto scrollbar;
+}
+
+.scrollbar.horizontal::-webkit-scrollbar,
+.scrollbar.horizontal::-webkit-scrollbar-track,
+.scrollbar.horizontal::-webkit-scrollbar-track-piece,
+.h-scroll::-webkit-scrollbar,
+.h-scroll::-webkit-scrollbar-track,
+.h-scroll::-webkit-scrollbar-track-piece {
+  @apply block h-1 w-auto;
+}
+
+@supports (-webkit-text-stroke: 1px currentcolor) {
+  .text-stroke {
+    -webkit-text-stroke: 1px currentcolor;
+    -webkit-text-fill-color: transparent;
+  }
 }

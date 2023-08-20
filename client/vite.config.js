@@ -13,6 +13,7 @@ export default defineConfig({
       '~': resolve(__dirname, 'src'),
       '~base': resolve(__dirname, 'src', 'components', 'base'),
       '~common': resolve(__dirname, 'src', 'components', 'common'),
+      '~loaders': resolve(__dirname, 'src', 'router', 'loaders'),
     },
   },
   server: {

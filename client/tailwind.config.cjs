@@ -15,6 +15,9 @@ module.exports = {
       containers: {
         '2xs': '16rem',
       },
+      spacing: {
+        cover: 'calc(100vh - 100px)',
+      },
     },
   },
   future: {

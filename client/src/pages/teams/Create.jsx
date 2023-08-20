@@ -9,8 +9,11 @@ import BaseInput from '~base/BaseInput'
 import CsrfField from '~common/CsrfField'
 import Notification from '~common/Notification'
 import getFormData from '~/utils/getFormData'
+import { allowIfNoTeamCreated } from '~loaders/teams.loader'
 
-export default function CreateTeam() {
+export const loader = allowIfNoTeamCreated
+
+export function Component() {
   const createdTeam = useLoaderData()
 
   const [notification, { set, setAll }] = useMap({
@@ -24,7 +27,7 @@ export default function CreateTeam() {
   const setShowNotification = useCallback(bool => set('show', bool), [])
 
   return (
-    <main className='max-w-xl mx-auto h-[calc(100vh-100px)] flex flex-col justify-center relative'>
+    <main className='max-w-xl mx-auto h-cover flex flex-col justify-center relative'>
       <Notification
         show={notification.show}
         setShow={setShowNotification}
@@ -59,6 +62,8 @@ export default function CreateTeam() {
     </main>
   )
 }
+
+Component.displayName = 'CreateTeam'
 
 function CreateTeamForm({ setShowNotification, setAll }) {
   const navigate = useNavigate()

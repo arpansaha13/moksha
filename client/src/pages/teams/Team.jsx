@@ -15,12 +15,15 @@ import Container from '~common/Container'
 import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import UserListItem from '~/components/Teams/UserListItem'
+import { getTeamData } from '~loaders/teams.loader'
+
+export const loader = getTeamData
 
 const InviteModal = lazy(() => import('../../components/Teams/InviteModal'))
 const PendingInvites = lazy(() => import('../../components/Teams/PendingInvites'))
 const RegisteredTeamContestCard = lazy(() => import('../../components/Contests/RegisteredTeamContestCard'))
 
-export default function Team() {
+export function Component() {
   const fetchHook = useFetch()
   const { appContext } = useAppContext()
   const { team, members } = useLoaderData()
@@ -141,6 +144,8 @@ export default function Team() {
     </Container>
   )
 }
+
+Component.displayName = 'Team'
 
 const TeamMembers = memo(({ members }) => (
   <Sheet className='px-6 py-4 space-y-3'>

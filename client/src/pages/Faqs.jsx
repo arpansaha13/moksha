@@ -1,17 +1,11 @@
 import { memo } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link } from 'react-router-dom'
-import { useHashLink } from '../hooks/useHashLink'
 import { slugify } from '@arpansaha13/utils'
-import { Icon } from '@iconify/react'
-import poundIcon from '@iconify-icons/mdi/pound'
-import Sheet from '../components/common/Sheet'
-import Container from '../components/common/Container'
-import faqs from '../data/faqs'
+import Sheet from '~common/Sheet'
+import Container from '~common/Container'
+import faqs from '~/data/faqs'
 
-function Faqs() {
-  useHashLink()
-
+export function Component() {
   return (
     <Container className='py-4'>
       <Helmet>
@@ -23,11 +17,11 @@ function Faqs() {
           <h1>Frequently Asked Questions</h1>
 
           <div className='space-y-6'>
-            {faqs.map(faq => (
-              <Sheet className='group p-4 sm:p-6' key={slugify(faq.question)} id={slugify(faq.question)}>
-                <Faq faq={faq} />
-              </Sheet>
-            ))}
+            {faqs.map(faq => {
+              const slug = slugify(faq.question)
+
+              return <Faq key={slug} faq={faq} slug={slug} />
+            })}
           </div>
         </div>
       </section>
@@ -35,19 +29,16 @@ function Faqs() {
   )
 }
 
-export default Faqs
+Component.displayName = 'Faqs'
 
-const Faq = memo(({ faq }) => (
-  <>
-    <div className='not-prose flex flex-col-reverse gap-2 lg:flex-row lg:items-center'>
-      <h2 className='flex-grow text-xl font-semibold'>{faq.question}</h2>
-      <Link
-        className='flex-shrink-0 block w-max text-amber-600 hover:text-amber-500 lg:opacity-0 lg:group-hover:opacity-100 transition-[opacity,_color]'
-        to={{ hash: slugify(faq.question) }}
-      >
-        <Icon icon={poundIcon} color='inherit' width='1.5rem' height='1.5rem' />
-      </Link>
-    </div>
-    <p className='mb-0'>{faq.answer}</p>
-  </>
-))
+const Faq = memo(
+  ({ faq, slug }) => (
+    <Sheet className='p-4 sm:p-6' id={slug}>
+      <div className='not-prose'>
+        <h2 className='text-xl font-semibold'>{faq.question}</h2>
+      </div>
+      <p className='mb-0'>{faq.answer}</p>
+    </Sheet>
+  ),
+  (prev, next) => prev.slug === next.slug
+)

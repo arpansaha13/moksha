@@ -2,17 +2,23 @@ import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import instagramIcon from '@iconify-icons/mdi/instagram'
 import githubIcon from '@iconify-icons/mdi/github'
+import MokshaLogo from '~/components/pictures/MokshaLogo'
 import { navTabs } from '../data/tabs'
 
 const socialLinks = [
+  // {
+  //   name: 'Facebook',
+  //   href: 'https://www.instagram.com/moksha.nita/?igshid=MzRlODBiNWFlZA%3D%3D',
+  //   icon: facebookIcon,
+  // },
   {
     name: 'Instagram',
-    href: '#a',
+    href: 'https://www.instagram.com/moksha.nita/?igshid=MzRlODBiNWFlZA%3D%3D',
     icon: instagramIcon,
   },
   {
     name: 'GitHub',
-    href: '#b',
+    href: 'https://github.com/arpansaha13/moksha',
     icon: githubIcon,
   },
 ]
@@ -22,9 +28,9 @@ const CURRENT_YEAR = new Date().getFullYear()
 function Footer() {
   return (
     <footer className='mt-6 py-12 bg-darkBrown/70 backdrop-blur-sm text-gray-400 text-sm flex flex-col items-center gap-y-6 shadow-inner shadow-amber-900/20'>
-      <div className='w-12 h-12'>
-        <img src='/moksha-logo.svg' alt='Moksha logo' className='w-full h-full' />
-      </div>
+      <Link to='/' className='block w-12 h-12'>
+        <MokshaLogo />
+      </Link>
 
       <ul className='hidden sm:flex gap-12'>
         {navTabs.map(tab => (

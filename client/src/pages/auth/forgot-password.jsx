@@ -1,30 +1,30 @@
+import { useRef } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from 'react-router-dom'
-import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import { useAppContext } from '~/containers/DataProvider'
+import getFormData from '~/utils/getFormData'
 
-const ForgotPasswordPage = () => {
+export function Component() {
   const { setAppContext } = useAppContext()
   const navigate = useNavigate()
 
   const fetchHook = useFetch()
 
-  const [formData, { set }] = useMap({
-    email: '',
-  })
+  const formRef = useRef(null)
 
-  function signIn(e) {
+  function forgotPassword(e) {
     e.preventDefault()
+
+    const formData = getFormData(formRef.current, { format: 'object' })
 
     fetchHook('users/forgot-password', {
       method: 'POST',
       body: JSON.stringify(formData),
     }).then(res => {
       if (res.message === 'User logged in!!') {
-        // TODO: replace with user data from designated api
         setAppContext(state => {
           const newState = { ...state }
           newState.authUser = { ...state.authUser, ...formData }
@@ -41,17 +41,8 @@ const ForgotPasswordPage = () => {
         <title>Moksha | Forgot password</title>
       </Helmet>
 
-      <form className='space-y-6' onSubmit={signIn}>
-        <BaseInput
-          id='email'
-          name='email'
-          type='email'
-          autoComplete='email'
-          required
-          label='Email address'
-          value={formData.email}
-          onChange={e => set('email', e.target.value)}
-        />
+      <form ref={formRef} className='space-y-6' onSubmit={forgotPassword}>
+        <BaseInput id='email' name='email' type='email' autoComplete='email' required label='Email address' />
 
         <div>
           <BaseButton type='submit' stretch>
@@ -70,4 +61,5 @@ const ForgotPasswordPage = () => {
     </div>
   )
 }
-export default ForgotPasswordPage
+
+Component.displayName = 'ForgotPasswordPage'

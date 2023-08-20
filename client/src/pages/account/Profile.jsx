@@ -2,8 +2,11 @@ import { useMemo } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import Sheet from '~common/Sheet'
 import Avatar from '~common/Avatar'
+import { getAuthUserData } from '~loaders/auth.loader'
 
-function Profile() {
+export const loader = getAuthUserData
+
+export function Component() {
   const authUser = useLoaderData()
 
   const userDetails = useMemo(
@@ -42,4 +45,4 @@ function Profile() {
     </Sheet>
   )
 }
-export default Profile
+Component.displayName = 'Profile'

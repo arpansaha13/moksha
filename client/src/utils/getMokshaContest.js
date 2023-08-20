@@ -6,5 +6,5 @@ export function getMokshaContest(clubName, contestSlug) {
 
   const contest = mokshaContests[clubName].find(contest => contest.slug === contestSlug)
 
-  return isNullOrUndefined(contest) ? null : contest
+  return contest ?? null
 }

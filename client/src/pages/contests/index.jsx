@@ -1,29 +1,24 @@
 import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData } from 'react-router-dom'
-import { capitalCase } from 'change-case'
-import { classNames } from '@arpansaha13/utils'
-import { isTouchDevice } from '@arpansaha13/utils/browser'
+// import { capitalCase } from 'change-case'
+import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import Container from '~common/Container'
-import CardsSlider from '~common/CardsSlider'
 import SocialShare from '~/components/SocialShare'
+import StayTunedBanner from '~/components/StayTunedBanner'
 import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
-import { useHashLink } from '~/hooks/useHashLink'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
-import leftIcon from '@iconify-icons/mdi/chevron-left'
 import rightIcon from '@iconify-icons/mdi/chevron-right'
-import doubleLeftIcon from '@iconify-icons/mdi/chevron-double-left'
-import doubleRightIcon from '@iconify-icons/mdi/chevron-double-right'
-import CastleGate2 from '~/assets/castle-gate-2.svg' // Reference image for now
+import { getContests } from '~loaders/contests.loader'
 
-function Contests() {
-  useHashLink()
+export const loader = getContests
 
-  const contestsMap = useLoaderData()
+export function Component() {
+  const { mokshaContestsMap, udaanContestsList } = useLoaderData()
 
   return (
     <>
@@ -31,113 +26,92 @@ function Contests() {
         <title>Moksha | Contests</title>
       </Helmet>
 
-      <Container className='pb-4 grid grid-cols-1 sm:grid-cols-2' id='contests-hero-section'>
+      <Container className='mb-12 grid grid-cols-1 sm:grid-cols-2' id='contests-hero-section'>
         <div className='markdown'>
           <h1>Contests</h1>
 
           <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia, asperiores perferendis! Ex rem, alias id
-            doloribus impedit dignissimos voluptatibus suscipit natus corporis quis.
+            Unleash your brilliance: engage, excel, and elevate in the ultimate arena of creativity! Welcome to NIT
+            Agartala Moksha contests - where talents collide and legends emerge. Explore, participate, and ignite your
+            competitive spirit!
           </p>
-
-          <ul className='grid grid-cols-2 gap-y-0'>
-            {Object.keys(contestsMap).map(clubName => (
-              <li key={clubName}>
-                <Link to={{ hash: `${clubName}-contests` }}>{capitalCase(clubName)}</Link>
-              </li>
-            ))}
-          </ul>
         </div>
       </Container>
 
-      {Object.keys(contestsMap).map(clubName => (
-        <ClubContest key={clubName} clubName={clubName} contests={contestsMap[clubName]} />
-      ))}
+      <UdaanContests udaanContestsList={udaanContestsList} className='mb-12 space-y-6' />
+      <MokshaContests mokshaContestsMap={mokshaContestsMap} className='space-y-6' />
     </>
   )
 }
 
-export default Contests
+Component.displayName = 'Contests'
 
-const PaginateButton = memo(({ children, onClick }) => (
-  <button
-    type='button'
-    className='block p-1 w-10 h-10 text-gray-200 focus:text-amber-600 border border-amber-600 rounded-md focus:ring-1 focus:ring-offset-1 focus:ring-offset-amber-600 focus:ring-amber-600 transition-colors relative'
-    onClick={onClick}
-  >
-    {children}
-  </button>
-))
+const UdaanContests = memo(
+  ({ udaanContestsList, className }) => (
+    <Container className={className}>
+      <h2 className='text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Udaan</h2>
 
-const cardGap = { base: 16, sm: 20, xl: 28 }
+      <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+        {udaanContestsList.map(contest => (
+          <div key={contest.id} className='min-w-[16rem]'>
+            <ContestCard clubName={contest.club} contest={contest} />
+          </div>
+        ))}
+      </div>
+    </Container>
+  ),
+  () => true
+)
+
+const MokshaContests = memo(
+  ({ className }) => (
+    <Container className={className}>
+      <h2 className='text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
+
+      <StayTunedBanner />
+
+      {/* {Object.keys(mokshaContestsMap).map(clubName => (
+        <ClubContests key={clubName} clubName={clubName} contests={mokshaContestsMap[clubName]} />
+      ))} */}
+    </Container>
+  ),
+  () => true
+)
 
 /** Display contests of a particular club */
-const ClubContest = memo(({ clubName, contests }) => {
-  return (
-    <Container as='section' className='flex-grow py-4 w-full' id={`${clubName}-contests`}>
-      <h2 className='mb-6 text-4xl font-semibold'>{capitalCase(clubName)}</h2>
+// const ClubContests = memo(
+//   ({ clubName, contests }) => (
+//     <section className='flex-grow w-full' id={`${clubName}-contests`}>
+//       <h3 className='mb-6 text-4xl font-semibold'>{capitalCase(clubName)}</h3>
 
-      <CardsSlider.Wrapper
-        length={contests.length}
-        exposeWidth={{ base: 44, sm: 140 }}
-        visibleCount={{ base: 1, sm: 3 }}
-      >
-        {({ scrollToStart, scrollToEnd, prev, next, start, end, visible }) => (
-          <>
-            <CardsSlider className='w-full' gap={cardGap}>
-              {({ cardWidth }) =>
-                contests.map(contest => (
-                  <ContestCard key={contest.slug} clubName={clubName} cardWidth={cardWidth} contest={contest} />
-                ))
-              }
-            </CardsSlider>
+//       <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+//         {contests.map(contest => (
+//           <div key={contest.id} className='min-w-[16rem]'>
+//             <ContestCard clubName={clubName} contest={contest} />
+//           </div>
+//         ))}
+//       </div>
+//     </section>
+//   ),
+//   (prev, next) => prev.clubName === next.clubName
+// )
 
-            {!isTouchDevice() && contests.length > visible && (
-              <div className='mx-auto mt-6 w-max flex items-center gap-4'>
-                <PaginateButton onClick={scrollToStart}>
-                  <Icon icon={doubleLeftIcon} className='block' color='inherit' width='100%' height='100%' />
-                </PaginateButton>
-                <PaginateButton onClick={prev}>
-                  <Icon icon={leftIcon} className='block' color='inherit' width='100%' height='100%' />
-                </PaginateButton>
-
-                {/* Specify a width to prevent shifts in width during scroll */}
-                <p className='w-[5ch] sm:w-[8ch] text-center'>
-                  <span>
-                    {start + 1}
-                    {''}
-                  </span>
-                  <span className='hidden sm:inline'>
-                    {'-'}
-                    {end + 1}
-                  </span>
-                  <span>
-                    {'/'}
-                    {contests.length}
-                  </span>
-                </p>
-
-                <PaginateButton onClick={next}>
-                  <Icon icon={rightIcon} className='block' color='inherit' width='100%' height='100%' />
-                </PaginateButton>
-                <PaginateButton onClick={scrollToEnd}>
-                  <Icon icon={doubleRightIcon} className='block' color='inherit' width='100%' height='100%' />
-                </PaginateButton>
-              </div>
-            )}
-          </>
-        )}
-      </CardsSlider.Wrapper>
-    </Container>
-  )
-})
-
-const ContestCard = memo(({ clubName, cardWidth, contest }) => (
-  <div className='flex-shrink-0 snap-center' style={{ width: `${cardWidth}px` }}>
-    <Sheet className='w-full flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
+const ContestCard = memo(
+  ({ clubName, contest }) => (
+    <Sheet className='flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
       <MLink to={`/contests/${clubName}/${contest.slug}`} as='div' className='block h-[304px]'>
         <div className='w-full h-48 flex items-center justify-center relative'>
-          <img src={CastleGate2} alt='' className='w-full h-full object-cover' />
+          <picture className='w-full h-full'>
+            {!isNullOrUndefined(contest.image.sources) &&
+              contest.image.sources.map((source, i) => (
+                <source key={i} media={source.media} srcSet={source.srcSet} type={source.type} />
+              ))}
+            <img
+              src={contest.image.src}
+              alt={`moksha-contest-${contest.slug}-poster`}
+              className='w-full h-full object-cover'
+            />
+          </picture>
           <span
             role='presentation'
             className='absolute w-full h-full bg-gradient-to-bl from-brown via-transparent mix-blend-darken'
@@ -152,11 +126,11 @@ const ContestCard = memo(({ clubName, cardWidth, contest }) => (
         </div>
 
         <div className='w-full px-4 pt-4'>
-          <h3 className='text-lg text-amber-500 font-semibold'>
+          <h4 className='text-lg text-amber-500 font-semibold'>
             <DLink to={`/contests/${clubName}/${contest.slug}`} className='lg:hover:underline'>
               {contest.name}
             </DLink>
-          </h3>
+          </h4>
 
           {contest.subtitle && <p className='text-sm text-gray-400'>{contest.subtitle}</p>}
 
@@ -202,5 +176,6 @@ const ContestCard = memo(({ clubName, cardWidth, contest }) => (
         </SocialShare>
       </div>
     </Sheet>
-  </div>
-))
+  ),
+  (prev, next) => prev.contest.id === next.contest.id
+)
