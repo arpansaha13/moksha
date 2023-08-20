@@ -33,7 +33,8 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = is_dev
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', env('CLIENT_DOMAIN')]
-ALLOWED_HOSTS = ['.moksha23.netlify.app', 'https://moksha23.netlify.app', 'https://moksha23.netlify.app/']
+# ALLOWED_HOSTS = ['.moksha23.netlify.app', 'https://moksha23.netlify.app', 'https://moksha23.netlify.app/']
+ALLOWED_HOSTS = ['*']
 
 APPEND_SLASH = False
 
