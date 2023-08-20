@@ -1,4 +1,5 @@
 import { classNames } from '@arpansaha13/utils'
+import Container from '~common/Container'
 import styles from './styles.module.css'
 
 export default function Hero() {
@@ -6,21 +7,22 @@ export default function Hero() {
 
   return (
     <section className={classNames('-mt-[100px] pt-[100px] pb-4', styles['hero-bg'])}>
-      <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 place-items-center'>
-        {/* Half of Container widths */}
-        <div className='mx-auto px-4 xs:max-w-md sm:ml-auto sm:mr-0 sm:px-0 sm:max-w-[18rem] lg:max-w-md xl:max-w-xl'>
-          <h1 className='mt-1 text-lg text-red-500 font-semibold'>Moksha</h1>
-          <p className='text-5xl font-bold'>Rise like a Phoenix</p>
+      <Container className='grid grid-cols-1 gap-y-4 sm:grid-cols-2'>
+        <div className='flex items-center'>
+          <div>
+            <h1 className='mt-1 text-lg text-red-500 font-semibold'>Moksha</h1>
+            <p className='text-5xl font-bold'>Rise like a Phoenix</p>
 
-          <div className='mt-4 md:mt-6 markdown'>
-            <p>
-              Imagine a mythical bird, the Phoenix, that&apos;s about to come back to life. It&apos;s like it&apos;s
-              waking up from ashes after burning away.
-            </p>
+            <div className='mt-4 md:mt-6 markdown'>
+              <p>
+                Imagine a mythical bird, the Phoenix, that&apos;s about to come back to life. It&apos;s like it&apos;s
+                waking up from ashes after burning away.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className='py-8 sm:py-16 flex items-center justify-center relative mix-blend-lighten'>
+        <div className='py-8 sm:py-16 flex items-center justify-center sm:justify-end xl:justify-center relative mix-blend-lighten'>
           <div
             className={classNames(
               imageSizeStyles,
@@ -40,7 +42,7 @@ export default function Hero() {
             />
           </picture>
         </div>
-      </div>
+      </Container>
     </section>
   )
 }
