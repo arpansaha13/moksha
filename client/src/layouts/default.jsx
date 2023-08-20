@@ -1,9 +1,12 @@
 import { Outlet } from 'react-router-dom'
+import { useScrollToTop } from '~/hooks/useScrollToTop'
 import Navbar from '~/components/Navbar'
 import Footer from '~/components/Footer'
 import DefaultBg from '~/components/pictures/DefaultBg'
 
 export default function DefaultLayout() {
+  useScrollToTop()
+
   return (
     <div className='min-w-screen min-h-screen'>
       <DefaultBg />

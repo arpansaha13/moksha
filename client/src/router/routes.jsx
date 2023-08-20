@@ -9,11 +9,11 @@ import AuthLayout from '../layouts/auth'
 import AccountLayout from '../layouts/account'
 import TeamsLayout from '../layouts/teams'
 
-// const FloatingWindow = lazy(() => import('./layouts/floating-window'))
-// const DefaultLayout = lazy(() => import('./layouts/default'))
-// const AuthLayout = lazy(() => import('./layouts/auth'))
-// const AccountLayout = lazy(() => import('./layouts/account'))
-// const TeamsLayout = lazy(() => import('./layouts/teams'))
+// const FloatingWindow = lazy(() => import('../layouts/floating-window'))
+// const DefaultLayout = lazy(() => import('../layouts/default'))
+// const AuthLayout = lazy(() => import('../layouts/auth'))
+// const AccountLayout = lazy(() => import('../layouts/account'))
+// const TeamsLayout = lazy(() => import('../layouts/teams'))
 
 const Home = () => import('../pages/Home')
 const Events = () => import('../pages/events')
@@ -73,7 +73,7 @@ const routes = createRoutesFromElements(
     </Route>
   </Route>
 )
-// https://stackoverflow.com/questions/66039626/react-lazy-suspens-react-router-dont-change-route-until-component-is-fetched
+
 const router = createBrowserRouter(routes)
 
 function AppRoutes() {

@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
@@ -35,8 +35,6 @@ export function Component() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location.pathname]
   )
-
-  useEffect(() => window.scrollTo({ top: 0 }), [])
 
   if (isNullOrUndefined(contest)) {
     return <NotFound />
