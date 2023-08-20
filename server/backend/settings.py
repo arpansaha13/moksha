@@ -32,7 +32,9 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = is_dev
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', env('CLIENT_DOMAIN')]
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', env('CLIENT_DOMAIN')]
+# ALLOWED_HOSTS = ['.moksha23.netlify.app', 'https://moksha23.netlify.app', 'https://moksha23.netlify.app/']
+ALLOWED_HOSTS = ['*']
 
 APPEND_SLASH = False
 
@@ -94,9 +96,10 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'None'
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000' if is_dev else env('CLIENT_DOMAIN')
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000' if is_dev else env('CLIENT_DOMAIN')
+# ]
+CORS_ALLOWED_ORIGINS = [env('CLIENT_DOMAIN')]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
