@@ -10,6 +10,7 @@ import closeIcon from '@iconify-icons/mdi/close'
 import AccountMenu from './AccountMenu'
 import { useAppContext } from '~/containers/DataProvider'
 import { useFetch } from '~/hooks/useFetch'
+import MokshaLogo from '~/components/pictures/MokshaLogo'
 import { navTabs } from '~/data/tabs'
 
 const NavTab = memo(({ to, children }) => (
@@ -57,7 +58,7 @@ function Navbar() {
           // Desktop Navbar
           <div className='flex items-center'>
             <Link to='/' className='block sm:mr-8 w-12 h-12'>
-              <img src='/moksha/moksha-192x192.png' alt='Moksha logo' className='w-full h-full' />
+              <MokshaLogo />
             </Link>
             <ul className='flex gap-3 sm:gap-6'>
               {navTabs.map(tab => (
