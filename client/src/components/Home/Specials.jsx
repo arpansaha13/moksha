@@ -92,12 +92,12 @@ const EleganciaTeaser = () => (
 export default function Specials() {
   return (
     <section className={styles['specials-bg']}>
-      <Container className='lg:h-cover py-4 flex items-center justify-center'>
+      <Container className='lg:h-cover pt-8 pb-4 sm:py-4 md:py-12 flex items-center justify-center'>
         <div className='grid grid-rows-[repeat(4,_minmax(0,_min-content))] grid-cols-2 sm:grid-rows-none sm:grid-cols-5'>
           <div className='col-span-2 sm:col-span-3 sm:col-start-1'>
             <h2 className='mb-4'>
               <p className='text-lg sm:text-xl font-light'>The</p>
-              <p className='text-5xl sm:text-6xl font-bold'>Specials</p>
+              <p className='text-5xl lg:text-6xl font-bold'>Specials</p>
             </h2>
             <div className='!max-w-lg pb-4 sm:pb-0 markdown'>
               <p>

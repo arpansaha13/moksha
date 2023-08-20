@@ -1,24 +1,64 @@
 .home {
-  --yellow700-33: #a1620733;
-  --yellow700-44: #a1620744;
+  --yellow-700-33: #a1620733;
+  --yellow-700-44: #a1620744;
+  --yellow-200: #fef08a;
+  --yellow-400: #facc15;
+  --red-500: #ef4444;
+  --red-600: #ef4444;
+  --orange-400: #fb923c;
+  --orange-700: #c2410c;
 }
 
 .hero-bg {
-  background: linear-gradient(to top left, black, var(--yellow700-44)),
+  background: linear-gradient(to top left, black, var(--yellow-700-44)),
     linear-gradient(to top right, black, transparent);
   background-blend-mode: screen;
 }
 
 @media (min-width: 640px) {
   .hero-bg {
-    background: linear-gradient(to top left, black, transparent), linear-gradient(to bottom left, black, transparent),
-      linear-gradient(to top right, var(--yellow700-33), transparent);
-    background-blend-mode: screen;
+    background: linear-gradient(to top left, black, transparent),
+      linear-gradient(to bottom left, black, transparent, transparent),
+      linear-gradient(to top right, var(--yellow-700-44), transparent);
   }
 }
 
 .specials-bg {
-  background: linear-gradient(to bottom left, var(--yellow700-44), transparent, transparent),
+  background: linear-gradient(to bottom left, var(--yellow-700-44), transparent, transparent),
     linear-gradient(to bottom right, black, transparent, transparent);
   background-blend-mode: screen;
+}
+
+.hero-img-shadow {
+  box-shadow: inset 0 0 0.4rem 0.2rem var(--red-600), inset 0 0 0.4rem 0.1rem var(--orange-400),
+    0 0 0.3rem 0.1rem var(--yellow-400), -0.1rem -0.1rem 0.5rem 0.1rem var(--yellow-400),
+    -0.1rem -0.1rem 1rem 0.2rem var(--yellow-400), -0.1rem -0.1rem 1rem 0.2rem var(--orange-400),
+    0 0 0.5rem 0.2rem var(--orange-400), 0 0 2rem 0.8rem var(--orange-700), 0 0 3rem 0.8rem var(--orange-700);
+}
+
+@media (min-width: 768px) {
+  .hero-img-shadow {
+    box-shadow: inset 0 0 0.5rem 0.3rem var(--red-600), inset 0 0 0.4rem 0.1rem var(--orange-400),
+      0 0 0.4rem 0.1rem var(--yellow-400), -0.2rem -0.2rem 0.8rem 0.1rem var(--yellow-400),
+      -0.2rem -0.2rem 1.5rem 0.2rem var(--yellow-400), -0.2rem -0.2rem 1.5rem 0.2rem var(--orange-400),
+      0 0 0.8rem 0.3rem var(--orange-400), 0 0 3rem 1rem var(--orange-700), 0 0 5rem 1.2rem var(--orange-700);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-img-shadow {
+    box-shadow: inset 0 0 0.6rem 0.4rem var(--red-600), inset 0 0 0.4rem 0.1rem var(--orange-400),
+      0 0 0.4rem 0.1rem var(--yellow-400), -0.3rem -0.3rem 1rem 0.2rem var(--yellow-400),
+      -0.3rem -0.3rem 2rem 0.3rem var(--yellow-400), -0.3rem -0.3rem 2rem 0.3rem var(--orange-400),
+      0 0 0.8rem 0.3rem var(--orange-400), 0 0 4rem 1.2rem var(--orange-700), 0 0 5rem 1.2rem var(--orange-700);
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-img-shadow {
+    box-shadow: inset 0 0 0.7rem 0.5rem var(--red-600), inset 0 0 0.5rem 0.1rem var(--orange-400),
+      0 0 0.5rem 0.2rem var(--yellow-400), -0.3rem -0.3rem 1rem 0.2rem var(--yellow-400),
+      -0.3rem -0.3rem 2rem 0.3rem var(--yellow-400), -0.3rem -0.3rem 2rem 0.3rem var(--orange-400),
+      0 0 1rem 0.4rem var(--orange-400), 0 0 4rem 1.5rem var(--orange-700), 0 0 6rem 1.6rem var(--orange-700);
+  }
 }
