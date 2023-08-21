@@ -22,10 +22,10 @@ class BaseEndpoint(APIView):
         team_name = request.POST['team_name']
 
         if not team_name:
-            raise BadRequest({'message': 'No team name provided.'})
+            raise BadRequest(message='No team name provided.')
 
         if Team.objects.filter(leader=request.auth_user.user_id).exists():
-            raise Conflict({'message': 'A team is already created by the user.'})
+            raise Conflict(message='A team is already created by the user.')
 
         if Team.objects.filter(team_name__iexact=team_name).exists():
             raise Conflict(message='This team name is already taken.')

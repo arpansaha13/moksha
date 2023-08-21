@@ -5,7 +5,7 @@ from contests.models import Contest, TeamContestRegistration
 
 def get_contest(contest_id: int):
     if not contest_id:
-        raise BadRequest({'message': 'No contest_id provided.'})
+        raise BadRequest(message='No contest_id provided.')
 
     contest = Contest.objects.filter(id=contest_id).first()
 
@@ -17,10 +17,10 @@ def get_contest(contest_id: int):
 
 def get_team_reg(team_id: str, contest_id: int):
     if not team_id:
-        raise BadRequest({'message': 'No team_id provided.'})
+        raise BadRequest(message='No team_id provided.')
 
     if not contest_id:
-        raise BadRequest({'message': 'No contest_id provided.'})
+        raise BadRequest(message='No contest_id provided.')
 
     team_reg = TeamContestRegistration.objects.filter(
         team=team_id,

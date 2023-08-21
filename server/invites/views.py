@@ -23,20 +23,20 @@ class BaseEndpoint(APIView):
         user = User.objects.filter(user_id=user_id).first()
 
         if not user:
-            raise BadRequest({'message': 'Invalid user_id'})
+            raise BadRequest(message='Invalid user_id')
 
         if TeamMember.objects.filter(
             Q(user=user_id)
             & Q(team=team_id)
         ).exists():
-            raise Conflict({'message': 'User is already in team'})
+            raise Conflict(message='User is already in team')
 
         if Invite.objects.filter(
             Q(user_id=user_id)
             & Q(team_id=team_id)
             & Q(status=InviteStatus.PENDING)
         ).exists():
-            raise Conflict({'message': 'User has already been invited'})
+            raise Conflict(message='User has already been invited.')
 
         new_invite = Invite(team=team, user=user)
         new_invite.save()
@@ -53,7 +53,7 @@ class BaseEndpoint(APIView):
         verify_team_leader(team, request.auth_user)
 
         if not User.objects.filter(user_id=user_id).exists():
-            raise BadRequest({'message': 'Invalid user_id'})
+            raise BadRequest(message='Invalid user_id')
 
         invite = Invite.objects.filter(
             Q(user_id=user_id)
@@ -62,7 +62,7 @@ class BaseEndpoint(APIView):
         ).first()
 
         if not invite:
-            raise BadRequest({'message': 'No such invite exists'})
+            raise BadRequest(message='No such invite exists')
 
         invite.delete()
         return Response({'message': 'Invite has been withdrawn'}, status=200)
