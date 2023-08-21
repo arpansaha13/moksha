@@ -30,3 +30,11 @@ export async function getAuthUserData({ request }) {
     return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
   }
 }
+
+export async function getLinkValidity({ request }) {
+  const pathSegments = new URL(request.url).pathname.split('/')
+  const hash = pathSegments.at(-1)
+
+  const res = await fetchWithCredentials(`auth/validate-link/account/${hash}`)
+  return res.valid
+}

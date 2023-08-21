@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
+import { Link, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
@@ -9,9 +9,8 @@ import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
 
 export function Component() {
-  const navigate = useNavigate()
   let [searchParams] = useSearchParams()
-  const { setNotification, setAllNotification } = useOutletContext()
+  const { setAllNotification } = useOutletContext()
 
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
@@ -56,13 +55,15 @@ export function Component() {
         method: 'POST',
         body: JSON.stringify(formData),
       })
-        .then(() => {
-          setLoading(false)
-          setNotification('show', false)
-          navigate({ pathname: '/auth/verification', search: searchParams.toString() })
+        .then(res => {
+          setAllNotification({
+            show: true,
+            title: 'Account created!',
+            description: res.message,
+            status: 'success',
+          })
         })
         .catch(err => {
-          setLoading(false)
           setAllNotification({
             show: true,
             title: 'Registration failed',
@@ -70,6 +71,7 @@ export function Component() {
             status: 'error',
           })
         })
+        .finally(() => setLoading(false))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [validationErrors, formRef]

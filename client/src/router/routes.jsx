@@ -68,7 +68,7 @@ const routes = createRoutesFromElements(
     <Route loader={allowIfNotAuthenticated} element={<AuthLayout />}>
       <Route path='/auth/login' lazy={Login} />
       <Route path='/auth/register' lazy={Registration} />
-      <Route path='/auth/verification' lazy={Verification} />
+      <Route path='/auth/verification/:hash' lazy={Verification} />
       <Route path='/auth/forgot-password' lazy={ForgotPassword} />
     </Route>
   </Route>

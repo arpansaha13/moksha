@@ -13,11 +13,10 @@ const getHeading = route => {
       return 'Login to your account'
     case '/auth/register':
       return 'Create your account'
-    case '/auth/verification':
-      return 'Verify your account'
     case '/auth/forgot-password':
       return 'Forgot password'
     default:
+      if (route.startsWith('/auth/verification')) return 'Verify your account'
       return null
   }
 }
