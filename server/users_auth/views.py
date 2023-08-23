@@ -26,7 +26,7 @@ environ.Env.read_env()
 
 class CheckAuth(APIView):
     def get(self, request):
-        token = request.COOKIES.get('jwt', None)
+        token = request.COOKIES.get('token', None)
 
         unauth_res = Response({'data': None, 'message': 'Unauthenticated'})
 
@@ -180,14 +180,22 @@ class Login(APIView):
 
         payload = {
             'id': user.user_id,
-            'exp': datetime.utcnow() + timedelta(minutes=60),
+            'exp': datetime.utcnow() + timedelta(seconds=int(env('JWT_VALIDATION_SECONDS'))),
             'iat': datetime.utcnow(),
         }
 
         token = jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
 
         response = Response()
-        response.set_cookie(key='jwt', value=token, httponly=True, domain=env('COOKIE_DOMAIN'))
+        response.set_cookie(
+            key='token',
+            value=token,
+            secure=True,
+            httponly=True,
+            samesite='None',
+            domain=env('COOKIE_DOMAIN'),
+            max_age=int(env('JWT_VALIDATION_SECONDS'))
+        )
         response.data = AuthUserSerializer(user).data
         response.status_code = 200
         return response
@@ -199,7 +207,7 @@ class Login(APIView):
 
 class Logout(APIView):
     def get(self, request):
-        token = request.COOKIES.get('jwt', None)
+        token = request.COOKIES.get('token', None)
 
         if token is None:
             raise PermissionDenied({'Unauthenticated'})
@@ -213,7 +221,7 @@ class Logout(APIView):
             raise Unauthorized({'message': 'Invalid token.'})
 
         response = Response()
-        response.set_cookie('jwt', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
+        response.set_cookie('token', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
         response.data = {'message': 'User has been successfully logged out.'}
         response.status_code = 200
         return response
