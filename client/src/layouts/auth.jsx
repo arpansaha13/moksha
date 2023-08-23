@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useMap } from '~/hooks/useMap'
-import { useScrollToTop } from '~/hooks/useScrollToTop'
 import Notification from '~/components/common/Notification'
 import AuthBg from '~/components/pictures/AuthBg'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
@@ -22,8 +21,6 @@ const getHeading = route => {
 }
 
 export default function AuthLayout() {
-  useScrollToTop()
-
   const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
     show: false,
     title: '',
