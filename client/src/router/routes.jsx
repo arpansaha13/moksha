@@ -3,17 +3,15 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import { allowIfNotAuthenticated } from '~loaders/auth.loader'
 import { getReceivedTeamInvites } from '~loaders/account.loader'
 
-import FloatingWindow from '../layouts/floating-window'
-import DefaultLayout from '../layouts/default'
 import AuthLayout from '../layouts/auth'
+import DefaultLayout from '../layouts/default'
 import AccountLayout from '../layouts/account'
-import TeamsLayout from '../layouts/teams'
+import FloatingWindow from '../layouts/floating-window'
 
-// const FloatingWindow = lazy(() => import('../layouts/floating-window'))
-// const DefaultLayout = lazy(() => import('../layouts/default'))
 // const AuthLayout = lazy(() => import('../layouts/auth'))
+// const DefaultLayout = lazy(() => import('../layouts/default'))
 // const AccountLayout = lazy(() => import('../layouts/account'))
-// const TeamsLayout = lazy(() => import('../layouts/teams'))
+// const FloatingWindow = lazy(() => import('../layouts/floating-window'))
 
 const Home = () => import('../pages/Home')
 const Events = () => import('../pages/events')
@@ -51,6 +49,9 @@ const routes = createRoutesFromElements(
       <Route path='/contests' lazy={Contests} />
       <Route path='/contests/:club/:contest' lazy={Contest} />
 
+      <Route path='/teams/create' lazy={CreateTeam} />
+      <Route path='/teams/:team' lazy={Team} />
+
       <Route path='/*' lazy={NotFound} />
 
       <Route loader={getReceivedTeamInvites} element={<AccountLayout />}>
@@ -58,11 +59,6 @@ const routes = createRoutesFromElements(
         <Route path='/account/teams' lazy={Teams} />
         <Route path='/account/registrations' lazy={Registrations} />
       </Route>
-    </Route>
-
-    <Route element={<TeamsLayout />}>
-      <Route path='/teams/create' lazy={CreateTeam} />
-      <Route path='/teams/:team' lazy={Team} />
     </Route>
 
     <Route loader={allowIfNotAuthenticated} element={<AuthLayout />}>

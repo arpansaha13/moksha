@@ -40,6 +40,7 @@ function AccountLayout() {
                 </NavLink>
               </li>
             ))}
+
             {accountTabs.map(tab => (
               <li key={tab.to}>
                 <NavLink

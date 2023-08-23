@@ -46,7 +46,6 @@ export default function AuthLayout() {
   return (
     <div className='relative min-w-screen min-h-screen text-white'>
       <AuthBg />
-      <span role='presentation' className='fixed w-screen h-screen z-10 bg-darkBrown/90 mix-blend-darken' />
 
       <div className='min-w-screen min-h-screen flex flex-col justify-center py-8 sm:px-6 lg:px-8 relative z-20'>
         <Notification
