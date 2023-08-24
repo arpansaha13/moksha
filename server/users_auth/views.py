@@ -63,23 +63,22 @@ class Register(APIView):
         email = request.POST['email']
         user = User.objects.filter(email=email).first()
 
-        if user is not None and user.email_verified:
-            raise Conflict(message='This email is already registered.')
+        if user is not None:
+            if user.email_verified:
+                raise Conflict(message='This email is already registered.')
+
+            raise Conflict(message='This email is already registered. You can login after verifying your account.')
 
         self.verify_username(email, request.POST['username'])
 
         otp_entry: AccountCreationOtp
-        otp_generated = random.randint(1000, 9999)
+        otp_generated = generate_otp()
         hashed_password = make_password(request.data['password'])
 
         try:
             with transaction.atomic():
-                if user is None:
-                    user = self.create_new_user(request, hashed_password)
-                    otp_entry = self.create_otp(user, otp_generated)
-                else:
-                    user = self.update_user(user, request, hashed_password)
-                    otp_entry = self.update_otp(user, otp_generated)
+                user = self.create_new_user(request, hashed_password)
+                otp_entry = self.create_otp(user, otp_generated)
 
                 user.save()
                 otp_entry.save()
@@ -125,16 +124,6 @@ class Register(APIView):
 
         return user
 
-    def update_user(self, user: User, request, hashed_password: str):
-        user.avatar_idx = request.POST['avatar_idx']
-        user.name = request.POST['name']
-        user.institution = request.POST['institution']
-        user.phone_no = request.POST['phone_no']
-        user.username = request.POST['username']
-        user.password = hashed_password
-
-        return user
-
     def create_otp(self, user: User, otp_generated: int):
         otp_hash = generate_hash()
 
@@ -146,16 +135,6 @@ class Register(APIView):
             hash=otp_hash,
             otp=otp_generated
         )
-
-    def update_otp(self, user: User, otp_generated: int):
-        otp_entry = AccountCreationOtp.objects.filter(user=user).first()
-
-        if otp_entry is None:
-            otp_entry = self.create_otp(user, otp_generated)
-        else:
-            otp_entry.otp = otp_generated
-
-        return otp_entry
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -279,7 +258,7 @@ class ResendOtp(APIView):
         if otp_entry is None:
             raise NotFound({'message': 'Invalid link.'})
 
-        otp_entry.otp = random.randint(1000, 9999)
+        otp_entry.otp = generate_otp()
         otp_entry.save()
 
         send_mail(
@@ -288,6 +267,47 @@ class ResendOtp(APIView):
                 otp_entry.user.name,
                 otp_entry.otp,
                 get_link(otp_hash),
+                False
+            ),
+            from_email=env('EMAIL_HOST_USER'),
+            recipient_list=[otp_entry.user.email],
+            fail_silently=False,
+        )
+
+        return Response({'message': 'An email has been sent with the new OTP.'}, status=200)
+
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class ResendVerificationLink(APIView):
+    def post(self, request):
+        email = request.POST['email']
+        user = User.objects.filter(email=email).first()
+
+        if user is None:
+            raise NotFound({'message': 'This email is not registered.'})
+
+        if user.email_verified:
+            raise NotFound({'message': 'This email is already registered.'})
+
+        otp_entry = AccountCreationOtp.objects.filter(user=user).first()
+        otp_generated = generate_otp()
+
+        if otp_entry is None:
+            otp_entry = Register().create_otp(user, otp_generated)
+        else:
+            otp_entry.otp = otp_generated
+
+        otp_entry.save()
+
+        send_mail(
+            subject='Moksha 2023, NIT Agartala - New OTP for account verification',
+            message=get_account_verification_mail_message(
+                otp_entry.user.name,
+                otp_entry.otp,
+                get_link(otp_entry.hash),
                 False
             ),
             from_email=env('EMAIL_HOST_USER'),
@@ -402,6 +422,10 @@ def get_link(hash: str):
         client_domain = client_domain + '/auth/verification/'
 
     return client_domain + hash
+
+
+def generate_otp():
+    return random.randint(1000, 9999)
 
 
 def get_account_verification_mail_message(user_name: str, otp: int, link: str, is_new=True):

@@ -32,6 +32,7 @@ const Login = () => import('../pages/auth/login')
 const Registration = () => import('../pages/auth/register')
 const Verification = () => import('../pages/auth/verification')
 const ForgotPassword = () => import('../pages/auth/forgot-password')
+const ResendVerificationLink = () => import('../pages/auth/resend-link')
 
 const NotFound = () => import('../pages/404')
 
@@ -66,6 +67,7 @@ const routes = createRoutesFromElements(
       <Route path='/auth/register' lazy={Registration} />
       <Route path='/auth/verification/:hash' lazy={Verification} />
       <Route path='/auth/forgot-password' lazy={ForgotPassword} />
+      <Route path='/auth/resend-verification-link' lazy={ResendVerificationLink} />
     </Route>
   </Route>
 )

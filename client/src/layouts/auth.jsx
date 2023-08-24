@@ -60,7 +60,7 @@ export default function AuthLayout() {
           <h2 className='mt-6 px-2 sm:px-0 text-center text-3xl font-bold tracking-tight'>{heading}</h2>
         </div>
 
-        <div className='mt-8 w-full [&>*]:sm:mx-auto [&>*]:py-8 [&>*]px-4 [&>*]:sm:px-10 [&>*]:sm:w-full [&>*]:bg-amber-900/50 [&>*]:sm:rounded-lg [&>*]:shadow'>
+        <div className='mt-8 w-full [&>*]:mx-auto [&>*]:py-8 [&>*]px-4 [&>*]:sm:px-10 [&>*]:sm:w-full [&>*]:bg-amber-900/50 [&>*]:sm:rounded-lg [&>*]:shadow'>
           {/* Use appropriate max-w-{size} on the root of this children */}
           <Outlet context={authContext} />
         </div>

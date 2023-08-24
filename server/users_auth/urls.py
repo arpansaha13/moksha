@@ -9,6 +9,7 @@ urlpatterns = [
     path('/validate-link/account/<slug:otp_hash>', VerifyAccountOtpLink.as_view()),
     path('/verification/<slug:otp_hash>', AccountVerification.as_view()),
     path('/resend-otp/<slug:otp_hash>', ResendOtp.as_view()),
+    path('/resend-link', ResendVerificationLink.as_view()),
     # path('/validate-link/reset-pass/<slug:otp_hash>', VerifyResetPassOtpLink.as_view()),
     # path('/forgot-password', ForgotPassword.as_view()),
     # path('/reset-password', ChangePassword.as_view()),
