@@ -13,4 +13,5 @@ urlpatterns = [
     path('/validate-link/reset-pass/<slug:forgot_pass_hash>', VerifyResetPassLink.as_view()),
     path('/forgot-password', ForgotPassword.as_view()),
     path('/reset-password/<slug:forgot_pass_hash>', ResetPassword.as_view()),
+    path('/change-password', ChangePassword.as_view()),
 ]

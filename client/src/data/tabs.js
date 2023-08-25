@@ -45,8 +45,8 @@ export const profileTabs = [
 ]
 
 export const accountTabs = [
-  // {
-  //   name: 'Change password',
-  //   to: '/account/change-password',
-  // },
+  {
+    name: 'Change password',
+    to: '/account/change-password',
+  },
 ]

@@ -9,12 +9,15 @@ const Notification = memo(({ title, description, show, setShow, timeout, classNa
   const timeoutId = useRef(null)
 
   useEffect(() => {
-    if (show && !isNullOrUndefined(timeout)) {
-      if (!setShow) {
+    if (show && !isNullOrUndefined(timeout) && timeoutId.current === null) {
+      if (isNullOrUndefined(setShow)) {
         throw new Error('A timeout is provided but no setShow function is provided.')
       }
 
-      timeoutId.current = setTimeout(() => setShow(false), timeout * 1000)
+      timeoutId.current = setTimeout(() => {
+        setShow(false)
+        timeoutId.current = null
+      }, timeout * 1000)
 
       return () => {
         if (timeoutId.current !== null) clearTimeout(timeoutId.current)

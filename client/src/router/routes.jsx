@@ -27,6 +27,7 @@ const CreateTeam = () => import('../pages/teams/Create')
 const Profile = () => import('../pages/account/Profile')
 const Teams = () => import('../pages/account/Teams')
 const Registrations = () => import('../pages/account/Registrations')
+const ChangePassword = () => import('../pages/account/change-password')
 
 const Login = () => import('../pages/auth/login')
 const Registration = () => import('../pages/auth/register')
@@ -60,6 +61,7 @@ const routes = createRoutesFromElements(
         <Route path='/account/profile' lazy={Profile} />
         <Route path='/account/teams' lazy={Teams} />
         <Route path='/account/registrations' lazy={Registrations} />
+        <Route path='/account/change-password' lazy={ChangePassword} />
       </Route>
     </Route>
 

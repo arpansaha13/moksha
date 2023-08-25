@@ -58,7 +58,7 @@ class CheckAuth(APIView):
 class Register(APIView):
     def post(self, request):
         if request.POST['password'] != request.POST['confirm_password']:
-            raise Unauthorized({'message': "Password and confirm password do not match."})
+            raise Unauthorized({'message': "Password and confirm-password do not match."})
 
         email = request.POST['email']
         user = User.objects.filter(email=email).first()
@@ -389,7 +389,7 @@ class ResetPassword(APIView):
             return Response({'message': 'Link has expired.'}, status=498)
 
         if request.POST['password'] != request.POST['confirm_password']:
-            raise Unauthorized({'message': "Password and confirm password do not match."})
+            raise Unauthorized({'message': "Password and confirm-password do not match."})
 
         try:
             with transaction.atomic():
@@ -410,11 +410,25 @@ class ResetPassword(APIView):
 
 class ChangePassword(APIView):
     def post(self, request):
-        pass
+        if request.POST['new_password'] != request.POST['confirm_password']:
+            raise Unauthorized({'message': "Password and confirm-password do not match."})
 
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+        if request.POST['new_password'] == request.POST['old_password']:
+            raise Unauthorized({'message': "New password and old password cannot be the same."})
+
+        try:
+            with transaction.atomic():
+                if not check_password(request.POST['old_password'], request.auth_user.password):
+                    raise Unauthorized({'message': "Old password does not match with your current password."})
+
+                hashed_password = make_password(request.POST['new_password'])
+                user = request.auth_user
+                user.password = hashed_password
+                user.save()
+        except IntegrityError:
+            raise InternalServerError()
+
+        return Response({'message': 'Your password has been updated.'}, status=200)
 
 
 def generate_uid(length=8):
