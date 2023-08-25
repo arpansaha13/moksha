@@ -25,7 +25,7 @@ export function Component() {
       .then(res => {
         setAllNotification({
           show: true,
-          title: 'Email sent!',
+          title: 'Email sent',
           description: res.message,
           status: 'success',
         })

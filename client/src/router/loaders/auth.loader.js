@@ -31,10 +31,18 @@ export async function getAuthUserData({ request }) {
   }
 }
 
-export async function getLinkValidity({ request }) {
+export async function getVerificationLinkValidity({ request }) {
   const pathSegments = new URL(request.url).pathname.split('/')
   const hash = pathSegments.at(-1)
 
   const res = await fetchWithCredentials(`auth/validate-link/account/${hash}`)
+  return res.valid
+}
+
+export async function getForgotPassLinkValidity({ request }) {
+  const pathSegments = new URL(request.url).pathname.split('/')
+  const hash = pathSegments.at(-1)
+
+  const res = await fetchWithCredentials(`auth/validate-link/reset-pass/${hash}`)
   return res.valid
 }

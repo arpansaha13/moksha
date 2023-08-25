@@ -8,11 +8,9 @@ import BaseButton from '~base/BaseButton'
 import BaseButtonLink from '~base/BaseButtonLink'
 import OtpInput from '~common/OtpInput'
 import CsrfField from '~common/CsrfField'
-import { getLinkValidity } from '~loaders/auth.loader'
+import { getVerificationLinkValidity } from '~loaders/auth.loader'
 
-export const loader = getLinkValidity
-
-// Link expiration is not tested
+export const loader = getVerificationLinkValidity
 
 export function Component() {
   const linkIsValid = useLoaderData()
@@ -139,9 +137,9 @@ function LinkExpired() {
   return (
     <div className='text-center'>
       <p className='mb-4 text-2xl font-bold'>This link has expired</p>
-      <p className='mb-4 text-sm text-gray-400'>You can still create your account afresh.</p>
+      <p className='mb-4 text-sm text-gray-400'>You can still request a new account verification link.</p>
 
-      <BaseButtonLink to='/auth/register'>Create account</BaseButtonLink>
+      <BaseButtonLink to='/auth/resend-link'>Request verification</BaseButtonLink>
     </div>
   )
 }

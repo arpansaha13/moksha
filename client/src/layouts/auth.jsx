@@ -16,6 +16,7 @@ const getHeading = route => {
       return 'Forgot password'
     default:
       if (route.startsWith('/auth/verification')) return 'Verify your account'
+      if (route.startsWith('/auth/reset-password')) return 'Reset your password'
       return null
   }
 }

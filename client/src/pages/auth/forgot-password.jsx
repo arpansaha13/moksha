@@ -1,38 +1,46 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useOutletContext } from 'react-router-dom'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
-import { useAppContext } from '~/containers/DataProvider'
+import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
 
 export function Component() {
-  const { setAppContext } = useAppContext()
-  const navigate = useNavigate()
-
   const fetchHook = useFetch()
+  const { setAllNotification } = useOutletContext()
 
   const formRef = useRef(null)
+  const [loading, setLoading] = useState(false)
 
   function forgotPassword(e) {
     e.preventDefault()
+    setLoading(true)
 
     const formData = getFormData(formRef.current, { format: 'object' })
 
-    fetchHook('users/forgot-password', {
+    fetchHook('auth/forgot-password', {
       method: 'POST',
       body: JSON.stringify(formData),
-    }).then(res => {
-      if (res.message === 'User logged in!!') {
-        setAppContext(state => {
-          const newState = { ...state }
-          newState.authUser = { ...state.authUser, ...formData }
-          return newState
-        })
-        navigate('/')
-      }
     })
+      .then(res => {
+        setAllNotification({
+          show: true,
+          title: 'Email sent',
+          description: res.message,
+          status: 'success',
+        })
+      })
+      .catch(err => {
+        setAllNotification({
+          show: true,
+          title: 'Failure',
+          description: err.message,
+          status: 'error',
+        })
+      })
+      .finally(() => setLoading(false))
   }
 
   return (
@@ -44,8 +52,10 @@ export function Component() {
       <form ref={formRef} className='space-y-6' onSubmit={forgotPassword}>
         <BaseInput id='email' name='email' type='email' autoComplete='email' required label='Email address' />
 
+        <CsrfField />
+
         <div>
-          <BaseButton type='submit' stretch>
+          <BaseButton type='submit' stretch loading={loading}>
             Submit
           </BaseButton>
         </div>

@@ -35,8 +35,8 @@ export function Component() {
       let hasError = false
 
       if (formData.password !== formData.confirm_password) {
-        setError('password', 'Password and confirm password do not match')
-        setError('confirm_password', 'Password and confirm password do not match')
+        setError('password', 'Password and confirm-password do not match')
+        setError('confirm_password', 'Password and confirm-password do not match')
         hasError = true
       } else if (validationErrors.password) {
         setError('password', null)
