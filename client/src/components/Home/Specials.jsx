@@ -97,7 +97,7 @@ export default function Specials() {
         <div className='grid grid-rows-[repeat(4,_minmax(0,_min-content))] grid-cols-2 sm:grid-cols-3 lg:grid-rows-none lg:grid-cols-5'>
           <div className='col-span-2 sm:col-span-3 lg:col-span-2 xl:col-span-3'>
             <h2 className='mb-4'>
-              <p className='text-lg sm:text-xl font-light'>The</p>
+              <p className='text-lg sm:text-xl'>The</p>
               <p className='text-5xl lg:text-6xl font-bold'>Specials</p>
             </h2>
             <div className='!max-w-lg pb-4 lg:pb-0 markdown'>

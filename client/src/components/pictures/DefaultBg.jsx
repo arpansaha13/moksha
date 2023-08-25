@@ -4,6 +4,7 @@ export default function DefaultBg() {
       <picture>
         <source media='(max-width: 639px)' srcSet='/images/bg/default-626x808.webp' type='image/webp' />
         <source media='(max-width: 639px)' srcSet='/images/bg/default-626x808.png' type='image/png' />
+        <source media='(min-width: 640px)' srcSet='/images/bg/default-974x846.png' type='image/png' />
 
         <img
           role='presentation'

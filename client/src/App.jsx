@@ -3,7 +3,7 @@ import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useAppContext } from './containers/DataProvider'
 import Routes from './router/routes'
 import fetchWithCredentials from './utils/fetchWithCredentials'
-import './App.css'
+import './styles/main.css'
 import 'nprogress/nprogress.css'
 
 function App() {
