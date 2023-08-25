@@ -3,6 +3,8 @@ const malhar = [
     id: 15,
     slug: 'battle-of-bands',
     name: 'Battle of Bands',
+    club: 'malhar',
+    subtitle: 'Malhar',
     type: ['team'],
     image: {
       sources: [
@@ -24,6 +26,8 @@ const fineArts = [
     id: 2,
     slug: 'art-competition',
     name: 'Art Competition',
+    club: 'fine-arts',
+    subtitle: 'Fine Arts',
     type: ['solo'],
     image: {
       sources: [
@@ -40,6 +44,6 @@ const fineArts = [
   },
 ]
 
-const udaanContests = [...fineArts, ...malhar]
+const udaanContests = [...malhar, ...fineArts]
 
 export default udaanContests

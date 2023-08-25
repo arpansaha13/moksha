@@ -1,12 +1,19 @@
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { getUdaanEvent } from '~/utils/getUdaanEvent'
-import { getMokshaEvent } from '~/utils/getMokshaEvent'
-import mokshaEventsList from '~/data/events/moksha-desc'
-import udaanEventsList from '~/data/events/udaan-desc'
+import mokshaEventsList from '~/data/events/moksha'
+import udaanEventsList from '~/data/events/udaan'
+
+function getMokshaEvent(eventSlug) {
+  const event = mokshaEventsList.find(event => event.slug === eventSlug)
+  return event ?? null
+}
+
+function getUdaanEvent(contestSlug) {
+  const event = udaanEventsList.find(contest => contest.slug === contestSlug)
+  return event ?? null
+}
 
 export function getEvent({ request }) {
   const pathSegments = new URL(request.url).pathname.split('/')
-
   const eventSlug = pathSegments.at(-1)
 
   const event = getMokshaEvent(eventSlug)

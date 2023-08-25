@@ -58,6 +58,43 @@ const malhar = [
   },
 ]
 
-const udaanEvents = [...dzire, ...malhar]
+const phewsion = [
+  {
+    id: 2,
+    slug: 'fun-games',
+    name: 'Fun Games',
+    club: 'phewsion',
+    subtitle: 'Phewsion',
+    type: ['solo'],
+    image: {
+      sources: [
+        { srcSet: '/images/events/phewsion/fun-games/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/events/phewsion/fun-games/poster-512x512.png', type: 'image/png' },
+        { srcSet: '/images/events/phewsion/fun-games/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/events/phewsion/fun-games/poster-1024x1024.png 2x', type: 'image/png' },
+      ],
+      src: '/images/events/phewsion/fun-games/poster-1024x1024.png',
+    },
+    description: [
+      {
+        p: 'Step into a world of instant fun and friendly games at our college fest. From nailing a slam dunk at Basketball Hoop to hitting the bullseye at Dart Board, and showcasing your soccer freestyle at Football Kickups.',
+      },
+      { heading: 'Basketball Hoops' },
+      {
+        p: 'Pick up the ball and toss it in the basket. Can you beat the challenge and make that slam dunk?',
+      },
+      { heading: 'Dart Board' },
+      {
+        p: 'Precision and focus are your best friends at Bullseye Bonanza. Grab a dart, take a deep breath, and aim for that elusive bullseye.',
+      },
+      { heading: 'Football Kickups' },
+      {
+        p: "Fancy some footwork? It's not just about goals; it's about the rhythm.",
+      },
+    ],
+  },
+]
+
+const udaanEvents = [...dzire, ...malhar, ...phewsion]
 
 export default udaanEvents
