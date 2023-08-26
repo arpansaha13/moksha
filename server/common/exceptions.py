@@ -28,3 +28,23 @@ class Conflict(CustomAPIException):
         'error': 'Conflict',
         'message': '',
     }
+
+
+class Unauthorized(CustomAPIException):
+    status_code = 401
+    default_code = 'unauthorized'
+    default_detail = {
+        'status': 401,
+        'error': 'Unauthorized',
+        'message': '',
+    }
+
+
+class InternalServerError(CustomAPIException):
+    status_code = 500
+    default_code = 'internal_server_error'
+    default_detail = {
+        'status': 500,
+        'error': 'Internal server error',
+        'message': '',
+    }

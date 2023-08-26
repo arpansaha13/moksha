@@ -71,11 +71,19 @@ export function Component() {
           label='Password'
         />
 
-        <div className='text-sm flex items-center justify-between'>
+        <div className='text-sm 2xs:flex 2xs:items-center 2xs:justify-between space-y-3 2xs:space-y-0'>
           <div>
             <Link to='/auth/forgot-password'>
               <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
-                Forgot your password?
+                Forgot <span className='hidden xs:inline'>your</span> password?
+              </span>
+            </Link>
+          </div>
+
+          <div>
+            <Link to='/auth/resend-verification-link'>
+              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
+                Resend verification link
               </span>
             </Link>
           </div>

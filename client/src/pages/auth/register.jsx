@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
+import { Link, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
@@ -9,9 +9,8 @@ import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
 
 export function Component() {
-  const navigate = useNavigate()
   let [searchParams] = useSearchParams()
-  const { setNotification, setAllNotification } = useOutletContext()
+  const { setAllNotification } = useOutletContext()
 
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
@@ -36,8 +35,8 @@ export function Component() {
       let hasError = false
 
       if (formData.password !== formData.confirm_password) {
-        setError('password', 'Password and confirm password do not match')
-        setError('confirm_password', 'Password and confirm password do not match')
+        setError('password', 'Password and confirm-password do not match')
+        setError('confirm_password', 'Password and confirm-password do not match')
         hasError = true
       } else if (validationErrors.password) {
         setError('password', null)
@@ -56,13 +55,15 @@ export function Component() {
         method: 'POST',
         body: JSON.stringify(formData),
       })
-        .then(() => {
-          setLoading(false)
-          setNotification('show', false)
-          navigate({ pathname: '/auth/verification', search: searchParams.toString() })
+        .then(res => {
+          setAllNotification({
+            show: true,
+            title: 'Account created!',
+            description: res.message,
+            status: 'success',
+          })
         })
         .catch(err => {
-          setLoading(false)
           setAllNotification({
             show: true,
             title: 'Registration failed',
@@ -70,6 +71,7 @@ export function Component() {
             status: 'error',
           })
         })
+        .finally(() => setLoading(false))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [validationErrors, formRef]
@@ -89,6 +91,24 @@ export function Component() {
         </div>
 
         <CsrfField />
+
+        <div className='text-sm 2xs:flex 2xs:items-center 2xs:justify-between space-y-3 2xs:space-y-0'>
+          <div>
+            <Link to='/auth/forgot-password'>
+              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
+                Forgot <span className='hidden xs:inline'>your</span> password?
+              </span>
+            </Link>
+          </div>
+
+          <div>
+            <Link to='/auth/resend-verification-link'>
+              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
+                Resend verification link
+              </span>
+            </Link>
+          </div>
+        </div>
 
         <div>
           <BaseButton type='submit' stretch loading={loading}>

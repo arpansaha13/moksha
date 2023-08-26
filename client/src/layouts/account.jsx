@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { memo, useCallback, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { NavLink, Outlet, useLoaderData } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import checkIcon from '@iconify-icons/mdi/check'
@@ -18,57 +19,66 @@ function AccountLayout() {
   const { receivedInvites } = useLoaderData()
 
   return (
-    <Container className='xl:!max-w-7xl py-4'>
-      <div className='grid grid-cols-1 lg:grid-cols-11 gap-6'>
-        {/* Desktop sidebar */}
-        <aside className='hidden lg:block lg:col-span-2 text-white sticky top-4'>
-          <ul className='space-y-2'>
-            {profileTabs.map(tab => (
-              <li key={tab.to}>
-                <NavLink
-                  to={tab.to}
-                  className={({ isActive }) =>
-                    classNames(
-                      'block px-4 py-2 rounded-md text-sm',
-                      isActive
-                        ? 'bg-gradient-to-r from-amber-900'
-                        : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40'
-                    )
-                  }
-                >
-                  {tab.name}
-                </NavLink>
-              </li>
-            ))}
-            {accountTabs.map(tab => (
-              <li key={tab.to}>
-                <NavLink
-                  to={tab.to}
-                  className={({ isActive }) =>
-                    classNames(
-                      'block px-4 py-2 rounded-md text-sm',
-                      isActive
-                        ? 'bg-gradient-to-r from-amber-900'
-                        : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40'
-                    )
-                  }
-                >
-                  {tab.name}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </aside>
+    <>
+      <Helmet>
+        <title>Moksha | Account</title>
+      </Helmet>
 
-        <div className='lg:col-span-6'>
-          <Outlet />
+      <Container className='xl:!max-w-7xl py-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-11 gap-6'>
+          {/* Desktop sidebar */}
+          <aside className='hidden lg:block lg:col-span-2 text-white sticky top-4'>
+            <ul className='space-y-2'>
+              {profileTabs.map(tab => (
+                <li key={tab.to}>
+                  <NavLink
+                    to={tab.to}
+                    className={({ isActive }) =>
+                      classNames(
+                        'block px-4 py-2 rounded-md text-sm',
+                        isActive
+                          ? 'bg-gradient-to-r from-amber-900'
+                          : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40'
+                      )
+                    }
+                  >
+                    {tab.name}
+                  </NavLink>
+                </li>
+              ))}
+
+              <div className='w-full h-px bg-amber-900/80' />
+
+              {accountTabs.map(tab => (
+                <li key={tab.to}>
+                  <NavLink
+                    to={tab.to}
+                    className={({ isActive }) =>
+                      classNames(
+                        'block px-4 py-2 rounded-md text-sm',
+                        isActive
+                          ? 'bg-gradient-to-r from-amber-900'
+                          : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40'
+                      )
+                    }
+                  >
+                    {tab.name}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </aside>
+
+          <div className='lg:col-span-6'>
+            <Outlet />
+          </div>
+
+          <aside className='lg:col-span-3' id='received-invites'>
+            <ReceivedInvites invites={receivedInvites} />
+          </aside>
         </div>
-
-        <aside className='lg:col-span-3' id='received-invites'>
-          <ReceivedInvites invites={receivedInvites} />
-        </aside>
-      </div>
-    </Container>
+      </Container>
+    </>
   )
 }
 export default AccountLayout

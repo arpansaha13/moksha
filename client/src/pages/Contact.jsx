@@ -19,6 +19,20 @@ export function Component() {
           ))}
         </div>
       </section>
+
+      <div className='max-w-lg mx-auto mt-12 text-center text-gray-300'>
+        <p className='wrap-balance'>
+          If you face any issues with the website then please write an email to{' '}
+          <a
+            href='mailto:moksha.nita.web@gmail.com'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='font-medium text-amber-600 hover:text-amber-500'
+          >
+            moksha.nita.web@gmail.com
+          </a>
+        </p>
+      </div>
     </Container>
   )
 }

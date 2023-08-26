@@ -24,7 +24,7 @@ class JwtMiddleware(MiddlewareMixin):
         if getattr(view_func, 'jwt_exempt_flag', False):
             return None
 
-        token = request.COOKIES.get('jwt')
+        token = request.COOKIES.get('token')
 
         if not token:
             return JsonResponse({'message': 'Unauthenticated'}, status=403)

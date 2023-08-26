@@ -53,12 +53,10 @@ function CreatedTeam({ team }) {
       <EmptyState icon={accountMultipleIcon} title='You have not created any team yet' />
 
       <div className='mt-1 text-center text-sm text-gray-400'>
-        <p className='inline sm:block'>You can create a team while registering for a team contest.</p>
-        <span className='sm:hidden'> </span>
-        <p className='inline sm:block'>
-          Or you can{' '}
+        <p>
+          You can create a team{' '}
           <Link to='/teams/create' className='text-amber-600 hover:text-amber-500 font-medium transition-colors'>
-            create one now
+            here
           </Link>
           .
         </p>

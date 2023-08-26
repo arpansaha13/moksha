@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useAppContext } from './containers/DataProvider'
 import Routes from './router/routes'
+import AppLoader from './components/AppLoader'
 import fetchWithCredentials from './utils/fetchWithCredentials'
-import './App.css'
+import './styles/main.css'
 import 'nprogress/nprogress.css'
 
 function App() {
@@ -27,8 +28,9 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // TODO: Make a Loader
-  return loading ? null : (
+  return loading ? (
+    <AppLoader />
+  ) : (
     <div className='text-gray-50'>
       <Routes />
     </div>

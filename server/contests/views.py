@@ -38,7 +38,7 @@ class SoloContestRegistration(APIView):
         ).exists()
 
         if solo_reg_exists:
-            raise Conflict({'message': "User already registered for the contest."})
+            raise Conflict(message='User already registered for the contest.')
 
         solo_reg = SoloContestRegistrationModel(
             user=request.auth_user,
@@ -92,7 +92,7 @@ class TeamContestRegistration(APIView):
         ).exists()
 
         if team_reg_exists:
-            raise Conflict({'message': "Team already registered for the contest."})
+            raise Conflict(message='Team already registered for the contest.')
 
         # TODO: Put this in transaction
 

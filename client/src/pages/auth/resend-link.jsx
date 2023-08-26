@@ -4,23 +4,21 @@ import { Link, useOutletContext } from 'react-router-dom'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
-import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
 
 export function Component() {
   const fetchHook = useFetch()
-  const { setAllNotification } = useOutletContext()
-
   const formRef = useRef(null)
   const [loading, setLoading] = useState(false)
+  const { setAllNotification } = useOutletContext()
 
-  function forgotPassword(e) {
+  function resendLink(e) {
     e.preventDefault()
     setLoading(true)
 
     const formData = getFormData(formRef.current, { format: 'object' })
 
-    fetchHook('auth/forgot-password', {
+    fetchHook('auth/resend-link', {
       method: 'POST',
       body: JSON.stringify(formData),
     })
@@ -35,12 +33,14 @@ export function Component() {
       .catch(err => {
         setAllNotification({
           show: true,
-          title: 'Failure',
+          title: 'Failed to send link',
           description: err.message,
           status: 'error',
         })
       })
-      .finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   return (
@@ -49,10 +49,8 @@ export function Component() {
         <title>Moksha | Forgot password</title>
       </Helmet>
 
-      <form ref={formRef} className='space-y-6' onSubmit={forgotPassword}>
+      <form ref={formRef} className='space-y-6' onSubmit={resendLink}>
         <BaseInput id='email' name='email' type='email' autoComplete='email' required label='Email address' />
-
-        <CsrfField />
 
         <div>
           <BaseButton type='submit' stretch loading={loading}>

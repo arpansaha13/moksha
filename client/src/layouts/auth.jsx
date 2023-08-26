@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useMap } from '~/hooks/useMap'
-import { useScrollToTop } from '~/hooks/useScrollToTop'
 import Notification from '~/components/common/Notification'
 import AuthBg from '~/components/pictures/AuthBg'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
@@ -13,18 +12,16 @@ const getHeading = route => {
       return 'Login to your account'
     case '/auth/register':
       return 'Create your account'
-    case '/auth/verification':
-      return 'Verify your account'
     case '/auth/forgot-password':
       return 'Forgot password'
     default:
+      if (route.startsWith('/auth/verification')) return 'Verify your account'
+      if (route.startsWith('/auth/reset-password')) return 'Reset your password'
       return null
   }
 }
 
 export default function AuthLayout() {
-  useScrollToTop()
-
   const [notification, { set: setNotification, setAll: setAllNotification }] = useMap({
     show: false,
     title: '',
@@ -47,7 +44,6 @@ export default function AuthLayout() {
   return (
     <div className='relative min-w-screen min-h-screen text-white'>
       <AuthBg />
-      <span role='presentation' className='fixed w-screen h-screen z-10 bg-darkBrown/90 mix-blend-darken' />
 
       <div className='min-w-screen min-h-screen flex flex-col justify-center py-8 sm:px-6 lg:px-8 relative z-20'>
         <Notification
@@ -65,7 +61,7 @@ export default function AuthLayout() {
           <h2 className='mt-6 px-2 sm:px-0 text-center text-3xl font-bold tracking-tight'>{heading}</h2>
         </div>
 
-        <div className='mt-8 w-full [&>*]:sm:mx-auto [&>*]:py-8 [&>*]px-4 [&>*]:sm:px-10 [&>*]:sm:w-full [&>*]:bg-amber-900/50 [&>*]:sm:rounded-lg [&>*]:shadow'>
+        <div className='mt-8 w-full [&>*]:mx-auto [&>*]:py-8 [&>*]px-4 [&>*]:sm:px-10 [&>*]:sm:w-full [&>*]:bg-amber-900/50 [&>*]:sm:rounded-lg [&>*]:shadow'>
           {/* Use appropriate max-w-{size} on the root of this children */}
           <Outlet context={authContext} />
         </div>

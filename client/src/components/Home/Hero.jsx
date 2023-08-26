@@ -6,7 +6,7 @@ export default function Hero() {
   const imageSizeStyles = 'w-40 h-40 sm:w-60 sm:h-60 lg:w-80 lg:h-80 xl:w-80 xl:h-80'
 
   return (
-    <section className={classNames('-mt-[100px] pt-[100px] pb-4', styles['hero-bg'])}>
+    <section className={classNames('-mt-[100px] pt-[100px] pb-4 sm:pb-8', styles['hero-bg'])}>
       <Container className='grid grid-cols-1 gap-y-4 sm:grid-cols-2'>
         <div className='flex items-center'>
           <div>

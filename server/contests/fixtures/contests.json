@@ -13,7 +13,7 @@
     "pk": 2,
     "fields": {
       "club_slug": "fine-arts",
-      "contest_slug": "art-exhibition",
+      "contest_slug": "art-competition",
       "is_solo": true
     }
   },
@@ -121,7 +121,7 @@
     "pk": 14,
     "fields": {
       "club_slug": "pixel",
-      "contest_slug": "the-sunday-mystery",
+      "contest_slug": "snap-quest",
       "is_solo": true
     }
   },
@@ -129,27 +129,9 @@
     "model": "contests.contest",
     "pk": 15,
     "fields": {
-      "club_slug": "pixel",
-      "contest_slug": "let-me-out-escape-room",
+      "club_slug": "malhar",
+      "contest_slug": "battle-of-bands",
       "is_solo": false
-    }
-  },
-  {
-    "model": "contests.contest",
-    "pk": 16,
-    "fields": {
-      "club_slug": "pixel",
-      "contest_slug": "click-a-story",
-      "is_solo": true
-    }
-  },
-  {
-    "model": "contests.contest",
-    "pk": 17,
-    "fields": {
-      "club_slug": "dcc",
-      "contest_slug": "incredible-roll",
-      "is_solo": true
     }
   }
 ]

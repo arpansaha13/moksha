@@ -20,6 +20,6 @@ def verify_invite(invite: Optional[Invite]) -> Invite:
         raise NotFound({'message': 'Invalid invite'})
 
     if invite.status != InviteStatus.PENDING:
-        raise BadRequest({'message': 'Invalid invite'})
+        raise BadRequest(message='Invalid invite')
 
     return invite
