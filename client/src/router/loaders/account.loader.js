@@ -1,57 +1,63 @@
-import nprogress from 'nprogress'
 import { redirect } from 'react-router-dom'
 import getPathFromURL from '~/utils/getPathFromURL'
 import fetchWithCredentials from '~/utils/fetchWithCredentials'
+import loaderWrapper from './loaderWrapper'
 
-export async function getReceivedTeamInvites({ request }) {
-  nprogress.start()
+export const getReceivedTeamInvites = loaderWrapper({
+  meta: {
+    type: 'layout',
+  },
+  fn: async ({ request }) => {
+    try {
+      const { data } = await fetchWithCredentials('users/me/received-team-invites')
+      return { receivedInvites: data }
+    } catch {
+      return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
+    }
+  },
+})
 
-  try {
-    const { data } = await fetchWithCredentials('users/me/received-team-invites')
-    return { receivedInvites: data }
-  } catch {
-    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
-  }
-}
+export const getAuthUserTeams = loaderWrapper({
+  meta: {
+    type: 'page',
+  },
+  fn: async ({ request }) => {
+    try {
+      const data = { createdTeam: null, joinedTeams: null }
 
-export async function getAuthUserTeams({ request }) {
-  try {
-    if (!nprogress.isStarted()) nprogress.start()
+      const res = await Promise.all([
+        fetchWithCredentials('users/me/created-team'),
+        fetchWithCredentials('users/me/joined-teams'),
+      ])
 
-    const data = { createdTeam: null, joinedTeams: null }
+      data.createdTeam = res[0].data
+      data.joinedTeams = res[1].data
+      return data
+    } catch {
+      return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
+    }
+  },
+})
 
-    const res = await Promise.all([
-      fetchWithCredentials('users/me/created-team'),
-      fetchWithCredentials('users/me/joined-teams'),
-    ])
+export const getAuthUserContests = loaderWrapper({
+  meta: {
+    type: 'page',
+  },
+  fn: async ({ request }) => {
+    try {
+      const data = { soloRegistrations: [], teamRegistrations: [] }
 
-    data.createdTeam = res[0].data
-    data.joinedTeams = res[1].data
+      const res = await Promise.all([
+        fetchWithCredentials('users/me/registered-solo-contests'),
+        fetchWithCredentials('users/me/registered-team-contests'),
+      ])
 
-    nprogress.done()
-    return data
-  } catch {
-    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
-  }
-}
+      data.soloContests = res[0].data
+      data.teamContests = res[1].data
 
-export async function getAuthUserContests({ request }) {
-  try {
-    if (!nprogress.isStarted()) nprogress.start()
-
-    const data = { soloRegistrations: [], teamRegistrations: [] }
-
-    const res = await Promise.all([
-      fetchWithCredentials('users/me/registered-solo-contests'),
-      fetchWithCredentials('users/me/registered-team-contests'),
-    ])
-
-    data.soloContests = res[0].data
-    data.teamContests = res[1].data
-
-    nprogress.done()
-    return data
-  } catch {
-    return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
-  }
-}
+      return data
+    } catch {
+      return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
+    }
+  },
+})

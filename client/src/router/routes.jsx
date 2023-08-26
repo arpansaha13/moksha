@@ -1,5 +1,6 @@
+import nprogress from 'nprogress'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
-
+import { isNullOrUndefined } from '@arpansaha13/utils'
 import { allowIfNotAuthenticated } from '~loaders/auth.loader'
 import { getReceivedTeamInvites } from '~loaders/account.loader'
 
@@ -38,40 +39,49 @@ const ResetPassword = () => import('../pages/auth/reset-password')
 
 const NotFound = () => import('../pages/404')
 
+function fetchRoute(rImport) {
+  return async () => {
+    if (!nprogress.isStarted()) nprogress.start()
+    const rImported = await rImport()
+    if (isNullOrUndefined(rImported.loader)) nprogress.done()
+    return rImported
+  }
+}
+
 const routes = createRoutesFromElements(
   <Route element={<FloatingWindow />}>
     <Route element={<DefaultLayout />}>
-      <Route path='/' lazy={Home} />
-      <Route path='/faqs' lazy={Faqs} />
+      <Route path='/' lazy={fetchRoute(Home)} />
+      <Route path='/faqs' lazy={fetchRoute(Faqs)} />
       {/* <Route path='/sponsors' element={<Sponsors />} /> */}
-      <Route path='/contact' lazy={Contact} />
+      <Route path='/contact' lazy={fetchRoute(Contact)} />
 
-      <Route path='/events' lazy={Events} />
-      <Route path='/events/:club/:event' lazy={Event} />
+      <Route path='/events' lazy={fetchRoute(Events)} />
+      <Route path='/events/:club/:event' lazy={fetchRoute(Event)} />
 
-      <Route path='/contests' lazy={Contests} />
-      <Route path='/contests/:club/:contest' lazy={Contest} />
+      <Route path='/contests' lazy={fetchRoute(Contests)} />
+      <Route path='/contests/:club/:contest' lazy={fetchRoute(Contest)} />
 
-      <Route path='/teams/create' lazy={CreateTeam} />
-      <Route path='/teams/:team' lazy={Team} />
+      <Route path='/teams/create' lazy={fetchRoute(CreateTeam)} />
+      <Route path='/teams/:team' lazy={fetchRoute(Team)} />
 
-      <Route path='/*' lazy={NotFound} />
+      <Route path='/*' lazy={fetchRoute(NotFound)} />
 
       <Route loader={getReceivedTeamInvites} element={<AccountLayout />}>
-        <Route path='/account/profile' lazy={Profile} />
-        <Route path='/account/teams' lazy={Teams} />
-        <Route path='/account/registrations' lazy={Registrations} />
-        <Route path='/account/change-password' lazy={ChangePassword} />
+        <Route path='/account/profile' lazy={fetchRoute(Profile)} />
+        <Route path='/account/teams' lazy={fetchRoute(Teams)} />
+        <Route path='/account/registrations' lazy={fetchRoute(Registrations)} />
+        <Route path='/account/change-password' lazy={fetchRoute(ChangePassword)} />
       </Route>
     </Route>
 
     <Route loader={allowIfNotAuthenticated} element={<AuthLayout />}>
-      <Route path='/auth/login' lazy={Login} />
-      <Route path='/auth/register' lazy={Registration} />
-      <Route path='/auth/verification/:hash' lazy={Verification} />
-      <Route path='/auth/forgot-password' lazy={ForgotPassword} />
-      <Route path='/auth/reset-password/:hash' lazy={ResetPassword} />
-      <Route path='/auth/resend-verification-link' lazy={ResendVerificationLink} />
+      <Route path='/auth/login' lazy={fetchRoute(Login)} />
+      <Route path='/auth/register' lazy={fetchRoute(Registration)} />
+      <Route path='/auth/verification/:hash' lazy={fetchRoute(Verification)} />
+      <Route path='/auth/forgot-password' lazy={fetchRoute(ForgotPassword)} />
+      <Route path='/auth/reset-password/:hash' lazy={fetchRoute(ResetPassword)} />
+      <Route path='/auth/resend-verification-link' lazy={fetchRoute(ResendVerificationLink)} />
     </Route>
   </Route>
 )

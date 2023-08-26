@@ -1,6 +1,7 @@
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import mokshaEventsList from '~/data/events/moksha'
 import udaanEventsList from '~/data/events/udaan'
+import loaderWrapper from './loaderWrapper'
 
 function getMokshaEvent(eventSlug) {
   const event = mokshaEventsList.find(event => event.slug === eventSlug)
@@ -12,15 +13,25 @@ function getUdaanEvent(contestSlug) {
   return event ?? null
 }
 
-export function getEvent({ request }) {
-  const pathSegments = new URL(request.url).pathname.split('/')
-  const eventSlug = pathSegments.at(-1)
+export const getEvent = loaderWrapper({
+  meta: {
+    type: 'page',
+  },
+  fn: async ({ request }) => {
+    const pathSegments = new URL(request.url).pathname.split('/')
+    const eventSlug = pathSegments.at(-1)
 
-  const event = getMokshaEvent(eventSlug)
+    const event = getMokshaEvent(eventSlug)
 
-  return isNullOrUndefined(event) ? getUdaanEvent(eventSlug) : event
-}
+    return isNullOrUndefined(event) ? getUdaanEvent(eventSlug) : event
+  },
+})
 
-export function getEvents() {
-  return { mokshaEventsList, udaanEventsList }
-}
+export const getEvents = loaderWrapper({
+  meta: {
+    type: 'page',
+  },
+  fn: () => {
+    return { mokshaEventsList, udaanEventsList }
+  },
+})
