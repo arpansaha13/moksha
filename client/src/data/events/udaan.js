@@ -60,7 +60,7 @@ const malhar = [
 
 const phewsion = [
   {
-    id: 2,
+    id: 4,
     slug: 'fun-games',
     name: 'Fun Games',
     club: 'phewsion',

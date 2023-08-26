@@ -1,6 +1,6 @@
 const dzire = [
   {
-    id: 4,
+    id: 5,
     slug: 'chakra-clash',
     name: 'Chakra Clash',
     club: 'dzire',
@@ -34,7 +34,7 @@ const pixel = [
 
 const fineArts = [
   {
-    id: 5,
+    id: 7,
     slug: 'art-exhibition',
     name: 'Art exhibition',
     club: 'fine-arts',
@@ -65,7 +65,7 @@ const fineArts = [
 
 const dcc = [
   {
-    id: 20,
+    id: 8,
     slug: 'incredible-roll',
     name: 'Incredible Roll',
     club: 'dcc',

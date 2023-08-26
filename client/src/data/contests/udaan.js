@@ -6,6 +6,7 @@ const malhar = [
     club: 'malhar',
     subtitle: 'Malhar',
     type: ['team'],
+    allowedTeamSize: { min: 3, max: null },
     image: {
       sources: [
         { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.webp', type: 'image/webp' },
