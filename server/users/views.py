@@ -47,7 +47,7 @@ class GetAuthUserCreatedTeam(APIView):
 
 class GetAuthUserJoinedTeams(APIView):
     def get(self, request):
-        created_team = request.auth_user.created_team
+        created_team = request.auth_user.created_team.first()
         user_memberships = request.auth_user.user_memberships.filter(~Q(team__team_id=created_team)).all()
 
         serializer = TeamMemberSerializer(
