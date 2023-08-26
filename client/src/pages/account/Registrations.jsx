@@ -35,7 +35,7 @@ export function Component() {
             {soloContests.map(({ contest }) => (
               <RegisteredSoloContestCard
                 key={contest.id}
-                clubName={contest.club_slug}
+                clubSlug={contest.club_slug}
                 contestSlug={contest.contest_slug}
               />
             ))}
