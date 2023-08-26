@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 from functools import wraps
@@ -16,22 +17,47 @@ def jwt_exempt(view_func):
     return wraps(view_func)(wrapped_view)
 
 
+def validate_token(auth_token) -> Dict[str, Any] | None:
+    if not auth_token:
+        return None
+
+    try:
+        payload = jwt.decode(auth_token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
+    except jwt.ExpiredSignatureError:
+        return None
+
+    return payload
+
+
+def validate_session(session_token) -> Dict[str, Any] | None:
+    if not session_token:
+        return None
+
+    try:
+        payload = jwt.decode(session_token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
+    except jwt.ExpiredSignatureError:
+        return None
+
+    return payload
+
+
 class JwtMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, *view_args, **view_kwargs):
-        if request.path.startswith('/admin/'):
-            return None
+        # if request.path.startswith('/admin/'):
+        #     return None
 
         if getattr(view_func, 'jwt_exempt_flag', False):
             return None
 
-        token = request.COOKIES.get('token')
+        AUTH_TOKEN = request.COOKIES.get('auth')
+        payload = validate_token(AUTH_TOKEN)
 
-        if not token:
+        if payload is None:
+            SESSION_TOKEN = request.COOKIES.get('session')
+            payload = validate_session(SESSION_TOKEN)
+
+        if payload is None:
             return JsonResponse({'message': 'Unauthenticated'}, status=403)
-        try:
-            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
-        except jwt.ExpiredSignatureError:
-            return JsonResponse({'message': 'Token Expired! Log in again.'}, status=403)
 
         auth_user = User.objects.filter(user_id=payload['id']).first()
 

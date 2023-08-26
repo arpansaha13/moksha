@@ -10,7 +10,7 @@ from rest_framework.exceptions import PermissionDenied, NotFound
 from .models import AccountVerificationLink, ForgotPasswordLink
 from users.models import User
 from users.serializers import AuthUserSerializer
-from common.middleware import jwt_exempt
+from common.middleware import jwt_exempt, validate_token, validate_session
 from common.exceptions import Conflict, Unauthorized, InternalServerError
 from datetime import datetime, timedelta
 import jwt
@@ -26,22 +26,20 @@ environ.Env.read_env()
 
 class CheckAuth(APIView):
     def get(self, request):
-        token = request.COOKIES.get('token', None)
+        TOKEN = request.COOKIES.get('auth')
+        payload = validate_token(TOKEN)
 
-        unauth_res = Response({'data': None, 'message': 'Unauthenticated'})
+        if payload is None:
+            SESSION = request.COOKIES.get('session')
+            payload = validate_session(SESSION)
 
-        if token is None:
-            return unauth_res
-
-        try:
-            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
-        except jwt.ExpiredSignatureError:
-            return unauth_res
+        if payload is None:
+            return Response({'data': None, 'message': 'Unauthenticated'})
 
         auth_user = User.objects.filter(user_id=payload['id']).first()
 
         if not auth_user:
-            return unauth_res
+            return Response({'data': None, 'message': 'Invalid token'})
 
         return Response({
             'data': {
@@ -157,27 +155,47 @@ class Login(APIView):
         if not user.email_verified:
             raise PermissionDenied({'message': "Please verify your account using otp."})
 
-        payload = {
-            'id': user.user_id,
-            'exp': datetime.utcnow() + timedelta(seconds=int(env('JWT_VALIDATION_SECONDS'))),
-            'iat': datetime.utcnow(),
-        }
-
-        token = jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
+        auth_token = self.create_auth_token(user.user_id)
+        session_token = self.create_session_token(user.user_id)
 
         response = Response()
         response.set_cookie(
-            key='token',
-            value=token,
+            key='auth',
+            value=auth_token,
             secure=True,
             httponly=True,
             samesite='None',
             domain=env('COOKIE_DOMAIN'),
             max_age=int(env('JWT_VALIDATION_SECONDS'))
         )
+        response.set_cookie(
+            key='session',
+            value=session_token,
+            secure=True,
+            httponly=True,
+            samesite='None',
+            domain=env('COOKIE_DOMAIN'),
+        )
         response.data = AuthUserSerializer(user).data
         response.status_code = 200
         return response
+
+    def create_auth_token(self, user_id: str) -> str:
+        payload = {
+            'id': user_id,
+            'exp': datetime.utcnow() + timedelta(seconds=int(env('JWT_VALIDATION_SECONDS'))),
+            'iat': datetime.utcnow(),
+        }
+
+        return jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
+
+    def create_session_token(self, user_id: str) -> str:
+        payload = {
+            'id': user_id,
+            'iat': datetime.utcnow(),
+        }
+
+        return jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -186,21 +204,15 @@ class Login(APIView):
 
 class Logout(APIView):
     def get(self, request):
-        token = request.COOKIES.get('token', None)
+        auth_token = request.COOKIES.get('auth', None)
+        session_token = request.COOKIES.get('session', None)
 
-        if token is None:
+        if auth_token is None and session_token is None:
             raise PermissionDenied({'Unauthenticated'})
 
-        try:
-            payload = jwt.decode(token, env('JWT_SECRET'), algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise Unauthorized('Unauthenticated')
-
-        if not User.objects.filter(user_id=payload['id']).exists():
-            raise Unauthorized({'message': 'Invalid token.'})
-
         response = Response()
-        response.set_cookie('token', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
+        response.set_cookie(key='auth', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
+        response.set_cookie(key='session', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'),)
         response.data = {'message': 'User has been successfully logged out.'}
         response.status_code = 200
         return response
