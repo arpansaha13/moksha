@@ -125,16 +125,26 @@ const ReceivedInvites = ({ invites }) => {
   return (
     <>
       {heading}
+
       <Sheet className='px-2 py-4'>
         <ul className='px-4 divide-y divide-amber-800/80 text-xs lg:text-sm lg:max-h-96 lg:overflow-auto scrollbar'>
           {receivedInvites.map(inv => (
             <li key={inv.id} className='py-1.5 first:pt-0 last:pb-0'>
-              <div className='text-gray-100 flex items-center space-x-2'>
+              <div className='text-gray-100 flex items-center'>
                 <InviteListItem invite={inv} />
 
-                <AcceptButton id={inv.id} action={acceptInvite} loading={loading.has(inv.id)} />
+                <div className='ml-2 flex items-center justify-center relative'>
+                  <div className={classNames('flex gap-2', loading.has(inv.id) && 'opacity-0 pointer-events-none')}>
+                    <AcceptButton id={inv.id} action={acceptInvite} />
+                    <RejectButton id={inv.id} action={rejectInvite} />
+                  </div>
 
-                <RejectButton id={inv.id} action={rejectInvite} loading={false} />
+                  {loading.has(inv.id) && (
+                    <span className='absolute z-10 inset-0 flex items-center justify-center'>
+                      <Loader className='w-4 lg:w-5' />
+                    </span>
+                  )}
+                </div>
               </div>
             </li>
           ))}
@@ -151,31 +161,28 @@ const InviteListItem = ({ invite }) => (
   </div>
 )
 
-const AcceptButton = memo(({ loading, action, id }) => (
+const AcceptButton = memo(({ action, id }) => (
   <div>
-    <IconButton loading={loading} action={action} icon={checkIcon} id={id} desc='Accept' />
+    <IconButton action={action} icon={checkIcon} id={id} desc='Accept' />
   </div>
 ))
 
-const RejectButton = memo(({ loading, action, id }) => (
+const RejectButton = memo(({ action, id }) => (
   <div>
-    <IconButton loading={loading} action={action} icon={closeIcon} id={id} desc='Reject' />
+    <IconButton action={action} icon={closeIcon} id={id} desc='Reject' />
   </div>
 ))
 
-const IconButton = ({ loading, action, icon, id, desc }) => (
+const IconButton = ({ action, icon, id, desc }) => (
   <button
     type='button'
-    disabled={loading}
     className='p-0.5 lg:p-1 flex items-center justify-center hover:bg-amber-900/60 text-amber-500 border border-amber-500 rounded-full transition-colors relative'
     onClick={() => action(id)}
   >
-    <div className={classNames('w-5 h-5', loading && 'opacity-0')}>
+    <div className='w-5 h-5'>
       <Icon icon={icon} className='inline-block' color='inherit' width='100%' height='100%' />
     </div>
 
     <span className='sr-only'>{desc}</span>
-
-    {loading && <Loader className='absolute w-3.5 xl:w-5' />}
   </button>
 )

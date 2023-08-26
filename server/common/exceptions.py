@@ -46,5 +46,5 @@ class InternalServerError(CustomAPIException):
     default_detail = {
         'status': 500,
         'error': 'Internal server error',
-        'message': '',
+        'message': 'Could not perform the task. There is some problem.',
     }

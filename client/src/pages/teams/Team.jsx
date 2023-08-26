@@ -44,7 +44,7 @@ export function Component() {
   }, [])
 
   const refetchPendingInvites = useDebouncedFn(async () => {
-    const res = await fetchHook(`invites/${team.team_id}`)
+    const res = await fetchHook(`teams/${team.team_id}/pending-invites`)
     setPendingInvites(res.data)
   }, 500)
 
