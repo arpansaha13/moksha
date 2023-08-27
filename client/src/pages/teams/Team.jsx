@@ -51,20 +51,20 @@ export function Component() {
   const inviteCall = useCallback(async userId => {
     await fetchHook('invites', {
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         team_id: team.team_id,
         user_id: userId,
-      }),
+      },
     })
   }, [])
 
   const withdrawInviteCall = useCallback(async userId => {
     await fetchHook('invites', {
       method: 'DELETE',
-      body: JSON.stringify({
+      body: {
         team_id: team.team_id,
         user_id: userId,
-      }),
+      },
     })
   }, [])
 

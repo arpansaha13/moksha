@@ -79,7 +79,7 @@ function CreateTeamForm({ setShowNotification, setAll }) {
 
     fetchHook('teams', {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: formData,
     })
       .then(res => {
         navigate(`/teams/${res.team_id}`)

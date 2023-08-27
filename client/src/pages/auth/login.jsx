@@ -28,7 +28,7 @@ export function Component() {
 
       fetchHook('auth/login', {
         method: 'POST',
-        body: JSON.stringify(formData),
+        body: formData,
       })
         .then(res => {
           setAppContext('authenticated', true)

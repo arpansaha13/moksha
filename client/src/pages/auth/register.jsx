@@ -53,7 +53,7 @@ export function Component() {
 
       fetchHook('auth/register', {
         method: 'POST',
-        body: JSON.stringify(formData),
+        body: formData,
       })
         .then(res => {
           setAllNotification({

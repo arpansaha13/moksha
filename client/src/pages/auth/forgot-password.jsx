@@ -22,7 +22,7 @@ export function Component() {
 
     fetchHook('auth/forgot-password', {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: formData,
     })
       .then(res => {
         setAllNotification({

@@ -12,9 +12,9 @@ export default function CancelRegistration({ registrationId, setRegistrationId }
 
     fetchHook(`contests/solo/registration`, {
       method: 'DELETE',
-      body: JSON.stringify({
+      body: {
         solo_reg_id: registrationId,
-      }),
+      },
     }).then(() => {
       startTransition(() => {
         setRegistrationId(null)

@@ -50,7 +50,7 @@ export function Component() {
 
     fetchHook('auth/change-password', {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: formData,
     })
       .then(res => {
         setAll({

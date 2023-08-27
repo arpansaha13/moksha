@@ -38,11 +38,11 @@ export default function Register({ contest, team, members, alreadyRegisteredMemb
 
     fetchHook('contests/team/registration', {
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         team_id: team.team_id,
         contest_id: contest.id,
         selected_members: toArray(),
-      }),
+      },
     })
       .then(res =>
         startTransition(() => {
