@@ -26,12 +26,13 @@ environ.Env.read_env()
 
 class CheckAuth(APIView):
     def get(self, request):
-        TOKEN = request.COOKIES.get('auth')
-        payload = validate_token(TOKEN)
+        AUTH_TOKEN = request.COOKIES.get('auth')
+        SESSION_TOKEN = request.COOKIES.get('session')
+
+        payload = validate_token(AUTH_TOKEN)
 
         if payload is None:
-            SESSION = request.COOKIES.get('session')
-            payload = validate_session(SESSION)
+            payload = validate_session(SESSION_TOKEN)
 
         if payload is None:
             return Response({'data': None, 'message': 'Unauthenticated'})
@@ -41,12 +42,24 @@ class CheckAuth(APIView):
         if not auth_user:
             return Response({'data': None, 'message': 'Invalid token'})
 
-        return Response({
+        response = Response({
             'data': {
                 'avatar_idx': auth_user.avatar_idx,
                 'user_id': auth_user.user_id,
             }
         })
+
+        if SESSION_TOKEN is None:
+            response.set_cookie(
+                key='session',
+                value=Login().create_session_token(auth_user.user_id),
+                secure=True,
+                httponly=True,
+                samesite='None',
+                domain=env('COOKIE_DOMAIN'),
+            )
+
+        return response
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -155,13 +168,13 @@ class Login(APIView):
         if not user.email_verified:
             raise PermissionDenied({'message': "Please verify your account using otp."})
 
-        auth_token = self.create_auth_token(user.user_id)
-        session_token = self.create_session_token(user.user_id)
+        AUTH_TOKEN = self.create_auth_token(user.user_id)
+        SESSION_TOKEN = self.create_session_token(user.user_id)
 
         response = Response()
         response.set_cookie(
             key='auth',
-            value=auth_token,
+            value=AUTH_TOKEN,
             secure=True,
             httponly=True,
             samesite='None',
@@ -170,7 +183,7 @@ class Login(APIView):
         )
         response.set_cookie(
             key='session',
-            value=session_token,
+            value=SESSION_TOKEN,
             secure=True,
             httponly=True,
             samesite='None',
