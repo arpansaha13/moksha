@@ -18,9 +18,12 @@ export const getContest = loaderWrapper({
     const clubSlug = pathSegments.at(-2)
     const contestSlug = pathSegments.at(-1)
 
-    const contest = getMokshaContest(clubSlug, contestSlug)
+    let contest = getMokshaContest(clubSlug, contestSlug)
+    contest = getUdaanContest(contestSlug)
 
-    return isNullOrUndefined(contest) ? getUdaanContest(contestSlug) : contest
+    if (isNullOrUndefined(contest)) throw new Error('Invalid url')
+
+    return contest
   },
 })
 

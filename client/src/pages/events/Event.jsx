@@ -6,7 +6,6 @@ import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { Component as NotFound } from '../404'
 import SocialShare from '~/components/SocialShare'
 import Container from '~common/Container'
 import Sheet from '~/components/common/Sheet'
@@ -20,24 +19,17 @@ export function Component() {
   const location = useLocation()
 
   const shareData = useMemo(
-    () =>
-      isNullOrUndefined(event)
-        ? {}
-        : {
-            url: location.pathname,
-            title: `Moksha event - ${event.name}`,
-            text:
-              event.description[0].p.length <= 100
-                ? event.description[0].p.length
-                : `${event.description[0].p.substr(0, 100)}...`, // trim to 100 characters
-          },
+    () => ({
+      url: location.pathname,
+      title: `Moksha event - ${event.name}`,
+      text:
+        event.description[0].p.length <= 100
+          ? event.description[0].p.length
+          : `${event.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location.pathname]
   )
-
-  if (isNullOrUndefined(event)) {
-    return <NotFound />
-  }
 
   return (
     <Container as='section' className='py-4' id={`event-${event}`}>

@@ -30,6 +30,16 @@ class Conflict(CustomAPIException):
     }
 
 
+class NotFound(CustomAPIException):
+    status_code = 404
+    default_code = 'not_found'
+    default_detail = {
+        'status': 404,
+        'error': 'Not found',
+        'message': '',
+    }
+
+
 class Unauthorized(CustomAPIException):
     status_code = 401
     default_code = 'unauthorized'
