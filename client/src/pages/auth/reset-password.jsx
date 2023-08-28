@@ -68,7 +68,7 @@ function ResetPassForm({ setPassIsReset }) {
 
     fetchHook(`auth/reset-password/${params.hash}`, {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: formData,
     })
       .then(() => {
         setPassIsReset(true)

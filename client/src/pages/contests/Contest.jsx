@@ -5,8 +5,6 @@ import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 import Tz3dCard from '@tranzis/react/Tz3dCard'
-import { isNullOrUndefined } from '@arpansaha13/utils'
-import { Component as NotFound } from '../404'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
 import SoloContest from '~/components/Contests/SoloContest'
@@ -21,24 +19,17 @@ export function Component() {
   const location = useLocation()
 
   const shareData = useMemo(
-    () =>
-      isNullOrUndefined(contest)
-        ? {}
-        : {
-            url: location.pathname,
-            title: `Moksha contest - ${contest.name}`,
-            text:
-              contest.description[0].p.length <= 100
-                ? contest.description[0].p.length
-                : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
-          },
+    () => ({
+      url: location.pathname,
+      title: `Moksha contest - ${contest.name}`,
+      text:
+        contest.description[0].p.length <= 100
+          ? contest.description[0].p.length
+          : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location.pathname]
   )
-
-  if (isNullOrUndefined(contest)) {
-    return <NotFound />
-  }
 
   return (
     <Container as='section' className='py-4' id={`contest-${contest}`}>

@@ -30,6 +30,16 @@ class Conflict(CustomAPIException):
     }
 
 
+class NotFound(CustomAPIException):
+    status_code = 404
+    default_code = 'not_found'
+    default_detail = {
+        'status': 404,
+        'error': 'Not found',
+        'message': '',
+    }
+
+
 class Unauthorized(CustomAPIException):
     status_code = 401
     default_code = 'unauthorized'
@@ -46,5 +56,5 @@ class InternalServerError(CustomAPIException):
     default_detail = {
         'status': 500,
         'error': 'Internal server error',
-        'message': '',
+        'message': 'Could not perform the task. There is some problem.',
     }

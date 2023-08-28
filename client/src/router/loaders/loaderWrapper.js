@@ -4,7 +4,14 @@ export default function loaderWrapper(loader) {
   return async args => {
     if (!nprogress.isStarted()) nprogress.start()
 
-    const loaderData = await loader.fn(args)
+    let loaderData
+
+    try {
+      loaderData = await loader.fn(args)
+    } catch (e) {
+      nprogress.done()
+      throw e
+    }
 
     if (loader.meta.type === 'page') nprogress.done()
 

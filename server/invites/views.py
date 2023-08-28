@@ -1,11 +1,13 @@
 
 from django.db.models import Q
+from django.db import transaction, IntegrityError
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from .models import Invite, InviteStatus
 from teams.models import Team, TeamMember
 from users.models import User
-from common.exceptions import Conflict, BadRequest
+from common.exceptions import Conflict, BadRequest, InternalServerError
 from teams.helpers import get_team
 from .helpers import verify_invite, verify_team_leader
 
@@ -25,12 +27,6 @@ class BaseEndpoint(APIView):
         if not user:
             raise BadRequest(message='Invalid user_id')
 
-        if TeamMember.objects.filter(
-            Q(user=user_id)
-            & Q(team=team_id)
-        ).exists():
-            raise Conflict(message='User is already in team')
-
         if Invite.objects.filter(
             Q(user_id=user_id)
             & Q(team_id=team_id)
@@ -38,8 +34,18 @@ class BaseEndpoint(APIView):
         ).exists():
             raise Conflict(message='User has already been invited.')
 
-        new_invite = Invite(team=team, user=user)
-        new_invite.save()
+        try:
+            with transaction.atomic():
+                if TeamMember.objects.filter(
+                    Q(user=user_id)
+                    & Q(team=team_id)
+                ).exists():
+                    raise Conflict(message='User is already in team')
+
+                new_invite = Invite(team=team, user=user)
+                new_invite.save()
+        except IntegrityError:
+            raise InternalServerError(message='Some error occurred. Could not invite.')
 
         return Response({'message': 'Invited'}, status=201)
 
@@ -53,49 +59,60 @@ class BaseEndpoint(APIView):
         verify_team_leader(team, request.auth_user)
 
         if not User.objects.filter(user_id=user_id).exists():
-            raise BadRequest(message='Invalid user_id')
+            raise NotFound({'message': 'User not found.'})
 
-        invite = Invite.objects.filter(
-            Q(user_id=user_id)
-            & Q(team_id=team_id)
-            & Q(status=InviteStatus.PENDING)
-        ).first()
+        try:
+            with transaction.atomic():
+                invite = Invite.objects.filter(
+                    Q(user_id=user_id)
+                    & Q(team_id=team_id)
+                    & Q(status=InviteStatus.PENDING)
+                ).first()
 
-        if not invite:
-            raise BadRequest(message='No such invite exists')
+                if not invite:
+                    raise NotFound({'message': 'Invite does not exist.'})
 
-        invite.delete()
+                invite.delete()
+        except IntegrityError:
+            raise InternalServerError(message='Some error occurred. Could not withdraw invite.')
+
         return Response({'message': 'Invite has been withdrawn'}, status=200)
 
 
 class AcceptInvite(APIView):
-    def patch(self, req, invite_id):
+    def patch(self, _, invite_id):
         invite = Invite.objects.filter(id=invite_id).first()
 
-        invite = verify_invite(invite)
+        try:
+            with transaction.atomic():
+                invite = verify_invite(invite)
 
-        # TODO: wrap this in a transaction
+                invite.status = InviteStatus.ACCEPTED
+                invite.save()
 
-        invite.status = InviteStatus.ACCEPTED
-        invite.save()
+                joined_user = TeamMember(team=invite.team, user=invite.user)
+                joined_user.save()
 
-        joined_user = TeamMember(team=invite.team, user=invite.user)
-        joined_user.save()
-
-        team = get_team(invite.team.team_id)
-        team.member_count += 1
-        team.save()
+                team = get_team(invite.team.team_id)
+                team.member_count += 1
+                team.save()
+        except IntegrityError:
+            raise InternalServerError(message='Some error occurred. Could not accept invite.')
 
         return Response({'message': 'Invite accepted'}, status=200)
 
 
 class RejectInvite(APIView):
-    def patch(self, req, invite_id):
+    def patch(self, _, invite_id):
         invite = Invite.objects.filter(id=invite_id).first()
 
-        invite = verify_invite(invite)
+        try:
+            with transaction.atomic():
+                invite = verify_invite(invite)
 
-        invite.status = InviteStatus.REJECTED
-        invite.save()
+                invite.status = InviteStatus.REJECTED
+                invite.save()
+        except IntegrityError:
+            raise InternalServerError(message='Some error occurred. Could not reject invite.')
 
         return Response({'message': 'Invite rejected'}, status=200)

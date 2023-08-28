@@ -18,7 +18,7 @@ export default function Register({ setRegistrationId, contestId }) {
 
     fetchHook('contests/solo/registration', {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: formData,
     })
       .then(res => {
         startTransition(() => {

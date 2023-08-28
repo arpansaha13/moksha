@@ -53,14 +53,14 @@ class BaseEndpoint(APIView):
 
 
 class GetTeam(APIView):
-    def get(self, req, team_id):
+    def get(self, _, team_id):
         team = get_team(team_id)
         serializer = TeamSerializer(team)
         return Response({'data': serializer.data}, status=200)
 
 
 class GetTeamMembers(APIView):
-    def get(self, req, team_id):
+    def get(self, _, team_id):
         user_ids = TeamMember.objects.filter(team_id=team_id).values_list('user_id')
         users = User.objects.filter(user_id__in=user_ids)
 
@@ -70,7 +70,7 @@ class GetTeamMembers(APIView):
 
 
 class GetContestRegisteredTeamMembers(APIView):
-    def get(self, req, team_id, contest_id):
+    def get(self, _, team_id, contest_id):
         team = get_team(team_id)
         contest = get_contest(contest_id)
 

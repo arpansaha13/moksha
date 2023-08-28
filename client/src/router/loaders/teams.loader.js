@@ -36,7 +36,9 @@ export const getTeamData = loaderWrapper({
       data.members = res[1].data
 
       return data
-    } catch {
+    } catch (e) {
+      if (e.status === '404') throw e
+
       return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
     }
   },

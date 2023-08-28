@@ -56,7 +56,7 @@ function OtpForm({ setVerified }) {
 
     fetchHook(`auth/verification/${params.hash}`, {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: formData,
     })
       .then(() => {
         setVerified(true)

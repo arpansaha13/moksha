@@ -13,8 +13,9 @@ import Loader from '~common/Loader'
 import UserListItem from './UserListItem'
 import InviteButton from './InviteButton'
 
-const INITIAL_MODAL_TEXT = 'Search users to invite to the team'
-const NO_RESULTS_MODAL_TEXT = 'No users could be found by this username.'
+const INITIAL_MODAL_TEXT = 'Search users by their username to invite to the team'
+const NO_RESULTS_MODAL_TEXT =
+  "No users could be found by this username. Please note that team members and users who are already invited won't be shown here."
 
 export default function InviteModal({ open, setOpen, teamId, inviteCall, withdrawInviteCall, refetchPendingInvites }) {
   const fetchHook = useFetch()
@@ -128,7 +129,7 @@ export default function InviteModal({ open, setOpen, teamId, inviteCall, withdra
               <div role='presentation' className='mx-auto w-20 h-20 sm:w-24 sm:h-24 text-brown rounded-full'>
                 <Icon icon={modalIcon} className='block' color='inherit' width='100%' height='100%' />
               </div>
-              <p className='text-xs sm:text-sm text-gray-400'>{modalText}</p>
+              <p className='text-xs sm:text-sm text-center text-gray-400 wrap-balance'>{modalText}</p>
             </div>
           </div>
         )}

@@ -6,10 +6,12 @@ const dzire = [
     club: 'dzire',
     image: {
       sources: [
-        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.webp', type: 'image/webp' },
-        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/dzire/flash-mob/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/events/dzire/flash-mob/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
       ],
-      src: '/images/events/dzire/flash-mob/poster-1024x1024.jpeg',
+      src: '/images/events/dzire/flash-mob/poster-512x512.jpeg',
     },
     description: [
       {
@@ -27,10 +29,12 @@ const malhar = [
     club: 'malhar',
     image: {
       sources: [
-        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.webp', type: 'image/webp' },
-        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/malhar/street-jam/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/events/malhar/street-jam/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
       ],
-      src: '/images/events/malhar/street-jam/poster-1024x1024.jpeg',
+      src: '/images/events/malhar/street-jam/poster-512x512.jpeg',
     },
     description: [
       {
@@ -45,10 +49,12 @@ const malhar = [
     club: 'malhar',
     image: {
       sources: [
-        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.webp', type: 'image/webp' },
-        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/malhar/theme-song/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/events/malhar/theme-song/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
       ],
-      src: '/images/events/malhar/theme-song/poster-1024x1024.jpeg',
+      src: '/images/events/malhar/theme-song/poster-512x512.jpeg',
     },
     description: [
       {
@@ -60,7 +66,7 @@ const malhar = [
 
 const phewsion = [
   {
-    id: 2,
+    id: 4,
     slug: 'fun-games',
     name: 'Fun Games',
     club: 'phewsion',
@@ -73,7 +79,7 @@ const phewsion = [
         { srcSet: '/images/events/phewsion/fun-games/poster-1024x1024.webp 2x', type: 'image/webp' },
         { srcSet: '/images/events/phewsion/fun-games/poster-1024x1024.png 2x', type: 'image/png' },
       ],
-      src: '/images/events/phewsion/fun-games/poster-1024x1024.png',
+      src: '/images/events/phewsion/fun-games/poster-512x512.png',
     },
     description: [
       {

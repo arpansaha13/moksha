@@ -37,7 +37,7 @@ export function Component() {
           {userDetails.map(item => (
             <div key={item.label}>
               <p className='font-semibold text-gray-400'>{item.label}</p>
-              <p className='text-gray-100'>{item.value}</p>
+              <p className='text-gray-100 truncate'>{item.value}</p>
             </div>
           ))}
         </div>

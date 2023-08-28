@@ -1,6 +1,6 @@
 import { startTransition, useMemo, useState } from 'react'
 import { Disclosure } from '@headlessui/react'
-import { classNames } from '@arpansaha13/utils'
+import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
 import { useSet } from '~/hooks/useSet'
 import { useFetch } from '~/hooks/useFetch'
 import BaseButton from '~base/BaseButton'
@@ -38,11 +38,11 @@ export default function Register({ contest, team, members, alreadyRegisteredMemb
 
     fetchHook('contests/team/registration', {
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         team_id: team.team_id,
         contest_id: contest.id,
         selected_members: toArray(),
-      }),
+      },
     })
       .then(res =>
         startTransition(() => {
@@ -190,15 +190,33 @@ function AllowedTeamSizesInfo({ sizes }) {
     )
   }
 
-  return (
-    <Callout>
-      The selected team’s size should range from{' '}
-      <strong>
-        {sizes.min} to {sizes.max} members
-      </strong>
-      .
-    </Callout>
-  )
+  if (!isNullOrUndefined(sizes.min) && !isNullOrUndefined(sizes.max)) {
+    return (
+      <Callout>
+        The selected team’s size should range from{' '}
+        <strong>
+          {sizes.min} to {sizes.max} members
+        </strong>
+        .
+      </Callout>
+    )
+  }
+
+  if (!isNullOrUndefined(sizes.min)) {
+    return (
+      <Callout>
+        The selected team should have at least <strong>{sizes.min} members</strong>.
+      </Callout>
+    )
+  }
+
+  if (!isNullOrUndefined(sizes.max)) {
+    return (
+      <Callout>
+        The selected team should have at most <strong>{sizes.max} members</strong>.
+      </Callout>
+    )
+  }
 }
 
 function ConditionalWrapper({ renderDisclosure, children }) {

@@ -9,6 +9,8 @@ import DefaultLayout from '../layouts/default'
 import AccountLayout from '../layouts/account'
 import FloatingWindow from '../layouts/floating-window'
 
+import { Component as NotFound } from '../pages/404'
+
 // const AuthLayout = lazy(() => import('../layouts/auth'))
 // const DefaultLayout = lazy(() => import('../layouts/default'))
 // const AccountLayout = lazy(() => import('../layouts/account'))
@@ -37,8 +39,6 @@ const ResendVerificationLink = () => import('../pages/auth/resend-link')
 const ForgotPassword = () => import('../pages/auth/forgot-password')
 const ResetPassword = () => import('../pages/auth/reset-password')
 
-const NotFound = () => import('../pages/404')
-
 function fetchRoute(rImport) {
   return async () => {
     if (!nprogress.isStarted()) nprogress.start()
@@ -57,15 +57,15 @@ const routes = createRoutesFromElements(
       <Route path='/contact' lazy={fetchRoute(Contact)} />
 
       <Route path='/events' lazy={fetchRoute(Events)} />
-      <Route path='/events/:club/:event' lazy={fetchRoute(Event)} />
+      <Route path='/events/:club/:event' lazy={fetchRoute(Event)} errorElement={<NotFound />} />
 
       <Route path='/contests' lazy={fetchRoute(Contests)} />
-      <Route path='/contests/:club/:contest' lazy={fetchRoute(Contest)} />
+      <Route path='/contests/:club/:contest' lazy={fetchRoute(Contest)} errorElement={<NotFound />} />
 
       <Route path='/teams/create' lazy={fetchRoute(CreateTeam)} />
-      <Route path='/teams/:team' lazy={fetchRoute(Team)} />
+      <Route path='/teams/:team' lazy={fetchRoute(Team)} errorElement={<NotFound />} />
 
-      <Route path='/*' lazy={fetchRoute(NotFound)} />
+      <Route path='/*' element={<NotFound />} />
 
       <Route loader={getReceivedTeamInvites} element={<AccountLayout />}>
         <Route path='/account/profile' lazy={fetchRoute(Profile)} />

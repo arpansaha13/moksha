@@ -6,7 +6,7 @@ import { capitalCase } from 'change-case'
 import Sheet from '~common/Sheet'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
-import ContestPicture from '~/components/Contests/ContestPicture'
+import Picture from '~/components/pictures/Picture'
 import RegisteredContestMembers from '../Teams/RegisteredContestMembers'
 import { getMokshaContest } from '~/utils/getMokshaContest'
 import { getUdaanContest } from '~/utils/getUdaanContest'
@@ -27,7 +27,7 @@ const RegisteredTeamContestCard = memo(
         <div className='flex'>
           <MLink to={link} as='div' className='flex-shrink-0 block h-36 w-36 relative'>
             {/* Replace this image with contest poster */}
-            <ContestPicture picture={contest.image} contestSlug={contest.slug} />
+            <Picture picture={contest.image} contestSlug={contest.slug} />
           </MLink>
 
           <div className='@container flex-grow px-4 sm:px-6 py-3 sm:py-4 flex flex-col justify-between'>

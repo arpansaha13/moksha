@@ -6,12 +6,15 @@ const malhar = [
     club: 'malhar',
     subtitle: 'Malhar',
     type: ['team'],
+    allowedTeamSize: { min: 3, max: null },
     image: {
       sources: [
-        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.webp', type: 'image/webp' },
-        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
       ],
-      src: '/images/contests/malhar/battle-of-bands/poster-1024x1024.jpeg',
+      src: '/images/contests/malhar/battle-of-bands/poster-512x512.jpeg',
     },
     description: [
       {
@@ -31,10 +34,12 @@ const fineArts = [
     type: ['solo'],
     image: {
       sources: [
-        { srcSet: '/images/contests/fine-arts/art-competition/poster-1024x1024.webp', type: 'image/webp' },
-        { srcSet: '/images/contests/fine-arts/art-competition/poster-1024x1024.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/contests/fine-arts/art-competition/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/contests/fine-arts/art-competition/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/contests/fine-arts/art-competition/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/contests/fine-arts/art-competition/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
       ],
-      src: '/images/contests/fine-arts/art-competition/poster-1024x1024.jpeg',
+      src: '/images/contests/fine-arts/art-competition/poster-512x512.jpeg',
     },
     description: [
       {

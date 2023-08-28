@@ -20,7 +20,7 @@ export function Component() {
 
     fetchHook('auth/resend-link', {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: formData,
     })
       .then(res => {
         setAllNotification({

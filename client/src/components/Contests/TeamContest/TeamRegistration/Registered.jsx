@@ -14,10 +14,10 @@ export default function Registered({ contestId, team, registration, setRegistrat
 
     fetchHook('contests/team/registration', {
       method: 'DELETE',
-      body: JSON.stringify({
+      body: {
         team_id: team.team_id,
         contest_id: contestId,
-      }),
+      },
     })
       .then(() =>
         startTransition(() => {

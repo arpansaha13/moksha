@@ -21,9 +21,12 @@ export const getEvent = loaderWrapper({
     const pathSegments = new URL(request.url).pathname.split('/')
     const eventSlug = pathSegments.at(-1)
 
-    const event = getMokshaEvent(eventSlug)
+    let event = getMokshaEvent(eventSlug)
+    event = getUdaanEvent(eventSlug)
 
-    return isNullOrUndefined(event) ? getUdaanEvent(eventSlug) : event
+    if (isNullOrUndefined(event)) return new Error('Invalid url')
+
+    return event
   },
 })
 

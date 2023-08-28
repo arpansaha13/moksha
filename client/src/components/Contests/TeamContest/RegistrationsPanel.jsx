@@ -55,11 +55,13 @@ function MyRegistration({ reg, fromCreatedTeam }) {
         <h2 className='text-xl sm:text-2xl font-bold'>My registration</h2>
         <p className='text-sm text-gray-400'>Registration specific to your participation in this contest.</p>
 
-        {fromCreatedTeam && (
-          <p className='mt-1 text-sm text-gray-400'>
-            <em>You have registered from you created team - {reg.team.team_name}</em>
-          </p>
-        )}
+        <p className='mt-1 text-sm text-gray-400'>
+          {
+            fromCreatedTeam
+            ? <span>You have registered from your created team - <em>{reg.team.team_name}</em></span>
+            : <span>You have registered in this contest from this team:</span>
+          }
+        </p>                
       </div>
 
       {isNullOrUndefined(reg) ? (

@@ -6,19 +6,9 @@ import createRequest from '../utils/createRequest'
 /**
  * Returns a wrapper over the Fetch API.
  *
- * 1) Adds the required headers for cross-origin cookie transfer.
+ * 1) Extracts and returns the json response so that the json data is directly available in the then() block.
  *
- * 2) Adds the `Content-type` header as `application/x-www-form-urlencoded`.
- *
- * 3) Converts the JSON-stringified body-data to url-encoded form.
- *
- * 4) Extracts and returns the json response so that the json data is directly available in the then() block.
- *
- * 5) Automatically go to login page if token expires
- *
- * Note:
- *
- * 1) Body data (if provided) must be a stringified JSON.
+ * 2) Automatically go to login page if token expires
  */
 
 export function useFetch() {
