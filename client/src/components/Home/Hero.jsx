@@ -38,7 +38,6 @@ export default function Hero() {
               src='/moksha/moksha-1024x1024.png'
               alt='Moksha logo as hero image'
               className={classNames(imageSizeStyles, 'mix-blend-hard-light')}
-              // className='w-56 h-56 sm:w-80 sm:h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem]'
             />
           </picture>
         </div>
