@@ -3,7 +3,12 @@ export default function StayTunedBanner() {
     <div className='flex items-center justify-center'>
       <div className='p-10 w-64 h-64 relative flex items-center justify-center'>
         <span className='absolute inset-0 bg-amber-950/90 blur-xl rounded-full' />
-        <img src='/moksha/moksha-512x512.png' alt='Moksha Logo' className='w-full h-full mix-blend-overlay' />
+        <picture className='w-full h-full mix-blend-overlay'>
+          <source srcSet='/moksha/moksha-256x256.webp, /moksha/moksha-512x512.webp 2x' type='image/webp' />
+          <source srcSet='/moksha/moksha-256x256.png, /moksha/moksha-512x512.png 2x' type='image/png' />
+
+          <img src='/moksha/moksha-512x512.png' alt='Moksha Logo' />
+        </picture>
       </div>
 
       <div className='absolute z-10 text-center mix-blend-difference translate-y-12'>

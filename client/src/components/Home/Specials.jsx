@@ -1,15 +1,15 @@
 import Container from '~common/Container'
 import styles from './styles.module.css'
 
-const media = {
+const MEDIA = Object.freeze({
   mobile: '(max-width: 639px)',
   tablet: '(max-width: 1023px)',
   laptop: '(min-width: 1024px)',
-}
-const type = {
+})
+const TYPE = Object.freeze({
   webp: 'image/webp',
   png: 'image/png',
-}
+})
 
 const ProNightTeaser = () => (
   <div className='relative w-full h-full'>
@@ -17,11 +17,11 @@ const ProNightTeaser = () => (
       <picture>
         <source
           srcSet='/images/home/teaser-pro/poster-256x256.webp, /images/home/teaser-pro/poster-512x512.webp 2x, /images/home/teaser-pro/poster-1080x1080.webp 3x'
-          type={type.webp}
+          type={TYPE.webp}
         />
         <source
           srcSet='/images/home/teaser-pro/poster-256x256.png, /images/home/teaser-pro/poster-512x512.png 2x, /images/home/teaser-pro/poster-1080x1080.png 3x'
-          type={type.png}
+          type={TYPE.png}
         />
 
         <img
@@ -39,17 +39,17 @@ const EdmNightTeaser = () => (
     <div className='absolute z-20 lg:z-0 lg:-translate-y-8 lg:scale-90'>
       <picture>
         <source
-          media={media.tablet}
+          media={MEDIA.tablet}
           srcSet='/images/home/teaser-edm/poster-256x256.webp, /images/home/teaser-edm/poster-512x512.webp 2x, /images/home/teaser-edm/poster-1080x1080.webp 3x'
-          type={type.webp}
+          type={TYPE.webp}
         />
         <source
-          media={media.tablet}
+          media={MEDIA.tablet}
           srcSet='/images/home/teaser-edm/poster-256x256.png, /images/home/teaser-edm/poster-512x512.png 2x, /images/home/teaser-edm/poster-1080x1080.png 3x'
-          type={type.png}
+          type={TYPE.png}
         />
-        <source media={media.laptop} srcSet='/images/home/teaser-edm/poster-1200x628.webp' type={type.webp} />
-        <source media={media.laptop} srcSet='/images/home/teaser-edm/poster-1200x628.png' type={type.png} />
+        <source media={MEDIA.laptop} srcSet='/images/home/teaser-edm/poster-1200x628.webp' type={TYPE.webp} />
+        <source media={MEDIA.laptop} srcSet='/images/home/teaser-edm/poster-1200x628.png' type={TYPE.png} />
 
         <img
           src='/images/home/teaser-edm/poster-1200x628.png'
@@ -66,24 +66,24 @@ const EleganciaTeaser = () => (
     <div className='absolute translate-x-4 -translate-y-4 lg:translate-x-0 lg:translate-y-0 lg:origin-bottom-right lg:scale-110'>
       <picture>
         <source
-          media={media.tablet}
+          media={MEDIA.tablet}
           srcSet='/images/home/teaser-elegancia/poster-256x455.webp, /images/home/teaser-elegancia/poster-607x1080.webp 2x'
-          type={type.webp}
+          type={TYPE.webp}
         />
         <source
-          media={media.tablet}
+          media={MEDIA.tablet}
           srcSet='/images/home/teaser-elegancia/poster-256x455.png, /images/home/teaser-elegancia/poster-607x1080.png 2x'
-          type={type.png}
+          type={TYPE.png}
         />
         <source
-          media={media.laptop}
+          media={MEDIA.laptop}
           srcSet='/images/home/teaser-elegancia/poster-256x256.webp, /images/home/teaser-elegancia/poster-512x512.webp 2x, /images/home/teaser-elegancia/poster-1080x1080.webp 3x'
-          type={type.webp}
+          type={TYPE.webp}
         />
         <source
-          media={media.laptop}
+          media={MEDIA.laptop}
           srcSet='/images/home/teaser-elegancia/poster-256x256.png, /images/home/teaser-elegancia/poster-512x512.png 2x, /images/home/teaser-elegancia/poster-1080x1080.png 3x'
-          type={type.png}
+          type={TYPE.png}
         />
 
         <img

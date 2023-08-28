@@ -9,7 +9,7 @@ import DLink from '~common/Links/DLink'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
 import StayTunedBanner from '~/components/StayTunedBanner'
-import ContestPicture from '~/components/Contests/ContestPicture'
+import Picture from '~/components/pictures/Picture'
 import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
@@ -102,7 +102,7 @@ const ContestCard = memo(
     <Sheet className='flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
       <MLink to={`/contests/${clubName}/${contest.slug}`} as='div' className='block h-[304px]'>
         <div className='w-full h-48 flex items-center justify-center relative'>
-          <ContestPicture picture={contest.image} contestSlug={contest.slug} />
+          <Picture picture={contest.image} alt={`moksha-contest-${contest.slug}-poster`} />
 
           <span
             role='presentation'

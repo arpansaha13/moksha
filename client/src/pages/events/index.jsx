@@ -10,6 +10,7 @@ import Sheet from '~common/Sheet'
 import Container from '~common/Container'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
+import Picture from '~/components/pictures/Picture'
 import StayTunedBanner from '~/components/StayTunedBanner'
 import { getEvents } from '~loaders/events.loader'
 
@@ -77,7 +78,7 @@ const EventCard = memo(
     <Sheet className='w-full flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
       <MLink to={`/events/${event.club}/${event.slug}`} as='div' className='block h-[304px]'>
         <div className='w-full h-48 flex items-center justify-center relative'>
-          <img src={event.image.src} alt={`moksha-event-${event.slug}-poster`} className='w-full h-full object-cover' />
+          <Picture picture={event.image} alt={`moksha-event-${event.slug}-poster`} />
         </div>
 
         <div className='w-full px-4 pt-4'>
