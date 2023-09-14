@@ -28,7 +28,7 @@ export function Component() {
     e => {
       e.preventDefault()
 
-      const formData = getFormData(formRef.current, { format: 'object' })
+      const formData = getFormData(formRef.current)
       formData['avatar_idx'] = formData['phone_no'] % 10
       formData['username'] = formData['username'].toLowerCase() // force lowercase
 

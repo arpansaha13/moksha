@@ -16,7 +16,7 @@ export function Component() {
     e.preventDefault()
     setLoading(true)
 
-    const formData = getFormData(formRef.current, { format: 'object' })
+    const formData = getFormData(formRef.current)
 
     fetchHook('auth/resend-link', {
       method: 'POST',

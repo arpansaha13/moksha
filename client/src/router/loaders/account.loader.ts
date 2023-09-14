@@ -45,7 +45,7 @@ export const getAuthUserContests = loaderWrapper({
   },
   fn: async ({ request }) => {
     try {
-      const data = { soloRegistrations: [], teamRegistrations: [] }
+      const data = { soloContests: [] as any[], teamContests: [] as any[] }
 
       const res = await Promise.all([
         fetchWithCredentials('users/me/registered-solo-contests'),

@@ -1,4 +1,12 @@
-const mokshaContestsDesc = {
+import type { Contest } from '../types'
+
+type ClubName = 'fine-arts' | 'malhar' | 'dzire' | 'pixel'
+
+interface MokshaDesc extends Omit<Contest, 'description' | 'instructions'> {
+  description: [{ p: string }]
+}
+
+const mokshaContestsDesc: Record<ClubName, MokshaDesc[]> = {
   'fine-arts': [
     {
       id: 1,

@@ -1,4 +1,6 @@
-const dzire = [
+import type { Event } from '../types'
+
+const dzire: Event[] = [
   {
     id: 1,
     slug: 'flash-mob',
@@ -21,7 +23,7 @@ const dzire = [
   },
 ]
 
-const malhar = [
+const malhar: Event[] = [
   {
     id: 2,
     slug: 'street-jam',
@@ -64,14 +66,12 @@ const malhar = [
   },
 ]
 
-const phewsion = [
+const phewsion: Event[] = [
   {
     id: 4,
     slug: 'fun-games',
     name: 'Fun Games',
     club: 'phewsion',
-    subtitle: 'Phewsion',
-    type: ['solo'],
     image: {
       sources: [
         { srcSet: '/images/events/phewsion/fun-games/poster-512x512.webp', type: 'image/webp' },
@@ -101,6 +101,6 @@ const phewsion = [
   },
 ]
 
-const udaanEvents = [...dzire, ...malhar, ...phewsion]
+const udaanEvents = Object.freeze([...dzire, ...malhar, ...phewsion])
 
 export default udaanEvents

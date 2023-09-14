@@ -4,7 +4,7 @@ import mokshaContestsMap from '~/data/contests/moksha-desc'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import loaderWrapper from './loaderWrapper'
 
-function getUdaanContest(contestSlug) {
+function getUdaanContest(contestSlug: string) {
   const contest = udaanContestsList.find(contest => contest.slug === contestSlug)
   return contest ?? null
 }
@@ -15,8 +15,8 @@ export const getContest = loaderWrapper({
   },
   fn: ({ request }) => {
     const pathSegments = new URL(request.url).pathname.split('/')
-    const clubSlug = pathSegments.at(-2)
-    const contestSlug = pathSegments.at(-1)
+    const clubSlug = pathSegments.at(-2)!
+    const contestSlug = pathSegments.at(-1)!
 
     let contest = getMokshaContest(clubSlug, contestSlug)
     contest = getUdaanContest(contestSlug)

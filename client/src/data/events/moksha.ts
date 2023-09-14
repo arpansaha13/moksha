@@ -1,4 +1,6 @@
-const dzire = [
+import type { Event } from '../types'
+
+const dzire: Event[] = [
   {
     id: 5,
     slug: 'chakra-clash',
@@ -15,7 +17,7 @@ const dzire = [
   },
 ]
 
-const pixel = [
+const pixel: Event[] = [
   {
     id: 6,
     slug: 'let-me-shoot-you',
@@ -32,7 +34,7 @@ const pixel = [
   },
 ]
 
-const fineArts = [
+const fineArts: Event[] = [
   {
     id: 7,
     slug: 'art-exhibition',
@@ -63,7 +65,7 @@ const fineArts = [
   },
 ]
 
-const dcc = [
+const dcc: Event[] = [
   {
     id: 8,
     slug: 'incredible-roll',
@@ -98,6 +100,6 @@ const dcc = [
   },
 ]
 
-const mokshaEvents = [...dzire, ...dcc, ...pixel, ...fineArts]
+const mokshaEvents = Object.freeze([...dzire, ...dcc, ...pixel, ...fineArts])
 
 export default mokshaEvents

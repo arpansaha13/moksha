@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "typecheck": "tsc -p tsconfig.json",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -34,6 +35,7 @@
     "@tranzis/react": "file:packages/tranzis-react-0.1.0.tgz",
     "@tranzis/react-layouts": "file:packages/tranzis-react-layouts-0.1.0.tgz",
     "@types/node": "^20.5.1",
+    "@types/nprogress": "^0.2.0",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.4",
@@ -42,6 +44,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "prettier": "^2.8.8",
+    "typescript": "^5.2.2",
     "vite": "^4.4.9"
   }
 }

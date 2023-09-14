@@ -13,7 +13,7 @@ export default function Register({ setRegistrationId, contestId }) {
     e.preventDefault()
     setLoading(true)
 
-    const formData = getFormData(formRef.current, { format: 'object' })
+    const formData = getFormData(formRef.current)
     formData.contest_id = contestId
 
     fetchHook('contests/solo/registration', {

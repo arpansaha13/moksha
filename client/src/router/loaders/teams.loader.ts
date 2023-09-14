@@ -23,7 +23,7 @@ export const getTeamData = loaderWrapper({
     type: 'page',
   },
   fn: async ({ request }) => {
-    const data = {}
+    const data = { team: {} as any, members: [] as any[] }
 
     try {
       const teamId = request.url.substring(request.url.lastIndexOf('/') + 1)
@@ -36,7 +36,7 @@ export const getTeamData = loaderWrapper({
       data.members = res[1].data
 
       return data
-    } catch (e) {
+    } catch (e: any) {
       if (e.status === '404') throw e
 
       return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)

@@ -1,4 +1,6 @@
-const fineArts = [
+import type { Contest } from '../types'
+
+const fineArts: Contest[] = [
   {
     id: 1,
     slug: 'magic-of-fingers',
@@ -43,7 +45,7 @@ const fineArts = [
   },
 ]
 
-const malhar = [
+const malhar: Contest[] = [
   {
     id: 5,
     slug: 'solo-singing',
@@ -285,7 +287,7 @@ const malhar = [
   },
 ]
 
-const dzire = [
+const dzire: Contest[] = [
   {
     id: 10,
     slug: 'shinigami-showdown',
@@ -379,7 +381,7 @@ const dzire = [
   },
 ]
 
-const pixel = [
+const pixel: Contest[] = [
   {
     id: 14,
     slug: 'snap-quest',
@@ -416,11 +418,11 @@ const pixel = [
   },
 ]
 
-const mokshaContests = {
+const mokshaContests = Object.freeze({
   'fine-arts': fineArts,
   malhar: malhar,
   dzire: dzire,
   pixel: pixel,
-}
+})
 
 export default mokshaContests

@@ -1,9 +1,10 @@
-const malhar = [
+import type { Contest } from '../types'
+
+const malhar: Contest[] = [
   {
     id: 15,
     slug: 'battle-of-bands',
     name: 'Battle of Bands',
-    club: 'malhar',
     subtitle: 'Malhar',
     type: ['team'],
     allowedTeamSize: { min: 3, max: null },
@@ -24,12 +25,11 @@ const malhar = [
   },
 ]
 
-const fineArts = [
+const fineArts: Contest[] = [
   {
     id: 2,
     slug: 'art-competition',
     name: 'Art Competition',
-    club: 'fine-arts',
     subtitle: 'Fine Arts',
     type: ['solo'],
     image: {
@@ -49,6 +49,6 @@ const fineArts = [
   },
 ]
 
-const udaanContests = [...malhar, ...fineArts]
+const udaanContests = Object.freeze([...malhar, ...fineArts])
 
 export default udaanContests

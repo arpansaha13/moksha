@@ -75,7 +75,7 @@ function CreateTeamForm({ setShowNotification, setAll }) {
     e.preventDefault()
 
     setLoading(true)
-    const formData = getFormData(formRef.current, { format: 'object' })
+    const formData = getFormData(formRef.current)
 
     fetchHook('teams', {
       method: 'POST',

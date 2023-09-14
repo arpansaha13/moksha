@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "target": "ES6",
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "outDir": "lib",
+    "removeComments": true,
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "sourceRoot": "/",
+    "allowUnreachableCode": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noEmit": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "types": [
+      "vite/client"
+    ],
+    "paths": {
+      "~/*": [
+        "src/*"
+      ],
+      "~base/*": [
+        "src/components/base/*"
+      ],
+      "~common/*": [
+        "src/components/common/*"
+      ],
+      "~loaders/*": [
+        "src/router/loaders/*"
+      ],
+    },
+  },
+  "include": [
+    "src",
+    "server.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

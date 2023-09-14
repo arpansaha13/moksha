@@ -1,4 +1,4 @@
-const avatarColors = [
+const avatarColors = Object.freeze([
   'text-red-500',
   'text-indigo-500',
   'text-sky-500',
@@ -9,6 +9,6 @@ const avatarColors = [
   'text-purple-500',
   'text-cyan-500',
   'text-green-500',
-]
+])
 
 export default avatarColors

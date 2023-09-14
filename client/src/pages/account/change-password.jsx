@@ -36,7 +36,7 @@ export function Component() {
     e.preventDefault()
     setLoading(true)
 
-    const formData = getFormData(formRef.current, { format: 'object' })
+    const formData = getFormData(formRef.current)
 
     if (formData.new_password !== formData.confirm_password) {
       setError('new_password', 'Password and confirm-password do not match')

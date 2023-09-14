@@ -1,6 +1,16 @@
 import nprogress from 'nprogress'
+import type { LoaderFunction } from 'react-router-dom'
 
-export default function loaderWrapper(loader) {
+interface LoaderMeta {
+  type: 'layout' | 'page'
+}
+
+interface Loader {
+  meta: LoaderMeta
+  fn: LoaderFunction
+}
+
+export default function loaderWrapper(loader: Loader): LoaderFunction {
   return async args => {
     if (!nprogress.isStarted()) nprogress.start()
 

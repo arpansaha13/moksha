@@ -1,4 +1,9 @@
-export const navTabs = [
+interface Tab {
+  to: string
+  name: string
+}
+
+export const navTabs = Object.freeze<Tab[]>([
   {
     to: '/events',
     name: 'Events',
@@ -23,9 +28,9 @@ export const navTabs = [
   //   to: '/sponsors',
   //   name: 'Sponsors',
   // },
-]
+])
 
-export const profileTabs = [
+export const profileTabs = Object.freeze<Tab[]>([
   {
     name: 'Profile',
     to: '/account/profile',
@@ -42,11 +47,11 @@ export const profileTabs = [
   //   name: 'Merch',
   //   to: '/account/merch',
   // },
-]
+])
 
-export const accountTabs = [
+export const accountTabs = Object.freeze<Tab[]>([
   {
     name: 'Change password',
     to: '/account/change-password',
   },
-]
+])
