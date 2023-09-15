@@ -26,8 +26,8 @@ environ.Env.read_env()
 
 class CheckAuth(APIView):
     def get(self, request):
-        AUTH_TOKEN = request.COOKIES.get('auth')
-        SESSION_TOKEN = request.COOKIES.get('session')
+        AUTH_TOKEN = request.COOKIES.get('auth', None)
+        SESSION_TOKEN = request.COOKIES.get('session', None)
 
         payload = validate_token(AUTH_TOKEN)
 
@@ -56,7 +56,7 @@ class CheckAuth(APIView):
                 secure=True,
                 httponly=True,
                 samesite='None',
-                domain=env('COOKIE_DOMAIN'),
+                path='/api',
             )
 
         return response
@@ -178,7 +178,7 @@ class Login(APIView):
             secure=True,
             httponly=True,
             samesite='None',
-            domain=env('COOKIE_DOMAIN'),
+            path='/api',
             max_age=int(env('JWT_VALIDATION_SECONDS'))
         )
         response.set_cookie(
@@ -187,7 +187,7 @@ class Login(APIView):
             secure=True,
             httponly=True,
             samesite='None',
-            domain=env('COOKIE_DOMAIN'),
+            path='/api',
         )
         response.data = AuthUserSerializer(user).data
         response.status_code = 200
@@ -224,8 +224,8 @@ class Logout(APIView):
             raise PermissionDenied({'Unauthenticated'})
 
         response = Response()
-        response.set_cookie(key='auth', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'))
-        response.set_cookie(key='session', max_age=1, httponly=True, domain=env('COOKIE_DOMAIN'),)
+        response.set_cookie(key='auth', max_age=1, httponly=True, path='/api')
+        response.set_cookie(key='session', max_age=1, httponly=True, path='/api')
         response.data = {'message': 'User has been successfully logged out.'}
         response.status_code = 200
         return response
