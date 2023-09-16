@@ -10,7 +10,7 @@
     "build": "npm run typecheck && vite build && node scripts/postbuild.js",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "serve": "cd dist && node server.js",
+    "serve": "node dist/server",
     "serve:test": "cd dist && cross-env PROXY_REDIRECT_ORIGIN=http://127.0.0.1:8000 node server.js",
     "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
   },
