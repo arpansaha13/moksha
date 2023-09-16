@@ -15,10 +15,10 @@ const compression = (await import('compression')).default
 const sirv = (await import('sirv')).default
 
 app.use(compression())
-app.use('/assets', sirv('./assets', { extensions: [] }))
-app.use('/images', sirv('./images', { extensions: [] }))
-app.use('/logos', sirv('./logos', { extensions: [] }))
-app.use('/moksha', sirv('./moksha', { extensions: [] }))
+app.use('/assets', sirv('./dist/assets', { extensions: [] }))
+app.use('/images', sirv('./dist/images', { extensions: [] }))
+app.use('/logos', sirv('./dist/logos', { extensions: [] }))
+app.use('/moksha', sirv('./dist/moksha', { extensions: [] }))
 
 app.use(
   '/api',

@@ -11,7 +11,7 @@
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "serve": "node dist/server",
-    "serve:test": "cd dist && cross-env PROXY_REDIRECT_ORIGIN=http://127.0.0.1:8000 node server.js",
+    "serve:test": "cross-env PROXY_REDIRECT_ORIGIN=http://127.0.0.1:8000 node dist/server",
     "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
   },
   "dependencies": {
