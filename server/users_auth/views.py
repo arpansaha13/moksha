@@ -68,10 +68,10 @@ class CheckAuth(APIView):
 
 class Register(APIView):
     def post(self, request):
-        if request.POST['password'] != request.POST['confirm_password']:
+        if request.data['password'] != request.data['confirm_password']:
             raise Unauthorized({'message': "Password and confirm-password do not match."})
 
-        email = request.POST['email']
+        email = request.data['email']
         user = User.objects.filter(email=email).first()
 
         if user is not None:
@@ -80,7 +80,7 @@ class Register(APIView):
 
             raise Conflict(message='This email is already registered. You can login after verifying your account.')
 
-        self.verify_username(email, request.POST['username'])
+        self.verify_username(email, request.data['username'])
 
         otp_entry: AccountVerificationLink
         otp_generated = generate_otp()
@@ -124,12 +124,12 @@ class Register(APIView):
 
         user = User(
             user_id=uid,
-            avatar_idx=request.POST['avatar_idx'],
-            name=request.POST['name'],
-            institution=request.POST['institution'],
-            phone_no=request.POST['phone_no'],
-            email=request.POST['email'],
-            username=request.POST['username'],
+            avatar_idx=request.data['avatar_idx'],
+            name=request.data['name'],
+            institution=request.data['institution'],
+            phone_no=request.data['phone_no'],
+            email=request.data['email'],
+            username=request.data['username'],
             password=hashed_password
         )
 
@@ -154,13 +154,13 @@ class Register(APIView):
 
 class Login(APIView):
     def post(self, request):
-        email = request.POST['email']
+        email = request.data['email']
         user = User.objects.filter(email=email).first()
 
         if not user:
             raise Unauthorized({'message': 'Invalid email or password.'})
 
-        password_matched = check_password(request.POST['password'], user.password)
+        password_matched = check_password(request.data['password'], user.password)
 
         if not password_matched:
             raise Unauthorized({'message': 'Invalid email or password.'})
@@ -255,7 +255,7 @@ class AccountVerification(APIView):
         if otp_age.seconds > int(env('OTP_VALIDATION_SECONDS')):
             return Response({'message': 'OTP has expired.'}, status=498)
 
-        otp = int(request.POST['otp'])
+        otp = int(request.data['otp'])
 
         if otp_entry.otp != otp:
             raise Unauthorized(message='Invalid OTP.')
@@ -308,7 +308,7 @@ class ResendOtp(APIView):
 
 class ResendVerificationLink(APIView):
     def post(self, request):
-        email = request.POST['email']
+        email = request.data['email']
         user = User.objects.filter(email=email).first()
 
         if user is None:
@@ -368,7 +368,7 @@ class VerifyResetPassLink(APIView):
 
 class ForgotPassword(APIView):
     def post(self, request):
-        email = request.POST['email']
+        email = request.data['email']
         user = User.objects.filter(email=email).first()
 
         if user is None:
@@ -413,7 +413,7 @@ class ResetPassword(APIView):
         if link_age.seconds > int(env('FORGOT_PASS_VALIDATION_SECONDS')):
             return Response({'message': 'Link has expired.'}, status=498)
 
-        if request.POST['password'] != request.POST['confirm_password']:
+        if request.data['password'] != request.data['confirm_password']:
             raise Unauthorized({'message': "Password and confirm-password do not match."})
 
         try:
@@ -435,18 +435,18 @@ class ResetPassword(APIView):
 
 class ChangePassword(APIView):
     def post(self, request):
-        if request.POST['new_password'] != request.POST['confirm_password']:
+        if request.data['new_password'] != request.data['confirm_password']:
             raise Unauthorized({'message': "Password and confirm-password do not match."})
 
-        if request.POST['new_password'] == request.POST['old_password']:
+        if request.data['new_password'] == request.data['old_password']:
             raise Unauthorized({'message': "New password and old password cannot be the same."})
 
         try:
             with transaction.atomic():
-                if not check_password(request.POST['old_password'], request.auth_user.password):
+                if not check_password(request.data['old_password'], request.auth_user.password):
                     raise Unauthorized({'message': "Old password does not match with your current password."})
 
-                hashed_password = make_password(request.POST['new_password'])
+                hashed_password = make_password(request.data['new_password'])
                 user = request.auth_user
                 user.password = hashed_password
                 user.save()

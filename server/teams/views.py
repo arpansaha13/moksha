@@ -19,7 +19,7 @@ import string
 class BaseEndpoint(APIView):
     # Create team
     def post(self, request):
-        team_name = request.POST['team_name']
+        team_name = request.data['team_name']
 
         if not team_name:
             raise BadRequest(message='No team name provided.')

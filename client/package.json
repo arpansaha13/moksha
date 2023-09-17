@@ -25,6 +25,7 @@
     "autoprefixer": "^10.4.15",
     "change-case": "^4.1.2",
     "compression": "^1.7.4",
+    "crypto-js": "^4.1.1",
     "express": "^4.18.2",
     "http-proxy-middleware": "^2.0.6",
     "nprogress": "^0.2.0",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@tranzis/react": "file:packages/tranzis-react-0.1.0.tgz",
     "@tranzis/react-layouts": "file:packages/tranzis-react-layouts-0.1.0.tgz",
+    "@types/crypto-js": "^4.1.2",
     "@types/express": "^4.17.17",
     "@types/node": "^20.5.1",
     "@types/nprogress": "^0.2.0",

@@ -29,7 +29,7 @@ class SoloContestRegistration(APIView):
         return Response({'data': serializer.data}, status=200)
 
     def post(self, request):
-        contest_id = request.POST['contest_id']
+        contest_id = request.data['contest_id']
         contest = get_contest(contest_id)
 
         solo_reg_exists = SoloContestRegistrationModel.objects.filter(
@@ -50,7 +50,7 @@ class SoloContestRegistration(APIView):
         return Response({'data': serializer.data}, status=201)
 
     def delete(self, request):
-        solo_reg_id = request.POST['solo_reg_id']
+        solo_reg_id = request.data['solo_reg_id']
 
         solo_reg = SoloContestRegistrationModel.objects.filter(id=solo_reg_id).first()
 
@@ -82,9 +82,9 @@ class TeamContestRegistration(APIView):
         return Response({'data': serializer.data})
 
     def post(self, request):
-        team_id = request.POST['team_id']
-        contest_id = request.POST['contest_id']
-        selected_members = request.POST['selected_members'].split(',')
+        team_id = request.data['team_id']
+        contest_id = request.data['contest_id']
+        selected_members = request.data['selected_members'].split(',')
 
         team_reg_exists = TeamContestRegistrationModel.objects.filter(
             team=team_id,
@@ -128,8 +128,8 @@ class TeamContestRegistration(APIView):
         return Response({'data': serializer.data}, status=201)
 
     def delete(self, request):
-        team_id = request.POST['team_id']
-        contest_id = request.POST['contest_id']
+        team_id = request.data['team_id']
+        contest_id = request.data['contest_id']
 
         team_reg = get_team_reg(team_id, contest_id)
 
