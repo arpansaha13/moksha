@@ -188,7 +188,7 @@ const getFields = validationErrors => {
       autoCapitalize: 'words',
       required: true,
       minLength: 3,
-      maxLength: 8,
+      maxLength: 50,
       label: 'Institution',
     },
     {
