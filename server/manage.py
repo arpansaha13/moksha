@@ -8,10 +8,10 @@ def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
-    # Override default host for `runserver` command
+    # Override default host and port for `runserver` command
     from django.core.management.commands.runserver import Command as runserver
     runserver.default_addr = 'localhost'
-    runserver.default_port = 8000
+    runserver.default_port = int(os.environ.get('DJANGO_PORT', 8000))
 
     try:
         from django.core.management import execute_from_command_line

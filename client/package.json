@@ -11,8 +11,7 @@
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "serve": "node dist/server",
-    "serve:test": "cross-env PROXY_REDIRECT_ORIGIN=http://127.0.0.1:8000 node dist/server",
-    "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\""
+    "pretty": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css}\" \"./server.js\""
   },
   "dependencies": {
     "@arpansaha13/utils": "^0.3.0",
@@ -26,6 +25,7 @@
     "change-case": "^4.1.2",
     "compression": "^1.7.4",
     "crypto-js": "^4.1.1",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "http-proxy-middleware": "^2.0.6",
     "nprogress": "^0.2.0",
@@ -48,7 +48,6 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.4",
-    "cross-env": "^7.0.3",
     "eslint": "^8.47.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",

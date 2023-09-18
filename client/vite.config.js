@@ -16,6 +16,9 @@ export default defineConfig({
       '~loaders': resolve(__dirname, 'src', 'router', 'loaders'),
     },
   },
+  build: {
+    emptyOutDir: true,
+  },
   server: {
     port: 3000,
   },
