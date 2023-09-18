@@ -3,7 +3,7 @@ import { getCookie } from '@arpansaha13/utils/browser'
 import { FETCH_BASE_URL } from '../constants'
 
 export interface RequestOptions extends Omit<RequestInit, 'body'> {
-  body?: Record<string, any> | null
+  body?: BodyInit | null
 }
 
 /**

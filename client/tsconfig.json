@@ -5,7 +5,8 @@
     "target": "ES6",
     "lib": [
       "ESNext",
-      "dom"
+      "dom",
+      "dom.iterable"
     ],
     "outDir": "lib",
     "removeComments": true,
@@ -16,13 +17,13 @@
     "sourceMap": true,
     "sourceRoot": "/",
     "allowUnreachableCode": false,
-    "noImplicitAny": true,
     "strictNullChecks": true,
     "noEmit": true,
-    "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
     "noUnusedLocals": true,
+    "noImplicitReturns": true,
     "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "types": [
