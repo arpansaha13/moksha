@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useOutletContext, useSearchParams } from 'react-router-dom'
+import { trim } from '@arpansaha13/utils'
 import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
 import BaseInput from '~base/BaseInput'
@@ -9,7 +10,7 @@ import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
 
 export function Component() {
-  let [searchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const { setAllNotification } = useOutletContext()
 
   const fetchHook = useFetch()
@@ -29,8 +30,6 @@ export function Component() {
       e.preventDefault()
 
       const formData = getFormData(formRef.current)
-      formData['avatar_idx'] = formData['phone_no'] % 10
-      formData['username'] = formData['username'].toLowerCase() // force lowercase
 
       let hasError = false
 
@@ -49,6 +48,7 @@ export function Component() {
 
       if (hasError) return
 
+      prepareRequestBody(formData)
       setLoading(true)
 
       fetchHook('auth/register', {
@@ -145,6 +145,13 @@ function validateUsername(username, setError) {
     return true
   }
   return false
+}
+
+function prepareRequestBody(formData) {
+  formData.name = trim(formData.name)
+  formData.institution = trim(formData.institution)
+  formData['avatar_idx'] = formData['phone_no'] % 10
+  formData['username'] = formData['username'].toLowerCase() // force lowercase
 }
 
 const getFields = validationErrors => {

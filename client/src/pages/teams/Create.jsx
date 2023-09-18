@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
-import { isNullOrUndefined } from '@arpansaha13/utils'
+import { isNullOrUndefined, trim } from '@arpansaha13/utils'
 import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
 import Sheet from '~common/Sheet'
@@ -76,6 +76,7 @@ function CreateTeamForm({ setShowNotification, setAll }) {
 
     setLoading(true)
     const formData = getFormData(formRef.current)
+    formData.team_name = trim(formData.team_name)
 
     fetchHook('teams', {
       method: 'POST',
