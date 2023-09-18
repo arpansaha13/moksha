@@ -23,6 +23,8 @@ import environ  # Pylance does not recognize this import for some reason but the
 env = environ.Env()
 environ.Env.read_env()
 
+PASSWORD_MISMATCH_EXCEPTION_MESSAGE = "Password and confirm-password do not match."
+
 
 class CheckAuth(APIView):
     def get(self, request):
@@ -69,7 +71,7 @@ class CheckAuth(APIView):
 class Register(APIView):
     def post(self, request):
         if request.data['password'] != request.data['confirm_password']:
-            raise Unauthorized({'message': "Password and confirm-password do not match."})
+            raise Unauthorized({'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
 
         email = request.data['email']
         user = User.objects.filter(email=email).first()
@@ -81,6 +83,7 @@ class Register(APIView):
             raise Conflict(message='This email is already registered. You can login after verifying your account.')
 
         self.verify_username(email, request.data['username'])
+        self.verify_phone(email, request.data['phone_no'])
 
         otp_entry: AccountVerificationLink
         otp_generated = generate_otp()
@@ -113,8 +116,14 @@ class Register(APIView):
     def verify_username(self, email: str, username: str):
         user = User.objects.filter(Q(username=username) & ~Q(email=email)).first()
 
-        if user is not None and user.email_verified:
+        if user is not None and (user.email_verified or user.email != email):
             raise Conflict(message='This username is already taken.')
+
+    def verify_phone(self, email: str, phone: int):
+        user = User.objects.filter(Q(phone_no=phone) & ~Q(email=email)).first()
+
+        if user is not None and (user.email_verified or user.email != email):
+            raise Conflict(message='This phone number is already registered.')
 
     def create_new_user(self, request, hashed_password: str):
         uid = generate_uid()
@@ -414,7 +423,7 @@ class ResetPassword(APIView):
             return Response({'message': 'Link has expired.'}, status=498)
 
         if request.data['password'] != request.data['confirm_password']:
-            raise Unauthorized({'message': "Password and confirm-password do not match."})
+            raise Unauthorized({'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
 
         try:
             with transaction.atomic():
@@ -436,7 +445,7 @@ class ResetPassword(APIView):
 class ChangePassword(APIView):
     def post(self, request):
         if request.data['new_password'] != request.data['confirm_password']:
-            raise Unauthorized({'message': "Password and confirm-password do not match."})
+            raise Unauthorized({'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
 
         if request.data['new_password'] == request.data['old_password']:
             raise Unauthorized({'message': "New password and old password cannot be the same."})
@@ -494,12 +503,12 @@ def generate_otp():
 
 def get_account_verification_mail_message(user_name: str, otp: int, link: str, is_new=True):
     valid_time_hours = int(env('OTP_VALIDATION_SECONDS')) // 3600
-
+    first_name = user_name.split(' ', 1)[0]
     first_mail_intro = 'Welcome to Moksha 2023 Official Website! Verify your email to get started:'
     resend_intro = 'A new OTP has been generated for your account verification:'
 
     return textwrap.dedent(f'''\
-        Hi {user_name},
+        Hi {first_name},
 
         {first_mail_intro if is_new else resend_intro}
 
@@ -517,10 +526,11 @@ def get_account_verification_mail_message(user_name: str, otp: int, link: str, i
 
 
 def get_forgot_password_mail_message(user: User, link: str):
+    first_name = user.name.split(' ', 1)[0]
     valid_time_hours = int(env('FORGOT_PASS_VALIDATION_SECONDS')) // 3600
 
     return textwrap.dedent(f'''\
-        Dear {user.name},
+        Dear {first_name},
 
         We have recently received a request to reset the password for your account associated with the email address: {user.email}. If you did not initiate this request, please disregard this email.
 
