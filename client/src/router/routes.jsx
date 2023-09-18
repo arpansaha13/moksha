@@ -35,7 +35,7 @@ const ChangePassword = () => import('../pages/account/change-password')
 const Login = () => import('../pages/auth/login')
 const Registration = () => import('../pages/auth/register')
 const Verification = () => import('../pages/auth/verification')
-const ResendVerificationLink = () => import('../pages/auth/resend-link')
+const ResendVerificationLink = () => import('../pages/auth/resend-verification-link')
 const ForgotPassword = () => import('../pages/auth/forgot-password')
 const ResetPassword = () => import('../pages/auth/reset-password')
 
