@@ -1,6 +1,6 @@
-import { FETCH_BASE_URL } from '../constants'
+import AES from 'crypto-js/aes'
 import { getCookie } from '@arpansaha13/utils/browser'
-import CryptoJS from 'crypto-js'
+import { FETCH_BASE_URL } from '../constants'
 
 export interface RequestOptions extends Omit<RequestInit, 'body'> {
   body?: Record<string, any> | null
@@ -29,8 +29,7 @@ export default function createRequest(url: string, options: RequestOptions = {})
 
   if (options?.body) {
     const stringified = JSON.stringify(options.body)
-    body = CryptoJS.AES.encrypt(stringified, import.meta.env.VITE_PAYLOAD_SECRET).toString()
-    console.log(body)
+    body = AES.encrypt(stringified, import.meta.env.VITE_PAYLOAD_SECRET).toString()
   }
 
   if (import.meta.env.DEV) {
