@@ -1,10 +1,11 @@
 import AES from 'crypto-js/aes'
 import { getCookie } from '@arpansaha13/utils/browser'
-import { FETCH_BASE_URL } from '../constants'
 
 export interface RequestOptions extends Omit<RequestInit, 'body'> {
   body?: BodyInit | null
 }
+
+export const FETCH_BASE_URL = import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin
 
 /**
  * Create request object for Fetch API with credentials allowed.
@@ -36,7 +37,7 @@ export default function createRequest(url: string, options: RequestOptions = {})
     options.mode = 'cors'
   }
 
-  return new Request(`${FETCH_BASE_URL}${url}`, {
+  return new Request(`${FETCH_BASE_URL}/api/${url}`, {
     ...options,
     credentials: 'include',
     body,
