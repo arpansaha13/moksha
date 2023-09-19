@@ -8,6 +8,7 @@
       "dom",
       "dom.iterable"
     ],
+    "jsx": "react-jsx",
     "outDir": "lib",
     "removeComments": true,
     "baseUrl": "./",

@@ -13,7 +13,7 @@ class CryptoParser(BaseParser):
 
     def parse(self, stream, media_type=None, parser_context=None):
         ciphertext_b64 = stream.read()
-        stringified_json = decrypt(ciphertext_b64, env('PAYLOAD_SECRET').encode()).decode()
+        stringified_json = decrypt(ciphertext_b64, env('PAYLOAD_SECRET')).decode()
 
         try:
             return json.loads(stringified_json)

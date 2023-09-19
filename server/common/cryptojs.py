@@ -1,21 +1,30 @@
 from Cryptodome import Random
 from Cryptodome.Cipher import AES
-import base64
 from hashlib import md5
+import base64
 
 BLOCK_SIZE = 16
 
 
-def pad(data):
+def pad(data: bytes) -> bytes:
     length = BLOCK_SIZE - (len(data) % BLOCK_SIZE)
     return data + (chr(length)*length).encode()
 
 
-def unpad(data):
+def unpad(data) -> bytes:
     return data[:-(data[-1] if type(data[-1]) == int else ord(data[-1]))]
 
 
-def bytes_to_key(data, salt, output=48):
+def to_bytes(str_or_bytes: str | bytes) -> bytes:
+    if type(str_or_bytes) is bytes:
+        return str_or_bytes
+    elif type(str_or_bytes) is str:
+        return str_or_bytes.encode()
+    else:
+        raise TypeError("Expected bytes or string, but got %s." % type(str_or_bytes))
+
+
+def bytes_to_key(data: bytes, salt: bytes, output=48) -> bytes:
     assert len(salt) == 8, len(salt)
     data += salt
     key = md5(data).digest()
@@ -26,7 +35,10 @@ def bytes_to_key(data, salt, output=48):
     return final_key[:output]
 
 
-def encrypt(message, passphrase):
+def encrypt(message: str | bytes, passphrase: str | bytes) -> bytes:
+    message = to_bytes(message)
+    passphrase = to_bytes(passphrase)
+
     salt = Random.new().read(8)
     key_iv = bytes_to_key(passphrase, salt, 32+16)
     key = key_iv[:32]
@@ -35,8 +47,10 @@ def encrypt(message, passphrase):
     return base64.b64encode(b"Salted__" + salt + aes.encrypt(pad(message)))
 
 
-def decrypt(encrypted, passphrase):
-    encrypted = base64.b64decode(encrypted)
+def decrypt(encrypted: str | bytes, passphrase: str | bytes) -> bytes:
+    encrypted = base64.b64decode(to_bytes(encrypted))
+    passphrase = to_bytes(passphrase)
+
     assert encrypted[0:8] == b"Salted__"
     salt = encrypted[8:16]
     key_iv = bytes_to_key(passphrase, salt, 32+16)
