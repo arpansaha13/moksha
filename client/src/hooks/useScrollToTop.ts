@@ -1,8 +1,8 @@
-import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { isNullOrUndefined } from '@arpansaha13/utils'
 
-export function useScrollToTop(ref = null) {
+export function useScrollToTop(ref: React.RefObject<HTMLElement> | null = null) {
   const location = useLocation()
 
   useEffect(() => {

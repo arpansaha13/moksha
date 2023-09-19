@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 export function useScrollbarWidth() {
   const scrollbarWidth = useRef(0)
-  const div = useRef(null)
+  const div = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     div.current = document.createElement('div')
@@ -17,7 +17,7 @@ export function useScrollbarWidth() {
 
     div.current.remove()
 
-    return () => div.current.remove()
+    return () => div.current?.remove()
   })
 
   return scrollbarWidth

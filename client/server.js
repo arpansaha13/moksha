@@ -1,5 +1,4 @@
-import { fileURLToPath } from 'node:url'
-import { dirname, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import sirv from 'sirv'
 import express from 'express'
 import compression from 'compression'
@@ -9,7 +8,6 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 dotenvConfig()
 
 const port = process.env.PROXY_PORT || 5173
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 
@@ -29,7 +27,7 @@ app.use(
 )
 
 app.use('*', (_, res) => {
-  res.sendFile(resolve(__dirname, 'index.html'))
+  res.sendFile(resolve('./dist/index.html'))
 })
 
 app.listen(port, () => {
