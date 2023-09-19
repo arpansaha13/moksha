@@ -1,9 +1,9 @@
-from typing import Any, Dict
 from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
-from functools import wraps
-import jwt
 from users.models import User
+from functools import wraps
+from typing import Any, Dict
+import jwt
 import environ
 
 env = environ.Env()

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import { useEffect } from 'react'
 
 /**
@@ -7,9 +7,9 @@ import { useEffect } from 'react'
  * ### Usage
  *
  * ```js
-  * const [value, setValue] = useLocalStorage('some-key')
-  * console.log(value) // use the value corresponding to this key
-  * setValue(newValue) // update the value of this key in the localStorage
+ * const [value, setValue] = useLocalStorage('some-key')
+ * console.log(value) // use the value corresponding to this key
+ * setValue(newValue) // update the value of this key in the localStorage
  * ```
  *
  * @param {string} key
@@ -22,7 +22,7 @@ export function useLocalStorage(key) {
   useEffect(() => {
     setMounted(true)
     setValue(localStorage.getItem(key))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const set = newValue => {

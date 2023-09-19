@@ -1,9 +1,11 @@
-import { FETCH_BASE_URL } from '../constants'
+import AES from 'crypto-js/aes'
 import { getCookie } from '@arpansaha13/utils/browser'
 
 export interface RequestOptions extends Omit<RequestInit, 'body'> {
-  body?: Record<string, any> | null
+  body?: BodyInit | null
 }
+
+export const FETCH_BASE_URL = import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin
 
 /**
  * Create request object for Fetch API with credentials allowed.
@@ -12,7 +14,7 @@ export default function createRequest(url: string, options: RequestOptions = {})
   const csrftoken = getCookie('csrftoken')
 
   let headers: RequestOptions['headers'] = {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'text/plain',
   }
 
   if (csrftoken) headers['x-csrftoken'] = csrftoken
@@ -24,15 +26,21 @@ export default function createRequest(url: string, options: RequestOptions = {})
     }
   }
 
+  let body
+
+  if (options?.body) {
+    const stringified = JSON.stringify(options.body)
+    body = AES.encrypt(stringified, import.meta.env.VITE_PAYLOAD_SECRET).toString()
+  }
+
   if (import.meta.env.DEV) {
-    console.log(import.meta.env)
     options.mode = 'cors'
   }
 
-  return new Request(`${FETCH_BASE_URL}${url}`, {
+  return new Request(`${FETCH_BASE_URL}/api/${url}`, {
     ...options,
     credentials: 'include',
-    body: options?.body ? new URLSearchParams(options.body) : null,
+    body,
     headers,
   })
 }

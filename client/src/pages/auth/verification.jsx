@@ -139,7 +139,7 @@ function LinkExpired() {
       <p className='mb-4 text-2xl font-bold'>This link has expired</p>
       <p className='mb-4 text-sm text-gray-400'>You can still request a new account verification link.</p>
 
-      <BaseButtonLink to='/auth/resend-link'>Request verification</BaseButtonLink>
+      <BaseButtonLink to='/auth/resend-verification-link'>Request verification</BaseButtonLink>
     </div>
   )
 }

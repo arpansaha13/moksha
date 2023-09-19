@@ -10,7 +10,7 @@ class User(Model):
     institution = CharField(max_length=100, null=False)
 
     # TODO: add verification for phone
-    phone_no = BigIntegerField(null=False)
+    phone_no = BigIntegerField(unique=True, null=False)
     email = EmailField(unique=True, null=False)
 
     # TODO: add client-side validation for usernames that are taken

@@ -18,7 +18,7 @@ export function Component() {
 
     const formData = getFormData(formRef.current)
 
-    fetchHook('auth/resend-link', {
+    fetchHook('auth/resend-verification-link', {
       method: 'POST',
       body: formData,
     })
