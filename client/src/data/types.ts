@@ -40,6 +40,7 @@ interface BaseContest {
   id: number
   slug: string
   name: string
+  club?: string
   subtitle?: string
   image: {
     sources?: ImageSource[]

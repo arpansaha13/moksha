@@ -84,7 +84,7 @@ class TeamContestRegistration(APIView):
     def post(self, request):
         team_id = request.data['team_id']
         contest_id = request.data['contest_id']
-        selected_members = request.data['selected_members'].split(',')
+        selected_members = request.data['selected_members']
 
         team_reg_exists = TeamContestRegistrationModel.objects.filter(
             team=team_id,

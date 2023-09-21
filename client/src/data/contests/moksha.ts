@@ -285,6 +285,28 @@ const malhar: Contest[] = [
       },
     ],
   },
+  {
+    id: 15,
+    slug: 'battle-of-bands',
+    name: 'Battle of Bands',
+    subtitle: 'Malhar',
+    type: ['team'],
+    allowedTeamSize: { min: 3, max: null },
+    image: {
+      sources: [
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
+      ],
+      src: '/images/contests/malhar/battle-of-bands/poster-512x512.jpeg',
+    },
+    description: [
+      {
+        p: 'Harmonious Collision! Battle of the Beats! Get ready to witness an electrifying showdown of campus melodies as top musical bands clash in a symphonic spectacle. The stage is set, the amps are buzzing, and the atmosphere is charged with musical magic. Who will strike the perfect chord and claim the title of ultimate campus conqueror? Join us at Moksha for a night of rhythmic rivalry that will leave you dancing to the pulsating cadence of creativity!',
+      },
+    ],
+  },
 ]
 
 const dzire: Contest[] = [

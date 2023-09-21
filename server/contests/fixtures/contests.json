@@ -3,9 +3,9 @@
     "model": "contests.contest",
     "pk": 1,
     "fields": {
-      "club_slug": "fine-arts",
-      "contest_slug": "magic-of-fingers",
-      "is_solo": true
+      "club_slug": "nlc",
+      "contest_slug": "quiz-competition",
+      "is_solo": false
     }
   },
   {
@@ -13,7 +13,7 @@
     "pk": 2,
     "fields": {
       "club_slug": "fine-arts",
-      "contest_slug": "art-competition",
+      "contest_slug": "magic-of-fingers",
       "is_solo": true
     }
   },

@@ -1,4 +1,6 @@
-import { type Key, useCallback, useReducer } from 'react'
+import { useCallback, useReducer } from 'react'
+
+type Key = string | number | symbol
 
 interface UseMapActionSet<T> {
   type: 'set'
