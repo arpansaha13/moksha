@@ -9,11 +9,11 @@ const dzire: Event[] = [
     image: {
       sources: [
         { srcSet: '/images/events/dzire/flash-mob/poster-512x512.webp', type: 'image/webp' },
-        { srcSet: '/images/events/dzire/flash-mob/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/dzire/flash-mob/poster-512x512.png', type: 'image/png' },
         { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.webp 2x', type: 'image/webp' },
-        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
+        { srcSet: '/images/events/dzire/flash-mob/poster-1024x1024.png 2x', type: 'image/png' },
       ],
-      src: '/images/events/dzire/flash-mob/poster-512x512.jpeg',
+      src: '/images/events/dzire/flash-mob/poster-512x512.png',
     },
     description: [
       {
@@ -32,11 +32,11 @@ const malhar: Event[] = [
     image: {
       sources: [
         { srcSet: '/images/events/malhar/street-jam/poster-512x512.webp', type: 'image/webp' },
-        { srcSet: '/images/events/malhar/street-jam/poster-512x512.jpeg', type: 'image/jpeg' },
+        { srcSet: '/images/events/malhar/street-jam/poster-512x512.png', type: 'image/png' },
         { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.webp 2x', type: 'image/webp' },
-        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
+        { srcSet: '/images/events/malhar/street-jam/poster-1024x1024.png 2x', type: 'image/png' },
       ],
-      src: '/images/events/malhar/street-jam/poster-512x512.jpeg',
+      src: '/images/events/malhar/street-jam/poster-512x512.png',
     },
     description: [
       {
@@ -44,23 +44,26 @@ const malhar: Event[] = [
       },
     ],
   },
+]
+
+const aaveg: Event[] = [
   {
     id: 3,
-    slug: 'theme-song',
-    name: 'Theme song of Moksha',
-    club: 'malhar',
+    slug: 'nukkad',
+    name: 'Nukkad',
+    club: 'aaveg',
     image: {
       sources: [
-        { srcSet: '/images/events/malhar/theme-song/poster-512x512.webp', type: 'image/webp' },
-        { srcSet: '/images/events/malhar/theme-song/poster-512x512.jpeg', type: 'image/jpeg' },
-        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.webp 2x', type: 'image/webp' },
-        { srcSet: '/images/events/malhar/theme-song/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
+        { srcSet: '/images/events/aaveg/nukkad/poster-512x512.webp', type: 'image/webp' },
+        { srcSet: '/images/events/aaveg/nukkad/poster-512x512.png', type: 'image/png' },
+        { srcSet: '/images/events/aaveg/nukkad/poster-1024x1024.webp 2x', type: 'image/webp' },
+        { srcSet: '/images/events/aaveg/nukkad/poster-1024x1024.png 2x', type: 'image/png' },
       ],
-      src: '/images/events/malhar/theme-song/poster-512x512.jpeg',
+      src: '/images/events/aaveg/nukkad/poster-512x512.png',
     },
     description: [
       {
-        p: 'A theme song can be a beautiful and powerful thing. A well-crafted theme song can capture the essence of a show, movie, or game in just a few short notes, and evoke strong emotions and memories in its listeners.',
+        p: "Step into the heart of human emotions as the curtains rise on Nukkad at this year's Udaan college fest! Aaveg is proud to present an unforgettable performance that will make you laugh, cry, and reflect on the tapestry of life itself.",
       },
     ],
   },
@@ -101,6 +104,6 @@ const phewsion: Event[] = [
   },
 ]
 
-const udaanEvents = Object.freeze([...dzire, ...malhar, ...phewsion])
+const udaanEvents = Object.freeze([...dzire, ...malhar, ...aaveg, ...phewsion])
 
 export default udaanEvents
