@@ -16,18 +16,14 @@ export const navTabs = Object.freeze<Tab[]>([
     to: '/faqs',
     name: 'FAQs',
   },
-  // {
-  //   to: '/merch',
-  //   name: 'Merch',
-  // },
+  {
+    to: '/merch',
+    name: 'Merch',
+  },
   {
     to: '/contact',
     name: 'Contact',
   },
-  // {
-  //   to: '/sponsors',
-  //   name: 'Sponsors',
-  // },
 ])
 
 export const profileTabs = Object.freeze<Tab[]>([
@@ -43,10 +39,6 @@ export const profileTabs = Object.freeze<Tab[]>([
     name: 'Teams',
     to: '/account/teams',
   },
-  // {
-  //   name: 'Merch',
-  //   to: '/account/merch',
-  // },
 ])
 
 export const accountTabs = Object.freeze<Tab[]>([

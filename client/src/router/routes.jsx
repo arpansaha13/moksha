@@ -22,10 +22,10 @@ const Event = () => import('../pages/events/Event')
 const Contests = () => import('../pages/contests')
 const Contest = () => import('../pages/contests/Contest')
 const Faqs = () => import('../pages/Faqs')
-// const Sponsors = () => import('../pages/Sponsors')
 const Contact = () => import('../pages/Contact')
 const Team = () => import('../pages/teams/Team')
 const CreateTeam = () => import('../pages/teams/Create')
+const Merch = () => import('../pages/Merch')
 
 const Profile = () => import('../pages/account/Profile')
 const Teams = () => import('../pages/account/Teams')
@@ -53,7 +53,7 @@ const routes = createRoutesFromElements(
     <Route element={<DefaultLayout />}>
       <Route path='/' lazy={fetchRoute(Home)} />
       <Route path='/faqs' lazy={fetchRoute(Faqs)} />
-      {/* <Route path='/sponsors' element={<Sponsors />} /> */}
+      <Route path='/merch' lazy={fetchRoute(Merch)} />
       <Route path='/contact' lazy={fetchRoute(Contact)} />
 
       <Route path='/events' lazy={fetchRoute(Events)} />

@@ -4,12 +4,12 @@ import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
-import Tz3dCard from '@tranzis/react/Tz3dCard'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Tz3dCard } from '@tranzis/core/Tz3dCard'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
 import SoloContest from '~/components/Contests/SoloContest'
 import TeamContest from '~/components/Contests/TeamContest'
-import '@tranzis/react/styles/Tz3dCard'
 import { getContest } from '~loaders/contests.loader'
 
 export const loader = getContest
@@ -79,11 +79,11 @@ export function Component() {
         <div className='lg:col-span-2 order-first lg:order-2'>
           <div className='sm:sticky sm:top-8'>
             <div className='mx-auto w-64 h-64 sm:w-80 sm:h-80'>
-              <Tz3dCard
+              <tz-3d-card
                 src={contest.image.src}
                 alt={`moksha-contest-${contest}-poster`}
-                rotation={{ base: -30, sm: -30 }}
-                elevation={{ base: 8, sm: 10 }}
+                rotation='-30'
+                elevation='120'
               />
             </div>
           </div>

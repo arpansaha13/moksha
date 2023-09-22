@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useAppContext } from './containers/DataProvider'
+import { useCe } from './hooks/useCe'
 import { useAnalytics } from './hooks/useAnalytics'
 import Routes from './router/routes'
 import AppLoader from './components/AppLoader'
@@ -26,10 +27,12 @@ function App() {
       .finally(() => {
         setLoading(false)
       })
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useAnalytics()
+  useCe()
 
   return loading ? (
     <AppLoader />
