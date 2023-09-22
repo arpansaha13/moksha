@@ -23,6 +23,7 @@ import environ  # Pylance does not recognize this import for some reason but the
 env = environ.Env()
 environ.Env.read_env()
 
+COOKIE_SECURE = bool(int(env('COOKIE_SECURE')))
 PASSWORD_MISMATCH_EXCEPTION_MESSAGE = "Password and confirm-password do not match."
 
 
@@ -55,9 +56,8 @@ class CheckAuth(APIView):
             response.set_cookie(
                 key='session',
                 value=Login().create_session_token(auth_user.user_id),
-                secure=True,
+                secure=COOKIE_SECURE,
                 httponly=True,
-                samesite='None',
                 path='/api',
             )
 
@@ -184,18 +184,16 @@ class Login(APIView):
         response.set_cookie(
             key='auth',
             value=AUTH_TOKEN,
-            secure=True,
+            secure=COOKIE_SECURE,
             httponly=True,
-            samesite='None',
             path='/api',
             max_age=int(env('JWT_VALIDATION_SECONDS'))
         )
         response.set_cookie(
             key='session',
             value=SESSION_TOKEN,
-            secure=True,
+            secure=COOKIE_SECURE,
             httponly=True,
-            samesite='None',
             path='/api',
         )
         response.data = AuthUserSerializer(user).data
