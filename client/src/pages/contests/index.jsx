@@ -154,10 +154,7 @@ const ContestCard = memo(
           data={{
             url: `/contests/${clubName}/${contest.slug}`,
             title: `Moksha contest - ${contest.name}`,
-            text:
-              contest.description[0].p.length <= 100
-                ? contest.description[0].p.length
-                : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+            text: contest.description[0].p,
           }}
           className='block text-amber-600 hover:text-amber-500'
         >

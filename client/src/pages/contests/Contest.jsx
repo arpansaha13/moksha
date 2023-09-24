@@ -22,10 +22,7 @@ export function Component() {
     () => ({
       url: location.pathname,
       title: `Moksha contest - ${contest.name}`,
-      text:
-        contest.description[0].p.length <= 100
-          ? contest.description[0].p.length
-          : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+      text: contest.description[0].p,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location.pathname]

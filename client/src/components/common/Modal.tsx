@@ -3,6 +3,16 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useScrollbarWidth } from '~/hooks/useScrollbarWidth'
 import { classNames } from '@arpansaha13/utils'
 
+interface ModalProps {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  children: React.ReactNode
+  onClose?: () => void
+
+  /** @default 'lg'' */
+  maxWidth: keyof typeof maxWidths
+}
+
 const maxWidths = {
   xs: 'sm:max-w-xs',
   sm: 'sm:max-w-sm',
@@ -10,11 +20,11 @@ const maxWidths = {
   lg: 'sm:max-w-lg',
 }
 
-const Modal = ({ open, setOpen, children, onClose, maxWidth = 'lg' }) => {
+const Modal = ({ open, setOpen, children, onClose, maxWidth = 'lg' }: ModalProps) => {
   const scrollbarWidth = useScrollbarWidth()
 
   const doOnClose = useCallback(
-    bool => {
+    (bool: boolean) => {
       setOpen(bool)
       onClose?.()
     },

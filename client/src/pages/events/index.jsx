@@ -113,10 +113,7 @@ const EventCard = memo(
           data={{
             url: `/events/${event.club}/${event.slug}`,
             title: `Moksha event - ${event.name}`,
-            text:
-              event.description[0].p.length <= 100
-                ? event.description[0].p.length
-                : `${event.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+            text: event.description[0].p,
           }}
           className='block text-amber-600 hover:text-amber-500'
         >

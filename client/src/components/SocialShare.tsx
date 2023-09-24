@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 import copyIcon from '@iconify-icons/mdi/content-copy'
@@ -6,28 +6,42 @@ import copiedIcon from '@iconify-icons/mdi/file-document-check-outline'
 import { classNames } from '@arpansaha13/utils'
 import Modal from './common/Modal'
 
+interface SocialShareProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  data: {
+    url: string
+    title: string
+    text: string
+  }
+  children: React.ReactNode
+}
+
 /** A width and height needs to be specified from parent */
-export default function SocialShare({ data, children, ...attrs }) {
+export default function SocialShare({ data, children, ...attrs }: SocialShareProps) {
   const [modalOpen, setModalOpen] = useState(false)
-  const locationOrigin = useRef('')
+  const [copied, setCopied] = useState(false)
 
   const openModal = () => setModalOpen(true)
 
-  useEffect(() => {
-    locationOrigin.current = window.location.origin
-  }, [])
+  const shareUrl = useMemo(() => {
+    const path = data.url.startsWith('/') ? data.url : `/${data.url}`
+    return window.location.origin + path
+  }, [data.url])
 
-  const [copied, setCopied] = useState(false)
+  const shareText = useMemo(
+    // trim to 2000 characters
+    () => (data.text.length <= 100 ? data.text.length : `${data.text.substr(0, 200)}...`),
+    [data.text]
+  )
 
   const copyToClipboard = useCallback(() => {
-    navigator.clipboard.writeText(locationOrigin.current + data.url)
+    navigator.clipboard.writeText(shareUrl)
     setCopied(true)
 
     setTimeout(() => {
       setCopied(false)
     }, 4000)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [shareUrl])
 
   const social = useMemo(
     () => [
@@ -35,17 +49,17 @@ export default function SocialShare({ data, children, ...attrs }) {
         name: 'WhatsApp',
         logo: '/logos/whatsapp.svg',
         href: `https://api.whatsapp.com/send/?text=${encodeURIComponent(data.title)}%0A%0A${encodeURIComponent(
-          locationOrigin.current + data.url
-        )}%0A%0A${encodeURIComponent(data.text)}`,
+          shareUrl
+        )}%0A%0A${encodeURIComponent(shareText)}`,
       },
       {
         name: 'Facebook',
         logo: '/logos/facebook.svg',
-        href: `https://www.facebook.com/sharer.php?u=${encodeURIComponent(locationOrigin.current + data.url)}`,
+        href: `https://www.facebook.com/sharer.php?u=${encodeURIComponent(shareUrl)}`,
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data.title, data.url, locationOrigin]
+    [data.title, data.text, shareUrl]
   )
 
   return (
