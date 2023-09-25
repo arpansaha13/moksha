@@ -4,20 +4,14 @@ import { useAppContext } from '~/containers/DataProvider'
 import createRequest, { type RequestOptions } from '~/utils/createRequest'
 import getResponseData from '~/utils/getResponseData'
 
-/**
- * Returns a wrapper over the Fetch API.
- *
- * 1) Extracts and returns the json response so that the json data is directly available in the then() block.
- *
- * 2) Automatically go to login page if token expires
- */
+/** Returns a wrapper over the Fetch API. */
 
 export function useFetch<T = any>() {
   const { resetAppContext } = useAppContext() as any
   const navigate = useNavigate()
   const location = useLocation()
 
-  const fetchHook = useCallback(async (url: string, options?: RequestOptions) => {
+  const fetchHook = useCallback(async (url: string, options?: RequestOptions): Promise<T | void> => {
     const request = createRequest(url, options)
 
     const res = await fetch(request)
@@ -27,6 +21,7 @@ export function useFetch<T = any>() {
     const jsonData = await getResponseData<T>(res)
 
     if (res.status >= 400) {
+      // Automatically go to login page if token expires
       // If auth token expires, it will raise 403 exception
       if (res.status === 403) {
         resetAppContext()

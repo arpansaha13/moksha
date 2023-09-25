@@ -1,4 +1,4 @@
-import type { Event } from '../types'
+import type { Event } from '~/types'
 
 const dzire: Event[] = [
   {
@@ -50,7 +50,7 @@ const fineArts: Event[] = [
     ],
   },
   {
-    id: 7,
+    id: 8,
     slug: 'open-canvas',
     name: 'Open canvas',
     club: 'fine-arts',
@@ -67,7 +67,7 @@ const fineArts: Event[] = [
 
 const dcc: Event[] = [
   {
-    id: 8,
+    id: 9,
     slug: 'incredible-roll',
     name: 'Incredible Roll',
     club: 'dcc',

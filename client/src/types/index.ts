@@ -1,4 +1,16 @@
-// Contest and Event types
+export type HTMLElementTagNames = keyof HTMLElementTagNameMap
+
+export interface User {
+  avatar_idx: number
+  name: string
+  user_id: string
+  username: string
+  email: string
+  institution: string
+  phone_no: number
+}
+
+// # Contest and Event types
 
 type Heading = Record<'heading', string>
 type UnorderedList = Record<'ul', string[]>
@@ -14,6 +26,8 @@ interface ImageSource {
   type?: string
 }
 
+// # EVENT
+
 export interface Event {
   id: number
   slug: string
@@ -26,6 +40,8 @@ export interface Event {
   description: (Heading | Para | UnorderedList)[]
   instructions?: (Heading | Para | UnorderedList)[]
 }
+
+// # CONTEST
 
 type ContestType = 'solo' | 'team' | 'duo' | 'duet' | 'squad' | 'open'
 

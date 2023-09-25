@@ -1,8 +1,8 @@
-import type { Contest } from '../types'
+import type { Contest } from '~/types'
 
 const nlc: Contest[] = [
   {
-    id: 2,
+    id: 1,
     slug: 'quiz-competition',
     name: 'Quiz Competition',
     club: 'nlc',

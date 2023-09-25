@@ -1,8 +1,8 @@
-import type { Contest } from '../types'
+import type { Contest } from '~/types'
 
 const fineArts: Contest[] = [
   {
-    id: 1,
+    id: 2,
     slug: 'magic-of-fingers',
     name: 'Magic of fingers',
     type: ['solo'],

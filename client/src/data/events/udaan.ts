@@ -1,4 +1,4 @@
-import type { Event } from '../types'
+import type { Event } from '~/types'
 
 const dzire: Event[] = [
   {

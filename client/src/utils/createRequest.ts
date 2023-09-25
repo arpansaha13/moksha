@@ -1,8 +1,11 @@
 import AES from 'crypto-js/aes'
 import { getCookie } from '@arpansaha13/utils/browser'
 
-export interface RequestOptions extends Omit<RequestInit, 'body'> {
-  body?: BodyInit | null
+export interface RequestOptions extends Omit<RequestInit, 'body' | 'method'> {
+  /** @default 'GET' */
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT'
+
+  body?: Record<string, any>
 }
 
 export const FETCH_BASE_URL = import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin
