@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.serializers import CharField
 from .models import User
+from common.responses import NoContentResponse
 from .serializers import AuthUserSerializer, UserSerializer
 from invites.models import InviteStatus
 from invites.serializers import InviteSerializer
@@ -10,13 +11,34 @@ from teams.serializers import TeamSerializer, TeamMemberSerializer
 from contests.serializers import ContestSerializer, SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
 
 
-class GetAuthUser(APIView):
+class AuthUser(APIView):
     def get(self, request):
         serializer = AuthUserSerializer(request.auth_user)
         return Response({'data': serializer.data}, status=200)
 
+    def patch(self, request):
+        auth_user = request.auth_user
+        is_updated = False
 
-class GetUsers(APIView):
+        if request.data.get('name', None) is not None:
+            auth_user.name = request.data['name']
+            is_updated = True
+
+        if request.data.get('institution', None) is not None:
+            auth_user.institution = request.data['institution']
+            is_updated = True
+
+        if request.data.get('phone_no', None) is not None:
+            auth_user.phone_no = request.data['phone_no']
+            is_updated = True
+
+        if is_updated:
+            auth_user.save()
+
+        return NoContentResponse()
+
+
+class Users(APIView):
     def get(self, request):
         username = request.GET.get('username', None)
         limit = request.GET.get('limit', 10)
@@ -34,7 +56,7 @@ class GetUsers(APIView):
         return Response({'data': serializer.data}, status=200)
 
 
-class GetAuthUserCreatedTeam(APIView):
+class AuthUserCreatedTeam(APIView):
     def get(self, request):
         created_team = request.auth_user.created_team.first()
 
@@ -45,7 +67,7 @@ class GetAuthUserCreatedTeam(APIView):
         return Response({'data': None, 'message': 'No team found'}, status=200)
 
 
-class GetAuthUserJoinedTeams(APIView):
+class AuthUserJoinedTeams(APIView):
     def get(self, request):
         created_team = request.auth_user.created_team.first()
         user_memberships = request.auth_user.user_memberships.filter(~Q(team__team_id=created_team)).all()
@@ -59,7 +81,7 @@ class GetAuthUserJoinedTeams(APIView):
         return Response({'data': serializer.data}, status=200)
 
 
-class GetAuthUserReceivedTeamInvites(APIView):
+class AuthUserReceivedTeamInvites(APIView):
     def get(self, request):
         received_invites = request.auth_user.received_invites.filter(status=InviteStatus.PENDING).all()
 
@@ -76,7 +98,7 @@ class GetAuthUserReceivedTeamInvites(APIView):
         return Response({'data': serializer.data}, status=200)
 
 
-class GetAuthUserSoloContests(APIView):
+class AuthUserSoloContests(APIView):
     def get(self, request):
         solo_contest_regs = request.auth_user.registered_solo_contests.only('contest').all()
 
@@ -89,7 +111,7 @@ class GetAuthUserSoloContests(APIView):
         return Response({'data': serializer.data}, status=200)
 
 
-class GetAuthUserTeamContests(APIView):
+class AuthUserTeamContests(APIView):
     def get(self, request):
         contest_id = request.GET.get('contest_id', None)
 

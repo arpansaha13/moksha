@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from common.exceptions import BadRequest, Conflict
+from common.exceptions import Conflict
+from common.responses import NoContentResponse
 from users.models import User
 from .models import SoloContestRegistration as SoloContestRegistrationModel, TeamContestRegistration as TeamContestRegistrationModel, TeamContestUserRegistration
 from .serializers import SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
@@ -58,7 +59,7 @@ class SoloContestRegistration(APIView):
             raise NotFound({'message': 'No registration found.'})
 
         solo_reg.delete()
-        return Response(status=204)
+        return NoContentResponse()
 
 
 class TeamContestRegistration(APIView):
@@ -138,4 +139,4 @@ class TeamContestRegistration(APIView):
 
         team_reg.delete()
 
-        return Response(status=204)
+        return NoContentResponse()
