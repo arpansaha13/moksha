@@ -7,6 +7,7 @@ import { getReceivedTeamInvites } from '~loaders/account.loader'
 import AuthLayout from '../layouts/auth'
 import DefaultLayout from '../layouts/default'
 import AccountLayout from '../layouts/account'
+import SettingsLayout from '../layouts/settings'
 import FloatingWindow from '../layouts/floating-window'
 
 import { Component as NotFound } from '../pages/404'
@@ -30,7 +31,9 @@ const Merch = () => import('../pages/Merch')
 const Profile = () => import('../pages/account/Profile')
 const Teams = () => import('../pages/account/Teams')
 const Registrations = () => import('../pages/account/Registrations')
-const ChangePassword = () => import('../pages/account/change-password')
+const Settings = () => import('../pages/account/settings')
+const EditProfile = () => import('../pages/account/settings/edit-profile')
+const ChangePassword = () => import('../pages/account/settings/change-password')
 
 const Login = () => import('../pages/auth/login')
 const Registration = () => import('../pages/auth/register')
@@ -71,7 +74,12 @@ const routes = createRoutesFromElements(
         <Route path='/account/profile' lazy={fetchRoute(Profile)} />
         <Route path='/account/teams' lazy={fetchRoute(Teams)} />
         <Route path='/account/registrations' lazy={fetchRoute(Registrations)} />
-        <Route path='/account/change-password' lazy={fetchRoute(ChangePassword)} />
+        <Route path='/account/settings' lazy={fetchRoute(Settings)} />
+
+        <Route element={<SettingsLayout />}>
+          <Route path='/account/settings/edit-profile' lazy={fetchRoute(EditProfile)} />
+          <Route path='/account/settings/change-password' lazy={fetchRoute(ChangePassword)} />
+        </Route>
       </Route>
     </Route>
 

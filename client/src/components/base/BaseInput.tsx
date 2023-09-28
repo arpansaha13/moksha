@@ -1,15 +1,15 @@
 import { classNames } from '@arpansaha13/utils'
 
-/*
-  Props
+interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string
   label: string
-  innerRef?: RefObject<HTMLInputElement>
+  srOnlyLabel?: boolean
+  innerRef?: React.RefObject<HTMLInputElement>
   disabled?: boolean
   validationError?: string | null
-*/
+}
 
-export default function BaseInput(props) {
+export default function BaseInput(props: BaseInputProps) {
   const { id, label, innerRef, validationError = null, disabled = false, srOnlyLabel = false, ...inputAttrs } = props
 
   return (

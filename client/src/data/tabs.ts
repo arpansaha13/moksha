@@ -39,11 +39,8 @@ export const profileTabs = Object.freeze<Tab[]>([
     name: 'Teams',
     to: '/account/teams',
   },
-])
-
-export const accountTabs = Object.freeze<Tab[]>([
   {
-    name: 'Change password',
-    to: '/account/change-password',
+    name: 'Settings',
+    to: '/account/settings',
   },
 ])

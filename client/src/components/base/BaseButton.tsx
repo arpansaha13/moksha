@@ -2,7 +2,16 @@ import { forwardRef } from 'react'
 import { classNames } from '@arpansaha13/utils'
 import Loader from '../common/Loader'
 
-const BaseButton = forwardRef((props, ref) => {
+interface BaseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode
+  type?: 'button' | 'submit'
+  loading?: boolean
+  disabled?: boolean
+  stretch?: boolean
+  secondary?: boolean
+}
+
+const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>((props, ref) => {
   const {
     children,
     type = 'button',

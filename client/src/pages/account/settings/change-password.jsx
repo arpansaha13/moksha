@@ -83,7 +83,7 @@ export function Component() {
         className='top-16'
       />
 
-      <h2 className='text-2xl font-bold'>Change Password</h2>
+      <h2 className='text-2xl font-bold text-gray-50'>Change Password</h2>
 
       <Sheet className='mt-4 p-4 sm:p-6'>
         <form ref={formRef} onSubmit={changePassword} className='max-w-sm space-y-6'>

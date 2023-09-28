@@ -19,6 +19,7 @@
 
 body {
   @apply bg-gradient-to-tr from-darkBrown via-darkBrown to-brown;
+  overflow-y: scroll;
 }
 
 /* NProgress */

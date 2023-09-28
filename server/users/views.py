@@ -35,7 +35,7 @@ class AuthUser(APIView):
         if is_updated:
             auth_user.save()
 
-        return NoContentResponse()
+        return Response({'message': 'Your information has been updated'}, status=200)
 
 
 class Users(APIView):

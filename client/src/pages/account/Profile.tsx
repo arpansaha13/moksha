@@ -3,11 +3,12 @@ import { useLoaderData } from 'react-router-dom'
 import Sheet from '~common/Sheet'
 import Avatar from '~common/Avatar'
 import { getAuthUserData } from '~loaders/auth.loader'
+import type { User } from '~/types'
 
 export const loader = getAuthUserData
 
 export function Component() {
-  const authUser = useLoaderData()
+  const authUser = useLoaderData() as User
 
   const userDetails = useMemo(
     () => [
@@ -45,4 +46,5 @@ export function Component() {
     </Sheet>
   )
 }
+
 Component.displayName = 'Profile'
