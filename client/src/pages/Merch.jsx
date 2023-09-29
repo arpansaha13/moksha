@@ -42,7 +42,21 @@ export function Component() {
 
           <div className='lg:row-span-2 flex items-center justify-center lg:justify-end'>
             <div className='w-64 h-64 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem]'>
-              <tz-gallery-1 srcfirst='/images/merch/black.png' srcsec='/images/merch/white.png' altfirst='' altsec='' />
+              <tz-gallery-1>
+                <picture slot="first">
+                  <source srcSet="images/merch/black-512x450.webp, images/merch/black-1024x900.webp 2x" type="image/webp" />
+                  <source srcSet="images/merch/black-512x450.png, images/merch/black-1024x900.png 2x" type="image/png" />
+
+                  <img src="images/merch/black-1024x900.png" alt="Moksha 2023 merch (black)" className="object-cover shadow-lg" />
+                </picture>
+
+                <picture slot="second">
+                  <source srcSet="images/merch/white-512x450.webp, images/merch/white-1024x900.webp 2x" type="image/webp" />
+                  <source srcSet="images/merch/white-512x450.png, images/merch/white-1024x900.png 2x" type="image/png" />
+
+                  <img src="images/merch/white-1024x900.png" alt="Moksha 2023 merch (white)" className="object-cover shadow-lg" />
+                </picture>
+              </tz-gallery-1>
             </div>
           </div>
 
