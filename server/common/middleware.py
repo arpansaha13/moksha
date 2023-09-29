@@ -62,7 +62,7 @@ class JwtMiddleware(MiddlewareMixin):
         auth_user = User.objects.filter(user_id=payload['id']).first()
 
         if not auth_user:
-            return JsonResponse({'message': 'Invalid token'}, status=404)
+            return JsonResponse({'message': 'Invalid token'}, status=403)
 
         request.auth_user = auth_user
 
