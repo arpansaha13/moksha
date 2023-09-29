@@ -54,7 +54,7 @@ function ResetPassForm({ setPassIsReset }) {
     e.preventDefault()
     setLoading(true)
 
-    const formData = getFormData(formRef.current, { format: 'object' })
+    const formData = getFormData(formRef.current)
 
     if (formData.password !== formData.confirm_password) {
       setError('password', 'Password and confirm-password do not match')

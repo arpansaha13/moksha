@@ -7,6 +7,7 @@ import { getReceivedTeamInvites } from '~loaders/account.loader'
 import AuthLayout from '../layouts/auth'
 import DefaultLayout from '../layouts/default'
 import AccountLayout from '../layouts/account'
+import SettingsLayout from '../layouts/settings'
 import FloatingWindow from '../layouts/floating-window'
 
 import { Component as NotFound } from '../pages/404'
@@ -22,20 +23,22 @@ const Event = () => import('../pages/events/Event')
 const Contests = () => import('../pages/contests')
 const Contest = () => import('../pages/contests/Contest')
 const Faqs = () => import('../pages/Faqs')
-// const Sponsors = () => import('../pages/Sponsors')
 const Contact = () => import('../pages/Contact')
 const Team = () => import('../pages/teams/Team')
 const CreateTeam = () => import('../pages/teams/Create')
+const Merch = () => import('../pages/Merch')
 
 const Profile = () => import('../pages/account/Profile')
 const Teams = () => import('../pages/account/Teams')
 const Registrations = () => import('../pages/account/Registrations')
-const ChangePassword = () => import('../pages/account/change-password')
+const Settings = () => import('../pages/account/settings')
+const EditProfile = () => import('../pages/account/settings/edit-profile')
+const ChangePassword = () => import('../pages/account/settings/change-password')
 
 const Login = () => import('../pages/auth/login')
 const Registration = () => import('../pages/auth/register')
 const Verification = () => import('../pages/auth/verification')
-const ResendVerificationLink = () => import('../pages/auth/resend-link')
+const ResendVerificationLink = () => import('../pages/auth/resend-verification-link')
 const ForgotPassword = () => import('../pages/auth/forgot-password')
 const ResetPassword = () => import('../pages/auth/reset-password')
 
@@ -53,7 +56,7 @@ const routes = createRoutesFromElements(
     <Route element={<DefaultLayout />}>
       <Route path='/' lazy={fetchRoute(Home)} />
       <Route path='/faqs' lazy={fetchRoute(Faqs)} />
-      {/* <Route path='/sponsors' element={<Sponsors />} /> */}
+      <Route path='/merch' lazy={fetchRoute(Merch)} />
       <Route path='/contact' lazy={fetchRoute(Contact)} />
 
       <Route path='/events' lazy={fetchRoute(Events)} />
@@ -71,7 +74,12 @@ const routes = createRoutesFromElements(
         <Route path='/account/profile' lazy={fetchRoute(Profile)} />
         <Route path='/account/teams' lazy={fetchRoute(Teams)} />
         <Route path='/account/registrations' lazy={fetchRoute(Registrations)} />
-        <Route path='/account/change-password' lazy={fetchRoute(ChangePassword)} />
+        <Route path='/account/settings' lazy={fetchRoute(Settings)} />
+
+        <Route element={<SettingsLayout />}>
+          <Route path='/account/settings/edit-profile' lazy={fetchRoute(EditProfile)} />
+          <Route path='/account/settings/change-password' lazy={fetchRoute(ChangePassword)} />
+        </Route>
       </Route>
     </Route>
 

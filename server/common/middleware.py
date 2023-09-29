@@ -1,9 +1,9 @@
-from typing import Any, Dict
 from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
-from functools import wraps
-import jwt
 from users.models import User
+from functools import wraps
+from typing import Any, Dict
+import jwt
 import environ
 
 env = environ.Env()
@@ -62,7 +62,7 @@ class JwtMiddleware(MiddlewareMixin):
         auth_user = User.objects.filter(user_id=payload['id']).first()
 
         if not auth_user:
-            return JsonResponse({'message': 'Invalid token'}, status=404)
+            return JsonResponse({'message': 'Invalid token'}, status=403)
 
         request.auth_user = auth_user
 

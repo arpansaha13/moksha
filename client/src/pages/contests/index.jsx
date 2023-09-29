@@ -54,7 +54,7 @@ const UdaanContests = memo(
 
       <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {udaanContestsList.map(contest => (
-          <div key={contest.id} className='min-w-[16rem]'>
+          <div key={contest.id} className='mx-auto min-w-[16rem] w-64 lg:w-auto'>
             <ContestCard clubName={contest.club} contest={contest} />
           </div>
         ))}
@@ -154,10 +154,7 @@ const ContestCard = memo(
           data={{
             url: `/contests/${clubName}/${contest.slug}`,
             title: `Moksha contest - ${contest.name}`,
-            text:
-              contest.description[0].p.length <= 100
-                ? contest.description[0].p.length
-                : `${contest.description[0].p.substr(0, 100)}...`, // trim to 100 characters
+            text: contest.description[0].p,
           }}
           className='block text-amber-600 hover:text-amber-500'
         >

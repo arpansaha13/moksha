@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useReducer } from "react"
+import { useCallback, useReducer } from 'react'
 
 function reducer(state, action) {
   const index = action.index
@@ -43,19 +43,25 @@ export function useList(initialValue, options) {
     dispatch({ type: 'set', index, value })
   }, [])
 
-  const push = useCallback((value) => {
-    if (typeof maxLength !== 'undefined' && list.length === maxLength) return
+  const push = useCallback(
+    value => {
+      if (typeof maxLength !== 'undefined' && list.length === maxLength) return
 
-    dispatch({ type: 'push', value })
-  }, [list])
+      dispatch({ type: 'push', value })
+    },
+    [list]
+  )
 
-  const pop = useCallback((index) => {
-    if (typeof minLength !== 'undefined' && list.length === minLength) return
+  const pop = useCallback(
+    index => {
+      if (typeof minLength !== 'undefined' && list.length === minLength) return
 
-    dispatch({ type: 'pop', index })
-  }, [list])
+      dispatch({ type: 'pop', index })
+    },
+    [list]
+  )
 
-  const setAll = useCallback((newList) => {
+  const setAll = useCallback(newList => {
     dispatch({ type: 'all', newList })
   }, [])
 

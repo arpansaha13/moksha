@@ -16,6 +16,13 @@ export default defineConfig({
       '~loaders': resolve(__dirname, 'src', 'router', 'loaders'),
     },
   },
+  build: {
+    emptyOutDir: true,
+  },
+  define: {
+    __VUE_OPTIONS_API__: false,
+    __VUE_PROD_DEVTOOLS__: false,
+  },
   server: {
     port: 3000,
   },

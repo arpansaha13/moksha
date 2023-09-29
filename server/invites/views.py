@@ -15,8 +15,8 @@ from .helpers import verify_invite, verify_team_leader
 class BaseEndpoint(APIView):
     # Create invite
     def post(self, request):
-        team_id = request.POST['team_id']
-        user_id = request.POST['user_id']
+        team_id = request.data['team_id']
+        user_id = request.data['user_id']
 
         team = Team.objects.filter(team_id=team_id).first()
 
