@@ -1,11 +1,16 @@
+from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from common.exceptions import Conflict
 from common.responses import NoContentResponse
 from users.models import User
+from users.serializers import UserSerializer
+from teams.serializers import TeamSerializer
 from .models import SoloContestRegistration as SoloContestRegistrationModel, TeamContestRegistration as TeamContestRegistrationModel, TeamContestUserRegistration
 from .serializers import SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
+from common.middleware import jwt_exempt
+from common.exceptions import BadRequest
 from teams.helpers import get_team
 from contests.helpers import get_contest, get_team_reg
 
@@ -140,3 +145,39 @@ class TeamContestRegistration(APIView):
         team_reg.delete()
 
         return NoContentResponse()
+
+
+class GetContestRegistrations(APIView):
+    def get(self, request, club_slug, contest_slug):
+        contest_type = request.GET.get('type', None)
+
+        if (contest_type is None):
+            raise BadRequest(message='No contest type specified')
+
+        if contest_type == 'solo':
+            data = SoloContestRegistrationModel.objects.filter(contest__club_slug=club_slug, contest__contest_slug=contest_slug).all()
+
+            serializer = SoloContestRegistrationSerializer(
+                data,
+                many=True,
+                empty=True,
+                fields={'user': UserSerializer()}
+            )
+
+            return Response({'data': serializer.data})
+
+        else:
+            data = TeamContestRegistrationModel.objects.filter(contest__club_slug=club_slug, contest__contest_slug=contest_slug).all()
+
+            serializer = TeamContestRegistrationSerializer(
+                data,
+                many=True,
+                empty=True,
+                fields={'team': TeamSerializer()}
+            )
+
+            return Response({'data': serializer.data})
+
+    @method_decorator(jwt_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
