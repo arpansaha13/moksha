@@ -1,4 +1,4 @@
-from django.db.models import Model, AutoField, CharField, BooleanField, ForeignKey, CASCADE
+from django.db.models import Model, AutoField, CharField, BooleanField, ForeignKey, DateTimeField, CASCADE
 from teams.models import Team
 from users.models import User
 
@@ -17,6 +17,7 @@ class SoloContestRegistration(Model):
     id = AutoField(primary_key=True)
     user = ForeignKey(User, related_name='registered_solo_contests', on_delete=CASCADE, null=False, db_column='user')
     contest = ForeignKey(Contest, related_name='registered_users', on_delete=CASCADE, null=False, db_column='contest')
+    created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.id)
@@ -26,6 +27,7 @@ class TeamContestRegistration(Model):
     id = AutoField(primary_key=True)
     team = ForeignKey(Team, related_name='registered_team_contests', on_delete=CASCADE, null=False, db_column='team')
     contest = ForeignKey(Contest, related_name='registered_teams', on_delete=CASCADE, null=False, db_column='contest')
+    created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.id)
