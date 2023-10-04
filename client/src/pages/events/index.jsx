@@ -11,7 +11,7 @@ import Container from '~common/Container'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import Picture from '~/components/pictures/Picture'
-import StayTunedBanner from '~/components/StayTunedBanner'
+// import StayTunedBanner from '~/components/StayTunedBanner'
 import { getEvents } from '~loaders/events.loader'
 
 export const loader = getEvents
@@ -55,19 +55,19 @@ const UdaanEvents = memo(
 )
 
 const MokshaEvents = memo(
-  () => (
+  ({ mokshaEventsList }) => (
     <section id='moksha-events'>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
 
-      <StayTunedBanner />
+      {/* <StayTunedBanner /> */}
 
-      {/* <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+      <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {mokshaEventsList.map(event => (
           <div key={event.id} className='min-w-[16rem]'>
             <EventCard event={event} />
           </div>
         ))}
-      </div> */}
+      </div>
     </section>
   ),
   () => true
