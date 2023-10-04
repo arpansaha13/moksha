@@ -5,7 +5,7 @@ from rest_framework.exceptions import NotFound
 from common.exceptions import Conflict
 from common.responses import NoContentResponse
 from users.models import User
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, AuthUserSerializer
 from teams.serializers import TeamSerializer
 from .models import SoloContestRegistration as SoloContestRegistrationModel, TeamContestRegistration as TeamContestRegistrationModel, TeamContestUserRegistration
 from .serializers import SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
@@ -147,6 +147,10 @@ class TeamContestRegistration(APIView):
         return NoContentResponse()
 
 
+# This below api is meant for admin client only
+# No role-based auth is implemented yet
+
+
 class GetContestRegistrations(APIView):
     def get(self, request, club_slug, contest_slug):
         contest_type = request.GET.get('type', None)
@@ -173,7 +177,14 @@ class GetContestRegistrations(APIView):
                 data,
                 many=True,
                 empty=True,
-                fields={'team': TeamSerializer()}
+                fields={
+                    'team': TeamSerializer(),
+                    'registered_members': TeamContestUserRegistrationSerializer(
+                        many=True,
+                        # AuthUserSerializer is used here to get email and phone for admin client
+                        fields={'user': AuthUserSerializer()}
+                    )
+                }
             )
 
             return Response({'data': serializer.data})
