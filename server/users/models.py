@@ -19,5 +19,7 @@ class User(Model):
     password = CharField(max_length=100, null=False)
     email_verified = BooleanField(default=False, null=False)
 
+    role = CharField(max_length=100, default='user', null=False)
+
     def __str__(self):
         return self.user_id

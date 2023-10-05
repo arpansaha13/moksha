@@ -84,7 +84,7 @@ export function Component() {
       </Helmet>
 
       <form ref={formRef} className='space-y-6' onSubmit={signUp}>
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6'>
           {fields.map(field => (
             <BaseInput key={field.id} {...field} />
           ))}

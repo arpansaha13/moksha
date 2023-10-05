@@ -24,14 +24,12 @@ export default function BaseInput(props: BaseInputProps) {
           ref={innerRef}
           {...inputAttrs}
           className={classNames(
-            'block w-full appearance-none rounded-md  px-3 py-2 text-gray-50 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-amber-500 text-sm',
+            'block w-full appearance-none rounded-md px-3 py-2 text-gray-50 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-amber-500 text-sm',
             disabled ? 'bg-amber-900/50 border-none' : 'bg-amber-900/70 border border-gray-300 shadow-sm'
           )}
         />
       </div>
-      {validationError !== null && (
-        <p className='text-xs text-red-400 absolute -bottom-5 left-0.5'>{validationError}</p>
-      )}
+      {validationError !== null && <p className='text-xs text-red-400 absolute -bottom-5'>{validationError}</p>}
     </div>
   )
 }
