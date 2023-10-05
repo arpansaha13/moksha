@@ -31,7 +31,9 @@ const SoloRegistration = ({ contest }) => {
     return <Loader className='w-6 mx-auto' />
   }
 
-  return (
+  return new Date() > contest.deadline ? (
+    <div>Registration for this contest is closed.</div>
+  ) : (
     <div className='markdown markdown-a space-x-4'>
       {isNullOrUndefined(registrationId) ? (
         <Register contestId={contest.id} setRegistrationId={setRegistrationId} />

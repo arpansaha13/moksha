@@ -19,7 +19,7 @@ const nlc: Contest[] = [
       ],
       src: '/images/contests/nlc/quiz-competition/poster-512x512.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2023-09-26', '23:59:00'),
     description: [
       {
         p: 'Get ready to test your knowledge, quick thinking, and teamwork! This thrilling quiz competition, organized for NITA students, is set to take center stage during the grand release event of Udaan.',

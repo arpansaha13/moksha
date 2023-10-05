@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import accountMultipleIcon from '@iconify-icons/mdi/account-multiple-remove-outline'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useFetch } from '~/hooks/useFetch'
+import Sheet from '~common/Sheet'
 import Loader from '~common/Loader'
 import EmptyState from '~common/EmptyState'
 
@@ -65,19 +66,27 @@ export default function TeamRegistration({ contest }) {
     )
   }
 
-  return isNullOrUndefined(registration) ? (
+  if (!isNullOrUndefined(registration)) {
+    return (
+      <Registered
+        contestId={contest.id}
+        team={createdTeam}
+        registration={registration}
+        setRegistration={setRegistration}
+      />
+    )
+  }
+
+  if (new Date() > contest.deadline) {
+    return <Sheet className='p-4 sm:p-6'>Registration for this contest is closed.</Sheet>
+  }
+
+  return (
     <Register
       contest={contest}
       team={createdTeam}
       members={teamMembers}
       alreadyRegisteredMemberIds={alreadyRegisteredMemberIds}
-      setRegistration={setRegistration}
-    />
-  ) : (
-    <Registered
-      contestId={contest.id}
-      team={createdTeam}
-      registration={registration}
       setRegistration={setRegistration}
     />
   )
