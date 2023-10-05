@@ -247,7 +247,7 @@ export const malhar: Contest[] = [
           'Group will comprise members a maximum of 7 and a minimum of 3 which includes a minimum of 2 vocalists and at least 1 instrumentalist.',
           'Time limit for performance will be 2-4 mins.',
           'Participants will be given a maximum of 7 minutes and a minimum of 5 minutes to complete their performance. Extra time will deduct marks.',
-          'Judgment will be based on vocals and cultural representation: Sur, Taal, Lay, Pronounciation, Overall Impact.',
+          'Judgment will be based on vocals and cultural representation: Sur, Taal, Lay, Pronunciation, Overall Impact.',
           'Top 7 to 8 teams from this round will be qualified for finals.',
         ],
       },

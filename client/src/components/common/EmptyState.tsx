@@ -1,8 +1,14 @@
 import { memo } from 'react'
-import { Icon } from '@iconify/react'
+import { Icon, type IconifyIcon } from '@iconify/react'
 import { classNames } from '@arpansaha13/utils'
 
-const EmptyState = memo(({ icon, title, description }) => {
+interface EmptyStateProps {
+  icon: IconifyIcon
+  title: string
+  description: string
+}
+
+const EmptyState = memo(({ icon, title, description }: EmptyStateProps) => {
   return (
     <div className='flex flex-col items-center text-center wrap-balance'>
       {icon && (

@@ -82,9 +82,9 @@ export const fineArts: Contest[] = [
         ul: [
           'Maximum two entries are allowed for each contestant.',
           'Both digital artwork and hand drawn artwork can be submitted.',
-          'There will be two groups one for Digital work and the other is for Hand drawn art work ,so that the judgemnet can be fair.',
+          'There will be two groups one for Digital work and the other is for Hand drawn art work ,so that the judgement can be fair.',
           'Winners will be selected from each group.',
-          'Artworks will be uploaded to fineartsclub’s Instagram page.',
+          'Artworks will be uploaded to fine-arts club’s Instagram page.',
           'The winners art works will be printed out and showcased in Fine arts club exhibition.',
           'The best works will be showcased in our insta page.',
           'The submission of artworks will be closed on the 1st day of Moksha',

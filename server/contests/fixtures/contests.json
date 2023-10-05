@@ -187,32 +187,5 @@
       "contest_slug": "rangmanch",
       "is_solo": false
     }
-  },
-  {
-    "model": "contests.contest",
-    "pk": 22,
-    "fields": {
-      "club_slug": "aaveg",
-      "contest_slug": "showcase-showdown",
-      "is_solo": false
-    }
-  },
-  {
-    "model": "contests.contest",
-    "pk": 23,
-    "fields": {
-      "club_slug": "aaveg",
-      "contest_slug": "helium-highs",
-      "is_solo": false
-    }
-  },
-  {
-    "model": "contests.contest",
-    "pk": 24,
-    "fields": {
-      "club_slug": "aaveg",
-      "contest_slug": "ad-mockery-matchup",
-      "is_solo": false
-    }
   }
 ]

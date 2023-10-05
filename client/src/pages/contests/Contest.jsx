@@ -65,7 +65,7 @@ export function Component() {
           </Link>
 
           <Suspense fallback={null}>
-            {contest.type.length === 1 && contest.type[0] === 'solo' ? (
+            {contest.type.includes('solo') || contest.type.includes('open') ? (
               <SoloContest contest={contest} />
             ) : (
               <TeamContest contest={contest} />

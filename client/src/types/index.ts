@@ -12,6 +12,8 @@ export interface User {
 
 // # Contest and Event types
 
+export type ClubSlug = 'fine-arts' | 'malhar' | 'dzire' | 'aaveg' | 'nlc' | 'collabs'
+
 type Heading = Record<'heading', string>
 type UnorderedList = Record<'ul', string[]>
 
@@ -19,6 +21,8 @@ interface Para {
   p: string
   bold?: boolean
 }
+
+type ProseElement = Heading | Para | UnorderedList
 
 interface ImageSource {
   srcSet: string
@@ -37,8 +41,8 @@ export interface Event {
     sources?: ImageSource[]
     src: string
   }
-  description: (Heading | Para | UnorderedList)[]
-  instructions?: (Heading | Para | UnorderedList)[]
+  description: ProseElement[]
+  instructions?: ProseElement[]
 }
 
 // # CONTEST
@@ -56,22 +60,22 @@ interface BaseContest {
   id: number
   slug: string
   name: string
-  club?: string
+  club?: ClubSlug
   subtitle?: string
   image: {
     sources?: ImageSource[]
     src: string
   }
   deadline: Date
-  description: (Heading | Para | UnorderedList)[]
-  instructions?: (Heading | Para | UnorderedList)[]
+  description: ProseElement[]
+  instructions?: ProseElement[]
 }
 
-interface SoloContest extends BaseContest {
-  type: ['solo'] | ['open']
+export interface SoloContest extends BaseContest {
+  type: ('solo' | 'open')[]
 }
 
-interface TeamContest extends BaseContest {
+export interface TeamContest extends BaseContest {
   type: ContestType[]
   allowedTeamSize: AllowedTeamSize
 }
