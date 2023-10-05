@@ -1,11 +1,13 @@
-import { Suspense, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData, useLocation } from 'react-router-dom'
+import { format } from 'date-fns'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Tz3dCard } from '@tranzis/core/Tz3dCard'
+import Sheet from '~common/Sheet'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
 import SoloContest from '~/components/Contests/SoloContest'
@@ -64,17 +66,15 @@ export function Component() {
             <span>Go to contests</span>
           </Link>
 
-          <Suspense fallback={null}>
-            {contest.type.length === 1 && contest.type[0] === 'solo' ? (
-              <SoloContest contest={contest} />
-            ) : (
-              <TeamContest contest={contest} />
-            )}
-          </Suspense>
+          {contest.type.includes('solo') || contest.type.includes('open') ? (
+            <SoloContest contest={contest} />
+          ) : (
+            <TeamContest contest={contest} />
+          )}
         </div>
 
         <div className='lg:col-span-2 order-first lg:order-2'>
-          <div className='sm:sticky sm:top-8'>
+          <div className='sm:sticky sm:top-8 space-y-6'>
             <div className='mx-auto w-64 h-64 sm:w-80 sm:h-80'>
               <tz-3d-card
                 src={contest.image.src}
@@ -83,6 +83,23 @@ export function Component() {
                 elevation='120'
               />
             </div>
+
+            {!contest.type.includes('open') && (
+              <Sheet className='lg:mx-6 p-4 sm:p-6'>
+                <h2 className='mb-4 text-xl font-bold'>Registration Deadline</h2>
+
+                <div className='markdown'>
+                  <ul>
+                    <li className='text-sm sm:text-base'>
+                      <strong>Date:</strong> {format(contest.deadline, 'do LLL yyyy')}
+                    </li>
+                    <li className='text-sm sm:text-base'>
+                      <strong>Time:</strong> {format(contest.deadline, 'hh:mm a')}
+                    </li>
+                  </ul>
+                </div>
+              </Sheet>
+            )}
           </div>
         </div>
       </div>

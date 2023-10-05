@@ -11,7 +11,7 @@ import Container from '~common/Container'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import Picture from '~/components/pictures/Picture'
-import StayTunedBanner from '~/components/StayTunedBanner'
+// import StayTunedBanner from '~/components/StayTunedBanner'
 import { getEvents } from '~loaders/events.loader'
 
 export const loader = getEvents
@@ -28,8 +28,8 @@ export function Component() {
       <Container>
         <h1 className='sr-only'>Events</h1>
 
+        <MokshaEvents mokshaEventsList={mokshaEventsList} className='mb-12' />
         <UdaanEvents udaanEventsList={udaanEventsList} />
-        <MokshaEvents mokshaEventsList={mokshaEventsList} />
       </Container>
     </>
   )
@@ -38,8 +38,8 @@ export function Component() {
 Component.displayName = 'Events'
 
 const UdaanEvents = memo(
-  ({ udaanEventsList }) => (
-    <section className='mb-12' id='udaan-events'>
+  ({ udaanEventsList, className }) => (
+    <section className={className} id='udaan-events'>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Udaan</h2>
 
       <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
@@ -55,19 +55,19 @@ const UdaanEvents = memo(
 )
 
 const MokshaEvents = memo(
-  () => (
-    <section id='moksha-events'>
+  ({ mokshaEventsList, className }) => (
+    <section id='moksha-events' className={className}>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
 
-      <StayTunedBanner />
+      {/* <StayTunedBanner /> */}
 
-      {/* <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+      <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {mokshaEventsList.map(event => (
           <div key={event.id} className='min-w-[16rem]'>
             <EventCard event={event} />
           </div>
         ))}
-      </div> */}
+      </div>
     </section>
   ),
   () => true
@@ -83,7 +83,7 @@ const EventCard = memo(
 
         <div className='w-full px-4 pt-4'>
           <h3 className='text-lg text-amber-500 font-semibold'>
-            <DLink to={`/events/${event.club}/${event.slug}`} className='lg:hover:underline'>
+            <DLink to={`/events/${event.club}/${event.slug}`} className='lg:hover:underline line-clamp-1'>
               {event.name}
             </DLink>
           </h3>

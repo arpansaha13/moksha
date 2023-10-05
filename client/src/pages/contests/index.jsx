@@ -1,19 +1,19 @@
 import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useLoaderData } from 'react-router-dom'
-// import { capitalCase } from 'change-case'
+import { capitalCase } from 'change-case'
+import { Icon } from '@iconify/react'
+import shareIcon from '@iconify-icons/mdi/share'
+import rightIcon from '@iconify-icons/mdi/chevron-right'
 import { classNames } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
-import StayTunedBanner from '~/components/StayTunedBanner'
+// import StayTunedBanner from '~/components/StayTunedBanner'
 import Picture from '~/components/pictures/Picture'
 import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
-import { Icon } from '@iconify/react'
-import shareIcon from '@iconify-icons/mdi/share'
-import rightIcon from '@iconify-icons/mdi/chevron-right'
 import { getContests } from '~loaders/contests.loader'
 
 export const loader = getContests
@@ -39,8 +39,8 @@ export function Component() {
         </div>
       </Container>
 
-      <UdaanContests udaanContestsList={udaanContestsList} className='mb-12 space-y-6' />
-      <MokshaContests mokshaContestsMap={mokshaContestsMap} className='space-y-6' />
+      <MokshaContests mokshaContestsMap={mokshaContestsMap} className='mb-12 space-y-12' />
+      <UdaanContests udaanContestsList={udaanContestsList} className='space-y-6' />
     </>
   )
 }
@@ -50,12 +50,12 @@ Component.displayName = 'Contests'
 const UdaanContests = memo(
   ({ udaanContestsList, className }) => (
     <Container className={className}>
-      <h2 className='text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Udaan</h2>
+      <h2 className='text-4xl text-center font-bold border-b-2 border-amber-900/70'>Udaan</h2>
 
       <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {udaanContestsList.map(contest => (
           <div key={contest.id} className='mx-auto min-w-[16rem] w-64 lg:w-auto'>
-            <ContestCard clubName={contest.club} contest={contest} />
+            <ContestCard clubSlug={contest.club} contest={contest} />
           </div>
         ))}
       </div>
@@ -65,42 +65,42 @@ const UdaanContests = memo(
 )
 
 const MokshaContests = memo(
-  ({ className }) => (
+  ({ className, mokshaContestsMap }) => (
     <Container className={className}>
-      <h2 className='text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
+      <h2 className='text-4xl text-center font-bold border-b-2 border-amber-900/70'>Moksha</h2>
 
-      <StayTunedBanner />
+      {/* <StayTunedBanner /> */}
 
-      {/* {Object.keys(mokshaContestsMap).map(clubName => (
-        <ClubContests key={clubName} clubName={clubName} contests={mokshaContestsMap[clubName]} />
-      ))} */}
+      {Object.keys(mokshaContestsMap).map(clubSlug => (
+        <ClubContests key={clubSlug} clubSlug={clubSlug} contests={mokshaContestsMap[clubSlug]} />
+      ))}
     </Container>
   ),
   () => true
 )
 
 /** Display contests of a particular club */
-// const ClubContests = memo(
-//   ({ clubName, contests }) => (
-//     <section className='flex-grow w-full' id={`${clubName}-contests`}>
-//       <h3 className='mb-6 text-4xl font-semibold'>{capitalCase(clubName)}</h3>
+const ClubContests = memo(
+  ({ clubSlug, contests }) => (
+    <section className='flex-grow w-full' id={`${clubSlug}-contests`}>
+      <h3 className='mb-4 text-4xl font-bold'>{capitalCase(clubSlug)}</h3>
 
-//       <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-//         {contests.map(contest => (
-//           <div key={contest.id} className='min-w-[16rem]'>
-//             <ContestCard clubName={clubName} contest={contest} />
-//           </div>
-//         ))}
-//       </div>
-//     </section>
-//   ),
-//   (prev, next) => prev.clubName === next.clubName
-// )
+      <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+        {contests.map(contest => (
+          <div key={contest.id} className='min-w-[16rem]'>
+            <ContestCard clubSlug={clubSlug} contest={contest} />
+          </div>
+        ))}
+      </div>
+    </section>
+  ),
+  (prev, next) => prev.clubSlug === next.clubSlug
+)
 
 const ContestCard = memo(
-  ({ clubName, contest }) => (
+  ({ clubSlug, contest }) => (
     <Sheet className='flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
-      <MLink to={`/contests/${clubName}/${contest.slug}`} as='div' className='block h-[304px]'>
+      <MLink to={`/contests/${clubSlug}/${contest.slug}`} as='div' className='block h-[304px]'>
         <div className='w-full h-48 flex items-center justify-center relative'>
           <Picture picture={contest.image} alt={`moksha-contest-${contest.slug}-poster`} />
 
@@ -119,7 +119,7 @@ const ContestCard = memo(
 
         <div className='w-full px-4 pt-4'>
           <h4 className='text-lg text-amber-500 font-semibold'>
-            <DLink to={`/contests/${clubName}/${contest.slug}`} className='lg:hover:underline'>
+            <DLink to={`/contests/${clubSlug}/${contest.slug}`} className='lg:hover:underline line-clamp-1'>
               {contest.name}
             </DLink>
           </h4>
@@ -141,7 +141,7 @@ const ContestCard = memo(
 
       <div className='px-4 pt-2 pb-4 w-full flex items-center justify-end lg:justify-between'>
         <Link
-          to={`/contests/${clubName}/${contest.slug}`}
+          to={`/contests/${clubSlug}/${contest.slug}`}
           className='hidden lg:block font-medium text-amber-600 hover:text-amber-500 transition-colors'
         >
           <span>View contest</span>
@@ -152,7 +152,7 @@ const ContestCard = memo(
 
         <SocialShare
           data={{
-            url: `/contests/${clubName}/${contest.slug}`,
+            url: `/contests/${clubSlug}/${contest.slug}`,
             title: `Moksha contest - ${contest.name}`,
             text: contest.description[0].p,
           }}

@@ -1,6 +1,6 @@
 import { getMokshaContest } from '~/utils/getMokshaContest'
 import udaanContestsList from '~/data/contests/udaan'
-import mokshaContestsMap from '~/data/contests/moksha-desc'
+import mokshaContestsMap from '~/data/contests/moksha'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import loaderWrapper from './loaderWrapper'
 
@@ -19,7 +19,8 @@ export const getContest = loaderWrapper({
     const contestSlug = pathSegments.at(-1)!
 
     let contest = getMokshaContest(clubSlug, contestSlug)
-    contest = getUdaanContest(contestSlug)
+
+    if (isNullOrUndefined(contest)) contest = getUdaanContest(contestSlug)
 
     if (isNullOrUndefined(contest)) throw new Error('Invalid url')
 
