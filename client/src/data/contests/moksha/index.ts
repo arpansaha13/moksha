@@ -13,8 +13,7 @@ const mokshaContests = Object.freeze({
   aaveg: aaveg,
   malhar: malhar,
   'fine-arts': fineArts,
-  collabs : collab
-
+  collabs: collab,
 })
 
 export default mokshaContests

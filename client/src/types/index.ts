@@ -62,6 +62,7 @@ interface BaseContest {
     sources?: ImageSource[]
     src: string
   }
+  deadline: Date
   description: (Heading | Para | UnorderedList)[]
   instructions?: (Heading | Para | UnorderedList)[]
 }

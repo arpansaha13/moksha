@@ -13,7 +13,7 @@
     "pk": 2,
     "fields": {
       "club_slug": "fine-arts",
-      "contest_slug": "magic-of-fingers",
+      "contest_slug": "kalakriti",
       "is_solo": true
     }
   },
@@ -22,7 +22,7 @@
     "pk": 3,
     "fields": {
       "club_slug": "fine-arts",
-      "contest_slug": "instant-portrait",
+      "contest_slug": "comiquest",
       "is_solo": true
     }
   },
@@ -30,8 +30,8 @@
     "model": "contests.contest",
     "pk": 4,
     "fields": {
-      "club_slug": "fine-arts",
-      "contest_slug": "digital-illustration",
+      "club_slug": "malhar",
+      "contest_slug": "moksha-maestro",
       "is_solo": true
     }
   },
@@ -40,22 +40,13 @@
     "pk": 5,
     "fields": {
       "club_slug": "malhar",
-      "contest_slug": "solo-singing",
-      "is_solo": true
-    }
-  },
-  {
-    "model": "contests.contest",
-    "pk": 6,
-    "fields": {
-      "club_slug": "malhar",
       "contest_slug": "melody-mania",
       "is_solo": false
     }
   },
   {
     "model": "contests.contest",
-    "pk": 7,
+    "pk": 6,
     "fields": {
       "club_slug": "malhar",
       "contest_slug": "harmony-hunt",
@@ -64,10 +55,19 @@
   },
   {
     "model": "contests.contest",
+    "pk": 7,
+    "fields": {
+      "club_slug": "malhar",
+      "contest_slug": "beatnik",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
     "pk": 8,
     "fields": {
       "club_slug": "malhar",
-      "contest_slug": "rap-battle",
+      "contest_slug": "folklore-fiesta",
       "is_solo": true
     }
   },
@@ -76,7 +76,7 @@
     "pk": 9,
     "fields": {
       "club_slug": "malhar",
-      "contest_slug": "beatnik",
+      "contest_slug": "muzic-madness",
       "is_solo": true
     }
   },
@@ -103,7 +103,7 @@
     "pk": 12,
     "fields": {
       "club_slug": "dzire",
-      "contest_slug": "hunter-x-hunter-hoedown",
+      "contest_slug": "hunter-x-hunter-showdown",
       "is_solo": false
     }
   },
@@ -112,7 +112,7 @@
     "pk": 13,
     "fields": {
       "club_slug": "dzire",
-      "contest_slug": "bob-till-you-drop",
+      "contest_slug": "bop-till-you-drop",
       "is_solo": false
     }
   },
@@ -120,8 +120,8 @@
     "model": "contests.contest",
     "pk": 14,
     "fields": {
-      "club_slug": "pixel",
-      "contest_slug": "snap-quest",
+      "club_slug": "collabs",
+      "contest_slug": "kbc",
       "is_solo": true
     }
   },
@@ -129,8 +129,89 @@
     "model": "contests.contest",
     "pk": 15,
     "fields": {
-      "club_slug": "malhar",
-      "contest_slug": "battle-of-bands",
+      "club_slug": "collabs",
+      "contest_slug": "cosmania",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 16,
+    "fields": {
+      "club_slug": "nlc",
+      "contest_slug": "oxford-union-debate",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 17,
+    "fields": {
+      "club_slug": "nlc",
+      "contest_slug": "open-mic",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 18,
+    "fields": {
+      "club_slug": "nlc",
+      "contest_slug": "plot-twist",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 19,
+    "fields": {
+      "club_slug": "nlc",
+      "contest_slug": "treasure-hunt",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 20,
+    "fields": {
+      "club_slug": "aaveg",
+      "contest_slug": "i-me-myself",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 21,
+    "fields": {
+      "club_slug": "aaveg",
+      "contest_slug": "rangmanch",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 22,
+    "fields": {
+      "club_slug": "aaveg",
+      "contest_slug": "showcase-showdown",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 23,
+    "fields": {
+      "club_slug": "aaveg",
+      "contest_slug": "helium-highs",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 24,
+    "fields": {
+      "club_slug": "aaveg",
+      "contest_slug": "ad-mockery-matchup",
       "is_solo": false
     }
   }

@@ -2,7 +2,7 @@ import type { Event } from '~/types'
 
 export const pixel: Event[] = [
     {
-        id: 13,
+        id: 2,
         slug: 'let-me-shoot-you',
         name: 'Let Me Shoot You',
         club: 'Pixels',
@@ -18,6 +18,6 @@ export const pixel: Event[] = [
             p: '5-10 Minutes PHOTOSHOOT unlimited CLICKS at a very cheap price!!',
           }
         ],
-        
+
       },
 ]

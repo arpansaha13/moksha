@@ -1,3 +1,4 @@
+import getDateFromIST from '~/utils/getDateFromIST'
 import { Contest } from '~/types'
 
 export const fineArts: Contest[] = [
@@ -10,13 +11,14 @@ export const fineArts: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
+    deadline: getDateFromIST('2023-10-10', '23:59:00'),
     description: [
       {
         p: 'It is an event to provide a platform for children to showcase their talent, express their creativity and develop their artistic skills.',
       },
       {
-        bold:true,
-        p:'Theme',
+        bold: true,
+        p: 'Theme',
       },
       {
         ul: [
@@ -26,17 +28,14 @@ export const fineArts: Contest[] = [
         ],
       },
       {
-        bold:true,
-        p:'Event Managers',
+        bold: true,
+        p: 'Event Managers',
       },
       {
-        ul: [
-          'Arghya Paitya : +91 87877 63931',
-          'Sreeja Ghosh : +91 87989 96322',
-        ],
+        ul: ['Arghya Paitya : +91 87877 63931', 'Sreeja Ghosh : +91 87989 96322'],
       },
     ],
-    instructions:[
+    instructions: [
       { heading: 'Rules' },
       {
         ul: [
@@ -60,13 +59,14 @@ export const fineArts: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
+    deadline: getDateFromIST('2023-10-10', '23:59:00'),
     description: [
       {
         p: 'Comic characters or themes (All forms of art such as Digital, Traditional, Vector, etc are allowed) (All entries will be accepted online. No artwork will be accepted offline).',
       },
       {
-        bold:true,
-        p:'Event Managers',
+        bold: true,
+        p: 'Event Managers',
       },
       {
         ul: [
@@ -76,7 +76,7 @@ export const fineArts: Contest[] = [
         ],
       },
     ],
-    instructions:[
+    instructions: [
       { heading: 'Rules' },
       {
         ul: [
