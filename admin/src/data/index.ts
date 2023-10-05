@@ -13,7 +13,7 @@ export const clubs: SelectMenuItem<Club>[] = [
   { name: 'Dzire', slug: 'dzire' },
   { name: 'Aaveg', slug: 'aaveg' },
   { name: 'Fine Arts', slug: 'fine-arts' },
-  { name: 'Pixels', slug: 'pixels' },
+  { name: 'Collab', slug: 'collab' },
 ]
 
 export const contests = Object.freeze<Record<Club, Record<ContestTypeSlug, SelectMenuItem[]>>>({
@@ -36,21 +36,18 @@ export const contests = Object.freeze<Record<Club, Record<ContestTypeSlug, Selec
     team: [
       { name: 'Melody mania', slug: 'melody-mania' },
       { name: 'Folklore fiesta', slug: 'folklore-fiesta' },
+      { name: 'Muzic Madness', slug: 'muzic-madness' },
     ],
   },
   dzire: {
     solo: [{ name: 'Shinigami showdown', slug: 'shinigami-showdown' }],
     team: [
       { name: 'Dragon Ballroom', slug: 'dragon-ballroom' },
-      { name: 'Hunter × Hunter Showdown', slug: 'hunter-×-hunter-showdown' },
+      { name: 'Hunter × Hunter Showdown', slug: 'hunter-x-hunter-showdown' },
     ],
   },
   aaveg: {
-    solo: [
-      { name: 'I Me Myself', slug: 'i-me-myself' },
-      { name: 'Nukkad', slug: 'nukkad' },
-      { name: 'Mime act', slug: 'mime-act' },
-    ],
+    solo: [{ name: 'I Me Myself', slug: 'i-me-myself' }],
     team: [{ name: 'Rangmanch', slug: 'rangmanch' }],
   },
   'fine-arts': {
@@ -60,9 +57,9 @@ export const contests = Object.freeze<Record<Club, Record<ContestTypeSlug, Selec
     ],
     team: [],
   },
-  pixels: {
+  collab: {
     solo: [
-      { name: 'Kaun banega comedian', slug: 'kaun-banega-comedian' },
+      { name: 'Kaun banega comedian', slug: 'kbc' },
       { name: 'Cosmania', slug: 'cosmania' },
     ],
     team: [],
