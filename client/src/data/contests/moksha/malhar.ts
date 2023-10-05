@@ -10,7 +10,7 @@ export const malhar: Contest[] = [
     subtitle: 'Solo Singing Competition',
     type: ['solo'],
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
@@ -58,7 +58,7 @@ export const malhar: Contest[] = [
     subtitle: 'Group Singing Competition',
     type: ['team'],
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     allowedTeamSize: { min: 3, max: 6 },
     description: [
@@ -109,7 +109,7 @@ export const malhar: Contest[] = [
     subtitle: 'Solo Instrumental Competition',
     type: ['solo'],
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
@@ -156,14 +156,16 @@ export const malhar: Contest[] = [
     type: ['solo'],
     subtitle: 'Rap Battle',
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
         p: 'This rap battle competition will be held in two stages: a preliminary round, from which a chosen group of contestants will advance to the final round, which will take place in the auditorium.',
       },
-      { bold:true,
-        p: 'Winners will be awarded some exciting prizes which will be revealed later!' },
+      {
+        bold: true,
+        p: 'Winners will be awarded some exciting prizes which will be revealed later!'
+      },
       {
         p: 'VISION: Finding undiscovered talent on campus and providing students with a stage to perform in addition to their academic obligations have always been the goals of Malhar. In addition, as a part of our musical endeavour, we will provide the perfect stage for all participants to broaden their perspectives beyond academics and exhibit their musical prowess.',
       },
@@ -208,10 +210,10 @@ export const malhar: Contest[] = [
     slug: 'folklore-fiesta',
     name: 'Folklore Fiesta',
     type: ['team'],
-    allowedTeamSize: {min:3, max:7},
+    allowedTeamSize: { min: 3, max: 7 },
     subtitle: 'Group Singing Competition',
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
@@ -234,7 +236,7 @@ export const malhar: Contest[] = [
       {
         ul: [
           'The participants have to perform one or more songs of one regional folk of their choice and have to send the video in MP4 format to the official mail id of malhar.',
-          'Group will comprise members a maximum of 7 and a minimum of 3 which includes a minimum of 2 vocalists and at least 1 instrumentalist.',          'Time limit for performance will be 2-4 mins.',
+          'Group will comprise members a maximum of 7 and a minimum of 3 which includes a minimum of 2 vocalists and at least 1 instrumentalist.', 'Time limit for performance will be 2-4 mins.',
           'Participants will be given a maximum of 7 minutes and a minimum of 5 minutes to complete their performance. Extra time will deduct marks.',
           'Judgment will be based on vocals and cultural representation: Sur, Taal, Lay, Pronounciation, Overall Impact.',
           'Top 7 to 8 teams from this round will be qualified for finals.',
@@ -253,6 +255,56 @@ export const malhar: Contest[] = [
           'The decision of the judges will be final and binding.',
         ],
       },
+    ],
+  },
+
+  {
+    id: 9,
+    slug: 'muzic-madness',
+    name: 'Muzic Madness',
+    type: ['team'],
+    allowedTeamSize: { min: 5, max: 6 },
+    subtitle: 'Antakshari Game',
+    image: {
+      src: '/images/contests/generic-poster.png',
+    },
+    description: [
+      {
+        p: 'Antakshari is that game that has been played since Ramayana days of Hindu culture. We all are well known for it . Boredom pacifies its medicinal way out to such interesting games!!'
+      },
+      {
+        p: "Musical games are very fun to play ,very much hyping and just changes the atmosphere of a place drastically,ex: from a very serious one to a very relaxing one.",
+      },
+      {
+        bold: true,
+        p: 'This game is also one kinda ANTAKSHARI only.'
+      },
+    ],
+    instructions: [
+      { heading: 'Venue' },
+      {
+        ul: ['Prelims: Visveswaraya Auditorium', 'Finals: Visveswaraya Auditorium'],
+      },
+      {
+        bold: true,
+        p: 'One selection round will also be there to select the groups for further steps.'
+      },
+      { heading: 'Rules' },
+      {
+        ul: [
+          'This game will consist of two rounds- Preliminary and Finals.',
+          'Group will comprise members a maximum of 7 and a minimum of 3 which includes a minimum of 2 vocalists and at least 1 instrumentalist.', 'Time limit for performance will be 2-4 mins.',
+          'No elimination will be there for these two rounds.',
+          'Winner will be decided on the verse of Sur,Lyrics,Time obviously.',
+          'First round will be like Antakshari only..I.e, starting the next song with the end most letter,the next group has to sing the song with that letter within a fixed time limit.',
+          'Second round will be a quiz round related to music.',
+          'Venue for both the rounds will be Auditorium.',
+        ],
+      },
+      {
+        bold: true,
+        p: 'The winner will be awarded with exciting prizes!!'
+      }
     ],
   },
 ]

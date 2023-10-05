@@ -8,7 +8,7 @@ export const nlc: Contest[] = [
         subtitle: 'Debate Competition',
         type: ['duo'],
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+            src: '/images/contests/generic-poster.png',
         },
         description: [
             {
@@ -97,7 +97,7 @@ export const nlc: Contest[] = [
         subtitle: 'Open Mic Competition',
         type: ['solo'],
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+            src: '/images/contests/generic-poster.png',
         },
         description: [
             {
@@ -181,7 +181,7 @@ export const nlc: Contest[] = [
         subtitle: 'Writing Competition',
         type: ['solo'],
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+            src: '/images/contests/generic-poster.png',
         },
         description: [
             {
@@ -227,7 +227,7 @@ export const nlc: Contest[] = [
         subtitle: 'Treasure Hunt',
         type: ['team'],
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+            src: '/images/contests/generic-poster.png',
         },
         allowedTeamSize: { min: 1, max: 4 },
         description: [

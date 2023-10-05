@@ -8,7 +8,7 @@ export const dzire: Contest[] = [
     subtitle: 'Solo Dance Competition',
     type: ['solo'],
     image: {
-      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       { p: 'It is a solo dance competition on classical and freestyle genres.' },
@@ -33,7 +33,7 @@ export const dzire: Contest[] = [
     subtitle: 'Duet Competition',
     type: ['duet'],
     image: {
-      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/generic-poster.png',
     },
     allowedTeamSize: 2,
     description: [
@@ -60,7 +60,7 @@ export const dzire: Contest[] = [
     subtitle: 'Group Dance Competition',
     type: ['team'],
     image: {
-      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/generic-poster.png',
     },
     allowedTeamSize: { min: 4, max: 15 },
     description: [{ p: 'It is a group dance competition where  any form of dance can be performed.' }],
@@ -88,7 +88,7 @@ export const dzire: Contest[] = [
     subtitle: 'Open Dance Competition',
     type: ['open'],
     image: {
-      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/generic-poster.png',
     },
     description: [{ p: "It's a dance competition which is open for all, any form of dance can be performed." },
     {

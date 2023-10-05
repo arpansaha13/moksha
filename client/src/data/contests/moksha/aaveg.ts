@@ -8,8 +8,8 @@ export const aaveg: Contest[] = [
         subtitle: 'Mono Act Competition',
         type: ['solo'],
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
-        },
+            src: '/images/contests/generic-poster.png',
+          },
         description: [
             {
                 p: 'To all the drama actors out there, this is your best chance to hog the limelight and own the stage!! This will be your moment of glory and your chance to steal the show, so prepare yourself and dazzle the audience with your talent and show yourself to be a master of impromptu action.'
@@ -59,8 +59,8 @@ export const aaveg: Contest[] = [
         type: ['team'],
         allowedTeamSize: { min: 5, max: 10 },
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
-        },
+            src: '/images/contests/generic-poster.png',
+          },
         description: [
             {
                 p: 'To all the drama actors out there, this is your best chance to hog the limelight and own the stage!! This will be your moment of glory and your chance to steal the show, so prepare yourself and dazzle the audience with your talent and show yourself to be a master of impromptu action.'
@@ -109,8 +109,8 @@ export const aaveg: Contest[] = [
         subtitle: 'Open Act Game',
         type: ['open'],
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
-        },
+            src: '/images/contests/generic-poster.png',
+          },
         description: [
             {
                 p: 'Unleash Your Improvisation Skills! This fun event is for encouraging quick thinking and collaboration among participants, where every moment is a chance to shine!'
@@ -143,8 +143,8 @@ export const aaveg: Contest[] = [
         subtitle: 'Helium Gas Game',
         type: ['open'],
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
-        },
+            src: '/images/contests/generic-poster.png',
+          },
         description: [
             {
                 p: "Ladies and gentlemen, get ready to elevate your spirits and voices in our uproarious Helium Gas Challenge! Prepare for a day of high-pitched hilarity as we take on the lighter side of science. Remember, this contest isn't just about breath control, it's about who can bring the most laughs with a touch of helium magic! So, grab a balloon and let's turn this place into a symphony of giggles!"
@@ -183,8 +183,8 @@ export const aaveg: Contest[] = [
         type: ['open'],
         allowedTeamSize: { min: 1, max: 6 },
         image: {
-            src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
-        },
+            src: '/images/contests/generic-poster.png',
+          },
         description: [
             {
                 p: "Step into the limelight and unleash your inner actor in our Ad Mockery Matchup! This event is a rollercoaster of wit and creativity, where contestants transform into marketing maestros. From iconic jingles to memorable slogans, participants recreate it all with a twist of humor. Get ready for a showdown of comedic charisma and persuasive prowess. Join us for a day of ad-spun amusement that will leave you laughing and longing for more!"
