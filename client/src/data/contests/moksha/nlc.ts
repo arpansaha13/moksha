@@ -5,7 +5,7 @@ export const nlc: Contest[] = [
         id: 45,
         slug: 'oxford-union-debate',
         name: 'Oxford Union Debate',
-        subtitle: 'Debate',
+        subtitle: 'Debate Competition',
         type: ['duo'],
         image: {
             src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
@@ -94,7 +94,7 @@ export const nlc: Contest[] = [
         id: 46,
         slug: 'open-mic',
         name: 'Open Mic',
-        subtitle: 'Open Mic',
+        subtitle: 'Open Mic Competition',
         type: ['solo'],
         image: {
             src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
@@ -178,7 +178,7 @@ export const nlc: Contest[] = [
         id: 47,
         slug: 'plot-twist',
         name: 'Plot-Twist',
-        subtitle: 'Writing',
+        subtitle: 'Writing Competition',
         type: ['solo'],
         image: {
             src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',

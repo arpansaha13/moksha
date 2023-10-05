@@ -5,7 +5,7 @@ export const aaveg: Contest[] = [
         id: 51,
         slug: 'i-me-myself',
         name: 'I Me Myself',
-        subtitle: 'Mono Act',
+        subtitle: 'Mono Act Competition',
         type: ['solo'],
         image: {
             src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
@@ -55,7 +55,7 @@ export const aaveg: Contest[] = [
         id: 52,
         slug: 'rangmanch',
         name: 'Rangmanch',
-        subtitle: 'Group Act',
+        subtitle: 'Group Act Competition',
         type: ['team'],
         allowedTeamSize: { min: 5, max: 10 },
         image: {
@@ -106,8 +106,8 @@ export const aaveg: Contest[] = [
         id: 53,
         slug: 'showcase-showdown',
         name: 'Showcase Showdown',
-        subtitle: 'Open Act',
-        type: ['solo'],
+        subtitle: 'Open Act Game',
+        type: ['open'],
         image: {
             src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
         },
@@ -141,7 +141,7 @@ export const aaveg: Contest[] = [
         slug: 'helium-highs',
         name: 'Helium Highs',
         subtitle: 'Helium Gas Game',
-        type: ['solo'],
+        type: ['open'],
         image: {
             src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
         },
@@ -179,8 +179,8 @@ export const aaveg: Contest[] = [
         id: 55,
         slug: 'ad-mockery-matchup',
         name: 'Ad Mockery Matchup',
-        subtitle: 'Advertisment Mimicry',
-        type: ['team'],
+        subtitle: 'Mimicry Game',
+        type: ['open'],
         allowedTeamSize: { min: 1, max: 6 },
         image: {
             src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
