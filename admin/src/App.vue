@@ -1,81 +1,100 @@
 <template>
-  <header class="px-6 py-3 flex items-center bg-gray-50 shadow">
-    <img src="/moksha/moksha-192x192.png" alt="Moksha Logo" class="block mr-2 w-10 h-10" />
+  <div v-if="!passwordMatched" class="w-screen h-screen flex flex-col items-center justify-center gap-6">
+    <img src="/moksha/moksha-192x192.png" alt="Moksha Logo" class="block mr-2 w-16 h-16" />
 
-    <p class="font-bold">Moksha 2023 Admin Client</p>
-  </header>
-
-  <main class="max-w-6xl mx-auto px-2 sm:px-0 py-6 space-y-6 min-h-[calc(100vh-128px)]">
-    <form class="px-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" @submit="search">
-      <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-        <SelectMenu
-          class="w-52 sm:w-40"
-          label="Club"
-          :items="clubs"
-          :model-value="selectedClub"
-          @update:model-value="newVal => (selectedClub = newVal)"
-        />
-        <SelectMenu
-          class="w-52 sm:w-40"
-          label="Contest type"
-          :items="contestTypes"
-          :model-value="selectedContestType"
-          @update:model-value="newVal => (selectedContestType = newVal)"
-        />
-        <div class="w-52">
-          <SelectMenu
-            v-if="typeof selectedContest !== 'undefined'"
-            class="w-full"
-            label="Contest name"
-            :items="selectedClubContests"
-            :model-value="selectedContest"
-            @update:model-value="newVal => (selectedContest = newVal)"
-          />
-          <p v-else class="w-full h-full text-gray-500 text-sm flex items-center font-medium">
-            <span>No contests found for this category</span>
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <button
-          type="submit"
-          :disabled="searching"
-          class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto relative"
-        >
-          <span :class="searching && 'text-transparent'">Search</span>
-          <span v-if="searching" class="absolute z-10 w-5 h-5 border-y-2 border-gray-50 rounded-full animate-spin" />
-        </button>
-      </div>
-    </form>
+    <h1 class="text-2xl font-bold">Moksha 2023 Admin Client</h1>
 
     <div
-      v-if="registrationData.length === 0"
-      class="min-w-full h-40 flex items-center justify-center bg-gray-50 rounded-sm md:rounded-lg shadow ring-1 ring-black ring-opacity-5 overflow-hidden"
+      class="p-4 max-w-md w-full mx-auto bg-gray-50 rounded-sm md:rounded-lg shadow ring-1 ring-black ring-opacity-5 overflow-hidden"
     >
-      <span v-if="firstSearch" class="w-6 h-6 border-y-2 border-gray-700 rounded-full animate-spin" />
-      <p v-else class="text-sm font-medium text-gray-600">No registrations found for this contest</p>
-    </div>
+      <form class="w-full text-sm" @submit="verifyPassword">
+        <label class="mb-1 block font-medium text-gray-700">Password</label>
+        <input type="password" class="w-full py-1.5 rounded" v-model="password" />
+        <p v-if="error !== null" class="mt-1 text-xs text-red-500 font-medium">{{ error }}</p>
 
-    <div v-else>
-      <SoloRegTable v-if="tableType === 'solo'" :registered-users="registrationData" />
-      <TeamRegTable v-else :registered-teams="registrationData" />
+        <div class="mt-4">
+          <BaseButton type="submit"> Submit </BaseButton>
+        </div>
+      </form>
     </div>
-  </main>
+  </div>
 
-  <footer class="p-6 flex items-center bg-gray-50 shadow">
-    <p class="text-center text-xs">© {{ new Date().getFullYear() }} Moksha, NIT Agartala. All rights reserved.</p>
-  </footer>
+  <div v-else>
+    <header class="px-6 py-3 flex items-center bg-gray-50 shadow">
+      <img src="/moksha/moksha-192x192.png" alt="Moksha Logo" class="block mr-2 w-10 h-10" />
+
+      <p class="font-bold">Moksha 2023 Admin Client</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-2 sm:px-0 py-6 space-y-6 min-h-[calc(100vh-128px)]">
+      <form class="px-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" @submit="search">
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+          <SelectMenu
+            class="w-52 sm:w-40"
+            label="Club"
+            :items="clubs"
+            :model-value="selectedClub"
+            @update:model-value="newVal => (selectedClub = newVal)"
+          />
+          <SelectMenu
+            class="w-52 sm:w-40"
+            label="Contest type"
+            :items="contestTypes"
+            :model-value="selectedContestType"
+            @update:model-value="newVal => (selectedContestType = newVal)"
+          />
+          <div class="w-52">
+            <SelectMenu
+              v-if="typeof selectedContest !== 'undefined'"
+              class="w-full"
+              label="Contest name"
+              :items="selectedClubContests"
+              :model-value="selectedContest"
+              @update:model-value="newVal => (selectedContest = newVal)"
+            />
+            <p v-else class="w-full h-full text-gray-500 text-sm flex items-center font-medium">
+              <span>No contests found for this category</span>
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <BaseButton type="submit" :loading="searching"> Search </BaseButton>
+        </div>
+      </form>
+
+      <div
+        v-if="registrationData.length === 0"
+        class="min-w-full h-40 flex items-center justify-center bg-gray-50 rounded-sm md:rounded-lg shadow ring-1 ring-black ring-opacity-5 overflow-hidden"
+      >
+        <span v-if="firstSearch" class="w-6 h-6 border-y-2 border-gray-700 rounded-full animate-spin" />
+        <p v-else class="text-sm font-medium text-gray-600">No registrations found for this contest</p>
+      </div>
+
+      <div v-else>
+        <SoloRegTable v-if="tableType === 'solo'" :registered-users="registrationData" />
+        <TeamRegTable v-else :registered-teams="registrationData" />
+      </div>
+    </main>
+
+    <footer class="p-6 flex items-center bg-gray-50 shadow">
+      <p class="text-center text-xs">© {{ new Date().getFullYear() }} Moksha, NIT Agartala. All rights reserved.</p>
+    </footer>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import BaseButton from '~/components/BaseButton.vue'
 import SelectMenu from '~/components/SelectMenu.vue'
 import SoloRegTable from '~/components/SoloRegTable.vue'
 import TeamRegTable from '~/components/TeamRegTable.vue'
 import { clubs, contestTypes, contests } from '~/data'
 import rfetch from '~/utils/rfetch'
 
+const passwordMatched = ref(false)
+const password = ref('')
+const error = ref<string | null>(null)
 const firstSearch = ref(true)
 const searching = ref(false)
 const selectedClub = ref(clubs[0])
@@ -119,4 +138,15 @@ async function search(e?: Event) {
 }
 
 onMounted(() => search())
+
+function verifyPassword(e: Event) {
+  e.preventDefault()
+
+  if (password.value === import.meta.env.VITE_ADMIN_CLIENT_PASS) {
+    passwordMatched.value = true
+    error.value = null
+  } else {
+    error.value = 'Incorrect password'
+  }
+}
 </script>
