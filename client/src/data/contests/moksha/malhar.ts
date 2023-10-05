@@ -5,11 +5,12 @@ import type { Contest } from '~/types'
 export const malhar: Contest[] = [
   {
     id: 5,
-    slug: 'solo-singing',
-    name: 'Solo singing',
+    slug: 'moksha-maestro',
+    name: 'Moksha Maestro',
+    subtitle: 'Solo Singing Competition',
     type: ['solo'],
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
@@ -24,12 +25,11 @@ export const malhar: Contest[] = [
       },
     ],
     instructions: [
-      { heading: 'Venue - Prelims' },
+      { heading: 'Venue' },
       {
-        p: 'Contestants will have to submit videos of a maximum of five (05) minutes of their performance to the official email id of Malhar.',
+        ul: ['Prelims: Contestants will have to submit videos of a maximum of five (05) minutes of their performance to the official email id of Malhar.',
+          'Finals: Auditorium or stage provided.']
       },
-      { heading: 'Venue - Finals' },
-      { p: 'Auditorium or stage provided.' },
       { heading: 'Rules - Prelims' },
       {
         ul: [
@@ -54,11 +54,11 @@ export const malhar: Contest[] = [
   {
     id: 6,
     slug: 'melody-mania',
-    name: 'Melody mania',
-    subtitle: 'Group singing',
+    name: 'Melody Mania',
+    subtitle: 'Group Singing Competition',
     type: ['team'],
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     allowedTeamSize: { min: 3, max: 6 },
     description: [
@@ -105,28 +105,27 @@ export const malhar: Contest[] = [
   {
     id: 7,
     slug: 'harmony-hunt',
-    name: 'Harmony hunt',
-    subtitle: 'Solo instrumental',
+    name: 'Harmony Hunt',
+    subtitle: 'Solo Instrumental Competition',
     type: ['solo'],
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
         p: 'This solo instrumental competition will be held in 2 stages: a preliminary round, from which selected contestants will advance to the final round and compete in the main event of ‘Moksha’, which will take place in the Auditorium.',
       },
-      { p: 'Winners will be awarded some exciting prizes.' },
+      {
+        bold: true,
+        p: 'Winners will be awarded some exciting prizes!'
+      },
       {
         p: 'VISION: The main motive of this solo instrumental competition is to discover the untapped talented instrumentalists and give them the platform to showcase their talent and perform their heart out. ‘Malhar’s’ vision is to encourage all the instrumentalists out there to express themselves in front of such a huge crowd and to push them towards active participation in club and college events in the future and outshine their cultural horizons.',
       },
     ],
     instructions: [
-      { heading: 'Venue - Prelims' },
-      { p: 'Online' },
-      { heading: 'Venue - Finals' },
-      { p: 'Auditorium or stage provided.' },
-      { heading: 'Duration' },
-      { p: '1 hour.' },
+      { heading: 'Venue' },
+      { ul: ['Prelims: Online', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'] },
       { heading: 'Rules - Prelims' },
       {
         ul: [
@@ -152,17 +151,21 @@ export const malhar: Contest[] = [
   },
   {
     id: 8,
-    slug: 'rap-battle',
-    name: 'Rap battle',
+    slug: 'beatnik',
+    name: 'Beatnik',
     type: ['solo'],
+    subtitle: 'Rap Battle',
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
         p: 'This rap battle competition will be held in two stages: a preliminary round, from which a chosen group of contestants will advance to the final round, which will take place in the auditorium.',
       },
-      { p: 'Winners will be awarded some exciting prizes which will be revealed later' },
+      {
+        bold: true,
+        p: 'Winners will be awarded some exciting prizes which will be revealed later!'
+      },
       {
         p: 'VISION: Finding undiscovered talent on campus and providing students with a stage to perform in addition to their academic obligations have always been the goals of Malhar. In addition, as a part of our musical endeavour, we will provide the perfect stage for all participants to broaden their perspectives beyond academics and exhibit their musical prowess.',
       },
@@ -170,7 +173,7 @@ export const malhar: Contest[] = [
     instructions: [
       { heading: 'Venue' },
       {
-        ul: ['Prelims: Offline', 'Finals: Auditorium or stage provided.'],
+        ul: ['Prelims: Offline', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'],
       },
       { heading: 'Rules - Prelims' },
       {
@@ -195,73 +198,113 @@ export const malhar: Contest[] = [
           'Judgment will be strictly based on beats, pronunciations, and speed.',
         ],
       },
+      {
+        bold: true,
+        p: 'Winners will be awarded some exciting prizes which will be revealed later.'
+      },
     ],
   },
+
   {
     id: 9,
-    slug: 'beatnik',
-    name: 'Beatnik',
-    subtitle: 'Beatboxing',
-    type: ['solo'],
+    slug: 'folklore-fiesta',
+    name: 'Folklore Fiesta',
+    type: ['team'],
+    allowedTeamSize: { min: 3, max: 7 },
+    subtitle: 'Group Singing Competition',
     image: {
-      src: '/images/contests/malhar/solo_singing/poster-1-1024x1024.jfif',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
-        p: 'Gear up! Beatboxers release your adrenalines to insane limits. Showcase your mini orchestra living in your throats by creating a wide range of sounds.',
+        p: 'India is a land of diverse culture and heritage. Folklore fiesta is a competition to celebrate the varied cultural heritage of different parts of India. This is the perfect platform to showcase your vocal talents.In this competition a group of performers have to choose any regional folk theme to perform, For example - Gujrati folk, Rajasthani folk, Assamese folk etc.This competition consists of two rounds: a preliminary round(online) from which a chosen group of contestants will advance to the final round. the winner will be announced respectively.'
       },
       {
-        p: "VISION: Malhar always tries to bring something new, innovative events on the table that breaks the trend of orthodox ,monotonous music life .Beatnik is a way to celebrate the art and sport of beatboxing, bring together a diverse community of performers and fans, and push the boundaries of what's possible with just your voice and some creative imagination.",
+        bold: true,
+        p: 'Winners will be awarded some exciting prizes which will be revealed later!'
+      },
+      {
+        p: "VISION: Malhar's mission has always been to provide a platform for talented singers to showcase their musical abilities. The competition can provide a way for these singers to gain exposure and recognition, and potentially even launch a career in the music industry. In addition, this competition will help to develop important teamwork skills, such as communication, collaboration, and respect for each other. As icing on the cake, this will promote cultural diversity by featuring groups with different backgrounds, musical traditions, and styles of music.",
       },
     ],
     instructions: [
-      { heading: 'Rules' },
+      { heading: 'Venue' },
       {
-        ul: [
-          'This is a solo beatboxing competition. This will be held in two levels - Prelims and Finals.',
-          'Prelims will be held online wherein top 4-6 will be selected and called up for finals in NIT ,Agartala during the fest.',
-          'In case a finalist is unable to attend the finale then the next finalist will be approached.',
-          'Decision of the judges will be final and binding. No changes will be made once the judges have announced the results.',
-          'No foul language is allowed. In case they use foul languages they will be disqualified.',
-        ],
+        ul: ['Prelims: Offline', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'],
       },
       { heading: 'Rules - Prelims' },
       {
         ul: [
-          'The participants will be required to send a video of not more than 1.5 minutes performing their piece to the official mail id of malhar club.',
-          'No musical instruments will be allowed. In case it is found, the participant will be disqualified.',
+          'The participants have to perform one or more songs of one regional folk of their choice and have to send the video in MP4 format to the official mail id of malhar.',
+          'Group will comprise members a maximum of 7 and a minimum of 3 which includes a minimum of 2 vocalists and at least 1 instrumentalist.', 'Time limit for performance will be 2-4 mins.',
+          'Participants will be given a maximum of 7 minutes and a minimum of 5 minutes to complete their performance. Extra time will deduct marks.',
+          'Judgment will be based on vocals and cultural representation: Sur, Taal, Lay, Pronounciation, Overall Impact.',
+          'Top 7 to 8 teams from this round will be qualified for finals.',
         ],
       },
       { heading: 'Rules - Finals' },
       {
         ul: [
-          'This will be a 1vs1 battle rounds among the top 4-6 participants wherein each beatboxer would be given 2 minutes each and the winners will be decided by the judges.',
-          'The winner from each battle will be promoted to the next battle and the opponents will be decided by the judges whichever way they seem fit.',
-          'No musical instruments will be allowed. In case it is found, the participant will be disqualified.',
+          'Participants have to perform one or more songs of their choice in the auditorium of NIT, Agartala.',
+          'Participants will be given a maximum of 7 minutes and a minimum of 5 minutes to complete their performance. Extra time will deduct marks.',
+          'Participants will carry their instruments (only a harmonium will be provided by the club).',
+          'Electrical guitars ( without amplifiers)and bass guitars (without any processors) are allowed. One synthesizer will be allowed per entry.',
+          'The following equipment will be provided by us: Power supply for synthesizer & Microphones and sounds.',
+          'Patch Change for the synthesizer is not allowed in the middle of the song.',
+          'Judgment will be based on vocals and cultural representation: Sur, Taal, Lay, Pronounciation, Overall Impact.',
+          'The decision of the judges will be final and binding.',
         ],
       },
     ],
   },
+
   {
-    id: 15,
-    slug: 'battle-of-bands',
-    name: 'Battle of Bands',
-    subtitle: 'Malhar',
+    id: 9,
+    slug: 'muzic-madness',
+    name: 'Muzic Madness',
     type: ['team'],
-    allowedTeamSize: { min: 3, max: null },
+    allowedTeamSize: { min: 5, max: 6 },
+    subtitle: 'Antakshari Game',
     image: {
-      sources: [
-        { srcSet: '/images/contests/malhar/battle-of-bands/poster-512x512.webp', type: 'image/webp' },
-        { srcSet: '/images/contests/malhar/battle-of-bands/poster-512x512.jpeg', type: 'image/jpeg' },
-        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.webp 2x', type: 'image/webp' },
-        { srcSet: '/images/contests/malhar/battle-of-bands/poster-1024x1024.jpeg 2x', type: 'image/jpeg' },
-      ],
-      src: '/images/contests/malhar/battle-of-bands/poster-512x512.jpeg',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
-        p: 'Harmonious Collision! Battle of the Beats! Get ready to witness an electrifying showdown of campus melodies as top musical bands clash in a symphonic spectacle. The stage is set, the amps are buzzing, and the atmosphere is charged with musical magic. Who will strike the perfect chord and claim the title of ultimate campus conqueror? Join us at Moksha for a night of rhythmic rivalry that will leave you dancing to the pulsating cadence of creativity!',
+        p: 'Antakshari is that game that has been played since Ramayana days of Hindu culture. We all are well known for it . Boredom pacifies its medicinal way out to such interesting games!!'
       },
+      {
+        p: "Musical games are very fun to play ,very much hyping and just changes the atmosphere of a place drastically,ex: from a very serious one to a very relaxing one.",
+      },
+      {
+        bold: true,
+        p: 'This game is also one kinda ANTAKSHARI only.'
+      },
+    ],
+    instructions: [
+      { heading: 'Venue' },
+      {
+        ul: ['Prelims: Visveswaraya Auditorium', 'Finals: Visveswaraya Auditorium'],
+      },
+      {
+        bold: true,
+        p: 'One selection round will also be there to select the groups for further steps.'
+      },
+      { heading: 'Rules' },
+      {
+        ul: [
+          'This game will consist of two rounds- Preliminary and Finals.',
+          'Group will comprise members a maximum of 7 and a minimum of 3 which includes a minimum of 2 vocalists and at least 1 instrumentalist.', 'Time limit for performance will be 2-4 mins.',
+          'No elimination will be there for these two rounds.',
+          'Winner will be decided on the verse of Sur,Lyrics,Time obviously.',
+          'First round will be like Antakshari only..I.e, starting the next song with the end most letter,the next group has to sing the song with that letter within a fixed time limit.',
+          'Second round will be a quiz round related to music.',
+          'Venue for both the rounds will be Auditorium.',
+        ],
+      },
+      {
+        bold: true,
+        p: 'The winner will be awarded with exciting prizes!!'
+      }
     ],
   },
 ]
