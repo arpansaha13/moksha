@@ -28,8 +28,8 @@ export function Component() {
       <Container>
         <h1 className='sr-only'>Events</h1>
 
+        <MokshaEvents mokshaEventsList={mokshaEventsList} className='mb-12' />
         <UdaanEvents udaanEventsList={udaanEventsList} />
-        <MokshaEvents mokshaEventsList={mokshaEventsList} />
       </Container>
     </>
   )
@@ -38,8 +38,8 @@ export function Component() {
 Component.displayName = 'Events'
 
 const UdaanEvents = memo(
-  ({ udaanEventsList }) => (
-    <section className='mb-12' id='udaan-events'>
+  ({ udaanEventsList, className }) => (
+    <section className={className} id='udaan-events'>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Udaan</h2>
 
       <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
@@ -55,8 +55,8 @@ const UdaanEvents = memo(
 )
 
 const MokshaEvents = memo(
-  ({ mokshaEventsList }) => (
-    <section id='moksha-events'>
+  ({ mokshaEventsList, className }) => (
+    <section id='moksha-events' className={className}>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
 
       {/* <StayTunedBanner /> */}

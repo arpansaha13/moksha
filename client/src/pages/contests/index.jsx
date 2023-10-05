@@ -39,8 +39,8 @@ export function Component() {
         </div>
       </Container>
 
-      <UdaanContests udaanContestsList={udaanContestsList} className='mb-12 space-y-6' />
-      <MokshaContests mokshaContestsMap={mokshaContestsMap} className='space-y-12' />
+      <MokshaContests mokshaContestsMap={mokshaContestsMap} className='mb-12 space-y-12' />
+      <UdaanContests udaanContestsList={udaanContestsList} className='space-y-6' />
     </>
   )
 }
