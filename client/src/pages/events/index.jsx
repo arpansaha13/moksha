@@ -83,7 +83,7 @@ const EventCard = memo(
 
         <div className='w-full px-4 pt-4'>
           <h3 className='text-lg text-amber-500 font-semibold'>
-            <DLink to={`/events/${event.club}/${event.slug}`} className='lg:hover:underline'>
+            <DLink to={`/events/${event.club}/${event.slug}`} className='lg:hover:underline line-clamp-1'>
               {event.name}
             </DLink>
           </h3>

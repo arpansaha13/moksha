@@ -119,7 +119,7 @@ const ContestCard = memo(
 
         <div className='w-full px-4 pt-4'>
           <h4 className='text-lg text-amber-500 font-semibold'>
-            <DLink to={`/contests/${clubSlug}/${contest.slug}`} className='lg:hover:underline'>
+            <DLink to={`/contests/${clubSlug}/${contest.slug}`} className='lg:hover:underline line-clamp-1'>
               {contest.name}
             </DLink>
           </h4>
