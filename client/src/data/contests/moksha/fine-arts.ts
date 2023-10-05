@@ -1,47 +1,94 @@
 import { Contest } from '~/types'
 
-// This is old data
-
 export const fineArts: Contest[] = [
   {
     id: 2,
-    slug: 'magic-of-fingers',
-    name: 'Magic of fingers',
+    slug: 'kalakriti',
+    name: 'KalaKriti',
     type: ['solo'],
     image: {
-      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
-        p: 'Who says a painter needs brush to unleash his imagination. All that was needed in this event were some water colours on one’s fingers and that’s how we crowned the Leonardo of finger painting.',
+        p: 'It is an event to provide a platform for children to showcase their talent, express their creativity and develop their artistic skills.',
+      },
+      {
+        bold:true,
+        p:'Theme',
+      },
+      {
+        ul: [
+          'Class (1-4) :- Paint the graffiti of Moksha. (Outline will be provided).',
+          'Class (5-8) :- Your favorite comic character.',
+          'Class (9-12) :- Anything that includes Moksha bird.',
+        ],
+      },
+      {
+        bold:true,
+        p:'Event Managers',
+      },
+      {
+        ul: [
+          'Arghya Paitya : +91 87877 63931',
+          'Sreeja Ghosh : +91 87989 96322',
+        ],
+      },
+    ],
+    instructions:[
+      { heading: 'Rules' },
+      {
+        ul: [
+          'All sketches should be coloured and can’t be only  a pencil sketch.',
+          'Drawing sheets will be provided on site by the organizers.',
+          'Every participant should bring their own pencil, rubber, board, colors during the contest day. Nothing related to them will be provided on site.',
+          'Duration of the competition will be 2hrs.',
+          'Participants must look after their own items carefully by themselves.',
+          'Participants have to bring their school Id card.',
+          'If any unfair means are found with the participant, his/her artwork will be canceled.',
+        ],
       },
     ],
   },
   {
     id: 3,
-    slug: 'instant-portrait',
-    name: 'Instant portrait',
+    subtitle: 'Artwork',
+    slug: 'comiquest',
+    name: 'Comiquest',
     type: ['solo'],
     image: {
-      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
+      src: '/images/contests/generic-poster.png',
     },
     description: [
       {
-        p: 'A portrait is a painting, photograph, sculpture, or other artistic representation of a person, in which the face and its expressions are predominant. The intent is to display the likeness, personality, and even the mood of the person.',
+        p: 'Comic characters or themes (All forms of art such as Digital, Traditional, Vector, etc are allowed) (All entries will be accepted online. No artwork will be accepted offline).',
+      },
+      {
+        bold:true,
+        p:'Event Managers',
+      },
+      {
+        ul: [
+          'Soumyadeep Shome : +91 96120 52905',
+          'Soumyadeep Bhowmik : +91 93629 49590',
+          'Anamika Debnath : +91 60091 55970',
+        ],
       },
     ],
-  },
-  {
-    id: 4,
-    slug: 'digital-illustration',
-    name: 'Digital illustration',
-    type: ['solo'],
-    image: {
-      src: '/images/contests/fine-arts/magic-of-fingers/poster-1164x1164.jpeg',
-    },
-    description: [
+    instructions:[
+      { heading: 'Rules' },
       {
-        p: 'Digital illustration or computer illustration is the use of digital tools to produce images under the direct manipulation of the artist, usually through a pointing device such as a graphics tablet or, less commonly, a mouse. It is distinguished from computer-generated art, which is produced by a computer using mathematical models created by the artist. It is also distinct from digital manipulation of photographs, in that it is an original construction "from scratch". Photographic elements such as background or texture may be incorporated into such works, but they are not necessarily the primary basis.',
+        ul: [
+          'Maximum two entries are allowed for each contestant.',
+          'Both digital artwork and hand drawn artwork can be submitted.',
+          'There will be two groups one for Digital work and the other is for Hand drawn art work ,so that the judgemnet can be fair.',
+          'Winners will be selected from each group.',
+          'Artworks will be uploaded to fineartsclub’s Instagram page.',
+          'The winners art works will be printed out and showcased in Fine arts club exhibition.',
+          'The best works will be showcased in our insta page.',
+          'The submission of artworks will be closed on the 1st day of Moksha',
+          'Results will be announced on the last day of Moksha.',
+        ],
       },
     ],
   },
