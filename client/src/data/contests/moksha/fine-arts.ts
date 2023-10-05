@@ -5,6 +5,7 @@ export const fineArts: Contest[] = [
     id: 2,
     slug: 'kalakriti',
     name: 'KalaKriti',
+    subtitle: 'Painting Competition',
     type: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
