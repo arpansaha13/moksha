@@ -2,7 +2,7 @@
   "name": "@moksha/client",
   "private": true,
   "description": "Official Moksha 2023 website, NIT Agartala",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
