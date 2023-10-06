@@ -165,7 +165,8 @@ class GetContestRegistrations(APIView):
                 data,
                 many=True,
                 empty=True,
-                fields={'user': UserSerializer()}
+                # AuthUserSerializer is used here to get email and phone for admin client
+                fields={'user': AuthUserSerializer()}
             )
 
             return Response({'data': serializer.data})
