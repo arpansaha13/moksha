@@ -1,9 +1,21 @@
 import { useMediaQuery } from 'react-responsive'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '../common/Sheet'
-import ContestTypeBadge from '../Contests/ContestTypeBadge'
+import ContestTypeBadge from './ContestTypeBadge'
+import type { Contest } from '~/types'
 
-export default function ContestOverview({ contest }) {
+interface ContestOverviewProps {
+  contest: Contest
+}
+
+interface RenderProseElementProps {
+  // FIXME: typescript is not able to identify the type of ProseElement
+  // proseElement: ProseElement
+
+  proseElement: any // for now
+}
+
+export default function ContestOverview({ contest }: ContestOverviewProps) {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
 
   return (
@@ -16,7 +28,7 @@ export default function ContestOverview({ contest }) {
             ))}
           </div>
           {contest.description.map((para, i) => (
-            <Para key={i} para={para} />
+            <RenderProseElement key={i} proseElement={para} />
           ))}
         </article>
       </Sheet>
@@ -27,7 +39,7 @@ export default function ContestOverview({ contest }) {
             <h2>Instructions</h2>
 
             {contest.instructions.map((para, i) => (
-              <Para key={i} para={para} />
+              <RenderProseElement key={i} proseElement={para} />
             ))}
           </article>
         </Sheet>
@@ -36,17 +48,21 @@ export default function ContestOverview({ contest }) {
   )
 }
 
-const Para = ({ para }) => {
-  if (!isNullOrUndefined(para.heading)) return <h3>{para.heading}</h3>
+const RenderProseElement = ({ proseElement }: RenderProseElementProps) => {
+  if (!isNullOrUndefined(proseElement.heading)) return <h3>{proseElement.heading}</h3>
 
-  if (!isNullOrUndefined(para.p)) return <p className={para.bold ? 'font-semibold' : ''}>{para.p}</p>
+  if (!isNullOrUndefined(proseElement.p))
+    return <p className={proseElement.bold ? 'font-semibold' : ''}>{proseElement.p}</p>
 
-  if (!isNullOrUndefined(para.ul))
+  if (!isNullOrUndefined(proseElement.ul)) {
     return (
       <ul>
-        {para.ul.map((li, i) => (
+        {proseElement.ul.map((li: string, i: number) => (
           <li key={i}>{li}</li>
         ))}
       </ul>
     )
+  }
+
+  return null
 }

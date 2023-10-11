@@ -17,17 +17,22 @@ export type ClubSlug = 'fine-arts' | 'malhar' | 'dzire' | 'aaveg' | 'nlc' | 'col
 type Heading = Record<'heading', string>
 type UnorderedList = Record<'ul', string[]>
 
-interface Para {
+type Para = {
   p: string
   bold?: boolean
 }
 
-type ProseElement = Heading | Para | UnorderedList
+export type ProseElement = Heading | Para | UnorderedList
 
 interface ImageSource {
   srcSet: string
   media?: string
   type?: string
+}
+
+export interface Image {
+  sources?: ImageSource[]
+  src: string
 }
 
 // # EVENT
@@ -37,17 +42,14 @@ export interface Event {
   slug: string
   name: string
   club: string
-  image: {
-    sources?: ImageSource[]
-    src: string
-  }
+  image: Image
   description: ProseElement[]
   instructions?: ProseElement[]
 }
 
 // # CONTEST
 
-type ContestType = 'solo' | 'team' | 'duo' | 'duet' | 'squad' | 'open'
+export type ContestType = 'solo' | 'team' | 'duo' | 'duet' | 'squad' | 'open'
 
 interface TeamSizeRange {
   min: number
@@ -62,10 +64,7 @@ interface BaseContest {
   name: string
   club?: ClubSlug
   subtitle?: string
-  image: {
-    sources?: ImageSource[]
-    src: string
-  }
+  image: Image
   deadline: Date
   description: ProseElement[]
   instructions?: ProseElement[]

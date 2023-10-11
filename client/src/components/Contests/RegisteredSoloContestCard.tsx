@@ -8,8 +8,13 @@ import { getMokshaContest } from '~/utils/getMokshaContest'
 import { getUdaanContest } from '~/utils/getUdaanContest'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 
-const RegisteredSoloContestCard = memo(({ clubSlug, contestSlug }) => {
-  const contest = getContest(clubSlug, contestSlug)
+interface RegisteredSoloContestCardProps {
+  clubSlug: string
+  contestSlug: string
+}
+
+const RegisteredSoloContestCard = memo(({ clubSlug, contestSlug }: RegisteredSoloContestCardProps) => {
+  const contest = getContest(clubSlug, contestSlug)!
   const link = `/contests/${clubSlug}/${contestSlug}`
 
   return (
@@ -17,7 +22,7 @@ const RegisteredSoloContestCard = memo(({ clubSlug, contestSlug }) => {
       <Sheet className='flex flex-row-reverse lg:flex-row overflow-hidden'>
         <div className='h-36 w-36 relative'>
           {/* Replace this image with contest poster */}
-          <Picture picture={contest.image} contestSlug={contest.slug} />
+          <Picture picture={contest.image} alt={`moksha-contest-${contest.slug}-poster`} />
         </div>
 
         <div className='flex-grow px-4 sm:px-6 py-3 sm:py-4 flex flex-col'>
@@ -49,7 +54,7 @@ const RegisteredSoloContestCard = memo(({ clubSlug, contestSlug }) => {
 
 export default RegisteredSoloContestCard
 
-function getContest(clubSlug, contestSlug) {
+function getContest(clubSlug: string, contestSlug: string) {
   const contest = getMokshaContest(clubSlug, contestSlug)
 
   return isNullOrUndefined(contest) ? getUdaanContest(contestSlug) : contest

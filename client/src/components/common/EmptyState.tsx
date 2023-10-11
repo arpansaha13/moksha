@@ -3,7 +3,7 @@ import { Icon, type IconifyIcon } from '@iconify/react'
 import { classNames } from '@arpansaha13/utils'
 
 interface EmptyStateProps {
-  icon: IconifyIcon
+  icon?: IconifyIcon
   title: string
   description: string
 }

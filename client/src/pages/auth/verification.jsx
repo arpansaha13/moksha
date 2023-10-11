@@ -6,7 +6,7 @@ import { useMap } from '~/hooks/useMap'
 import { useFetch } from '~/hooks/useFetch'
 import BaseButton from '~base/BaseButton'
 import BaseButtonLink from '~base/BaseButtonLink'
-import OtpInput from '~common/OtpInput'
+import OtpInput from '~/components/Auth/OtpInput'
 import CsrfField from '~common/CsrfField'
 import { getVerificationLinkValidity } from '~loaders/auth.loader'
 

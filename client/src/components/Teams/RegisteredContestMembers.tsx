@@ -1,6 +1,11 @@
 import UserListItem from '~/components/Teams/UserListItem'
+import type { User } from '~/types'
 
-export default function RegisteredContestMembers({ members }) {
+interface RegisteredContestMembersProps {
+  members: { user: User }[]
+}
+
+export default function RegisteredContestMembers({ members }: RegisteredContestMembersProps) {
   return (
     <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs lg:text-sm'>
       {members.map(({ user: member }) => (

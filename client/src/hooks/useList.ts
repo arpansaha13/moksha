@@ -1,32 +1,56 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useReducer } from 'react'
 
-function reducer(state, action) {
-  const index = action.index
-  const value = action.value
+interface UseListOptions {
+  minLength?: number
+  maxLength?: number
+}
+
+interface UseListActionSet<T> {
+  type: 'set'
+  index: number
+  value: T
+}
+
+interface UseListActionPush<T> {
+  type: 'push'
+  value: T
+}
+
+interface UseListActionPop {
+  type: 'pop'
+  index?: number
+}
+
+interface UseListActionAll<T> {
+  type: 'all'
+  newList: T[]
+}
+
+type UseListAction<T> = UseListActionSet<T> | UseListActionPush<T> | UseListActionPop | UseListActionAll<T>
+
+function reducer<T>(state: T[], action: UseListAction<T>) {
   const newState = [...state]
 
   switch (action.type) {
     case 'set':
-      newState[index] = value
+      newState[action.index] = action.value
       break
     case 'push':
-      newState.push(value)
+      newState.push(action.value)
       break
     case 'pop':
-      if (typeof index !== 'undefined') newState.splice(index, 1)
+      if (typeof action.index !== 'undefined') newState.splice(action.index, 1)
       else newState.pop()
       break
     case 'all':
       return action.newList
-    default:
-      throw Error('Unknown action: ' + action.type)
   }
 
   return newState
 }
 
-export function useList(initialValue, options) {
+export function useList<T = unknown>(initialValue: T[], options?: UseListOptions) {
   const minLength = options?.minLength
   const maxLength = options?.maxLength
 
@@ -37,14 +61,14 @@ export function useList(initialValue, options) {
     throw new Error(`Length of list provided is more than the given "options.maxLength: ${maxLength}"`)
   }
 
-  const [list, dispatch] = useReducer(reducer, initialValue)
+  const [list, dispatch] = useReducer(reducer<T>, initialValue)
 
-  const set = useCallback((index, value) => {
+  const set = useCallback((index: number, value: T) => {
     dispatch({ type: 'set', index, value })
   }, [])
 
   const push = useCallback(
-    value => {
+    (value: T) => {
       if (typeof maxLength !== 'undefined' && list.length === maxLength) return
 
       dispatch({ type: 'push', value })
@@ -53,7 +77,7 @@ export function useList(initialValue, options) {
   )
 
   const pop = useCallback(
-    index => {
+    (index: number) => {
       if (typeof minLength !== 'undefined' && list.length === minLength) return
 
       dispatch({ type: 'pop', index })
@@ -61,9 +85,9 @@ export function useList(initialValue, options) {
     [list]
   )
 
-  const setAll = useCallback(newList => {
+  const setAll = useCallback((newList: T[]) => {
     dispatch({ type: 'all', newList })
   }, [])
 
-  return [list, { set, push, pop, setAll }]
+  return [list, { set, push, pop, setAll }] as const
 }

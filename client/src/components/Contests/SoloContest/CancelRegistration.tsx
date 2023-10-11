@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom'
 import { useFetch } from '~/hooks/useFetch'
 import BaseButton from '~base/BaseButton'
 
-export default function CancelRegistration({ registrationId, setRegistrationId }) {
+interface CancelRegistrationProps {
+  registrationId: number | null
+  setRegistrationId: React.Dispatch<React.SetStateAction<number | null>>
+}
+
+export default function CancelRegistration({ registrationId, setRegistrationId }: CancelRegistrationProps) {
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
 

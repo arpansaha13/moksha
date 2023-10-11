@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom'
 
-export default function BaseButtonLink({ to, children }) {
+interface BaseButtonLinkProps {
+  to: string
+  children: React.ReactNode
+}
+
+export default function BaseButtonLink({ to, children }: BaseButtonLinkProps) {
   return (
     <Link
       to={to}

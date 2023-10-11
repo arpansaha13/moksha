@@ -7,8 +7,26 @@ import Loader from '~common/Loader'
 import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import RegisteredContestMembers from '~/components/Teams/RegisteredContestMembers'
+import type { Contest } from '~/types'
 
-export default function RegistrationsPanel({ contest }) {
+interface RegistrationsPanelProps {
+  contest: Contest
+}
+
+interface MyRegistrationProps {
+  reg: any
+  fromCreatedTeam: boolean
+}
+
+interface CreatedTeamRegistrationProps {
+  reg: any
+}
+
+interface RegistrationProps {
+  reg: any
+}
+
+export default function RegistrationsPanel({ contest }: RegistrationsPanelProps) {
   const fetchHook = useFetch()
   const [reg, setReg] = useState(null)
   const [createdTeamReg, setCreatedTeamReg] = useState(null)
@@ -48,7 +66,7 @@ export default function RegistrationsPanel({ contest }) {
   )
 }
 
-function MyRegistration({ reg, fromCreatedTeam }) {
+function MyRegistration({ reg, fromCreatedTeam }: MyRegistrationProps) {
   return (
     <div>
       <div className='mb-6'>
@@ -79,7 +97,7 @@ function MyRegistration({ reg, fromCreatedTeam }) {
   )
 }
 
-function CreatedTeamRegistration({ reg }) {
+function CreatedTeamRegistration({ reg }: CreatedTeamRegistrationProps) {
   return (
     <div>
       <div className='mb-6'>
@@ -98,7 +116,7 @@ function CreatedTeamRegistration({ reg }) {
   )
 }
 
-const Registration = memo(({ reg }) => {
+const Registration = memo(({ reg }: RegistrationProps) => {
   return (
     <Sheet className='px-6 py-4'>
       <h3 className='mb-2 text-xl font-semibold'>
@@ -116,18 +134,18 @@ const Registration = memo(({ reg }) => {
   )
 })
 
-async function fetchAuthUserReg(fetchHook, contestId) {
-  const params = new URLSearchParams({ contest_id: contestId }).toString()
+async function fetchAuthUserReg(fetchHook: ReturnType<typeof useFetch<any>>, contestId: number) {
+  const params = new URLSearchParams({ contest_id: contestId.toString() }).toString()
   const res = await fetchHook(`users/me/registered-team-contests?${params}`)
   return res.data?.team_contest_registration
 }
 
-async function fetchCreatedTeamReg(fetchHook, contestId) {
+async function fetchCreatedTeamReg(fetchHook: ReturnType<typeof useFetch<any>>, contestId: number) {
   const { data: team } = await fetchHook('users/me/created-team')
 
   if (isNullOrUndefined(team)) return { hasCreatedTeam: false, data: null }
 
-  const params = new URLSearchParams({ contest_id: contestId }).toString()
+  const params = new URLSearchParams({ contest_id: contestId.toString() }).toString()
   const res = await fetchHook(`teams/${team.team_id}/registered-contests?${params}`)
   return { hasCreatedTeam: true, data: res.data }
 }

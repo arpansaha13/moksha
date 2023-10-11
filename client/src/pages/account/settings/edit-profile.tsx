@@ -6,13 +6,12 @@ import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
 import CsrfField from '~common/CsrfField'
-import Notification from '~common/Notification'
+import Notification, { type NotificationStatus } from '~common/Notification'
 import getFormData from '~/utils/getFormData'
 import { useLoaderData } from 'react-router-dom'
 import { getAuthUserData } from '~/router/loaders/auth.loader'
 import type { User } from '~/types'
 
-type NotificationStatus = 'success' | 'error'
 type EditFormData = Pick<User, 'name' | 'phone_no' | 'institution'>
 
 export const loader = getAuthUserData

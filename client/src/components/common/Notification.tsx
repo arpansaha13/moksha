@@ -5,6 +5,8 @@ import closeIcon from '@iconify-icons/mdi/close'
 import checkIcon from '@iconify-icons/mdi/check-circle-outline'
 import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
 
+export type NotificationStatus = 'success' | 'error'
+
 interface NotificationProps {
   title: string
   description: string
@@ -12,7 +14,7 @@ interface NotificationProps {
   setShow: (bool: boolean) => void
   timeout?: number
   className?: string
-  status?: 'success' | 'error'
+  status?: NotificationStatus
 }
 
 const Notification = memo(

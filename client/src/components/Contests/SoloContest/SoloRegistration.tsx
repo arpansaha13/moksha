@@ -3,19 +3,24 @@ import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useFetch } from '~/hooks/useFetch'
 import { useAppContext } from '~/containers/DataProvider'
 import Loader from '~common/Loader'
+import type { Contest } from '~/types'
 
 const Register = lazy(() => import('./Register'))
 const CancelRegistration = lazy(() => import('./CancelRegistration'))
 
-const SoloRegistration = ({ contest }) => {
-  const { appContext } = useAppContext()
+interface SoloRegistrationProps {
+  contest: Contest
+}
+
+const SoloRegistration = ({ contest }: SoloRegistrationProps) => {
+  const { appContext } = useAppContext()!
   const fetchHook = useFetch()
-  const [registrationId, setRegistrationId] = useState(null)
+  const [registrationId, setRegistrationId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (appContext.authenticated) {
-      const params = new URLSearchParams({ contest_id: contest.id })
+      const params = new URLSearchParams({ contest_id: contest.id.toString() })
 
       fetchHook(`contests/solo/registration?${params.toString()}`).then(({ data }) => {
         if (isNullOrUndefined(data)) setRegistrationId(null)

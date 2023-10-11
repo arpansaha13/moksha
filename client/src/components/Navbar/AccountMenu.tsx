@@ -6,7 +6,12 @@ import Sheet from '~common/Sheet'
 import Avatar from '~common/Avatar'
 import { profileTabs } from '~/data/tabs'
 
-const Dropdown = memo(({ avatarIdx, onLogOut }) => {
+interface AccountMenuProps {
+  avatarIdx: number
+  onLogOut: () => void
+}
+
+const AccountMenu = memo(({ avatarIdx, onLogOut }: AccountMenuProps) => {
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <div>
@@ -56,4 +61,5 @@ const Dropdown = memo(({ avatarIdx, onLogOut }) => {
     </Menu>
   )
 })
-export default Dropdown
+
+export default AccountMenu

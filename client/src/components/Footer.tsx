@@ -5,7 +5,7 @@ import githubIcon from '@iconify-icons/mdi/github'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
 import { navTabs } from '../data/tabs'
 
-const socialLinks = [
+const socialLinks = Object.freeze([
   // {
   //   name: 'Facebook',
   //   href: 'https://www.instagram.com/moksha.nita/?igshid=MzRlODBiNWFlZA%3D%3D',
@@ -21,7 +21,7 @@ const socialLinks = [
     href: 'https://github.com/arpansaha13/moksha',
     icon: githubIcon,
   },
-]
+])
 
 const CURRENT_YEAR = new Date().getFullYear()
 

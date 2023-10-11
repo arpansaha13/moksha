@@ -34,16 +34,7 @@ function reducer<T>(state: T, action: UseMapAction<T>): T {
   }
 }
 
-export function useMap<T extends Record<Key, any>>(
-  initialValue: T
-): [
-  T,
-  {
-    set: (key: keyof T, value: T[keyof T]) => void
-    setAll: (newValue: T) => void
-    reset: () => void
-  }
-] {
+export function useMap<T extends Record<Key, any>>(initialValue: T) {
   const [map, dispatch] = useReducer(reducer<T>, initialValue)
 
   const set = useCallback((key: keyof T, value: T[keyof T]) => {
@@ -59,5 +50,5 @@ export function useMap<T extends Record<Key, any>>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return [map, { set, setAll, reset }]
+  return [map, { set, setAll, reset }] as const
 }

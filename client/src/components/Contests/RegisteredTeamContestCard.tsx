@@ -11,12 +11,24 @@ import RegisteredContestMembers from '../Teams/RegisteredContestMembers'
 import { getMokshaContest } from '~/utils/getMokshaContest'
 import { getUdaanContest } from '~/utils/getUdaanContest'
 
-const RegisteredTeamContestCard = memo(
-  ({ reg, showRegisteredMembers = true }) => {
-    const clubName = reg.contest.club_slug
-    const contestSlug = reg.contest.contest_slug
+interface RegisteredTeamContestCardProps {
+  reg: any
+  /** @default true */
+  showRegisteredMembers?: boolean
+}
 
-    const contest = getContest(clubName, contestSlug)
+interface ConditionalWrapperProps {
+  renderDisclosure: boolean
+  children: React.ReactNode
+  className?: string
+}
+
+const RegisteredTeamContestCard = memo(
+  ({ reg, showRegisteredMembers = true }: RegisteredTeamContestCardProps) => {
+    const clubName = reg.contest.club_slug as string
+    const contestSlug = reg.contest.contest_slug as string
+
+    const contest = getContest(clubName, contestSlug)!
     const link = `/contests/${clubName}/${contestSlug}`
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
@@ -27,7 +39,7 @@ const RegisteredTeamContestCard = memo(
         <div className='flex'>
           <MLink to={link} as='div' className='flex-shrink-0 block h-36 w-36 relative'>
             {/* Replace this image with contest poster */}
-            <Picture picture={contest.image} contestSlug={contest.slug} />
+            <Picture picture={contest.image} alt={`moksha-contest-${contest.slug}-poster`} />
           </MLink>
 
           <div className='@container flex-grow px-4 sm:px-6 py-3 sm:py-4 flex flex-col justify-between'>
@@ -69,7 +81,7 @@ const RegisteredTeamContestCard = memo(
 
                 {renderDisclosure && (
                   <Disclosure.Button className='text-amber-600 hover:text-amber-500 font-medium transition-colors'>
-                    {({ open }) => (open ? 'Hide members' : 'Show members')}
+                    {({ open }) => <>{open ? 'Hide members' : 'Show members'}</>}
                   </Disclosure.Button>
                 )}
               </div>
@@ -92,7 +104,7 @@ const RegisteredTeamContestCard = memo(
 
 export default RegisteredTeamContestCard
 
-function ConditionalWrapper({ renderDisclosure, children, className }) {
+function ConditionalWrapper({ renderDisclosure, children, className }: ConditionalWrapperProps) {
   return renderDisclosure ? (
     <Disclosure as={Sheet} className={className}>
       {children}
@@ -102,7 +114,7 @@ function ConditionalWrapper({ renderDisclosure, children, className }) {
   )
 }
 
-function getContest(clubSlug, contestSlug) {
+function getContest(clubSlug: string, contestSlug: string) {
   const contest = getMokshaContest(clubSlug, contestSlug)
 
   return isNullOrUndefined(contest) ? getUdaanContest(contestSlug) : contest

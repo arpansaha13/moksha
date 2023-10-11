@@ -1,8 +1,14 @@
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { memo } from 'react'
+import type { Image } from '~/types'
+
+interface PictureProps {
+  picture: Image
+  alt: string
+}
 
 const Picture = memo(
-  ({ picture, alt }) => {
+  ({ picture, alt }: PictureProps) => {
     return (
       <picture className='w-full h-full object-cover'>
         {!isNullOrUndefined(picture.sources) &&
@@ -13,7 +19,7 @@ const Picture = memo(
       </picture>
     )
   },
-  (prev, next) => prev.contestSlug === next.contestSlug
+  (prev, next) => prev.picture.src === next.picture.src
 )
 
 export default Picture

@@ -3,38 +3,47 @@ import { Tab } from '@headlessui/react'
 import { classNames } from '@arpansaha13/utils'
 import { useAppContext } from '~/containers/DataProvider'
 import Sheet from '~common/Sheet'
+import type { Contest } from '~/types'
 
 const ContestOverview = lazy(() => import('../ContestOverview'))
 const RegisterPanel = lazy(() => import('./RegisterPanel'))
 const RegistrationsPanel = lazy(() => import('./RegistrationsPanel'))
 
+interface TeamContestProps {
+  contest: Contest
+}
+
+interface TabPanelButtonProps {
+  name: string
+}
+
 const panels = Object.freeze([
   {
     name: 'Overview',
-    query: '',
     requiresAuth: false,
+    // query: '',
   },
   {
     name: 'Register',
-    query: new URLSearchParams({ panel: 'register' }).toString(),
     requiresAuth: false,
+    // query: new URLSearchParams({ panel: 'register' }).toString(),
   },
   {
     name: 'Registrations',
-    query: new URLSearchParams({ panel: 'registrations' }).toString(),
     requiresAuth: true,
+    // query: new URLSearchParams({ panel: 'registrations' }).toString(),
   },
 ])
 
-const TeamContest = ({ contest }) => {
-  const { appContext } = useAppContext()
+const TeamContest = ({ contest }: TeamContestProps) => {
+  const { appContext } = useAppContext()!
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const showPanel = useMemo(
     () => panels.map(panel => !panel.requiresAuth || appContext.authenticated),
     [appContext.authenticated]
   )
-  const switchTab = useCallback(i => startTransition(() => setSelectedIndex(i)), [])
+  const switchTab = useCallback((i: number) => startTransition(() => setSelectedIndex(i)), [])
 
   return (
     <Tab.Group selectedIndex={selectedIndex} onChange={switchTab}>
@@ -45,9 +54,7 @@ const TeamContest = ({ contest }) => {
           appContext.authenticated ? 'grid-cols-3' : 'grid-cols-2'
         )}
       >
-        {panels.map((panel, i) =>
-          showPanel[i] ? <TabPanelButton key={panel.name} name={panel.name} query={panel.query} /> : null
-        )}
+        {panels.map((panel, i) => (showPanel[i] ? <TabPanelButton key={panel.name} name={panel.name} /> : null))}
       </Tab.List>
 
       <Tab.Panels>
@@ -77,7 +84,7 @@ const TeamContest = ({ contest }) => {
 
 export default TeamContest
 
-const TabPanelButton = memo(({ name }) => (
+const TabPanelButton = memo(({ name }: TabPanelButtonProps) => (
   <Tab as={Fragment}>
     {({ selected }) => (
       <button type='button' className='px-1 xs:px-4 py-3 w-full relative focus:outline-none'>

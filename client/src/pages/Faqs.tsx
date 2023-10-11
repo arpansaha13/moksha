@@ -3,7 +3,12 @@ import { Helmet } from 'react-helmet'
 import { slugify } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import Container from '~common/Container'
-import faqs from '~/data/faqs'
+import faqs, { type Faq as FaqType } from '~/data/faqs'
+
+interface FaqProps {
+  faq: FaqType
+  slug: string
+}
 
 export function Component() {
   return (
@@ -32,7 +37,7 @@ export function Component() {
 Component.displayName = 'Faqs'
 
 const Faq = memo(
-  ({ faq, slug }) => (
+  ({ faq, slug }: FaqProps) => (
     <Sheet className='p-4 sm:p-6' id={slug}>
       <div className='not-prose'>
         <h2 className='text-xl font-semibold'>{faq.question}</h2>

@@ -1,6 +1,11 @@
 import Avatar from '~common/Avatar'
+import type { User } from '~/types'
 
-const UserListItem = ({ user }) => (
+interface UserListItemProps {
+  user: User
+}
+
+const UserListItem = ({ user }: UserListItemProps) => (
   <>
     <div className='w-9 h-9 lg:w-12 lg:h-12'>
       <Avatar avatarIdx={user.avatar_idx} />

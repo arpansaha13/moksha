@@ -1,7 +1,15 @@
 import { memo } from 'react'
 import { classNames } from '@arpansaha13/utils'
+import type { ContestType } from '~/types'
 
-const ContestTypeBadge = memo(({ type, small = false }) => (
+interface ContestTypeBadgeProps {
+  type: ContestType
+
+  /** @default false */
+  small?: boolean
+}
+
+const ContestTypeBadge = memo(({ type, small = false }: ContestTypeBadgeProps) => (
   <span
     className={classNames(
       'inline-block px-2 py-0.5 rounded-md font-semibold',

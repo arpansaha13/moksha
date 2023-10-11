@@ -2,11 +2,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useMap } from '~/hooks/useMap'
-import Notification from '~/components/common/Notification'
+import Notification, { type NotificationStatus } from '~/components/common/Notification'
 import AuthBg from '~/components/pictures/AuthBg'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
 
-const getHeading = route => {
+const getHeading = (route: string) => {
   switch (route) {
     case '/auth/login':
       return 'Login to your account'
@@ -26,10 +26,10 @@ export default function AuthLayout() {
     show: false,
     title: '',
     description: '',
-    status: 'success',
+    status: 'success' as NotificationStatus,
   })
 
-  const setShowNotification = useCallback(bool => setNotification('show', bool), [])
+  const setShowNotification = useCallback((bool: boolean) => setNotification('show', bool), [])
 
   const location = useLocation()
   const [heading, setHeading] = useState(getHeading(location.pathname))

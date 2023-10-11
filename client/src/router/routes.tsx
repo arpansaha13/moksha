@@ -42,7 +42,7 @@ const ResendVerificationLink = () => import('../pages/auth/resend-verification-l
 const ForgotPassword = () => import('../pages/auth/forgot-password')
 const ResetPassword = () => import('../pages/auth/reset-password')
 
-function fetchRoute(rImport) {
+function fetchRoute(rImport: () => Promise<any>) {
   return async () => {
     if (!nprogress.isStarted()) nprogress.start()
     const rImported = await rImport()

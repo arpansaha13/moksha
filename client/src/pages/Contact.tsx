@@ -3,7 +3,7 @@ import Container from '../components/common/Container'
 import { Icon } from '@iconify/react'
 import gmailIcon from '@iconify-icons/mdi/gmail'
 import whatsappIcon from '@iconify-icons/mdi/whatsapp'
-import contact from '../data/contact'
+import contact, { type Contact } from '../data/contact'
 
 export function Component() {
   return (
@@ -39,7 +39,7 @@ export function Component() {
 
 Component.displayName = 'Contact'
 
-const Card = ({ data }) => (
+const Card = ({ data }: { data: Contact }) => (
   <Sheet className='p-4 overflow-hidden'>
     <p className='text-lg sm:text-xl text-amber-500 font-semibold'>{data.name}</p>
     <p className='text-xs 2xs:text-sm text-gray-400 uppercase'>{data.designation}</p>
