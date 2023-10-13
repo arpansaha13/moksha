@@ -1,6 +1,6 @@
 import { startTransition, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useFetch } from '~/hooks/useFetch'
+import { useFetch } from '~/hooks/common/useFetch'
 import BaseButton from '~base/BaseButton'
 
 interface CancelRegistrationProps {

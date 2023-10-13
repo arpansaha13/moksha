@@ -1,6 +1,6 @@
 import { lazy, startTransition, useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { useFetch } from '~/hooks/useFetch'
+import { useFetch } from '~/hooks/common/useFetch'
 import { useAppContext } from '~/containers/DataProvider'
 import Loader from '~common/Loader'
 import type { Contest } from '~/types'

@@ -1,5 +1,5 @@
 import { startTransition, useRef, useState } from 'react'
-import { useFetch } from '~/hooks/useFetch'
+import { useFetch } from '~/hooks/common/useFetch'
 import BaseButton from '~base/BaseButton'
 import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'

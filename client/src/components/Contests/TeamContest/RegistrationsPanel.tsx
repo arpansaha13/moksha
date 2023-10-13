@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { useFetch } from '~/hooks/useFetch'
+import { useFetch } from '~/hooks/common/useFetch'
 import Sheet from '~common/Sheet'
 import Loader from '~common/Loader'
 import EmptyState from '~common/EmptyState'

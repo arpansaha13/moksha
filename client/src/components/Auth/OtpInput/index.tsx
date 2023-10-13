@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createRef, useCallback, useEffect, useMemo, useState } from 'react'
-import { useList } from '~/hooks/useList'
+import { useList } from '~/hooks/common/useList'
 import styles from './style.module.css'
 import { classNames } from '@arpansaha13/utils'
 

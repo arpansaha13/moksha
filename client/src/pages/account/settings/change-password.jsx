@@ -1,6 +1,6 @@
 import nprogress from 'nprogress'
-import { useMap } from '~/hooks/useMap'
-import { useFetch } from '~/hooks/useFetch'
+import { useMap } from '~/hooks/common/useMap'
+import { useFetch } from '~/hooks/common/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'

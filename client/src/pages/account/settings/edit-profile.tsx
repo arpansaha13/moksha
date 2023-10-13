@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { useFetch } from '~/hooks/useFetch'
-import { useMap } from '~/hooks/useMap'
+import { useFetch } from '~/hooks/common/useFetch'
+import { useMap } from '~/hooks/common/useMap'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'

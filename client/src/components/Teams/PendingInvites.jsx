@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect } from 'react'
 import accountClockIcon from '@iconify-icons/mdi/account-clock-outline'
-import { useSet } from '~/hooks/useSet'
+import { useSet } from '~/hooks/common/useSet'
 import Sheet from '~common/Sheet'
 import EmptyState from '~common/EmptyState'
 import UserListItem from './UserListItem'

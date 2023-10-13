@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useOutletContext } from 'react-router-dom'
-import { useFetch } from '~/hooks/useFetch'
+import { useFetch } from '~/hooks/common/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import CsrfField from '~common/CsrfField'

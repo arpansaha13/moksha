@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import { useMap } from '~/hooks/useMap'
+import { useMap } from '~/hooks/common/useMap'
 import Notification, { type NotificationStatus } from '~/components/common/Notification'
 import AuthBg from '~/components/pictures/AuthBg'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
