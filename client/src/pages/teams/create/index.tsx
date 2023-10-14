@@ -1,30 +1,18 @@
-import { useCallback, useRef, useState } from 'react'
-import { Link, useLoaderData, useNavigate } from 'react-router-dom'
-import { isNullOrUndefined, trim } from '@arpansaha13/utils'
-import { useMap } from '~/hooks/useMap'
-import { useFetch } from '~/hooks/useFetch'
+import { Link } from 'react-router-dom'
+import { isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import BaseButton from '~base/BaseButton'
 import BaseInput from '~base/BaseInput'
 import CsrfField from '~common/CsrfField'
 import Notification from '~common/Notification'
-import getFormData from '~/utils/getFormData'
 import { allowIfNoTeamCreated } from '~loaders/teams.loader'
+import { useCreateTeamController, useCreateTeamFormController } from './create-team.controller'
+import type { CreateTeamFormProps } from './create-team.types'
 
 export const loader = allowIfNoTeamCreated
 
 export function Component() {
-  const createdTeam = useLoaderData()
-
-  const [notification, { set, setAll }] = useMap({
-    show: false,
-    title: '',
-    description: '',
-    status: 'success',
-  })
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const setShowNotification = useCallback(bool => set('show', bool), [])
+  const { createdTeam, notification, setShowNotification, setAllNotification } = useCreateTeamController()
 
   return (
     <main className='max-w-xl mx-auto h-cover flex flex-col justify-center relative'>
@@ -55,7 +43,7 @@ export function Component() {
               </p>
             </>
           ) : (
-            <CreateTeamForm setShowNotification={setShowNotification} setAll={setAll} />
+            <CreateTeamForm setShowNotification={setShowNotification} setAllNotification={setAllNotification} />
           )}
         </Sheet>
       </div>
@@ -65,40 +53,8 @@ export function Component() {
 
 Component.displayName = 'CreateTeam'
 
-function CreateTeamForm({ setShowNotification, setAll }) {
-  const navigate = useNavigate()
-  const fetchHook = useFetch()
-  const formRef = useRef(null)
-  const [loading, setLoading] = useState(false)
-
-  const createTeam = useCallback(e => {
-    e.preventDefault()
-
-    setLoading(true)
-    const formData = getFormData(formRef.current)
-    formData.team_name = trim(formData.team_name)
-
-    fetchHook('teams', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(res => {
-        navigate(`/teams/${res.team_id}`)
-        setShowNotification(false)
-      })
-      .catch(err => {
-        if (Number(err.status) !== 409) throw err
-
-        setAll({
-          show: true,
-          title: 'Team creation failed',
-          description: err.message,
-          status: 'error',
-        })
-      })
-      .finally(() => setLoading(false))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+function CreateTeamForm(props: CreateTeamFormProps) {
+  const { formRef, loading, createTeam } = useCreateTeamFormController(props)
 
   return (
     <form ref={formRef} onSubmit={createTeam}>
@@ -107,7 +63,7 @@ function CreateTeamForm({ setShowNotification, setAll }) {
       <p>One user can create and be the leader of only one team.</p>
 
       <div className='not-prose mt-6'>
-        <BaseInput name='team_name' type='text' label='Team name' required />
+        <BaseInput id='team_name' name='team_name' type='text' label='Team name' required />
       </div>
 
       <CsrfField />

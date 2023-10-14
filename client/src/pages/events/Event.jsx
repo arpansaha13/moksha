@@ -87,7 +87,7 @@ function EventInfo({ event }) {
       <Sheet className='p-4 sm:p-6'>
         <article className='markdown'>
           {event.description.map((para, i) => (
-            <Para key={i} para={para} />
+            <ProseElement key={i} para={para} />
           ))}
         </article>
       </Sheet>
@@ -98,7 +98,7 @@ function EventInfo({ event }) {
             <h2>Instructions</h2>
 
             {event.instructions.map((para, i) => (
-              <Para key={i} para={para} />
+              <ProseElement key={i} para={para} />
             ))}
           </article>
         </Sheet>
@@ -107,15 +107,16 @@ function EventInfo({ event }) {
   )
 }
 
-const Para = ({ para }) => {
-  if (!isNullOrUndefined(para.heading)) return <h3>{para.heading}</h3>
+const ProseElement = ({ proseElement }) => {
+  if (!isNullOrUndefined(proseElement.heading)) return <h3>{proseElement.heading}</h3>
 
-  if (!isNullOrUndefined(para.p)) return <p className={para.bold ? 'font-semibold' : ''}>{para.p}</p>
+  if (!isNullOrUndefined(proseElement.p))
+    return <p className={proseElement.bold ? 'font-semibold' : ''}>{proseElement.p}</p>
 
-  if (!isNullOrUndefined(para.ul))
+  if (!isNullOrUndefined(proseElement.ul))
     return (
       <ul>
-        {para.ul.map((li, i) => (
+        {proseElement.ul.map((li, i) => (
           <li key={i}>{li}</li>
         ))}
       </ul>

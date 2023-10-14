@@ -5,7 +5,7 @@ import { classNames } from '@arpansaha13/utils'
 interface EmptyStateProps {
   icon?: IconifyIcon
   title: string
-  description: string
+  description?: string
 }
 
 const EmptyState = memo(({ icon, title, description }: EmptyStateProps) => {

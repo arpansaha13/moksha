@@ -1,13 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Suspense, lazy, memo, startTransition, useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, useLoaderData } from 'react-router-dom'
+import { Suspense, lazy, memo } from 'react'
+import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import calendarRemoveIcon from '@iconify-icons/mdi/calendar-remove'
 import accountMultiplePlusIcon from '@iconify-icons/mdi/account-multiple-plus'
 import { classNames } from '@arpansaha13/utils'
-import { useAppContext } from '~/containers/DataProvider'
-import { useFetch } from '~/hooks/useFetch'
-import { useDebouncedFn } from '~/hooks/useDebouncedFn'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
 import Loader from '~common/Loader'
@@ -16,57 +12,28 @@ import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import UserListItem from '~/components/Teams/UserListItem'
 import { getTeamData } from '~loaders/teams.loader'
+import { useRegisteredContests, useTeam } from './team.controller'
+import type { RegisteredContestsProps } from './team.types'
 
 export const loader = getTeamData
 
-const InviteModal = lazy(() => import('../../components/Teams/InviteModal'))
-const PendingInvites = lazy(() => import('../../components/Teams/PendingInvites'))
-const RegisteredTeamContestCard = lazy(() => import('../../components/Contests/RegisteredTeamContestCard'))
+const InviteModal = lazy(() => import('../../../components/Teams/InviteModal'))
+const PendingInvites = lazy(() => import('../../../components/Teams/PendingInvites'))
+const RegisteredTeamContestCard = lazy(() => import('../../../components/Contests/RegisteredTeamContestCard'))
 
 export function Component() {
-  const fetchHook = useFetch()
-  const { appContext } = useAppContext()
-  const { team, members } = useLoaderData()
-  const [pendingInvites, setPendingInvites] = useState([])
-  const [loadingInvites, setLoadingInvites] = useState(true)
-  const [modalOpen, setModalOpen] = useState(false)
-
-  const isLeader = team.leader.user_id === appContext.user_id
-  const isMember = useMemo(() => isLeader || members.findIndex(m => m.user_id === appContext.user_id) !== -1, [])
-
-  useEffect(() => {
-    if (isLeader) {
-      fetchHook(`teams/${team.team_id}/pending-invites`).then(r => {
-        setPendingInvites(r.data)
-        startTransition(() => setLoadingInvites(false))
-      })
-    }
-  }, [])
-
-  const refetchPendingInvites = useDebouncedFn(async () => {
-    const res = await fetchHook(`teams/${team.team_id}/pending-invites`)
-    setPendingInvites(res.data)
-  }, 500)
-
-  const inviteCall = useCallback(async userId => {
-    await fetchHook('invites', {
-      method: 'POST',
-      body: {
-        team_id: team.team_id,
-        user_id: userId,
-      },
-    })
-  }, [])
-
-  const withdrawInviteCall = useCallback(async userId => {
-    await fetchHook('invites', {
-      method: 'DELETE',
-      body: {
-        team_id: team.team_id,
-        user_id: userId,
-      },
-    })
-  }, [])
+  const {
+    team,
+    pendingInvites,
+    loadingInvites,
+    isLeader,
+    isMember,
+    modalOpen,
+    setModalOpen,
+    refetchPendingInvites,
+    inviteCall,
+    withdrawInviteCall,
+  } = useTeam()
 
   return (
     <Container
@@ -107,7 +74,7 @@ export function Component() {
             )}
           </div>
 
-          <TeamMembers members={members} />
+          <TeamMembers />
 
           {isMember && <RegisteredContests teamId={team.team_id} />}
         </div>
@@ -147,32 +114,26 @@ export function Component() {
 
 Component.displayName = 'Team'
 
-const TeamMembers = memo(({ members }) => (
-  <Sheet className='px-6 py-4 space-y-3'>
-    <ul className='grid grid-cols-1 sm:grid-cols-2 text-xs lg:text-sm'>
-      {members.map(member => (
-        <li key={member.user_id} className='py-1.5 first:pt-0 last:pb-0'>
-          <div className='text-gray-100 flex items-center'>
-            <UserListItem user={member} />
-          </div>
-        </li>
-      ))}
-    </ul>
-  </Sheet>
-))
+const TeamMembers = memo(() => {
+  const { members } = useTeam()
 
-const RegisteredContests = memo(({ teamId }) => {
-  const fetchHook = useFetch()
-  const [loading, setLoading] = useState(true)
-  const [registrations, setRegistrations] = useState([])
+  return (
+    <Sheet className='px-6 py-4 space-y-3'>
+      <ul className='grid grid-cols-1 sm:grid-cols-2 text-xs lg:text-sm'>
+        {members.map(member => (
+          <li key={member.user_id} className='py-1.5 first:pt-0 last:pb-0'>
+            <div className='text-gray-100 flex items-center'>
+              <UserListItem user={member} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </Sheet>
+  )
+})
 
-  useEffect(() => {
-    fetchHook(`teams/${teamId}/registered-contests`)
-      .then(r => setRegistrations(r.data))
-      .finally(() => {
-        startTransition(() => setLoading(false))
-      })
-  }, [])
+const RegisteredContests = memo((props: RegisteredContestsProps) => {
+  const { loading, registrations } = useRegisteredContests(props)
 
   const heading = (
     <div className='h-[42px] flex items-center'>

@@ -1,23 +1,25 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { Link, useOutletContext, useSearchParams } from 'react-router-dom'
-import { trim } from '@arpansaha13/utils'
+import { useOutletContext, useSearchParams } from 'react-router-dom'
 import { useMap } from '~/hooks/common/useMap'
 import { useFetch } from '~/hooks/common/useFetch'
-import BaseInput from '~base/BaseInput'
-import BaseButton from '~base/BaseButton'
-import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
+import { trim } from '@arpansaha13/utils'
 
-export function Component() {
+interface Field extends React.InputHTMLAttributes<HTMLInputElement> {
+  id: string
+  label: string
+  validationError?: string | null
+}
+
+export function useSignUpController() {
   const [searchParams] = useSearchParams()
-  const { setAllNotification } = useOutletContext()
+  const { setAllNotification } = useOutletContext() as any // FIXME: fix types
 
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
   const formRef = useRef(null)
 
-  const [validationErrors, { set: setError }] = useMap({
+  const [validationErrors, { set: setError }] = useMap<Record<string, string | null>>({
     username: null,
     password: null,
     confirm_password: null,
@@ -26,7 +28,7 @@ export function Component() {
   const fields = useMemo(() => getFields(validationErrors), [validationErrors])
 
   const signUp = useCallback(
-    e => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
 
       const formData = getFormData(formRef.current)
@@ -42,7 +44,7 @@ export function Component() {
         setError('confirm_password', null)
       }
 
-      if (!validateUsername(formData.username, setError)) {
+      if (!validateUsername(formData.username as string, setError)) {
         hasError = true
       }
 
@@ -77,60 +79,10 @@ export function Component() {
     [validationErrors, formRef]
   )
 
-  return (
-    <main className='sm:max-w-2xl px-4 sm:px-0'>
-      <Helmet>
-        <title>Moksha | Sign up</title>
-      </Helmet>
-
-      <form ref={formRef} className='space-y-6' onSubmit={signUp}>
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6'>
-          {fields.map(field => (
-            <BaseInput key={field.id} {...field} />
-          ))}
-        </div>
-
-        <CsrfField />
-
-        <div className='text-sm 2xs:flex 2xs:items-center 2xs:justify-between space-y-3 2xs:space-y-0'>
-          <div>
-            <Link to='/auth/forgot-password'>
-              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
-                Forgot <span className='hidden xs:inline'>your</span> password?
-              </span>
-            </Link>
-          </div>
-
-          <div>
-            <Link to='/auth/resend-verification-link'>
-              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>
-                Resend verification link
-              </span>
-            </Link>
-          </div>
-        </div>
-
-        <div>
-          <BaseButton type='submit' stretch loading={loading}>
-            Sign up
-          </BaseButton>
-        </div>
-
-        <div className='flex items-center'>
-          <div className='text-sm'>
-            <span className='text-gray-100'>Already have an account?</span>{' '}
-            <Link to={{ pathname: '/auth/login', search: searchParams.toString() }}>
-              <span className='font-medium text-amber-600 hover:text-amber-500 cursor-pointer'>Login</span>
-            </Link>
-          </div>
-        </div>
-      </form>
-    </main>
-  )
+  return { formRef, loading, fields, searchParams, signUp }
 }
-Component.displayName = 'SignUpPage'
 
-function validateUsername(username, setError) {
+function validateUsername(username: string, setError: (key: string, value: string | null) => void): boolean {
   const spacialChars = /[ `!@#$%^&*()+\-=[\]{};':"\\|,<>/?~]/
   const consecutiveDots = /\.{2,}/g
 
@@ -147,15 +99,15 @@ function validateUsername(username, setError) {
   return false
 }
 
-function prepareRequestBody(formData) {
-  formData.name = trim(formData.name)
-  formData.institution = trim(formData.institution)
-  formData['avatar_idx'] = formData['phone_no'] % 10
-  formData['username'] = formData['username'].toLowerCase() // force lowercase
+function prepareRequestBody(formData: ReturnType<typeof getFormData>) {
+  formData.name = trim(formData.name as string)
+  formData.institution = trim(formData.institution as string)
+  formData['avatar_idx'] = String(Number(formData['phone_no']) % 10)
+  formData['username'] = (formData['username'] as string).toLowerCase() // force lowercase
 }
 
-const getFields = validationErrors => {
-  const fields = [
+const getFields = (validationErrors: Record<string, string | null>): Field[] => {
+  const fields: Field[] = [
     {
       id: 'name',
       name: 'name',

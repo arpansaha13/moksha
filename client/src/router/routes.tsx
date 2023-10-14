@@ -24,8 +24,8 @@ const Contests = () => import('../pages/contests')
 const Contest = () => import('../pages/contests/Contest')
 const Faqs = () => import('../pages/Faqs')
 const Contact = () => import('../pages/Contact')
-const Team = () => import('../pages/teams/Team')
-const CreateTeam = () => import('../pages/teams/Create')
+const Team = () => import('../pages/teams/team')
+const CreateTeam = () => import('../pages/teams/create')
 const Merch = () => import('../pages/Merch')
 
 const Profile = () => import('../pages/account/Profile')
@@ -36,7 +36,7 @@ const EditProfile = () => import('../pages/account/settings/edit-profile')
 const ChangePassword = () => import('../pages/account/settings/change-password')
 
 const Login = () => import('../pages/auth/login')
-const Registration = () => import('../pages/auth/register')
+const SignUp = () => import('../pages/auth/signup')
 const Verification = () => import('../pages/auth/verification')
 const ResendVerificationLink = () => import('../pages/auth/resend-verification-link')
 const ForgotPassword = () => import('../pages/auth/forgot-password')
@@ -85,7 +85,7 @@ const routes = createRoutesFromElements(
 
     <Route loader={allowIfNotAuthenticated} element={<AuthLayout />}>
       <Route path='/auth/login' lazy={fetchRoute(Login)} />
-      <Route path='/auth/register' lazy={fetchRoute(Registration)} />
+      <Route path='/auth/register' lazy={fetchRoute(SignUp)} />
       <Route path='/auth/verification/:hash' lazy={fetchRoute(Verification)} />
       <Route path='/auth/forgot-password' lazy={fetchRoute(ForgotPassword)} />
       <Route path='/auth/reset-password/:hash' lazy={fetchRoute(ResetPassword)} />

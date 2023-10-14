@@ -1,13 +1,10 @@
 import nprogress from 'nprogress'
-import { useMap } from '~/hooks/common/useMap'
-import { useFetch } from '~/hooks/common/useFetch'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
 import CsrfField from '~common/CsrfField'
 import Notification from '~common/Notification'
-import { useRef, useState } from 'react'
-import getFormData from '~/utils/getFormData'
+import { useChangePasswordController } from './change-password.controller'
 
 export const loader = () => {
   nprogress.done()
@@ -15,67 +12,14 @@ export const loader = () => {
 }
 
 export function Component() {
-  const fetchHook = useFetch()
-  const formRef = useRef(null)
-  const [loading, setLoading] = useState(false)
-
-  const [notification, { set, setAll }] = useMap({
-    show: false,
-    title: '',
-    description: '',
-    status: 'success',
-  })
-
-  const [validationErrors, { set: setError }] = useMap({
-    old_password: null,
-    new_password: null,
-    confirm_password: null,
-  })
-
-  function changePassword(e) {
-    e.preventDefault()
-    setLoading(true)
-
-    const formData = getFormData(formRef.current)
-
-    if (formData.new_password !== formData.confirm_password) {
-      setError('new_password', 'Password and confirm-password do not match')
-      setError('confirm_password', 'Password and confirm-password do not match')
-      setLoading(false)
-      return
-    } else if (validationErrors.new_password) {
-      setError('new_password', null)
-      setError('confirm_password', null)
-    }
-
-    fetchHook('auth/change-password', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(res => {
-        setAll({
-          show: true,
-          title: 'Password updated!',
-          description: res.message,
-          status: 'success',
-        })
-      })
-      .catch(err => {
-        setAll({
-          show: true,
-          title: 'Failed',
-          description: err.message,
-          status: 'error',
-        })
-      })
-      .finally(() => setLoading(false))
-  }
+  const { formRef, loading, notification, validationErrors, changePassword, setShowNotification } =
+    useChangePasswordController()
 
   return (
     <main>
       <Notification
         show={notification.show}
-        setShow={bool => set('show', bool)}
+        setShow={setShowNotification}
         status={notification.status}
         title={notification.title}
         description={notification.description}
@@ -126,4 +70,5 @@ export function Component() {
     </main>
   )
 }
+
 Component.displayName = 'ChangePassword'

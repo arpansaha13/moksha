@@ -8,10 +8,25 @@ import MLink from '~common/Links/MLink'
 import { memo } from 'react'
 import { getAuthUserTeams } from '~loaders/account.loader'
 
+// FIXME: fix types
+
+interface LoaderData {
+  createdTeam: any
+  joinedTeams: any[]
+}
+
+interface CreatedTeamProps {
+  team: any
+}
+
+interface TeamCardProps {
+  team: any
+}
+
 export const loader = getAuthUserTeams
 
 export function Component() {
-  const { createdTeam, joinedTeams } = useLoaderData()
+  const { createdTeam, joinedTeams } = useLoaderData() as LoaderData
 
   return (
     <main
@@ -43,7 +58,7 @@ export function Component() {
 
 Component.displayName = 'Teams'
 
-function CreatedTeam({ team }) {
+function CreatedTeam({ team }: CreatedTeamProps) {
   if (!isNullOrUndefined(team)) {
     return <TeamCard key={team.team_id} team={team} />
   }
@@ -66,7 +81,7 @@ function CreatedTeam({ team }) {
 }
 
 const TeamCard = memo(
-  ({ team }) => (
+  ({ team }: TeamCardProps) => (
     <MLink as='div' to={`/teams/${team.team_id}`} className='block'>
       <Sheet className='px-6 py-4 overflow-hidden space-y-3'>
         <h3 className='text-lg font-semibold text-amber-500'>

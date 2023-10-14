@@ -5,10 +5,17 @@ import RegisteredSoloContestCard from '~/components/Contests/RegisteredSoloConte
 import RegisteredTeamContestCard from '~/components/Contests/RegisteredTeamContestCard'
 import { getAuthUserContests } from '~loaders/account.loader'
 
+// FIXME: fix types
+
+interface LoaderData {
+  soloContests: any[]
+  teamContests: any[]
+}
+
 export const loader = getAuthUserContests
 
 export function Component() {
-  const { soloContests, teamContests } = useLoaderData()
+  const { soloContests, teamContests } = useLoaderData() as LoaderData
 
   if (soloContests.length === 0 && teamContests.length === 0) {
     return (

@@ -1,22 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLoaderData } from 'react-router-dom'
 import { useFetch } from '~/hooks/common/useFetch'
 import { useMap } from '~/hooks/common/useMap'
-import BaseInput from '~base/BaseInput'
-import BaseButton from '~base/BaseButton'
-import Sheet from '~common/Sheet'
-import CsrfField from '~common/CsrfField'
-import Notification, { type NotificationStatus } from '~common/Notification'
+import { useNotification } from '~/hooks/useNotification'
 import getFormData from '~/utils/getFormData'
-import { useLoaderData } from 'react-router-dom'
-import { getAuthUserData } from '~/router/loaders/auth.loader'
 import type { User } from '~/types'
 
 type EditFormData = Pick<User, 'name' | 'phone_no' | 'institution'>
 
-export const loader = getAuthUserData
-
-export function Component() {
+export function useEditProfileController() {
   const authUser = useRef(useLoaderData() as User)
 
   const fetchHook = useFetch()
@@ -43,12 +36,8 @@ export function Component() {
     []
   )
 
-  const [notification, { set: setNotification, setAll }] = useMap({
-    show: false,
-    title: '',
-    description: '',
-    status: 'success' as NotificationStatus,
-  })
+  const [notification, { set, setAll }] = useNotification()
+  const setShowNotification = useCallback((bool: boolean) => set('show', bool), [])
 
   function editProfile(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -81,40 +70,8 @@ export function Component() {
       .finally(() => setLoading(false))
   }
 
-  return (
-    <main>
-      <Notification
-        show={notification.show}
-        setShow={(bool: boolean) => setNotification('show', bool)}
-        status={notification.status}
-        title={notification.title}
-        description={notification.description}
-        timeout={5}
-        className='top-16'
-      />
-
-      <h2 className='mb-4 text-2xl font-bold text-gray-50'>Edit profile</h2>
-
-      <Sheet className='mt-4 p-4 sm:p-6'>
-        <form ref={formRef} className='max-w-sm space-y-6' onSubmit={editProfile}>
-          {fields.map(field => (
-            <BaseInput key={field.id} {...field} />
-          ))}
-
-          <CsrfField />
-
-          <div>
-            <BaseButton disabled={disabled} type='submit' loading={loading}>
-              Save
-            </BaseButton>
-          </div>
-        </form>
-      </Sheet>
-    </main>
-  )
+  return { formRef, loading, disabled, notification, fields, editProfile, setShowNotification }
 }
-
-Component.displayName = 'EditProfile'
 
 function hasUpdatedField(isFieldUpdated: Record<keyof EditFormData, boolean>) {
   for (const bool of Object.values(isFieldUpdated)) {

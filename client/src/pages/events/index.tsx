@@ -11,13 +11,32 @@ import Container from '~common/Container'
 import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import Picture from '~/components/pictures/Picture'
-// import StayTunedBanner from '~/components/StayTunedBanner'
 import { getEvents } from '~loaders/events.loader'
+import type { Event } from '~/types'
+
+interface LoaderData {
+  mokshaEventsList: readonly Event[]
+  udaanEventsList: readonly Event[]
+}
+
+interface UdaanEventsProps {
+  udaanEventsList: readonly Event[]
+  className?: string
+}
+
+interface MokshaEventsProps {
+  mokshaEventsList: readonly Event[]
+  className?: string
+}
+
+interface EventCardProps {
+  readonly event: Event
+}
 
 export const loader = getEvents
 
 export function Component() {
-  const { mokshaEventsList, udaanEventsList } = useLoaderData()
+  const { mokshaEventsList, udaanEventsList } = useLoaderData() as LoaderData
 
   return (
     <>
@@ -38,7 +57,7 @@ export function Component() {
 Component.displayName = 'Events'
 
 const UdaanEvents = memo(
-  ({ udaanEventsList, className }) => (
+  ({ udaanEventsList, className }: UdaanEventsProps) => (
     <section className={className} id='udaan-events'>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Udaan</h2>
 
@@ -55,11 +74,9 @@ const UdaanEvents = memo(
 )
 
 const MokshaEvents = memo(
-  ({ mokshaEventsList, className }) => (
+  ({ mokshaEventsList, className }: MokshaEventsProps) => (
     <section id='moksha-events' className={className}>
       <h2 className='mb-6 text-4xl text-center font-semibold border-b-2 border-amber-900/70'>Moksha</h2>
-
-      {/* <StayTunedBanner /> */}
 
       <div className='h-scroll sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {mokshaEventsList.map(event => (
@@ -74,7 +91,7 @@ const MokshaEvents = memo(
 )
 
 const EventCard = memo(
-  ({ event }) => (
+  ({ event }: EventCardProps) => (
     <Sheet className='w-full flex flex-col !bg-amber-900/60 text-sm overflow-hidden'>
       <MLink to={`/events/${event.club}/${event.slug}`} as='div' className='block h-[304px]'>
         <div className='w-full h-48 flex items-center justify-center relative'>
@@ -91,7 +108,8 @@ const EventCard = memo(
           <p className='text-sm text-gray-400'>{capitalCase(event.club)}</p>
 
           <div className='mt-2 text-sm text-gray-300 space-y-1 line-clamp-2'>
-            {event.description.map((para, i) => (
+            {/* FIXME: fix types */}
+            {event.description.map((para: any, i) => (
               <p key={i}>{para.p}</p>
             ))}
           </div>
@@ -113,7 +131,8 @@ const EventCard = memo(
           data={{
             url: `/events/${event.club}/${event.slug}`,
             title: `Moksha event - ${event.name}`,
-            text: event.description[0].p,
+            // FIXME: fix types
+            text: (event.description[0] as any).p,
           }}
           className='block text-amber-600 hover:text-amber-500'
         >

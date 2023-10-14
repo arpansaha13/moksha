@@ -1,27 +1,25 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
-import { useParams, useOutletContext, useLoaderData } from 'react-router-dom'
-import { useMap } from '~/hooks/common/useMap'
-import { useFetch } from '~/hooks/common/useFetch'
+import { useLoaderData } from 'react-router-dom'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import BaseButtonLink from '~base/BaseButtonLink'
 import CsrfField from '~common/CsrfField'
-import getFormData from '~/utils/getFormData'
 import { getForgotPassLinkValidity } from '~loaders/auth.loader'
+import { useResetPasswordController } from './reset-password.controller'
 
 export const loader = getForgotPassLinkValidity
 
 export function Component() {
   const linkIsValid = useLoaderData()
-  const [passIsReset, setPassIsReset] = useState(false)
+  const { passIsReset } = useResetPasswordController()
 
   const content = useMemo(() => {
     if (!linkIsValid) return <LinkExpired />
 
     if (passIsReset) return <SuccessInfo />
 
-    return <ResetPassForm setPassIsReset={setPassIsReset} />
+    return <ResetPassForm />
   }, [linkIsValid, passIsReset])
 
   return (
@@ -35,55 +33,10 @@ export function Component() {
   )
 }
 
-Component.displayName = 'VerificationPage'
+Component.displayName = 'Verification'
 
-function ResetPassForm({ setPassIsReset }) {
-  const params = useParams()
-  const { setNotification, setAllNotification } = useOutletContext()
-
-  const fetchHook = useFetch()
-  const formRef = useRef(null)
-  const [loading, setLoading] = useState(false)
-
-  const [validationErrors, { set: setError }] = useMap({
-    password: null,
-    confirm_password: null,
-  })
-
-  function resetPass(e) {
-    e.preventDefault()
-    setLoading(true)
-
-    const formData = getFormData(formRef.current)
-
-    if (formData.password !== formData.confirm_password) {
-      setError('password', 'Password and confirm-password do not match')
-      setError('confirm_password', 'Password and confirm-password do not match')
-      setLoading(false)
-      return
-    } else if (validationErrors.password) {
-      setError('password', null)
-      setError('confirm_password', null)
-    }
-
-    fetchHook(`auth/reset-password/${params.hash}`, {
-      method: 'POST',
-      body: formData,
-    })
-      .then(() => {
-        setPassIsReset(true)
-        setNotification('show', false)
-      })
-      .catch(err => {
-        setAllNotification({
-          show: true,
-          title: 'Validation failed',
-          description: err.message,
-          status: 'error',
-        })
-      })
-      .finally(() => setLoading(false))
-  }
+function ResetPassForm() {
+  const { formRef, loading, validationErrors, resetPass } = useResetPasswordController()
 
   return (
     <form ref={formRef} className='space-y-6' onSubmit={resetPass}>
