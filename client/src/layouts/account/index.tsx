@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { memo, useCallback, useState } from 'react'
+import { memo } from 'react'
 import { Helmet } from 'react-helmet'
 import { NavLink, Outlet, useLoaderData } from 'react-router-dom'
 import { Icon } from '@iconify/react'
@@ -7,16 +6,21 @@ import checkIcon from '@iconify-icons/mdi/check'
 import closeIcon from '@iconify-icons/mdi/close'
 import accountClockIcon from '@iconify-icons/mdi/account-clock-outline'
 import { classNames } from '@arpansaha13/utils'
-import { useSet } from '~/hooks/common/useSet'
-import { useFetch } from '~/hooks/common/useFetch'
 import Sheet from '~common/Sheet'
 import Loader from '~common/Loader'
 import Container from '~common/Container'
 import EmptyState from '~common/EmptyState'
 import { profileTabs } from '~/data/tabs'
+import { useReceivedInvitesController } from './account.controller'
+import type {
+  AcceptRejectButtonProps,
+  IconButtonProps,
+  InviteListItemProps,
+  ReceivedInvitesProps,
+} from './account.types'
 
 function AccountLayout() {
-  const { receivedInvites } = useLoaderData()
+  const { receivedInvites } = useLoaderData() as any // FIXME: fix types
 
   return (
     <>
@@ -61,33 +65,11 @@ function AccountLayout() {
     </>
   )
 }
+
 export default AccountLayout
 
-const ReceivedInvites = ({ invites }) => {
-  const fetchHook = useFetch()
-  const loading = useSet()
-  const [receivedInvites, setReceivedInvites] = useState(invites)
-
-  const acceptInvite = useCallback(async id => {
-    loading.add(id)
-    await fetchHook(`invites/${id}/accept`, { method: 'PATCH' })
-    loading.delete(id)
-    // TODO: show link to team profile instead of deleting
-    setReceivedInvites(arr => {
-      const idx = arr.findIndex(inv => inv.id === id)
-      arr.splice(idx, 1)
-      return [...arr]
-    })
-  }, [])
-
-  const rejectInvite = useCallback(id => {
-    fetchHook(`invites/${id}/reject`, { method: 'PATCH' })
-    setReceivedInvites(arr => {
-      const idx = arr.findIndex(inv => inv.id === id)
-      arr.splice(idx, 1)
-      return [...arr]
-    })
-  }, [])
+const ReceivedInvites = (props: ReceivedInvitesProps) => {
+  const { receivedInvites, loading, acceptInvite, rejectInvite } = useReceivedInvitesController(props)
 
   const heading = <h3 className='mb-4 text-xl font-bold text-gray-50'>Received invites</h3>
 
@@ -134,26 +116,26 @@ const ReceivedInvites = ({ invites }) => {
   )
 }
 
-const InviteListItem = ({ invite }) => (
+const InviteListItem = ({ invite }: InviteListItemProps) => (
   <div className='ml-1 lg:ml-2 flex-grow'>
     <p className='font-semibold'>{invite.team.team_name}</p>
     {/* <p className='text-gray-400'>{`@${invite.username}`}</p> */}
   </div>
 )
 
-const AcceptButton = memo(({ action, id }) => (
+const AcceptButton = memo(({ action, id }: AcceptRejectButtonProps) => (
   <div>
     <IconButton action={action} icon={checkIcon} id={id} desc='Accept' />
   </div>
 ))
 
-const RejectButton = memo(({ action, id }) => (
+const RejectButton = memo(({ action, id }: AcceptRejectButtonProps) => (
   <div>
     <IconButton action={action} icon={closeIcon} id={id} desc='Reject' />
   </div>
 ))
 
-const IconButton = ({ action, icon, id, desc }) => (
+const IconButton = ({ action, icon, id, desc }: IconButtonProps) => (
   <button
     type='button'
     className='p-0.5 lg:p-1 flex items-center justify-center hover:bg-amber-900/60 text-amber-500 border border-amber-500 rounded-full transition-colors relative'

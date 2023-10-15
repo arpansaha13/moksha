@@ -4,7 +4,7 @@ import { classNames } from '@arpansaha13/utils'
 
 interface EmptyStateProps {
   icon?: IconifyIcon
-  title: string
+  title?: string
   description?: string
 }
 
