@@ -86,8 +86,8 @@ function EventInfo({ event }) {
     <>
       <Sheet className='p-4 sm:p-6'>
         <article className='markdown'>
-          {event.description.map((para, i) => (
-            <ProseElement key={i} para={para} />
+          {event.description.map((proseElement, i) => (
+            <ProseElement key={i} proseElement={proseElement} />
           ))}
         </article>
       </Sheet>
@@ -97,8 +97,8 @@ function EventInfo({ event }) {
           <article className='markdown'>
             <h2>Instructions</h2>
 
-            {event.instructions.map((para, i) => (
-              <ProseElement key={i} para={para} />
+            {event.instructions.map((proseElement, i) => (
+              <ProseElement key={i} proseElement={proseElement} />
             ))}
           </article>
         </Sheet>

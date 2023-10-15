@@ -105,7 +105,7 @@ const EventCard = memo(
             </DLink>
           </h3>
 
-          <p className='text-sm text-gray-400'>{capitalCase(event.club)}</p>
+          <p className='text-sm text-gray-400'>{event.subtitle}</p>
 
           <div className='mt-2 text-sm text-gray-300 space-y-1 line-clamp-2'>
             {/* FIXME: fix types */}

@@ -6,6 +6,7 @@ const dzire: Event[] = [
     slug: 'flash-mob',
     name: 'Flash Mob',
     club: 'dzire',
+    subtitle: 'Dzire',
     image: {
       sources: [
         { srcSet: '/images/events/dzire/flash-mob/poster-512x512.webp', type: 'image/webp' },
@@ -29,6 +30,7 @@ const malhar: Event[] = [
     slug: 'street-jam',
     name: 'Street Jam',
     club: 'malhar',
+    subtitle: 'Malhar',
     image: {
       sources: [
         { srcSet: '/images/events/malhar/street-jam/poster-512x512.webp', type: 'image/webp' },
@@ -52,6 +54,7 @@ const aaveg: Event[] = [
     slug: 'nukkad',
     name: 'Nukkad',
     club: 'aaveg',
+    subtitle: 'Aaveg',
     image: {
       sources: [
         { srcSet: '/images/events/aaveg/nukkad/poster-512x512.webp', type: 'image/webp' },
@@ -75,6 +78,7 @@ const phewsion: Event[] = [
     slug: 'fun-games',
     name: 'Fun Games',
     club: 'phewsion',
+    subtitle: 'Phewsion',
     image: {
       sources: [
         { srcSet: '/images/events/phewsion/fun-games/poster-512x512.webp', type: 'image/webp' },
