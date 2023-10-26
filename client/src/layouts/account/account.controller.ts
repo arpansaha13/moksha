@@ -2,12 +2,13 @@
 import { useCallback, useState } from 'react'
 import { useSet } from '~/hooks/common/useSet'
 import { useFetch } from '~/hooks/common/useFetch'
+import type { Invite } from '~/types'
 import type { ReceivedInvitesProps } from './account.types'
 
 export function useReceivedInvitesController({ invites }: ReceivedInvitesProps) {
   const fetchHook = useFetch()
   const loading = useSet()
-  const [receivedInvites, setReceivedInvites] = useState(invites)
+  const [receivedInvites, setReceivedInvites] = useState<Invite[]>(invites)
 
   const acceptInvite = useCallback(async (id: number) => {
     loading.add(id)

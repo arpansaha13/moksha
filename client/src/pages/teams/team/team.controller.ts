@@ -4,11 +4,11 @@ import { useLoaderData } from 'react-router-dom'
 import { useAppContext } from '~/containers/DataProvider'
 import { useFetch } from '~/hooks/common/useFetch'
 import { useDebouncedFn } from '~/hooks/common/useDebouncedFn'
-import type { User } from '~/types'
+import type { User, Team } from '~/types'
 import type { RegisteredContestsProps } from './team.types'
 
 interface LoaderData {
-  team: any
+  team: Team
   members: User[]
 }
 

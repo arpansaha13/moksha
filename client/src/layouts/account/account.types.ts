@@ -1,8 +1,5 @@
 import type { IconifyIcon } from '@iconify/react'
-
-// FIXME: fix types
-
-type Invite = any
+import { Invite } from '~/types'
 
 export interface ReceivedInvitesProps {
   invites: Invite[]

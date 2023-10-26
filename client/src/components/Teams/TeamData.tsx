@@ -1,4 +1,10 @@
-export default function TeamData({ team }) {
+import type { Team } from '~/types'
+
+interface TeamDataProps {
+  team: Team
+}
+
+export default function TeamData({ team }: TeamDataProps) {
   return (
     <div className='grid grid-cols-1 2xs:grid-cols-2 gap-3 text-sm'>
       <div>
