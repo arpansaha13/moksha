@@ -3,13 +3,13 @@ import { useAppContext } from '~/containers/DataProvider'
 import Sheet from '~common/Sheet'
 import EmptyState from '~common/EmptyState'
 import TeamRegistration from './TeamRegistration'
-import type { Contest } from '~/types'
+import type { TeamContest } from '~/types'
 
-interface RegisterPanelProps {
-  contest: Contest
+interface TeamRegisterPanelProps {
+  contest: TeamContest
 }
 
-export default function RegisterPanel({ contest }: RegisterPanelProps) {
+export default function RegisterPanel({ contest }: TeamRegisterPanelProps) {
   const { appContext } = useAppContext()!
 
   return (

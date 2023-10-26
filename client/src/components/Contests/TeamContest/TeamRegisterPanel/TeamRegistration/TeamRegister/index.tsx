@@ -1,57 +1,54 @@
-import { startTransition, useMemo, useState } from 'react'
 import { Disclosure } from '@headlessui/react'
 import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
-import { useSet } from '~/hooks/common/useSet'
-import { useFetch } from '~/hooks/common/useFetch'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
 import Callout from '~common/Callout'
-import UserListItem from '../../../Teams/UserListItem'
+import UserListItem from '~/components/Teams/UserListItem'
+import { useTeamRegisterController } from './team-register.controller'
 import styles from './style.module.css'
+import type { TeamContest, User } from '~/types'
+import type { TeamRegisterProps } from './team-register.types'
 
-export default function Register({ contest, team, members, alreadyRegisteredMemberIds, setRegistration }) {
-  const fetchHook = useFetch()
-  const [loading, setLoading] = useState(false)
-  const [error, showError] = useState(false)
-  const { add, delete: del, has, size: selectedCount, toArray } = useSet([])
+interface TeamMembersProps {
+  members: User[]
+  add: (value: string) => void
+  del: (value: string) => void
+  has: (value: string) => boolean
+}
 
-  const minMembersRequired = getMinMembersRequiredCount(contest.allowedTeamSize)
-  const hasAlreadyRegisteredMembers = alreadyRegisteredMemberIds.size > 0
+interface AlreadyRegisteredMembers {
+  members: User[]
+}
 
-  const { filteredMembers, alreadyRegisteredMembers } = useMemo(
-    () => filterMembers(members, alreadyRegisteredMemberIds),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
+interface ParticipationNotPossibleWarningProps {
+  minMembersRequired: number
+}
 
-  function teamRegister(e) {
-    e.preventDefault()
+interface AllowedTeamSizesInfoProps {
+  sizes: TeamContest['allowedTeamSize']
+}
 
-    if (error) return
+interface ConditionalWrapperProps {
+  renderDisclosure: boolean
+  children: React.ReactNode
+}
 
-    if (!isTeamSizeValid(contest.allowedTeamSize, selectedCount)) {
-      showError(true)
-      setTimeout(() => showError(false), 500)
-      return
-    }
-    setLoading(true)
+export default function Register(props: TeamRegisterProps) {
+  const { team, contest } = props
 
-    fetchHook('contests/team/registration', {
-      method: 'POST',
-      body: {
-        team_id: team.team_id,
-        contest_id: contest.id,
-        selected_members: toArray(),
-      },
-    })
-      .then(res =>
-        startTransition(() => {
-          setRegistration(res.data)
-          setLoading(false)
-        })
-      )
-      .catch(() => setLoading(false))
-  }
+  const {
+    error,
+    loading,
+    selectedCount,
+    filteredMembers,
+    minMembersRequired,
+    alreadyRegisteredMembers,
+    hasAlreadyRegisteredMembers,
+    add,
+    del,
+    has,
+    teamRegister,
+  } = useTeamRegisterController(props)
 
   return (
     <Sheet className='p-4 sm:p-6'>
@@ -75,7 +72,7 @@ export default function Register({ contest, team, members, alreadyRegisteredMemb
 
               {hasAlreadyRegisteredMembers && (
                 <Disclosure.Button className='block text-amber-600 hover:text-amber-500 font-medium transition-colors'>
-                  {({ open }) => (open ? 'Hide registered members' : 'Show registered members')}
+                  {({ open }) => <>{open ? 'Hide registered members' : 'Show registered members'}</>}
                 </Disclosure.Button>
               )}
             </div>
@@ -106,8 +103,8 @@ export default function Register({ contest, team, members, alreadyRegisteredMemb
   )
 }
 
-function TeamMembers({ members, add, del, has }) {
-  function toggle(userId) {
+function TeamMembers({ members, add, del, has }: TeamMembersProps) {
+  function toggle(userId: string) {
     if (has(userId)) del(userId)
     else add(userId)
   }
@@ -134,7 +131,7 @@ function TeamMembers({ members, add, del, has }) {
   )
 }
 
-function AlreadyRegisteredMembers({ members }) {
+function AlreadyRegisteredMembers({ members }: AlreadyRegisteredMembers) {
   return (
     <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs lg:text-sm'>
       {members.map(member => (
@@ -149,7 +146,7 @@ function AlreadyRegisteredMembers({ members }) {
   )
 }
 
-function ParticipationNotPossibleWarning({ minMembersRequired }) {
+function ParticipationNotPossibleWarning({ minMembersRequired }: ParticipationNotPossibleWarningProps) {
   return (
     <Callout type='warning' className='not-prose wrap-balance'>
       Your team does not have enough members to participate in this contest. A minimum of{' '}
@@ -166,7 +163,7 @@ function AlreadyRegisteredMembersInfo() {
   )
 }
 
-function AllowedTeamSizesInfo({ sizes }) {
+function AllowedTeamSizesInfo({ sizes }: AllowedTeamSizesInfoProps) {
   if (Array.isArray(sizes)) {
     return (
       <Callout>
@@ -174,8 +171,8 @@ function AllowedTeamSizesInfo({ sizes }) {
         <strong>
           {sizes.map((size, i) => {
             if (i === 0) return size
-            else if (i === sizes.length - 1) return ` or ${size} members.`
-            else return `, ${size}`
+            if (i === sizes.length - 1) return ` or ${size} members.`
+            return `, ${size}`
           })}
         </strong>
       </Callout>
@@ -217,42 +214,12 @@ function AllowedTeamSizesInfo({ sizes }) {
       </Callout>
     )
   }
+
+  // If none of them matches
+  console.warn(`Invalid prop "sizes" of type ${typeof sizes}.`)
+  return null
 }
 
-function ConditionalWrapper({ renderDisclosure, children }) {
+function ConditionalWrapper({ renderDisclosure, children }: ConditionalWrapperProps) {
   return renderDisclosure ? <Disclosure>{children}</Disclosure> : children
-}
-
-function getMinMembersRequiredCount(sizes) {
-  let minMembersRequired = 0
-
-  if (Array.isArray(sizes)) {
-    minMembersRequired = sizes[0]
-  } else if (typeof sizes === 'number') {
-    minMembersRequired = sizes
-  } else {
-    minMembersRequired = sizes.min
-  }
-
-  return minMembersRequired
-}
-
-function isTeamSizeValid(sizes, selectedCount) {
-  if (Array.isArray(sizes)) return sizes.includes(selectedCount)
-
-  if (typeof sizes === 'number') return sizes === selectedCount
-
-  return sizes.min <= selectedCount && selectedCount <= sizes.max
-}
-
-function filterMembers(members, alreadyRegisteredMemberIds) {
-  const filteredMembers = []
-  const alreadyRegisteredMembers = []
-
-  for (const member of members) {
-    if (alreadyRegisteredMemberIds.has(member.user_id)) alreadyRegisteredMembers.push(member)
-    else filteredMembers.push(member)
-  }
-
-  return { filteredMembers, alreadyRegisteredMembers }
 }

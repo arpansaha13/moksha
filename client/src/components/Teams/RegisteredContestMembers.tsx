@@ -1,4 +1,4 @@
-import UserListItem from '~/components/Teams/UserListItem'
+import UserListItem from './UserListItem'
 import type { User } from '~/types'
 
 interface RegisteredContestMembersProps {

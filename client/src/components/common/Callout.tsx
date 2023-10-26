@@ -3,7 +3,8 @@ import { classNames } from '@arpansaha13/utils'
 type CalloutType = 'info' | 'warning' | 'error'
 
 interface CalloutProps {
-  type: CalloutType
+  /** @default 'info' */
+  type?: CalloutType
   className?: string
   children: React.ReactNode
 }

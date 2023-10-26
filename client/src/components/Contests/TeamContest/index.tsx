@@ -3,14 +3,14 @@ import { Tab } from '@headlessui/react'
 import { classNames } from '@arpansaha13/utils'
 import { useAppContext } from '~/containers/DataProvider'
 import Sheet from '~common/Sheet'
-import type { Contest } from '~/types'
+import type { TeamContest } from '~/types'
 
 const ContestOverview = lazy(() => import('../ContestOverview'))
-const RegisterPanel = lazy(() => import('./RegisterPanel'))
-const RegistrationsPanel = lazy(() => import('./RegistrationsPanel'))
+const TeamRegisterPanel = lazy(() => import('./TeamRegisterPanel'))
+const TeamRegistrationsPanel = lazy(() => import('./TeamRegistrationsPanel'))
 
 interface TeamContestProps {
-  contest: Contest
+  contest: TeamContest
 }
 
 interface TabPanelButtonProps {
@@ -66,14 +66,14 @@ const TeamContest = ({ contest }: TeamContestProps) => {
 
         <Tab.Panel as={Fragment}>
           <Suspense fallback={null}>
-            <RegisterPanel contest={contest} />
+            <TeamRegisterPanel contest={contest} />
           </Suspense>
         </Tab.Panel>
 
         {appContext.authenticated && (
           <Tab.Panel as={Fragment}>
             <Suspense fallback={null}>
-              <RegistrationsPanel contest={contest} />
+              <TeamRegistrationsPanel contest={contest} />
             </Suspense>
           </Tab.Panel>
         )}

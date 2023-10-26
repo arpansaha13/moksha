@@ -1,15 +1,9 @@
 import { startTransition, useRef, useState } from 'react'
 import { useFetch } from '~/hooks/common/useFetch'
-import BaseButton from '~base/BaseButton'
-import CsrfField from '~common/CsrfField'
 import getFormData from '~/utils/getFormData'
+import type { SoloRegisterProps } from './solo-register.types'
 
-interface RegisterProps {
-  contestId: number
-  setRegistrationId: React.Dispatch<React.SetStateAction<number | null>>
-}
-
-export default function Register({ contestId, setRegistrationId }: RegisterProps) {
+export function useSoloRegisterController({ contestId, setRegistrationId }: SoloRegisterProps) {
   const fetchHook = useFetch()
   const formRef = useRef<HTMLFormElement>(null)
   const [loading, setLoading] = useState(false)
@@ -34,15 +28,5 @@ export default function Register({ contestId, setRegistrationId }: RegisterProps
       .catch(() => setLoading(false))
   }
 
-  return (
-    <form ref={formRef} onSubmit={soloRegister}>
-      <div className='not-prose'>
-        <BaseButton type='submit' loading={loading}>
-          Register
-        </BaseButton>
-      </div>
-
-      <CsrfField />
-    </form>
-  )
+  return { formRef, loading, soloRegister }
 }

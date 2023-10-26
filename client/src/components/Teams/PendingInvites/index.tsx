@@ -1,33 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect } from 'react'
 import accountClockIcon from '@iconify-icons/mdi/account-clock-outline'
-import { useSet } from '~/hooks/common/useSet'
 import Sheet from '~common/Sheet'
 import EmptyState from '~common/EmptyState'
-import UserListItem from './UserListItem'
-import InviteButton from './InviteButton'
+import UserListItem from '../UserListItem'
+import InviteButton from '../InviteButton'
+import { usePendingInvitesController } from './pending-invites.controller'
+import type { PendingInviteProps } from './pending-invites.types'
 
-export default function PendingInvites({ pendingInvites, inviteCall, withdrawInviteCall }) {
-  const loading = useSet()
-  const invited = useSet(pendingInvites.map(inv => inv.user.user_id))
-
-  useEffect(() => {
-    invited.setAll(pendingInvites.map(inv => inv.user.user_id))
-  }, [pendingInvites])
-
-  const invite = useCallback(async userId => {
-    loading.add(userId)
-    await inviteCall(userId)
-    invited.add(userId)
-    loading.delete(userId)
-  }, [])
-
-  const withdrawInvite = useCallback(async userId => {
-    loading.add(userId)
-    await withdrawInviteCall(userId)
-    invited.delete(userId)
-    loading.delete(userId)
-  }, [])
+export default function PendingInvites(props: PendingInviteProps) {
+  const { pendingInvites } = props
+  const { loading, invited, doInvite, withdrawInvite } = usePendingInvitesController(props)
 
   return (
     <Sheet className='px-2 py-4'>
@@ -44,7 +25,7 @@ export default function PendingInvites({ pendingInvites, inviteCall, withdrawInv
                   <InviteButton
                     loading={loading.has(inv.user.user_id)}
                     withdrawInvite={withdrawInvite}
-                    invite={invite}
+                    doInvite={doInvite}
                     userId={inv.user.user_id}
                     invited={invited.has(inv.user.user_id)}
                   />
