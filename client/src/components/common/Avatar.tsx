@@ -2,12 +2,24 @@ import { memo } from 'react'
 import { Icon } from '@iconify/react'
 import accountCircleIcon from '@iconify-icons/mdi/account-circle'
 import { classNames } from '@arpansaha13/utils'
-import avatarColors from '~/data/avatar-colors'
 
 interface AvatarProps {
   avatarIdx: number
   className?: string
 }
+
+const avatarColors = Object.freeze([
+  'text-red-500',
+  'text-indigo-500',
+  'text-sky-500',
+  'text-fuchsia-500',
+  'text-teal-500',
+  'text-lime-500',
+  'text-pink-500',
+  'text-purple-500',
+  'text-cyan-500',
+  'text-green-500',
+])
 
 /**
  * The avatar will take up the full size of parent element.

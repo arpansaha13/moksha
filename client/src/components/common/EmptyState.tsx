@@ -3,9 +3,9 @@ import { Icon, type IconifyIcon } from '@iconify/react'
 import { classNames } from '@arpansaha13/utils'
 
 interface EmptyStateProps {
-  icon: IconifyIcon
-  title: string
-  description: string
+  icon?: IconifyIcon
+  title?: string
+  description?: string
 }
 
 const EmptyState = memo(({ icon, title, description }: EmptyStateProps) => {

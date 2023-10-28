@@ -9,7 +9,7 @@ import menuIcon from '@iconify-icons/mdi/menu'
 import closeIcon from '@iconify-icons/mdi/close'
 import AccountMenu from './AccountMenu'
 import { useAppContext } from '~/containers/DataProvider'
-import { useFetch } from '~/hooks/useFetch'
+import { useFetch } from '~/hooks/common/useFetch'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
 import { navTabs } from '~/data/tabs'
 

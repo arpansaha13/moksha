@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
-import { useMap } from '~/hooks/useMap'
+import { useMap } from '~/hooks/common/useMap'
 
 interface DataProviderProps {
   children: ReactNode

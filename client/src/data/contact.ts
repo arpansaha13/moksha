@@ -1,4 +1,4 @@
-interface Contact {
+export interface Contact {
   name: string
   designation: string
   whatsApp: string

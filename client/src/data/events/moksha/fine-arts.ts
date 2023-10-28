@@ -5,7 +5,8 @@ export const fineArts: Event[] = [
     id: 3,
     slug: 'blazing-spirit',
     name: 'Blazing Spirit',
-    club: 'Fine Arts Club',
+    club: 'fine-arts',
+    subtitle: 'Fine Arts Club',
     image: {
       src: '/images/events/generic-poster.png',
     },
@@ -26,7 +27,8 @@ export const fineArts: Event[] = [
     id: 4,
     slug: 'celebrity-portrait',
     name: 'Celebrity Portrait',
-    club: 'Fine Arts Club',
+    club: 'fine-arts',
+    subtitle: 'Fine Arts Club',
     image: {
       src: '/images/events/generic-poster.png',
     },
@@ -47,7 +49,8 @@ export const fineArts: Event[] = [
     id: 5,
     slug: 'ink-splash',
     name: 'InkSplash',
-    club: 'Fine Arts Club',
+    club: 'fine-arts',
+    subtitle: 'Fine Arts Club',
     image: {
       src: '/images/events/generic-poster.png',
     },
@@ -69,7 +72,8 @@ export const fineArts: Event[] = [
     id: 6,
     slug: 'asgards-gallery',
     name: "Asgard's Gallery",
-    club: 'Fine Arts Club',
+    club: 'fine-arts',
+    subtitle: 'Fine Arts Club',
     image: {
       src: '/images/events/generic-poster.png',
     },
@@ -86,7 +90,8 @@ export const fineArts: Event[] = [
     id: 7,
     slug: 'graffiti',
     name: 'Graffiti/Mural Graffiti',
-    club: 'Fine Arts Club',
+    club: 'fine-arts',
+    subtitle: 'Fine Arts Club',
     image: {
       src: '/images/events/generic-poster.png',
     },
