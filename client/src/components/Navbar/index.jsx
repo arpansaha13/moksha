@@ -8,7 +8,7 @@ import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/mdi/menu'
 import closeIcon from '@iconify-icons/mdi/close'
 import AccountMenu from './AccountMenu'
-import { useAppContext } from '~/containers/DataProvider'
+import { useStore } from '~/store'
 import { useFetch } from '~/hooks/common/useFetch'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
 import { navTabs } from '~/data/tabs'
@@ -28,7 +28,7 @@ const NavTab = memo(({ to, children }) => (
 ))
 
 function Navbar() {
-  const { appContext } = useAppContext()
+  const authState = useStore(state => state.authState)
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
   const location = useLocation()
   const navigate = useNavigate()
@@ -71,8 +71,8 @@ function Navbar() {
         )}
 
         {/* Common for both Mobile and Desktop */}
-        {appContext.authenticated ? (
-          <AccountMenu avatarIdx={appContext.avatar_idx} onLogOut={logOut} />
+        {authState.authenticated ? (
+          <AccountMenu avatarIdx={authState.avatar_idx} onLogOut={logOut} />
         ) : (
           <div className='flex gap-3 sm:gap-6'>
             <NavTab to={{ pathname: '/auth/login', search: `${createSearchParams({ from: location.pathname })}` }}>

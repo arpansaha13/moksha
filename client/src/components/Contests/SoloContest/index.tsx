@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import accountAlertIcon from '@iconify-icons/mdi/account-alert'
-import { useAppContext } from '~/containers/DataProvider'
+import { useStore } from '~/store'
 import Sheet from '~common/Sheet'
 import EmptyState from '~common/EmptyState'
 import ContestOverview from '../ContestOverview'
@@ -12,7 +12,7 @@ interface SoloContestProps {
 }
 
 const SoloContest = ({ contest }: SoloContestProps) => {
-  const { appContext } = useAppContext()!
+  const authState = useStore(state => state.authState)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const contestTypeIsOpen = useMemo<boolean>(() => contest.type.includes('open'), [contest.id])
@@ -25,7 +25,7 @@ const SoloContest = ({ contest }: SoloContestProps) => {
 
       {!contestTypeIsOpen && (
         <Sheet className='mt-6 p-6'>
-          {appContext.authenticated ? (
+          {authState.authenticated ? (
             <SoloRegistration contest={contest} />
           ) : (
             <EmptyState

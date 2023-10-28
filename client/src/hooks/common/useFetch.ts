@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useAppContext } from '~/containers/DataProvider'
+import { useStore } from '~/store'
 import createRequest, { type RequestOptions } from '~/utils/createRequest'
 import getResponseData from '~/utils/getResponseData'
 
 /** Returns a wrapper over the Fetch API. */
 
 export function useFetch<T = any>() {
-  const { resetAppContext } = useAppContext() as any
+  const resetAuthState = useStore(state => state.resetAuthState)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -24,7 +24,7 @@ export function useFetch<T = any>() {
       // Automatically go to login page if token expires
       // If auth token expires, it will raise 403 exception
       if (res.status === 403) {
-        resetAppContext()
+        resetAuthState()
         if (!location.pathname.startsWith('/auth/')) navigate('/auth/login')
       }
       throw jsonData

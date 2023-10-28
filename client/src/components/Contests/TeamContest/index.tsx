@@ -1,7 +1,7 @@
 import { Fragment, Suspense, lazy, memo, startTransition, useCallback, useMemo, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { classNames } from '@arpansaha13/utils'
-import { useAppContext } from '~/containers/DataProvider'
+import { useStore } from '~/store'
 import Sheet from '~common/Sheet'
 import type { TeamContest } from '~/types'
 
@@ -36,12 +36,12 @@ const panels = Object.freeze([
 ])
 
 const TeamContest = ({ contest }: TeamContestProps) => {
-  const { appContext } = useAppContext()!
+  const authState = useStore(state => state.authState)
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const showPanel = useMemo(
-    () => panels.map(panel => !panel.requiresAuth || appContext.authenticated),
-    [appContext.authenticated]
+    () => panels.map(panel => !panel.requiresAuth || authState.authenticated),
+    [authState.authenticated]
   )
   const switchTab = useCallback((i: number) => startTransition(() => setSelectedIndex(i)), [])
 
@@ -51,7 +51,7 @@ const TeamContest = ({ contest }: TeamContestProps) => {
         as={Sheet}
         className={classNames(
           'my-4 sm:my-6 grid bg-amber-900/30 text-gray-200 text-sm font-medium divide-x divide-amber-900/70 overflow-hidden',
-          appContext.authenticated ? 'grid-cols-3' : 'grid-cols-2'
+          authState.authenticated ? 'grid-cols-3' : 'grid-cols-2'
         )}
       >
         {panels.map((panel, i) => (showPanel[i] ? <TabPanelButton key={panel.name} name={panel.name} /> : null))}
@@ -70,7 +70,7 @@ const TeamContest = ({ contest }: TeamContestProps) => {
           </Suspense>
         </Tab.Panel>
 
-        {appContext.authenticated && (
+        {authState.authenticated && (
           <Tab.Panel as={Fragment}>
             <Suspense fallback={null}>
               <TeamRegistrationsPanel contest={contest} />

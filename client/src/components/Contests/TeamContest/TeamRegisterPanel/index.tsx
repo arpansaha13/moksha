@@ -1,5 +1,5 @@
 import accountAlertIcon from '@iconify-icons/mdi/account-alert'
-import { useAppContext } from '~/containers/DataProvider'
+import { useStore } from '~/store'
 import Sheet from '~common/Sheet'
 import EmptyState from '~common/EmptyState'
 import TeamRegistration from './TeamRegistration'
@@ -10,7 +10,7 @@ interface TeamRegisterPanelProps {
 }
 
 export default function RegisterPanel({ contest }: TeamRegisterPanelProps) {
-  const { appContext } = useAppContext()!
+  const authState = useStore(state => state.authState)
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function RegisterPanel({ contest }: TeamRegisterPanelProps) {
         </p>
       </Sheet>
 
-      {appContext.authenticated ? (
+      {authState.authenticated ? (
         <TeamRegistration contest={contest} />
       ) : (
         <div className='mt-6'>

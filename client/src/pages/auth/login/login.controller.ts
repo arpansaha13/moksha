@@ -1,11 +1,11 @@
 import { useCallback, useRef, useState } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
-import { useAppContext } from '~/containers/DataProvider'
+import { useStore } from '~/store'
 import { useFetch } from '~/hooks/common/useFetch'
 import getFormData from '~/utils/getFormData'
 
 export function useLoginController() {
-  const { setAppContext } = useAppContext()!
+  const setAuthState = useStore(state => state.setAuthState)
   const { setNotification, setAllNotification } = useOutletContext() as any // FIXME: fix types
 
   const navigate = useNavigate()
@@ -27,9 +27,9 @@ export function useLoginController() {
         body: formData,
       })
         .then(res => {
-          setAppContext('authenticated', true)
-          setAppContext('avatar_idx', res.avatar_idx)
-          setAppContext('user_id', res.user_id)
+          setAuthState('authenticated', true)
+          setAuthState('avatar_idx', res.avatar_idx)
+          setAuthState('user_id', res.user_id)
           setNotification('show', false)
 
           if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')!), { replace: true })

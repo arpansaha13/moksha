@@ -1,17 +1,17 @@
 import { startTransition, useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useFetch } from '~/hooks/common/useFetch'
-import { useAppContext } from '~/containers/DataProvider'
+import { useStore } from '~/store'
 import type { SoloRegistrationProps } from './solo-registration.types'
 
 export function useSoloRegistrationController({ contest }: SoloRegistrationProps) {
-  const { appContext } = useAppContext()!
+  const authState = useStore(state => state.authState)
   const fetchHook = useFetch()
   const [registrationId, setRegistrationId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (appContext.authenticated) {
+    if (authState.authenticated) {
       const params = new URLSearchParams({ contest_id: contest.id.toString() })
 
       fetchHook(`contests/solo/registration?${params.toString()}`).then(({ data }) => {
