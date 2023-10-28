@@ -12,7 +12,7 @@ interface LoaderData {
   members: User[]
 }
 
-export function useTeam() {
+export function useTeamController() {
   const fetchHook = useFetch()
   const { appContext } = useAppContext()!
   const { team, members } = useLoaderData() as LoaderData
@@ -77,7 +77,7 @@ export function useTeam() {
   }
 }
 
-export function useRegisteredContests({ teamId }: RegisteredContestsProps) {
+export function useRegisteredContestsController({ teamId }: RegisteredContestsProps) {
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(true)
   const [registrations, setRegistrations] = useState<any[]>([])

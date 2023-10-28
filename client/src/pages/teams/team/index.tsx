@@ -12,7 +12,7 @@ import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import UserListItem from '~/components/Teams/UserListItem'
 import { getTeamData } from '~loaders/teams.loader'
-import { useRegisteredContests, useTeam } from './team.controller'
+import { useRegisteredContestsController, useTeamController } from './team.controller'
 import type { RegisteredContestsProps } from './team.types'
 
 export const loader = getTeamData
@@ -33,7 +33,7 @@ export function Component() {
     refetchPendingInvites,
     inviteCall,
     withdrawInviteCall,
-  } = useTeam()
+  } = useTeamController()
 
   return (
     <Container
@@ -115,7 +115,7 @@ export function Component() {
 Component.displayName = 'Team'
 
 const TeamMembers = memo(() => {
-  const { members } = useTeam()
+  const { members } = useTeamController()
 
   return (
     <Sheet className='px-6 py-4 space-y-3'>
@@ -133,7 +133,7 @@ const TeamMembers = memo(() => {
 })
 
 const RegisteredContests = memo((props: RegisteredContestsProps) => {
-  const { loading, registrations } = useRegisteredContests(props)
+  const { loading, registrations } = useRegisteredContestsController(props)
 
   const heading = (
     <div className='h-[42px] flex items-center'>
