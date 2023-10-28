@@ -5,6 +5,6 @@ import { dzire } from './dzire'
 import { pixel } from './pixels'
 import { fineArts } from './fine-arts'
 
-const mokshaEvents = Object.freeze([...dzire,...fineArts, ...pixel])
+const mokshaEvents = Object.freeze([...dzire, ...fineArts, ...pixel])
 
 export default mokshaEvents

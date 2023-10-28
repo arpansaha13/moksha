@@ -1,5 +1,3 @@
 import type { Contest } from '~/types'
 
-export const pixel: Contest[] = [
-  
-]
+export const pixel: Contest[] = []

@@ -1,4 +1,4 @@
-import type { Contest } from '~/types';
+import type { Contest } from '~/types'
 
 export interface SoloRegistrationProps {
   contest: Contest

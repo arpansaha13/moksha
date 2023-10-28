@@ -40,7 +40,6 @@ export default function SocialShare({ data, children, ...attrs }: SocialSharePro
     setTimeout(() => {
       setCopied(false)
     }, 4000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareUrl])
 
   const social = useMemo(
