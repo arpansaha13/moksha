@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { lazy, startTransition, useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useStore } from './store'
 import { useCe } from './hooks/useCe'
 import { useAnalytics } from './hooks/useAnalytics'
-import Routes from './router/routes'
 import AppLoader from './components/AppLoader'
 import fetchWithCredentials from './utils/fetchWithCredentials'
 import './styles/main.css'
 import 'nprogress/nprogress.css'
+
+const Routes = lazy(() => import('./router/routes'))
 
 function App() {
   const setAuthState = useStore(state => state.setAuthState)
@@ -25,9 +26,8 @@ function App() {
         setAuthState('user_id', data.user_id)
       })
       .finally(() => {
-        setLoading(false)
+        startTransition(() => setLoading(false))
       })
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
