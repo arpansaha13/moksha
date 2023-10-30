@@ -6,14 +6,21 @@ import accountMultiplePlusIcon from '@iconify-icons/mdi/account-multiple-plus'
 import { classNames } from '@arpansaha13/utils'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
-import Loader from '~common/Loader'
 import Container from '~common/Container'
 import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import UserListItem from '~/components/Teams/UserListItem'
 import { getTeamData } from '~loaders/teams.loader'
-import { useRegisteredContestsController, useTeamController } from './team.controller'
-import type { RegisteredContestsProps } from './team.types'
+import { useTeamController } from './team.controller'
+import type { User } from '~/types'
+
+interface TeamMembersProps {
+  members: User[]
+}
+
+interface RegisteredContestsProps {
+  registrations: any[]
+}
 
 export const loader = getTeamData
 
@@ -24,15 +31,16 @@ const RegisteredTeamContestCard = lazy(() => import('../../../components/Contest
 export function Component() {
   const {
     team,
-    pendingInvites,
-    loadingInvites,
+    members,
     isLeader,
     isMember,
     modalOpen,
+    pendingInvites,
+    registeredContests,
     setModalOpen,
-    refetchPendingInvites,
     inviteCall,
     withdrawInviteCall,
+    refetchPendingInvites,
   } = useTeamController()
 
   return (
@@ -74,9 +82,9 @@ export function Component() {
             )}
           </div>
 
-          <TeamMembers />
+          <TeamMembers members={members} />
 
-          {isMember && <RegisteredContests teamId={team.team_id} />}
+          {isMember && <RegisteredContests registrations={registeredContests} />}
         </div>
 
         {isLeader && (
@@ -97,15 +105,11 @@ export function Component() {
         <section id='pending-invites'>
           <h3 className='mb-4 text-xl font-bold text-gray-50'>Pending invites</h3>
 
-          {loadingInvites ? (
-            <Loader className='w-6 mx-auto' />
-          ) : (
-            <PendingInvites
-              pendingInvites={pendingInvites}
-              inviteCall={inviteCall}
-              withdrawInviteCall={withdrawInviteCall}
-            />
-          )}
+          <PendingInvites
+            pendingInvites={pendingInvites}
+            inviteCall={inviteCall}
+            withdrawInviteCall={withdrawInviteCall}
+          />
         </section>
       )}
     </Container>
@@ -114,9 +118,7 @@ export function Component() {
 
 Component.displayName = 'Team'
 
-const TeamMembers = memo(() => {
-  const { members } = useTeamController()
-
+const TeamMembers = memo(({ members }: TeamMembersProps) => {
   return (
     <Sheet className='px-6 py-4 space-y-3'>
       <ul className='grid grid-cols-1 sm:grid-cols-2 text-xs lg:text-sm'>
@@ -132,27 +134,12 @@ const TeamMembers = memo(() => {
   )
 })
 
-const RegisteredContests = memo((props: RegisteredContestsProps) => {
-  const { loading, registrations } = useRegisteredContestsController(props)
-
-  const heading = (
-    <div className='h-[42px] flex items-center'>
-      <h2 className='text-xl lg:text-2xl font-bold text-gray-50'>Registered contests</h2>
-    </div>
-  )
-
-  if (loading) {
-    return (
-      <>
-        {heading}
-        <Loader className='w-6 mx-auto' />
-      </>
-    )
-  }
-
+const RegisteredContests = memo(({ registrations }: RegisteredContestsProps) => {
   return (
     <>
-      {heading}
+      <div className='h-[42px] flex items-center'>
+        <h2 className='text-xl lg:text-2xl font-bold text-gray-50'>Registered contests</h2>
+      </div>
 
       {registrations.length > 0 ? (
         registrations.map(reg => <RegisteredTeamContestCard key={reg.id} reg={reg} />)

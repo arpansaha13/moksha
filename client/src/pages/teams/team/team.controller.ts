@@ -1,37 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { startTransition, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { useStore } from '~/store'
 import { useFetch } from '~/hooks/common/useFetch'
 import { useDebouncedFn } from '~/hooks/common/useDebouncedFn'
-import type { User, Team } from '~/types'
-import type { RegisteredContestsProps } from './team.types'
+import type { User, Team, Invite } from '~/types'
 
 interface LoaderData {
   team: Team
   members: User[]
+  pendingInvites: Invite[]
+  registeredContests: any[]
+  isLeader: boolean
+  isMember: boolean
 }
 
 export function useTeamController() {
+  const {
+    team,
+    isLeader,
+    isMember,
+    members,
+    pendingInvites: initialPendingInvites,
+    registeredContests,
+  } = useLoaderData() as LoaderData
+
   const fetchHook = useFetch()
-  const authState = useStore(state => state.authState)
-  const { team, members } = useLoaderData() as LoaderData
-  const [pendingInvites, setPendingInvites] = useState([])
-  const [loadingInvites, setLoadingInvites] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
-
-  const isLeader = team.leader.user_id === authState.user_id
-
-  const isMember = useMemo(() => isLeader || members.findIndex(m => m.user_id === authState.user_id) !== -1, [])
-
-  useEffect(() => {
-    if (isLeader) {
-      fetchHook(`teams/${team.team_id}/pending-invites`).then(r => {
-        setPendingInvites(r.data)
-        startTransition(() => setLoadingInvites(false))
-      })
-    }
-  }, [])
+  const [pendingInvites, setPendingInvites] = useState(initialPendingInvites)
 
   const refetchPendingInvites = useDebouncedFn(
     async () => {
@@ -65,30 +60,14 @@ export function useTeamController() {
   return {
     team,
     members,
-    pendingInvites,
-    loadingInvites,
     isLeader,
     isMember,
     modalOpen,
+    pendingInvites,
+    registeredContests,
     setModalOpen,
-    refetchPendingInvites,
     inviteCall,
     withdrawInviteCall,
+    refetchPendingInvites,
   }
-}
-
-export function useRegisteredContestsController({ teamId }: RegisteredContestsProps) {
-  const fetchHook = useFetch()
-  const [loading, setLoading] = useState(true)
-  const [registrations, setRegistrations] = useState<any[]>([])
-
-  useEffect(() => {
-    fetchHook(`teams/${teamId}/registered-contests`)
-      .then(r => setRegistrations(r.data))
-      .finally(() => {
-        startTransition(() => setLoading(false))
-      })
-  }, [])
-
-  return { loading, registrations }
 }

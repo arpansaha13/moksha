@@ -1,7 +1,9 @@
 import { redirect } from 'react-router-dom'
+import { useStore } from '~/store'
 import getPathFromURL from '~/utils/getPathFromURL'
 import fetchWithCredentials from '~/utils/fetchWithCredentials'
 import loaderWrapper from './loaderWrapper'
+import type { Invite, Team, User } from '~/types'
 
 export const allowIfNoTeamCreated = loaderWrapper({
   meta: {
@@ -23,19 +25,18 @@ export const getTeamData = loaderWrapper({
     type: 'page',
   },
   fn: async ({ request }) => {
-    const data = { team: {} as any, members: [] as any[] }
-
     try {
+      const authState = useStore.getState().authState
       const teamId = request.url.substring(request.url.lastIndexOf('/') + 1)
-      const res = await Promise.all([
-        fetchWithCredentials(`teams/${teamId}`),
-        fetchWithCredentials(`teams/${teamId}/members`),
-      ])
 
-      data.team = res[0].data
-      data.members = res[1].data
+      const { team, members } = await getPublicTeamData(teamId)
 
-      return data
+      const isLeader = team.leader.user_id === authState.user_id
+      const isMember = isLeader || members.findIndex(m => m.user_id === authState.user_id) !== -1
+
+      const { pendingInvites, registeredContests } = await getPrivateTeamData(teamId, isLeader, isMember)
+
+      return { team, members, isLeader, isMember, pendingInvites, registeredContests }
     } catch (e: any) {
       if (e.status === '404') throw e
 
@@ -43,3 +44,24 @@ export const getTeamData = loaderWrapper({
     }
   },
 })
+
+async function getPublicTeamData(teamId: string) {
+  const [team, members] = await Promise.all([
+    fetchWithCredentials(`teams/${teamId}`).then(r => r.data) as Promise<Team>,
+    fetchWithCredentials(`teams/${teamId}/members`).then(r => r.data) as Promise<User[]>,
+  ])
+
+  return { team, members }
+}
+
+async function getPrivateTeamData(teamId: string, isLeader: boolean, isMember: boolean) {
+  const [pendingInvites, registeredContests] = await Promise.all([
+    isLeader ? (fetchWithCredentials(`teams/${teamId}/pending-invites`).then(r => r.data) as Promise<Invite[]>) : [],
+    isMember ? fetchWithCredentials(`teams/${teamId}/registered-contests`).then(r => r.data) : [],
+  ])
+
+  return {
+    pendingInvites,
+    registeredContests,
+  }
+}
