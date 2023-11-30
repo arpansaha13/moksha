@@ -9,8 +9,7 @@ import { useEditProfileController } from './edit-profile.controller'
 export const loader = getAuthUserData
 
 export function Component() {
-  const { formRef, loading, disabled, notification, fields, editProfile, setShowNotification } =
-    useEditProfileController()
+  const { loading, isDirty, notification, fields, editProfile, setShowNotification } = useEditProfileController()
 
   return (
     <main>
@@ -27,7 +26,7 @@ export function Component() {
       <h2 className='mb-4 text-2xl font-bold text-gray-50'>Edit profile</h2>
 
       <Sheet className='mt-4 p-4 sm:p-6'>
-        <form ref={formRef} className='max-w-sm space-y-6' onSubmit={editProfile}>
+        <form className='max-w-sm space-y-6' onSubmit={editProfile}>
           {fields.map(field => (
             <BaseInput key={field.id} {...field} />
           ))}
@@ -35,7 +34,7 @@ export function Component() {
           <CsrfField />
 
           <div>
-            <BaseButton disabled={disabled} type='submit' loading={loading}>
+            <BaseButton disabled={!isDirty} type='submit' loading={loading}>
               Save
             </BaseButton>
           </div>

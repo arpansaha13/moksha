@@ -1,57 +1,50 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
+import { useForm, type UseFormRegister } from 'react-hook-form'
 import { useFetch } from '~/hooks/common/useFetch'
-import { useMap } from '~/hooks/common/useMap'
 import { useNotification } from '~/hooks/useNotification'
-import getFormData from '~/utils/getFormData'
 import type { User } from '~/types'
 
-type EditFormData = Pick<User, 'name' | 'phone_no' | 'institution'>
+interface EditProfileFormData {
+  name: string
+  institution: string
+  phone_no: string
+}
 
 export function useEditProfileController() {
   const authUser = useRef(useLoaderData() as User)
 
-  const fetchHook = useFetch()
-  const formRef = useRef(null)
-  const [loading, setLoading] = useState(false)
-  const [disabled, setDisabled] = useState(true)
-
-  const [isFieldUpdated, { set: setFieldUpdated }] = useMap({
-    name: false,
-    institution: false,
-    phone_no: false,
+  const {
+    formState,
+    register: formRegister,
+    handleSubmit,
+  } = useForm<EditProfileFormData>({
+    defaultValues: {
+      name: authUser.current.name,
+      institution: authUser.current.institution,
+      phone_no: authUser.current.phone_no.toString(),
+    },
   })
 
-  const handleChange = useCallback((value: any, field: keyof EditFormData) => {
-    setFieldUpdated(field, value !== authUser.current[field])
-  }, [])
+  const fetchHook = useFetch()
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    setDisabled(!hasUpdatedField(isFieldUpdated))
-  }, [isFieldUpdated])
-
-  const fields = useMemo(
-    () => getFields(authUser.current.name, authUser.current.institution, authUser.current.phone_no, handleChange),
-    []
-  )
+  const fields = useMemo(() => getFields(formRegister), [])
 
   const [notification, { set, setAll }] = useNotification()
   const setShowNotification = useCallback((bool: boolean) => set('show', bool), [])
 
-  function editProfile(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const editProfile = handleSubmit((formData: EditProfileFormData) => {
     setLoading(true)
-
-    const formData = getFormData(formRef.current!) as unknown as EditFormData
-    const formDataDiff = getDiff(isFieldUpdated, formData)
+    const formDataDiff = getDiff(formState.dirtyFields, formData)
 
     fetchHook('users/me', {
       method: 'PATCH',
       body: formDataDiff,
     })
       .then(res => {
-        authUser.current = { ...authUser.current, ...formDataDiff }
+        updateAuthUserData(authUser, formDataDiff)
+
         setAll({
           show: true,
           title: 'Profile updated!',
@@ -68,47 +61,52 @@ export function useEditProfileController() {
         })
       })
       .finally(() => setLoading(false))
-  }
+  })
 
-  return { formRef, loading, disabled, notification, fields, editProfile, setShowNotification }
+  return {
+    loading,
+    fields,
+    notification,
+    isDirty: formState.isDirty,
+    setShowNotification,
+    editProfile,
+  }
 }
 
-function hasUpdatedField(isFieldUpdated: Record<keyof EditFormData, boolean>) {
-  for (const bool of Object.values(isFieldUpdated)) {
-    if (bool) return true
-  }
-  return false
-}
+function getDiff(
+  dirtyFields: Partial<Readonly<Record<keyof EditProfileFormData, boolean>>>,
+  formData: EditProfileFormData
+) {
+  const diff: Partial<EditProfileFormData> = {}
 
-function getDiff(isFieldUpdated: Record<keyof EditFormData, boolean>, formData: EditFormData) {
-  const diff = {} as EditFormData
-
-  if (isFieldUpdated.name) diff.name = formData.name
-  if (isFieldUpdated.institution) diff.institution = formData.institution
-  if (isFieldUpdated.phone_no) diff.phone_no = Number(formData.phone_no)
+  if (dirtyFields.name) diff.name = formData.name
+  if (dirtyFields.institution) diff.institution = formData.institution
+  if (dirtyFields.phone_no) diff.phone_no = formData.phone_no
 
   return diff
 }
 
-function getFields(name: string, institution: string, phone_no: number, handleChange: any) {
+function updateAuthUserData(authUser: React.MutableRefObject<User>, formDataDiff: Partial<EditProfileFormData>) {
+  if (formDataDiff.name) authUser.current.name = formDataDiff.name
+  if (formDataDiff.institution) authUser.current.institution = formDataDiff.institution
+  if (formDataDiff.phone_no) authUser.current.phone_no = parseInt(formDataDiff.phone_no)
+}
+
+function getFields(formRegister: UseFormRegister<EditProfileFormData>) {
+  // Values will be set by `formRegister` according to default values
   const fields = [
     {
       id: 'name',
-      name: 'name',
       type: 'text',
       autoComplete: 'name',
       autoCapitalize: 'words',
       maxLength: 20,
       required: true,
       label: 'Name',
-      defaultValue: name,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-        handleChange(e.target.value, 'name')
-      },
+      ...formRegister('name'),
     },
     {
       id: 'institution',
-      name: 'institution',
       type: 'text',
       autoComplete: 'organization',
       autoCapitalize: 'words',
@@ -116,15 +114,11 @@ function getFields(name: string, institution: string, phone_no: number, handleCh
       minLength: 3,
       maxLength: 50,
       label: 'Institution',
-      defaultValue: institution,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-        handleChange(e.target.value, 'institution')
-      },
+      ...formRegister('institution'),
     },
     {
       id: 'phone',
-      name: 'phone_no',
-      type: 'tel',
+      type: 'text',
       autoComplete: 'tel',
       inputMode: 'numeric' as const,
       required: true,
@@ -133,10 +127,7 @@ function getFields(name: string, institution: string, phone_no: number, handleCh
       title: 'This field should contain 10 digits',
       minLength: 10,
       maxLength: 10,
-      defaultValue: phone_no,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-        handleChange(Number(e.target.value), 'phone_no')
-      },
+      ...formRegister('phone_no'),
     },
   ]
 

@@ -1,20 +1,22 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useOutletContext } from 'react-router-dom'
 import { useFetch } from '~/hooks/common/useFetch'
-import getFormData from '~/utils/getFormData'
+
+interface ForgotPasswordFormData {
+  email: string
+}
 
 export function useForgotPasswordController() {
+  const { register: formRegister, handleSubmit } = useForm<ForgotPasswordFormData>()
+
   const fetchHook = useFetch()
   const { setAllNotification } = useOutletContext() as any // FIXME: fix types
 
-  const formRef = useRef(null)
   const [loading, setLoading] = useState(false)
 
-  function forgotPassword(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const forgotPassword = handleSubmit((formData: ForgotPasswordFormData) => {
     setLoading(true)
-
-    const formData = getFormData(formRef.current)
 
     fetchHook('auth/forgot-password', {
       method: 'POST',
@@ -37,7 +39,7 @@ export function useForgotPasswordController() {
         })
       })
       .finally(() => setLoading(false))
-  }
+  })
 
-  return { formRef, loading, forgotPassword }
+  return { loading, formRegister, forgotPassword }
 }

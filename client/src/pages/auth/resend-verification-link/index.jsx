@@ -5,7 +5,7 @@ import BaseButton from '~base/BaseButton'
 import { useResendVerificationLinkController } from './resend-verification-link.controller'
 
 export function Component() {
-  const { formRef, loading, resendLink } = useResendVerificationLinkController()
+  const { loading, resendLink, formRegister } = useResendVerificationLinkController()
 
   return (
     <div className='max-w-md px-4 sm:px-0'>
@@ -13,8 +13,15 @@ export function Component() {
         <title>Moksha | Forgot password</title>
       </Helmet>
 
-      <form ref={formRef} className='space-y-6' onSubmit={resendLink}>
-        <BaseInput id='email' name='email' type='email' autoComplete='email' required label='Email address' />
+      <form className='space-y-6' onSubmit={resendLink}>
+        <BaseInput
+          id='email'
+          type='email'
+          autoComplete='email'
+          required
+          label='Email address'
+          {...formRegister('email')}
+        />
 
         <div>
           <BaseButton type='submit' stretch loading={loading}>

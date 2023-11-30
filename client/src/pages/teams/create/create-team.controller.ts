@@ -1,10 +1,14 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import { trim } from '@arpansaha13/utils'
 import { useFetch } from '~/hooks/common/useFetch'
 import { useNotification } from '~/hooks/useNotification'
-import getFormData from '~/utils/getFormData'
 import type { CreateTeamFormProps } from './create-team.types'
+
+interface CreateTeamFormData {
+  team_name: string
+}
 
 export function useCreateTeamController() {
   const createdTeam = useLoaderData() as any
@@ -18,17 +22,14 @@ export function useCreateTeamController() {
 }
 
 export function useCreateTeamFormController({ setShowNotification, setAllNotification }: CreateTeamFormProps) {
+  const { register: formRegister, handleSubmit } = useForm<CreateTeamFormData>()
   const navigate = useNavigate()
   const fetchHook = useFetch()
-  const formRef = useRef<HTMLFormElement>(null)
   const [loading, setLoading] = useState(false)
 
-  const createTeam = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
+  const createTeam = handleSubmit((formData: CreateTeamFormData) => {
     setLoading(true)
-    const formData = getFormData(formRef.current)
-    formData.team_name = trim(formData.team_name as string)
+    formData.team_name = trim(formData.team_name)
 
     fetchHook('teams', {
       method: 'POST',
@@ -49,8 +50,7 @@ export function useCreateTeamFormController({ setShowNotification, setAllNotific
         })
       })
       .finally(() => setLoading(false))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  })
 
-  return { formRef, loading, createTeam }
+  return { loading, createTeam, formRegister }
 }
