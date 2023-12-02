@@ -12,7 +12,7 @@ export const loader = () => {
 }
 
 export function Component() {
-  const { formRef, loading, notification, validationErrors, changePassword, setShowNotification } =
+  const { loading, notification, validationErrors, changePassword, formRegister, setShowNotification } =
     useChangePasswordController()
 
   return (
@@ -30,34 +30,34 @@ export function Component() {
       <h2 className='text-2xl font-bold text-gray-50'>Change Password</h2>
 
       <Sheet className='mt-4 p-4 sm:p-6'>
-        <form ref={formRef} onSubmit={changePassword} className='max-w-sm space-y-6'>
+        <form onSubmit={changePassword} className='max-w-sm space-y-6'>
           <BaseInput
             id='old-password'
-            name='old_password'
             type='password'
             required
             label='Old password'
-            validationError={validationErrors['old_password']}
+            validationError={validationErrors.old_password?.message}
+            {...formRegister('old_password')}
           />
 
           <BaseInput
             id='new-password'
-            name='new_password'
             type='password'
             required
             minLength={8}
             maxLength={30}
             label='New password'
-            validationError={validationErrors['new_password']}
+            validationError={validationErrors.new_password?.message}
+            {...formRegister('new_password')}
           />
 
           <BaseInput
             id='confirm_password'
-            name='confirm_password'
             type='password'
             required
             label='Confirm password'
-            validationError={validationErrors['confirm_password']}
+            validationError={validationErrors.confirm_password?.message}
+            {...formRegister('confirm_password')}
           />
 
           <CsrfField />

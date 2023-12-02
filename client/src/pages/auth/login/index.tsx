@@ -6,7 +6,7 @@ import CsrfField from '~common/CsrfField'
 import { useLoginController } from './login.controller'
 
 export function Component() {
-  const { formRef, loading, searchParams, signIn } = useLoginController()
+  const { loading, searchParams, formRegister, signIn } = useLoginController()
 
   return (
     <main className='max-w-md px-4 sm:px-0'>
@@ -14,16 +14,23 @@ export function Component() {
         <title>Moksha | Login</title>
       </Helmet>
 
-      <form ref={formRef} className='space-y-6' onSubmit={signIn}>
-        <BaseInput id='email' name='email' type='email' autoComplete='email' required label='Email address' />
+      <form className='space-y-6' onSubmit={signIn}>
+        <BaseInput
+          id='email'
+          type='email'
+          autoComplete='email'
+          required
+          label='Email address'
+          {...formRegister('email')}
+        />
 
         <BaseInput
           id='password'
-          name='password'
           type='password'
           autoComplete='current-password'
           required
           label='Password'
+          {...formRegister('password')}
         />
 
         <div className='text-sm 2xs:flex 2xs:items-center 2xs:justify-between space-y-3 2xs:space-y-0'>

@@ -1,40 +1,27 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
+import { useForm, type UseFormSetError, type UseFormClearErrors } from 'react-hook-form'
 import { useOutletContext, useParams } from 'react-router-dom'
 import { useFetch } from '~/hooks/common/useFetch'
-import { useMap } from '~/hooks/common/useMap'
-import getFormData from '~/utils/getFormData'
+import type { ResetPassFormProps } from './reset-password.types'
 
-const PASSWORD_MISMATCH_MESSAGE = 'Password and confirm-password do not match'
+interface ResetPasswordFormData {
+  password: string
+  confirm_password: string
+}
 
-export function useResetPasswordController() {
+export function useResetPasswordController({ setPassIsReset }: ResetPassFormProps) {
+  const { formState, register: formRegister, handleSubmit, setError, clearErrors } = useForm<ResetPasswordFormData>()
+
   const params = useParams()
   const { setNotification, setAllNotification } = useOutletContext() as any // FIXME: fix types
 
   const fetchHook = useFetch()
-  const formRef = useRef(null)
   const [loading, setLoading] = useState(false)
-  const [passIsReset, setPassIsReset] = useState(false)
 
-  const [validationErrors, { set: setError }] = useMap<Record<string, string | null>>({
-    password: null,
-    confirm_password: null,
-  })
+  const resetPass = handleSubmit((formData: ResetPasswordFormData) => {
+    if (!formIsValid(formData, setError, clearErrors)) return
 
-  function resetPass(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
     setLoading(true)
-
-    const formData = getFormData(formRef.current)
-
-    if (formData.password !== formData.confirm_password) {
-      setError('password', PASSWORD_MISMATCH_MESSAGE)
-      setError('confirm_password', PASSWORD_MISMATCH_MESSAGE)
-      setLoading(false)
-      return
-    } else if (validationErrors.password) {
-      setError('password', null)
-      setError('confirm_password', null)
-    }
 
     fetchHook(`auth/reset-password/${params.hash}`, {
       method: 'POST',
@@ -53,7 +40,34 @@ export function useResetPasswordController() {
         })
       })
       .finally(() => setLoading(false))
+  })
+
+  return { loading, validationErrors: formState.errors, formRegister, resetPass }
+}
+
+function formIsValid(
+  formData: ResetPasswordFormData,
+  setError: UseFormSetError<ResetPasswordFormData>,
+  clearErrors: UseFormClearErrors<ResetPasswordFormData>
+): boolean {
+  let isValid = true
+
+  const PASSWORD_MISMATCH_MESSAGE = 'Passwords do not match'
+
+  if (formData.password !== formData.confirm_password) {
+    isValid = false
+
+    setError('password', {
+      type: 'custom',
+      message: PASSWORD_MISMATCH_MESSAGE,
+    })
+    setError('confirm_password', {
+      type: 'custom',
+      message: PASSWORD_MISMATCH_MESSAGE,
+    })
+  } else {
+    clearErrors(['password', 'confirm_password'])
   }
 
-  return { formRef, passIsReset, loading, validationErrors, resetPass }
+  return isValid
 }

@@ -6,7 +6,7 @@ import CsrfField from '~common/CsrfField'
 import { useSignUpController } from './signup.controller'
 
 export function Component() {
-  const { fields, formRef, loading, searchParams, signUp } = useSignUpController()
+  const { fields, loading, searchParams, signUp } = useSignUpController()
 
   return (
     <main className='sm:max-w-2xl px-4 sm:px-0'>
@@ -14,7 +14,7 @@ export function Component() {
         <title>Moksha | Sign up</title>
       </Helmet>
 
-      <form ref={formRef} className='space-y-6' onSubmit={signUp}>
+      <form className='space-y-6' onSubmit={signUp}>
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6'>
           {fields.map(field => (
             <BaseInput key={field.id} {...field} />

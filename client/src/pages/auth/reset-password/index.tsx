@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useLoaderData } from 'react-router-dom'
 import BaseInput from '~base/BaseInput'
@@ -7,19 +7,20 @@ import BaseButtonLink from '~base/BaseButtonLink'
 import CsrfField from '~common/CsrfField'
 import { getForgotPassLinkValidity } from '~loaders/auth.loader'
 import { useResetPasswordController } from './reset-password.controller'
+import type { ResetPassFormProps } from './reset-password.types'
 
 export const loader = getForgotPassLinkValidity
 
 export function Component() {
   const linkIsValid = useLoaderData()
-  const { passIsReset } = useResetPasswordController()
+  const [passIsReset, setPassIsReset] = useState(false)
 
   const content = useMemo(() => {
     if (!linkIsValid) return <LinkExpired />
 
     if (passIsReset) return <SuccessInfo />
 
-    return <ResetPassForm />
+    return <ResetPassForm setPassIsReset={setPassIsReset} />
   }, [linkIsValid, passIsReset])
 
   return (
@@ -35,29 +36,29 @@ export function Component() {
 
 Component.displayName = 'Verification'
 
-function ResetPassForm() {
-  const { formRef, loading, validationErrors, resetPass } = useResetPasswordController()
+function ResetPassForm(props: ResetPassFormProps) {
+  const { loading, validationErrors, formRegister, resetPass } = useResetPasswordController(props)
 
   return (
-    <form ref={formRef} className='space-y-6' onSubmit={resetPass}>
+    <form className='space-y-6' onSubmit={resetPass}>
       <BaseInput
         id='password'
-        name='password'
         type='password'
         autoComplete='current-password'
         required
         label='Password'
-        validationError={validationErrors['password']}
+        validationError={validationErrors.password?.message}
+        {...formRegister('password')}
       />
 
       <BaseInput
         id='confirm_password'
-        name='confirm_password'
         type='password'
         autoComplete='current-password'
         required
         label='Confirm password'
-        validationError={validationErrors['confirm_password']}
+        validationError={validationErrors.confirm_password?.message}
+        {...formRegister('confirm_password')}
       />
 
       <CsrfField />

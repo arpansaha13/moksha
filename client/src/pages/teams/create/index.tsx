@@ -54,16 +54,16 @@ export function Component() {
 Component.displayName = 'CreateTeam'
 
 function CreateTeamForm(props: CreateTeamFormProps) {
-  const { formRef, loading, createTeam } = useCreateTeamFormController(props)
+  const { loading, createTeam, formRegister } = useCreateTeamFormController(props)
 
   return (
-    <form ref={formRef} onSubmit={createTeam}>
+    <form onSubmit={createTeam}>
       <p>Creating a team is as simple as choosing a name and pressing the button.</p>
 
       <p>One user can create and be the leader of only one team.</p>
 
       <div className='not-prose mt-6'>
-        <BaseInput id='team_name' name='team_name' type='text' label='Team name' required />
+        <BaseInput id='team_name' type='text' label='Team name' required {...formRegister('team_name')} />
       </div>
 
       <CsrfField />

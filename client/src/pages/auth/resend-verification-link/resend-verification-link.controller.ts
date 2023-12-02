@@ -1,19 +1,21 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useOutletContext } from 'react-router-dom'
 import { useFetch } from '~/hooks/common/useFetch'
-import getFormData from '~/utils/getFormData'
+
+interface ResendVerificationLinkFormData {
+  email: string
+}
 
 export function useResendVerificationLinkController() {
+  const { register: formRegister, handleSubmit } = useForm<ResendVerificationLinkFormData>()
+
   const fetchHook = useFetch()
-  const formRef = useRef(null)
   const [loading, setLoading] = useState(false)
   const { setAllNotification } = useOutletContext() as any // FIXME: fix types
 
-  function resendLink(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const resendLink = handleSubmit((formData: ResendVerificationLinkFormData) => {
     setLoading(true)
-
-    const formData = getFormData(formRef.current)
 
     fetchHook('auth/resend-verification-link', {
       method: 'POST',
@@ -38,7 +40,7 @@ export function useResendVerificationLinkController() {
       .finally(() => {
         setLoading(false)
       })
-  }
+  })
 
-  return { formRef, loading, resendLink }
+  return { loading, formRegister, resendLink }
 }

@@ -1,10 +1,17 @@
-import { useCallback, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import { useStore } from '~/store'
 import { useFetch } from '~/hooks/common/useFetch'
-import getFormData from '~/utils/getFormData'
+
+interface LoginFormData {
+  email: string
+  password: string
+}
 
 export function useLoginController() {
+  const { register: formRegister, handleSubmit } = useForm<LoginFormData>()
+
   const setAuthState = useStore(state => state.setAuthState)
   const { setNotification, setAllNotification } = useOutletContext() as any // FIXME: fix types
 
@@ -12,42 +19,34 @@ export function useLoginController() {
   const [searchParams] = useSearchParams()
 
   const fetchHook = useFetch()
-  const formRef = useRef(null)
   const [loading, setLoading] = useState(false)
 
-  const signIn = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      setLoading(true)
+  const signIn = handleSubmit((formData: LoginFormData) => {
+    setLoading(true)
 
-      const formData = getFormData(formRef.current)
+    fetchHook('auth/login', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(res => {
+        setAuthState('authenticated', true)
+        setAuthState('avatar_idx', res.avatar_idx)
+        setAuthState('user_id', res.user_id)
+        setNotification('show', false)
 
-      fetchHook('auth/login', {
-        method: 'POST',
-        body: formData,
+        if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')!), { replace: true })
+        else navigate('/', { replace: true })
       })
-        .then(res => {
-          setAuthState('authenticated', true)
-          setAuthState('avatar_idx', res.avatar_idx)
-          setAuthState('user_id', res.user_id)
-          setNotification('show', false)
-
-          if (searchParams.get('from')) navigate(decodeURIComponent(searchParams.get('from')!), { replace: true })
-          else navigate('/', { replace: true })
+      .catch(err => {
+        setAllNotification({
+          show: true,
+          title: 'Login failed',
+          description: err.message,
+          status: 'error',
         })
-        .catch(err => {
-          setAllNotification({
-            show: true,
-            title: 'Login failed',
-            description: err.message,
-            status: 'error',
-          })
-        })
-        .finally(() => setLoading(false))
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formRef]
-  )
+      })
+      .finally(() => setLoading(false))
+  })
 
-  return { loading, formRef, searchParams, signIn }
+  return { loading, searchParams, formRegister, signIn }
 }
