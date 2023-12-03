@@ -1,6 +1,8 @@
 import { Fragment, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Transition } from '@headlessui/react'
+import { Icon } from '@iconify/react'
+import logoutIcon from '@iconify-icons/mdi/logout'
 import { classNames } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import Avatar from '~common/Avatar'
@@ -13,7 +15,7 @@ interface AccountMenuProps {
 
 const AccountMenu = memo(({ avatarIdx, onLogOut }: AccountMenuProps) => {
   return (
-    <Menu as='div' className='relative inline-block text-left'>
+    <Menu as='div' className='relative inline-block'>
       <div>
         <Menu.Button className='block w-11 h-11 lg:w-14 lg:h-14 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ochre focus-visible:ring-opacity-75'>
           <Avatar avatarIdx={avatarIdx} />
@@ -33,14 +35,17 @@ const AccountMenu = memo(({ avatarIdx, onLogOut }: AccountMenuProps) => {
           as={Sheet}
           className='absolute right-0 mt-2 py-2 w-56 origin-top-right rounded-md text-sm text-gray-300 bg-amber-900/95 shadow-lg shadow-darkBrown ring-1 ring-darkBrown ring-opacity-5 focus:outline-none backdrop-blur-sm'
         >
-          {profileTabs.map(item => (
-            <Menu.Item key={item.to}>
+          {profileTabs.map(tab => (
+            <Menu.Item key={tab.to}>
               {({ active }) => (
                 <Link
-                  to={item.to}
-                  className={classNames(active ? 'bg-brown/40' : '', 'flex w-full items-center px-3 py-2')}
+                  to={tab.to}
+                  className={classNames(active ? 'bg-brown/40' : '', 'flex gap-x-2 w-full items-center px-3 py-2')}
                 >
-                  {item.name}
+                  <div className='w-5 h-5 text-gray-200 flex-shrink-0'>
+                    <Icon icon={tab.icon} className='block' color='inherit' width='100%' height='100%' />
+                  </div>
+                  <p>{tab.name}</p>
                 </Link>
               )}
             </Menu.Item>
@@ -49,10 +54,16 @@ const AccountMenu = memo(({ avatarIdx, onLogOut }: AccountMenuProps) => {
           <Menu.Item>
             {({ active }) => (
               <button
-                className={classNames(active ? 'bg-brown/40' : '', 'flex w-full items-center px-3 py-2')}
+                className={classNames(
+                  active ? 'bg-brown/40' : '',
+                  'flex gap-x-2 w-full border-t border-amber-800 items-center px-3 py-2'
+                )}
                 onClick={onLogOut}
               >
-                Log out
+                <div className='w-5 h-5 text-gray-200 flex-shrink-0'>
+                  <Icon icon={logoutIcon} className='block' color='inherit' width='100%' height='100%' />
+                </div>
+                <p>Log out</p>
               </button>
             )}
           </Menu.Item>

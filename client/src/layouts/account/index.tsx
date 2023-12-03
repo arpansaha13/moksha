@@ -39,14 +39,17 @@ function AccountLayout() {
                     to={tab.to}
                     className={({ isActive }) =>
                       classNames(
-                        'block px-4 py-2 rounded-md text-sm',
+                        'flex gap-x-2 items-center px-4 py-2 rounded-md text-sm',
                         isActive
                           ? 'bg-gradient-to-r from-amber-900'
                           : 'sm:hover:bg-gradient-to-r sm:hover:from-amber-900/40'
                       )
                     }
                   >
-                    {tab.name}
+                    <div className='w-5 h-5 flex-shrink-0 text-gray-300'>
+                      <Icon icon={tab.icon} className='block' color='inherit' width='100%' height='100%' />
+                    </div>
+                    <p>{tab.name}</p>
                   </NavLink>
                 </li>
               ))}
