@@ -10,7 +10,7 @@ export function Component() {
   return (
     <div className='max-w-md px-4 sm:px-0'>
       <Helmet>
-        <title>Moksha | Forgot password</title>
+        <title>Moksha | Resend verification link</title>
       </Helmet>
 
       <form className='space-y-6' onSubmit={resendLink}>
