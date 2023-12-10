@@ -17,7 +17,6 @@ class User(Model):
     username = CharField(max_length=100, unique=True, null=False)
 
     password = CharField(max_length=100, null=False)
-    email_verified = BooleanField(default=False, null=False)
 
     role = CharField(max_length=100, default='user', null=False)
 

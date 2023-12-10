@@ -7,11 +7,11 @@ from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, NotFound
-from .models import AccountVerificationLink, ForgotPasswordLink
+from .models import UnverifiedAccount, ForgotPasswordLink
 from users.models import User
 from users.serializers import AuthUserSerializer
 from common.middleware import jwt_exempt, validate_token, validate_session
-from common.exceptions import Conflict, Unauthorized, InternalServerError
+from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
 from datetime import datetime, timedelta
 import jwt
 import random
@@ -71,40 +71,40 @@ class CheckAuth(APIView):
 class Register(APIView):
     def post(self, request):
         if request.data['password'] != request.data['confirm_password']:
-            raise Unauthorized({'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
+            raise Unauthorized(message=PASSWORD_MISMATCH_EXCEPTION_MESSAGE)
 
         email = request.data['email']
-        user = User.objects.filter(email=email).first()
-
-        if user is not None:
-            if user.email_verified:
-                raise Conflict(message='This email is already registered.')
-
-            raise Conflict(message='This email is already registered. You can login after verifying your account.')
-
-        self.verify_username(email, request.data['username'])
-        self.verify_phone(email, request.data['phone_no'])
-
-        otp_entry: AccountVerificationLink
-        otp_generated = generate_otp()
-        hashed_password = make_password(request.data['password'])
+        unverified_acc: UnverifiedAccount
 
         try:
             with transaction.atomic():
-                user = self.create_new_user(request, hashed_password)
-                otp_entry = self.create_otp(user, otp_generated)
+                self.verify_email(email)
+                self.verify_username(request.data['username'])
+                self.verify_phone(request.data['phone_no'])
 
-                user.save()
-                otp_entry.save()
+                otp_generated = generate_otp()
+                hashed_password = make_password(request.data['password'])
+
+                unverified_acc = UnverifiedAccount.objects.filter(
+                    email=email).first()  # type: ignore
+
+                if unverified_acc is None:
+                    unverified_acc = self.create_new_acc(
+                        request, hashed_password, otp_generated)
+                else:
+                    unverified_acc = self.update_unverified_acc(
+                        request, unverified_acc, hashed_password, otp_generated)
+
+                unverified_acc.save()
         except IntegrityError:
             raise InternalServerError()
 
         send_mail(
             subject='Welcome to Moksha 2023, NIT Agartala - Please verify your email',
             message=get_account_verification_mail_message(
-                user.name,
+                unverified_acc.name,
                 otp_generated,
-                get_account_verification_link(otp_entry.hash)
+                get_account_verification_link(unverified_acc.hash)
             ),
             from_email=env('EMAIL_HOST_USER'),
             recipient_list=[email],
@@ -113,48 +113,49 @@ class Register(APIView):
 
         return Response({'message': "Otp validation link has been sent to your email."}, 201)
 
-    def verify_username(self, email: str, username: str):
-        user = User.objects.filter(Q(username=username) & ~Q(email=email)).first()
+    def verify_email(self, email: str):
+        if User.objects.filter(Q(email=email)).exists():
+            raise Conflict(message='This email is already registered.')
 
-        if user is not None and (user.email_verified or user.email != email):
+    def verify_username(self, username: str):
+        if User.objects.filter(Q(username=username)).exists():
             raise Conflict(message='This username is already taken.')
 
-    def verify_phone(self, email: str, phone: int):
-        user = User.objects.filter(Q(phone_no=phone) & ~Q(email=email)).first()
-
-        if user is not None and (user.email_verified or user.email != email):
+    def verify_phone(self, phone: int):
+        if User.objects.filter(Q(phone_no=phone)).exists():
             raise Conflict(message='This phone number is already registered.')
 
-    def create_new_user(self, request, hashed_password: str):
-        uid = generate_uid()
+    def create_new_acc(self, request, hashed_password: str, otp_generated: int) -> UnverifiedAccount:
+        otp_hash = generate_hash()
 
-        while User.objects.filter(user_id=uid).exists():
-            uid = generate_uid()
+        while UnverifiedAccount.objects.filter(hash=otp_hash).exists():
+            otp_hash = generate_hash()
 
-        user = User(
-            user_id=uid,
+        new_account = UnverifiedAccount(
+            hash=otp_hash,
+            otp=otp_generated,
             avatar_idx=request.data['avatar_idx'],
             name=request.data['name'],
             institution=request.data['institution'],
             phone_no=request.data['phone_no'],
             email=request.data['email'],
             username=request.data['username'],
-            password=hashed_password
+            password=hashed_password,
         )
 
-        return user
+        return new_account
 
-    def create_otp(self, user: User, otp_generated: int):
-        otp_hash = generate_hash()
+    def update_unverified_acc(self, request, unverified_acc: UnverifiedAccount, hashed_password: str, otp_generated: int) -> UnverifiedAccount:
 
-        while AccountVerificationLink.objects.filter(hash=otp_hash).exists():
-            otp_hash = generate_hash()
+        unverified_acc.otp = otp_generated
+        unverified_acc.avatar_idx = request.data['avatar_idx']
+        unverified_acc.name = request.data['name']
+        unverified_acc.institution = request.data['institution']
+        unverified_acc.phone_no = request.data['phone_no']
+        unverified_acc.username = request.data['username']
+        unverified_acc.password = hashed_password
 
-        return AccountVerificationLink(
-            user=user,
-            hash=otp_hash,
-            otp=otp_generated
-        )
+        return unverified_acc
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -166,16 +167,16 @@ class Login(APIView):
         email = request.data['email']
         user = User.objects.filter(email=email).first()
 
-        if not user:
-            raise Unauthorized({'message': 'Invalid email or password.'})
+        UNAUTHORIZED_MESSAGE = 'Invalid email or password.'
 
-        password_matched = check_password(request.data['password'], user.password)
+        if not user:
+            raise Unauthorized(message=UNAUTHORIZED_MESSAGE)
+
+        password_matched = check_password(
+            request.data['password'], user.password)
 
         if not password_matched:
-            raise Unauthorized({'message': 'Invalid email or password.'})
-
-        if not user.email_verified:
-            raise PermissionDenied({'message': "Please verify your account using otp."})
+            raise Unauthorized(message=UNAUTHORIZED_MESSAGE)
 
         AUTH_TOKEN = self.create_auth_token(user.user_id)
         SESSION_TOKEN = self.create_session_token(user.user_id)
@@ -232,15 +233,17 @@ class Logout(APIView):
 
         response = Response()
         response.set_cookie(key='auth', max_age=1, httponly=True, path='/api')
-        response.set_cookie(key='session', max_age=1, httponly=True, path='/api')
+        response.set_cookie(key='session', max_age=1,
+                            httponly=True, path='/api')
         response.data = {'message': 'User has been successfully logged out.'}
         response.status_code = 200
         return response
 
 
 class VerifyAccountOtpLink(APIView):
+    # Check if account verification link is valid or not
     def get(self, _, otp_hash):
-        if AccountVerificationLink.objects.filter(hash=otp_hash).exists():
+        if UnverifiedAccount.objects.filter(hash=otp_hash).exists():
             return Response({'valid': True}, status=200)
 
         return Response({'valid': False}, status=200)
@@ -252,31 +255,48 @@ class VerifyAccountOtpLink(APIView):
 
 class AccountVerification(APIView):
     def post(self, request, otp_hash):
-        otp_entry = AccountVerificationLink.objects.filter(hash=otp_hash).first()
-
-        if otp_entry is None:
-            return Response({'message': 'Invalid link.'}, status=498)
-
-        otp_age = timezone.now() - otp_entry.updated_at
-
-        if otp_age.seconds > int(env('OTP_VALIDATION_SECONDS')):
-            return Response({'message': 'OTP has expired.'}, status=498)
-
-        otp = int(request.data['otp'])
-
-        if otp_entry.otp != otp:
-            raise Unauthorized(message='Invalid OTP.')
-
         try:
             with transaction.atomic():
-                user = otp_entry.user
-                user.email_verified = True
-                user.save()
-                otp_entry.delete()
+                unverified_acc = UnverifiedAccount.objects.filter(
+                    hash=otp_hash).first()
+
+                if unverified_acc is None:
+                    return InvalidOrExpired(message='Invalid link.')
+
+                self.verify_otp_age(unverified_acc)
+
+                otp = int(request.data['otp'])
+
+                if unverified_acc.otp != otp:
+                    raise Unauthorized(message='Invalid OTP.')
+
+                new_user_id = generate_uid()
+
+                while User.objects.filter(user_id=new_user_id).exists():
+                    new_user_id = generate_uid()
+
+                new_user = User(
+                    user_id=new_user_id,
+                    avatar_idx=unverified_acc.avatar_idx,
+                    name=unverified_acc.name,
+                    institution=unverified_acc.institution,
+                    phone_no=unverified_acc.phone_no,
+                    email=unverified_acc.email,
+                    username=unverified_acc.username,
+                    password=unverified_acc.password,
+                )
+                new_user.save()
+                unverified_acc.delete()
         except IntegrityError:
             raise InternalServerError()
 
         return Response({'message': 'Account verification successful.'}, status=200)
+
+    def verify_otp_age(self, unverified_acc: UnverifiedAccount):
+        otp_age = timezone.now() - unverified_acc.updated_at
+
+        if otp_age.seconds > int(env('OTP_VALIDATION_SECONDS')):
+            raise InvalidOrExpired(message='OTP has expired.')
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -285,24 +305,25 @@ class AccountVerification(APIView):
 
 class ResendOtp(APIView):
     def get(self, _, otp_hash):
-        otp_entry = AccountVerificationLink.objects.filter(hash=otp_hash).first()
+        unverified_acc = UnverifiedAccount.objects.filter(
+            hash=otp_hash).first()
 
-        if otp_entry is None:
+        if unverified_acc is None:
             raise NotFound({'message': 'Invalid link.'})
 
-        otp_entry.otp = generate_otp()
-        otp_entry.save()
+        unverified_acc.otp = generate_otp()
+        unverified_acc.save()
 
         send_mail(
             subject='Moksha 2023, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
-                otp_entry.user.name,
-                otp_entry.otp,
+                unverified_acc.name,
+                unverified_acc.otp,
                 get_account_verification_link(otp_hash),
                 False
             ),
             from_email=env('EMAIL_HOST_USER'),
-            recipient_list=[otp_entry.user.email],
+            recipient_list=[unverified_acc.email],
             fail_silently=False,
         )
 
@@ -316,38 +337,40 @@ class ResendOtp(APIView):
 class ResendVerificationLink(APIView):
     def post(self, request):
         email = request.data['email']
-        user = User.objects.filter(email=email).first()
 
-        if user is None:
-            raise NotFound({'message': 'This email is not registered.'})
+        try:
+            with transaction.atomic():
+                if User.objects.filter(email=email).exists():
+                    raise Conflict(message='This email is already registered.')
 
-        if user.email_verified:
-            raise NotFound({'message': 'This email is already registered.'})
-
-        otp_entry = AccountVerificationLink.objects.filter(user=user).first()
-        otp_generated = generate_otp()
-
-        if otp_entry is None:
-            otp_entry = Register().create_otp(user, otp_generated)
-        else:
-            otp_entry.otp = otp_generated
-
-        otp_entry.save()
+                unverified_acc = self.get_unverified_acc(email)
+                unverified_acc.otp = generate_otp()
+                unverified_acc.save()
+        except IntegrityError:
+            raise InternalServerError()
 
         send_mail(
             subject='Moksha 2023, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
-                otp_entry.user.name,
-                otp_entry.otp,
-                get_account_verification_link(otp_entry.hash),
+                unverified_acc.name,
+                unverified_acc.otp,
+                get_account_verification_link(unverified_acc.hash),
                 False
             ),
             from_email=env('EMAIL_HOST_USER'),
-            recipient_list=[otp_entry.user.email],
+            recipient_list=[unverified_acc.email],
             fail_silently=False,
         )
 
         return Response({'message': 'An email has been sent with the new OTP.'}, status=200)
+
+    def get_unverified_acc(self, email) -> UnverifiedAccount:
+        unverified_acc = UnverifiedAccount.objects.filter(email=email).first()
+
+        if unverified_acc is None:
+            raise NotFound({'message': 'This email is not registered.'})
+
+        return unverified_acc
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -356,7 +379,8 @@ class ResendVerificationLink(APIView):
 
 class VerifyResetPassLink(APIView):
     def get(self, _, forgot_pass_hash):
-        forgot_pass_entry = ForgotPasswordLink.objects.filter(hash=forgot_pass_hash).first()
+        forgot_pass_entry = ForgotPasswordLink.objects.filter(
+            hash=forgot_pass_hash).first()
 
         if forgot_pass_entry is None:
             return Response({'valid': False}, status=200)
@@ -376,19 +400,27 @@ class VerifyResetPassLink(APIView):
 class ForgotPassword(APIView):
     def post(self, request):
         email = request.data['email']
-        user = User.objects.filter(email=email).first()
 
-        if user is None:
-            raise NotFound({'message': 'This email is not registered.'})
+        try:
+            with transaction.atomic():
+                user = User.objects.filter(email=email).first()
 
-        forgot_pass_entry = ForgotPasswordLink.objects.filter(user=user).first()
+                if user is None:
+                    raise NotFound(
+                        {'message': 'This email is not registered.'})
 
-        if forgot_pass_entry is not None:
-            forgot_pass_entry.delete()
+                forgot_pass_entry = ForgotPasswordLink.objects.filter(
+                    user=user).first()
 
-        forgot_pass_hash = generate_hash()
-        forgot_pass_entry = ForgotPasswordLink(hash=forgot_pass_hash, user=user)
-        forgot_pass_entry.save()
+                if forgot_pass_entry is not None:
+                    forgot_pass_entry.delete()
+
+                forgot_pass_hash = generate_hash()
+                forgot_pass_entry = ForgotPasswordLink(
+                    hash=forgot_pass_hash, user=user)
+                forgot_pass_entry.save()
+        except IntegrityError:
+            raise InternalServerError()
 
         send_mail(
             subject='Moksha 2023, NIT Agartala - Reset Password',
@@ -410,21 +442,20 @@ class ForgotPassword(APIView):
 
 class ResetPassword(APIView):
     def post(self, request, forgot_pass_hash):
-        forgot_pass_entry = ForgotPasswordLink.objects.filter(hash=forgot_pass_hash).first()
-
-        if forgot_pass_entry is None:
-            raise NotFound({'message': 'Invalid link.'})
-
-        link_age = timezone.now() - forgot_pass_entry.updated_at
-
-        if link_age.seconds > int(env('FORGOT_PASS_VALIDATION_SECONDS')):
-            return Response({'message': 'Link has expired.'}, status=498)
-
         if request.data['password'] != request.data['confirm_password']:
-            raise Unauthorized({'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
+            raise Unauthorized(
+                {'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
 
         try:
             with transaction.atomic():
+                forgot_pass_entry = ForgotPasswordLink.objects.filter(
+                    hash=forgot_pass_hash).first()
+
+                if forgot_pass_entry is None:
+                    raise NotFound({'message': 'Invalid link.'})
+
+                self.verify_link_age(forgot_pass_entry)
+
                 hashed_password = make_password(request.data['password'])
                 user = forgot_pass_entry.user
                 user.password = hashed_password
@@ -435,6 +466,12 @@ class ResetPassword(APIView):
 
         return Response({'message': 'Your password has been reset.'}, status=200)
 
+    def verify_link_age(self, forgot_pass_entry: ForgotPasswordLink):
+        link_age = timezone.now() - forgot_pass_entry.updated_at
+
+        if link_age.seconds > int(env('FORGOT_PASS_VALIDATION_SECONDS')):
+            raise InvalidOrExpired(message='Link has expired.')
+
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -443,15 +480,18 @@ class ResetPassword(APIView):
 class ChangePassword(APIView):
     def post(self, request):
         if request.data['new_password'] != request.data['confirm_password']:
-            raise Unauthorized({'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
+            raise Unauthorized(
+                {'message': PASSWORD_MISMATCH_EXCEPTION_MESSAGE})
 
         if request.data['new_password'] == request.data['old_password']:
-            raise Unauthorized({'message': "New password and old password cannot be the same."})
+            raise Unauthorized(
+                {'message': "New password and old password cannot be the same."})
 
         try:
             with transaction.atomic():
                 if not check_password(request.data['old_password'], request.auth_user.password):
-                    raise Unauthorized({'message': "Old password does not match with your current password."})
+                    raise Unauthorized(
+                        {'message': "Old password does not match with your current password."})
 
                 hashed_password = make_password(request.data['new_password'])
                 user = request.auth_user
@@ -464,12 +504,14 @@ class ChangePassword(APIView):
 
 
 def generate_uid(length=8):
-    uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(length))
+    uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
+                  for _ in range(length))
     return 'MOK-' + uid
 
 
 def generate_hash(length=15):
-    random_hash = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(length))
+    random_hash = ''.join(secrets.choice(
+        string.ascii_letters + string.digits) for _ in range(length))
     return random_hash
 
 

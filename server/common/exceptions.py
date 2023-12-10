@@ -50,6 +50,16 @@ class Unauthorized(CustomAPIException):
     }
 
 
+class InvalidOrExpired(CustomAPIException):
+    status_code = 498
+    default_code = 'invalid'
+    default_detail = {
+        'status': 498,
+        'error': 'Invalid',
+        'message': '',
+    }
+
+
 class InternalServerError(CustomAPIException):
     status_code = 500
     default_code = 'internal_server_error'
