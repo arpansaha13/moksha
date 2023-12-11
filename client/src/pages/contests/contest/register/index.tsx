@@ -18,25 +18,22 @@ export function Component() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const contestTypeIsOpen = useMemo<boolean>(() => contest.badges.includes('open'), [contest.id])
 
+  if (contestTypeIsOpen) {
+    return <Sheet className='p-4 sm:p-6'>No registration is required for this contest.</Sheet>
+  }
+
   return contest.type === 'solo' ? (
-    <>
-      {!contestTypeIsOpen ? (
-        <Sheet className='mt-6 p-6'>
-          {authState.authenticated ? (
-            <SoloRegistration contest={contest} />
-          ) : (
-            <EmptyState
-              icon={accountAlertIcon}
-              title='Interested in this contest?'
-              description='Login to register in it...'
-            />
-          )}
-        </Sheet>
+    <Sheet className='mt-6 p-6'>
+      {authState.authenticated ? (
+        <SoloRegistration contest={contest} />
       ) : (
-        // TODO
-        <>No registration is required for this contest.</>
+        <EmptyState
+          icon={accountAlertIcon}
+          title='Interested in this contest?'
+          description='Login to register in it...'
+        />
       )}
-    </>
+    </Sheet>
   ) : (
     <>
       <Sheet className='mb-6 p-4 sm:p-6 markdown'>
