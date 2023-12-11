@@ -4,6 +4,7 @@ import { Contest } from '~/types'
 export const collab: Contest[] = [
   {
     id: 14,
+    type: 'solo',
     slug: 'kbc',
     name: 'Kaun Banega Comedian',
     subtitle: 'Comedy Contest',
@@ -11,7 +12,7 @@ export const collab: Contest[] = [
       src: '/images/contests/generic-poster.png',
     },
     deadline: getDateFromIST('2023-10-10', '23:59:00'),
-    type: ['solo'],
+    badges: ['solo'],
     description: [
       {
         bold: true,
@@ -49,9 +50,9 @@ export const collab: Contest[] = [
       },
     ],
   },
-
   {
     id: 15,
+    type: 'team',
     slug: 'cosmania',
     name: 'COSMANIA',
     subtitle: 'Cosplay Fest',
@@ -59,7 +60,7 @@ export const collab: Contest[] = [
       src: '/images/contests/generic-poster.png',
     },
     deadline: getDateFromIST('2023-10-10', '23:59:00'),
-    type: ['team'],
+    badges: ['team'],
     allowedTeamSize: { min: 1, max: 3 }, // needs verification
     description: [
       {

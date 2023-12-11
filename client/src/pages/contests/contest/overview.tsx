@@ -24,8 +24,8 @@ export function Component() {
       <Sheet className='p-4 sm:p-6'>
         <article className='markdown'>
           <div className='flex gap-2'>
-            {contest.type.map(type => (
-              <ContestTypeBadge small={isTabletOrMobile} key={type} type={type} />
+            {contest.badges.map(badge => (
+              <ContestTypeBadge small={isTabletOrMobile} key={badge} badge={badge} />
             ))}
           </div>
           {contest.description.map((para, i) => (

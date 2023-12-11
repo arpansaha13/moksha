@@ -4,10 +4,11 @@ import { Contest } from '~/types'
 export const fineArts: Contest[] = [
   {
     id: 2,
+    type: 'solo',
     slug: 'kalakriti',
     name: 'KalaKriti',
     subtitle: 'Painting Competition',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -52,10 +53,11 @@ export const fineArts: Contest[] = [
   },
   {
     id: 3,
+    type: 'solo',
     subtitle: 'Artwork',
     slug: 'comiquest',
     name: 'Comiquest',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },

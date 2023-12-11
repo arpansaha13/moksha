@@ -1,6 +1,9 @@
 import type { ClubSlug, Image, ProseElement } from './common'
 
-export type ContestType = 'solo' | 'team' | 'duo' | 'duet' | 'squad' | 'open'
+type SoloContestBadge = 'solo' | 'open'
+type TeamContestBadge = 'solo' | 'team' | 'duo' | 'duet' | 'squad' | 'open'
+
+export type ContestBadge = SoloContestBadge | TeamContestBadge
 
 interface TeamSizeRange {
   min: number
@@ -22,11 +25,13 @@ interface BaseContest {
 }
 
 export interface SoloContest extends BaseContest {
-  type: ('solo' | 'open')[]
+  type: 'solo'
+  badges: SoloContestBadge[]
 }
 
 export interface TeamContest extends BaseContest {
-  type: ContestType[]
+  type: 'team'
+  badges: TeamContestBadge[]
   allowedTeamSize: AllowedTeamSize
 }
 

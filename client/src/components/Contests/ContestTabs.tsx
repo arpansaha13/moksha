@@ -1,13 +1,13 @@
 import { Fragment, memo, startTransition, useCallback, useMemo, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { Tab } from '@headlessui/react'
-import { classNames, isNullOrUndefined } from '@arpansaha13/utils'
+import { classNames } from '@arpansaha13/utils'
 import { useStore } from '~/store'
 import Sheet from '~common/Sheet'
-import type { Contest, TeamContest } from '~/types'
+import type { Contest } from '~/types'
 
 interface ContestTabsProps {
-  contest: Contest
+  contestType: Contest['type']
 }
 
 interface TabPanelButtonProps {
@@ -15,7 +15,7 @@ interface TabPanelButtonProps {
   to: string
 }
 
-const ContestTabs = ({ contest }: ContestTabsProps) => {
+const ContestTabs = ({ contestType }: ContestTabsProps) => {
   const params = useParams()
   const location = useLocation()
   const authState = useStore(state => state.authState)
@@ -34,7 +34,7 @@ const ContestTabs = ({ contest }: ContestTabsProps) => {
       },
     ]
 
-    if (!isNullOrUndefined((contest as TeamContest).allowedTeamSize)) {
+    if (contestType === 'team') {
       panels.push({
         name: 'Registrations',
         requiresAuth: true,
@@ -43,7 +43,7 @@ const ContestTabs = ({ contest }: ContestTabsProps) => {
     }
 
     return panels
-  }, [params, contest])
+  }, [params, contestType])
 
   const showPanel = useMemo(
     () => panels.map(panel => !panel.requiresAuth || authState.authenticated),
@@ -59,9 +59,7 @@ const ContestTabs = ({ contest }: ContestTabsProps) => {
         as={Sheet}
         className={classNames(
           'my-4 sm:my-6 grid bg-amber-900/30 text-gray-200 text-sm font-medium divide-x divide-amber-900/70 overflow-hidden',
-          authState.authenticated && !isNullOrUndefined((contest as TeamContest).allowedTeamSize)
-            ? 'grid-cols-3'
-            : 'grid-cols-2'
+          authState.authenticated && contestType === 'team' ? 'grid-cols-3' : 'grid-cols-2'
         )}
       >
         {panels.map((panel, i) =>

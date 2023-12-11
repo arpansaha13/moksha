@@ -4,7 +4,6 @@ import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { defineCustomElement } from '@tranzis/core/dist/components/tz-3d-card'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import SocialShare from '~/components/SocialShare'

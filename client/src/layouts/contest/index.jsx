@@ -63,7 +63,7 @@ export default function ContestLayout() {
             <span>Go to contests</span>
           </Link>
 
-          <ContestTabs contest={contest} />
+          <ContestTabs contestType={contest.type} />
 
           <Outlet />
         </div>
@@ -79,7 +79,7 @@ export default function ContestLayout() {
               />
             </div>
 
-            {!contest.type.includes('open') && (
+            {!contest.badges.includes('open') && (
               <Sheet className='lg:mx-6 p-4 sm:p-6'>
                 <h2 className='mb-4 text-xl font-bold'>Registration Deadline</h2>
 

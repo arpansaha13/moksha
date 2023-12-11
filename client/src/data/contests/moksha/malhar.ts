@@ -6,10 +6,11 @@ import type { Contest } from '~/types'
 export const malhar: Contest[] = [
   {
     id: 4,
+    type: 'solo',
     slug: 'moksha-maestro',
     name: 'Moksha Maestro',
     subtitle: 'Solo Singing Competition',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -57,10 +58,11 @@ export const malhar: Contest[] = [
   },
   {
     id: 5,
+    type: 'team',
     slug: 'melody-mania',
     name: 'Melody Mania',
     subtitle: 'Group Singing Competition',
-    type: ['team'],
+    badges: ['team'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -109,10 +111,11 @@ export const malhar: Contest[] = [
   },
   {
     id: 6,
+    type: 'solo',
     slug: 'harmony-hunt',
     name: 'Harmony Hunt',
     subtitle: 'Solo Instrumental Competition',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -157,9 +160,10 @@ export const malhar: Contest[] = [
   },
   {
     id: 7,
+    type: 'solo',
     slug: 'beatnik',
     name: 'Beatnik',
-    type: ['solo'],
+    badges: ['solo'],
     subtitle: 'Rap Battle',
     image: {
       src: '/images/contests/generic-poster.png',
@@ -211,12 +215,12 @@ export const malhar: Contest[] = [
       },
     ],
   },
-
   {
     id: 8,
+    type: 'team',
     slug: 'folklore-fiesta',
     name: 'Folklore Fiesta',
-    type: ['team'],
+    badges: ['team'],
     allowedTeamSize: { min: 3, max: 7 },
     subtitle: 'Group Singing Competition',
     image: {
@@ -268,9 +272,10 @@ export const malhar: Contest[] = [
   },
   {
     id: 9,
+    type: 'team',
     slug: 'muzic-madness',
     name: 'Muzic Madness',
-    type: ['team'],
+    badges: ['team'],
     allowedTeamSize: { min: 5, max: 6 },
     subtitle: 'Antakshari Game',
     image: {

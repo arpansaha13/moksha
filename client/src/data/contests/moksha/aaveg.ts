@@ -4,10 +4,11 @@ import type { Contest } from '~/types'
 export const aaveg: Contest[] = [
   {
     id: 20,
+    type: 'solo',
     slug: 'i-me-myself',
     name: 'I Me Myself',
     subtitle: 'Mono Act Competition',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -47,13 +48,13 @@ export const aaveg: Contest[] = [
       },
     ],
   },
-
   {
     id: 21,
+    type: 'team',
     slug: 'rangmanch',
     name: 'Rangmanch',
     subtitle: 'Group Act Competition',
-    type: ['team'],
+    badges: ['team'],
     allowedTeamSize: { min: 5, max: 10 },
     image: {
       src: '/images/contests/generic-poster.png',
@@ -94,13 +95,13 @@ export const aaveg: Contest[] = [
       },
     ],
   },
-
   {
     id: 22,
+    type: 'solo',
     slug: 'showcase-showdown',
     name: 'Showcase Showdown',
     subtitle: 'Open Act Game',
-    type: ['open'],
+    badges: ['open'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -128,13 +129,13 @@ export const aaveg: Contest[] = [
       },
     ],
   },
-
   {
     id: 23,
+    type: 'solo',
     slug: 'helium-highs',
     name: 'Helium Highs',
     subtitle: 'Helium Gas Game',
-    type: ['open'],
+    badges: ['open'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -168,13 +169,13 @@ export const aaveg: Contest[] = [
       },
     ],
   },
-
   {
     id: 24,
+    type: 'team',
     slug: 'ad-mockery-matchup',
     name: 'Ad Mockery Matchup',
     subtitle: 'Mimicry Game',
-    type: ['open'],
+    badges: ['open'],
     allowedTeamSize: { min: 1, max: 6 },
     image: {
       src: '/images/contests/generic-poster.png',
