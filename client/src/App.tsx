@@ -1,7 +1,6 @@
 import { lazy, startTransition, useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useStore } from './store'
-import { useCe } from './hooks/useCe'
 import { useAnalytics } from './hooks/useAnalytics'
 import AppLoader from './components/AppLoader'
 import fetchWithCredentials from './utils/fetchWithCredentials'
@@ -32,7 +31,6 @@ function App() {
   }, [])
 
   useAnalytics()
-  useCe()
 
   return loading ? (
     <AppLoader />

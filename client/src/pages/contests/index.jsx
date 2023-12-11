@@ -11,7 +11,6 @@ import MLink from '~common/Links/MLink'
 import DLink from '~common/Links/DLink'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
-// import StayTunedBanner from '~/components/StayTunedBanner'
 import Picture from '~/components/pictures/Picture'
 import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
 import { getContests } from '~loaders/contests.loader'
@@ -68,8 +67,6 @@ const MokshaContests = memo(
   ({ className, mokshaContestsMap }) => (
     <Container className={className}>
       <h2 className='text-4xl text-center font-bold border-b-2 border-amber-900/70'>Moksha</h2>
-
-      {/* <StayTunedBanner /> */}
 
       {Object.keys(mokshaContestsMap).map(clubSlug => (
         <ClubContests key={clubSlug} clubSlug={clubSlug} contests={mokshaContestsMap[clubSlug]} />

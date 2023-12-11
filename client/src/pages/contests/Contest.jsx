@@ -5,14 +5,15 @@ import { format } from 'date-fns'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Tz3dCard } from '@tranzis/core/Tz3dCard'
+import { defineCustomElement } from '@tranzis/core/dist/components/tz-3d-card'
 import Sheet from '~common/Sheet'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
 import SoloContest from '~/components/Contests/SoloContest'
 import TeamContest from '~/components/Contests/TeamContest'
 import { getContest } from '~loaders/contests.loader'
+
+defineCustomElement()
 
 export const loader = getContest
 
