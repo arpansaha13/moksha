@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useLoaderData, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLoaderData, useLocation } from 'react-router-dom'
 import { format } from 'date-fns'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
@@ -9,15 +9,11 @@ import { defineCustomElement } from '@tranzis/core/dist/components/tz-3d-card'
 import Sheet from '~common/Sheet'
 import Container from '~common/Container'
 import SocialShare from '~/components/SocialShare'
-import SoloContest from '~/components/Contests/SoloContest'
-import TeamContest from '~/components/Contests/TeamContest'
-import { getContest } from '~loaders/contests.loader'
+import ContestTabs from '~/components/Contests/ContestTabs'
 
 defineCustomElement()
 
-export const loader = getContest
-
-export function Component() {
+export default function ContestLayout() {
   const contest = useLoaderData()
   const location = useLocation()
 
@@ -67,11 +63,9 @@ export function Component() {
             <span>Go to contests</span>
           </Link>
 
-          {contest.type.includes('solo') || contest.type.includes('open') ? (
-            <SoloContest contest={contest} />
-          ) : (
-            <TeamContest contest={contest} />
-          )}
+          <ContestTabs contest={contest} />
+
+          <Outlet />
         </div>
 
         <div className='lg:col-span-2 order-first lg:order-2'>
@@ -107,5 +101,3 @@ export function Component() {
     </Container>
   )
 }
-
-Component.displayName = 'Contest'

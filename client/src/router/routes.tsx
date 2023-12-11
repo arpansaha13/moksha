@@ -1,14 +1,17 @@
 import nprogress from 'nprogress'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
+
+import { getContest } from '~loaders/contests.loader'
 import { allowIfNotAuthenticated } from '~loaders/auth.loader'
 import { getReceivedTeamInvites } from '~loaders/account.loader'
 
-import AuthLayout from '../layouts/auth'
-import DefaultLayout from '../layouts/default'
-import AccountLayout from '../layouts/account'
-import SettingsLayout from '../layouts/settings'
-import FloatingWindow from '../layouts/floating-window'
+import AuthLayout from '~/layouts/auth'
+import DefaultLayout from '~/layouts/default'
+import AccountLayout from '~/layouts/account'
+import ContestLayout from '~/layouts/contest'
+import SettingsLayout from '~/layouts/settings'
+import FloatingWindow from '~/layouts/floating-window'
 
 import { Component as NotFound } from '../pages/404'
 
@@ -21,7 +24,9 @@ const Home = () => import('../pages/Home')
 const Events = () => import('../pages/events')
 const Event = () => import('../pages/events/Event')
 const Contests = () => import('../pages/contests')
-const Contest = () => import('../pages/contests/Contest')
+const ContestOverview = () => import('../pages/contests/contest/overview')
+const ContestRegister = () => import('../pages/contests/contest/register')
+const ContestRegistrations = () => import('../pages/contests/contest/registrations')
 const Faqs = () => import('../pages/Faqs')
 const Contact = () => import('../pages/Contact')
 const Team = () => import('../pages/teams/team')
@@ -63,7 +68,20 @@ const routes = createRoutesFromElements(
       <Route path='/events/:club/:event' lazy={fetchRoute(Event)} errorElement={<NotFound />} />
 
       <Route path='/contests' lazy={fetchRoute(Contests)} />
-      <Route path='/contests/:club/:contest' lazy={fetchRoute(Contest)} errorElement={<NotFound />} />
+
+      <Route loader={getContest} element={<ContestLayout />}>
+        <Route path='/contests/:club/:contest' lazy={fetchRoute(ContestOverview)} errorElement={<NotFound />} />
+        <Route
+          path='/contests/:club/:contest/register'
+          lazy={fetchRoute(ContestRegister)}
+          errorElement={<NotFound />}
+        />
+        <Route
+          path='/contests/:club/:contest/registrations'
+          lazy={fetchRoute(ContestRegistrations)}
+          errorElement={<NotFound />}
+        />
+      </Route>
 
       <Route path='/teams/create' lazy={fetchRoute(CreateTeam)} />
       <Route path='/teams/:team' lazy={fetchRoute(Team)} errorElement={<NotFound />} />

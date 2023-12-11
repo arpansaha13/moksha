@@ -6,8 +6,10 @@ import Loader from '~common/Loader'
 import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import RegisteredContestMembers from '~/components/Teams/RegisteredContestMembers'
-import type { TeamRegistrationsPanelProps } from './team-registrations-panel.types'
-import { useTeamRegistrationsPanelController } from './team-registrations-panel.controller'
+import { getContest } from '~loaders/contests.loader'
+import { useRegistrationsController } from './registrations.controller'
+
+export const loader = getContest
 
 interface MyRegistrationProps {
   reg: any
@@ -22,8 +24,8 @@ interface RegistrationProps {
   reg: any
 }
 
-export default function TeamRegistrationsPanel(props: TeamRegistrationsPanelProps) {
-  const { reg, loading, createdTeamReg, fromCreatedTeam, hasCreatedTeam } = useTeamRegistrationsPanelController(props)
+export function Component() {
+  const { reg, loading, createdTeamReg, fromCreatedTeam, hasCreatedTeam } = useRegistrationsController()
 
   if (loading) {
     return <Loader className='mx-auto w-6 h-6' />
@@ -37,6 +39,8 @@ export default function TeamRegistrationsPanel(props: TeamRegistrationsPanelProp
     </div>
   )
 }
+
+Component.displayName = 'ContestRegistrations'
 
 function MyRegistration({ reg, fromCreatedTeam }: MyRegistrationProps) {
   return (

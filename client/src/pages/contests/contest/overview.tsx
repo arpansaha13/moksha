@@ -1,12 +1,12 @@
+import { useLoaderData } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import Sheet from '../common/Sheet'
-import ContestTypeBadge from './ContestTypeBadge'
+import Sheet from '~common/Sheet'
+import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
+import { getContest } from '~loaders/contests.loader'
 import type { Contest } from '~/types'
 
-interface ContestOverviewProps {
-  contest: Contest
-}
+export const loader = getContest
 
 interface RenderProseElementProps {
   // FIXME: typescript is not able to identify the type of ProseElement
@@ -15,7 +15,8 @@ interface RenderProseElementProps {
   proseElement: any // for now
 }
 
-export default function ContestOverview({ contest }: ContestOverviewProps) {
+export function Component() {
+  const contest = useLoaderData() as Contest
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1024px)' })
 
   return (
@@ -47,6 +48,8 @@ export default function ContestOverview({ contest }: ContestOverviewProps) {
     </>
   )
 }
+
+Component.displayName = 'ContestOverview'
 
 const RenderProseElement = ({ proseElement }: RenderProseElementProps) => {
   if (!isNullOrUndefined(proseElement.heading)) return <h3>{proseElement.heading}</h3>

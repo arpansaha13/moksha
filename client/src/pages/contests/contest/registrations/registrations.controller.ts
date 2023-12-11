@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import { useLoaderData } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import { useFetch } from '~/hooks/common/useFetch'
-import type { TeamRegistrationsPanelProps } from './team-registrations-panel.types'
+import type { Contest } from '~/types'
 
-export function useTeamRegistrationsPanelController({ contest }: TeamRegistrationsPanelProps) {
+export function useRegistrationsController() {
+  const contest = useLoaderData() as Contest
   const fetchHook = useFetch()
   const [reg, setReg] = useState(null)
   const [createdTeamReg, setCreatedTeamReg] = useState(null)

@@ -15,6 +15,9 @@ export const getContest = loaderWrapper({
   },
   fn: ({ request }) => {
     const pathSegments = new URL(request.url).pathname.split('/')
+
+    if (['register', 'registrations'].includes(pathSegments.at(-1)!)) pathSegments.pop()
+
     const clubSlug = pathSegments.at(-2)!
     const contestSlug = pathSegments.at(-1)!
 
