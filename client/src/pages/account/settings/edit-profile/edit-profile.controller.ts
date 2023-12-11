@@ -22,17 +22,17 @@ export function useEditProfileController() {
     defaultValues: {
       name: authUser.current.name,
       institution: authUser.current.institution,
-      phone_no: authUser.current.phone_no.toString(),
+      phone_no: authUser.current.phone_no,
     },
   })
 
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
 
-  const fields = useMemo(() => getFields(formRegister), [])
+  const fields = useMemo(() => getFields(formRegister), [formRegister])
 
   const [notification, { set, setAll }] = useNotification()
-  const setShowNotification = useCallback((bool: boolean) => set('show', bool), [])
+  const setShowNotification = useCallback((bool: boolean) => set('show', bool), [set])
 
   const editProfile = handleSubmit((formData: EditProfileFormData) => {
     setLoading(true)
@@ -89,7 +89,7 @@ function getDiff(
 function updateAuthUserData(authUser: React.MutableRefObject<User>, formDataDiff: Partial<EditProfileFormData>) {
   if (formDataDiff.name) authUser.current.name = formDataDiff.name
   if (formDataDiff.institution) authUser.current.institution = formDataDiff.institution
-  if (formDataDiff.phone_no) authUser.current.phone_no = parseInt(formDataDiff.phone_no)
+  if (formDataDiff.phone_no) authUser.current.phone_no = formDataDiff.phone_no
 }
 
 function getFields(formRegister: UseFormRegister<EditProfileFormData>) {
@@ -118,13 +118,13 @@ function getFields(formRegister: UseFormRegister<EditProfileFormData>) {
     },
     {
       id: 'phone',
-      type: 'text',
+      type: 'tel',
       autoComplete: 'tel',
       inputMode: 'numeric' as const,
       required: true,
       label: 'Phone number',
-      pattern: '[0-9]{10}',
-      title: 'This field should contain 10 digits',
+      pattern: '^[0-9]+$',
+      title: 'This field should contain only digits',
       minLength: 10,
       maxLength: 10,
       ...formRegister('phone_no'),

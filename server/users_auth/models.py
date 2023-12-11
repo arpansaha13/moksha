@@ -1,4 +1,4 @@
-from django.db.models import Model, BigIntegerField, CharField, DateTimeField, EmailField, IntegerField, SmallIntegerField, ForeignKey, CASCADE
+from django.db.models import Model, CharField, DateTimeField, EmailField, SmallIntegerField, ForeignKey, CASCADE
 from users.models import User
 
 
@@ -8,10 +8,10 @@ class UnverifiedAccount(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
-    avatar_idx = IntegerField()
+    avatar_idx = SmallIntegerField()
     name = CharField(max_length=100, null=False)
     institution = CharField(max_length=100, null=False)
-    phone_no = BigIntegerField(null=False)
+    phone_no = CharField(null=False)
     email = EmailField(unique=True, null=False)
     username = CharField(max_length=100, null=False)
     password = CharField(max_length=100, null=False)

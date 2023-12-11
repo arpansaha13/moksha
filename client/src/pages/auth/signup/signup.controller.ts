@@ -19,7 +19,7 @@ interface Field extends React.InputHTMLAttributes<HTMLInputElement> {
 interface SignUpFormData {
   name: string
   email: string
-  phone_no: number
+  phone_no: string
   username: string
   institution: string
   password: string
@@ -142,9 +142,9 @@ function usernameIsValid(
 }
 
 function prepareRequestBody(formData: SignUpFormData) {
-  formData.name = trim(formData.name as string)
-  formData.institution = trim(formData.institution as string)
-  formData['avatar_idx'] = String(Number(formData['phone_no']) % 10)
+  formData.name = trim(formData.name)
+  formData.institution = trim(formData.institution)
+  formData['avatar_idx'] = String(parseInt(formData['phone_no']) % 10)
 }
 
 const getFields = (errors: FieldErrors<SignUpFormData>, formRegister: UseFormRegister<SignUpFormData>): Field[] => {
@@ -208,7 +208,8 @@ const getFields = (errors: FieldErrors<SignUpFormData>, formRegister: UseFormReg
       inputMode: 'numeric',
       required: true,
       label: 'Phone number',
-      pattern: '[0-9]{10}',
+      pattern: '^[0-9]+$',
+      title: 'This field should contain only digits',
       minLength: 10,
       maxLength: 10,
       ...formRegister('phone_no'),

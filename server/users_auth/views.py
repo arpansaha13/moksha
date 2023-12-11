@@ -121,8 +121,8 @@ class Register(APIView):
         if User.objects.filter(Q(username=username)).exists():
             raise Conflict(message='This username is already taken.')
 
-    def verify_phone(self, phone: int):
-        if User.objects.filter(Q(phone_no=phone)).exists():
+    def verify_phone(self, phone_no: str):
+        if User.objects.filter(Q(phone_no=phone_no)).exists():
             raise Conflict(message='This phone number is already registered.')
 
     def create_new_acc(self, request, hashed_password: str, otp_generated: int) -> UnverifiedAccount:

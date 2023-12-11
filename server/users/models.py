@@ -1,16 +1,16 @@
-from django.db.models import Model, CharField, IntegerField, BigIntegerField, EmailField, BooleanField
+from django.db.models import Model, CharField, SmallIntegerField, EmailField, BooleanField
 
 
 class User(Model):
     user_id = CharField(primary_key=True, max_length=100, null=False)
-    avatar_idx = IntegerField()
+    avatar_idx = SmallIntegerField()
 
     # TODO: revise length limits - both client and server-side
     name = CharField(max_length=100, null=False)
     institution = CharField(max_length=100, null=False)
 
     # TODO: add verification for phone
-    phone_no = BigIntegerField(unique=True, null=False)
+    phone_no = CharField(unique=True, null=False)
     email = EmailField(unique=True, null=False)
 
     # TODO: add client-side validation for usernames that are taken
