@@ -1,6 +1,6 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { useForm, type UseFormRegister } from 'react-hook-form'
+import { type FormState, useForm } from 'react-hook-form'
 import { useFetch } from '~/hooks/common/useFetch'
 import { useNotification } from '~/hooks/useNotification'
 import type { User } from '~/types'
@@ -18,6 +18,7 @@ export function useEditProfileController() {
     formState,
     register: formRegister,
     handleSubmit,
+    reset,
   } = useForm<EditProfileFormData>({
     defaultValues: {
       name: authUser.current.name,
@@ -28,8 +29,6 @@ export function useEditProfileController() {
 
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
-
-  const fields = useMemo(() => getFields(formRegister), [formRegister])
 
   const [notification, { set, setAll }] = useNotification()
   const setShowNotification = useCallback((bool: boolean) => set('show', bool), [set])
@@ -44,6 +43,11 @@ export function useEditProfileController() {
     })
       .then(res => {
         updateAuthUserData(authUser, formDataDiff)
+        reset({
+          name: authUser.current.name,
+          institution: authUser.current.institution,
+          phone_no: authUser.current.phone_no,
+        })
 
         setAll({
           show: true,
@@ -65,18 +69,15 @@ export function useEditProfileController() {
 
   return {
     loading,
-    fields,
     notification,
     isDirty: formState.isDirty,
+    formRegister,
     setShowNotification,
     editProfile,
   }
 }
 
-function getDiff(
-  dirtyFields: Partial<Readonly<Record<keyof EditProfileFormData, boolean>>>,
-  formData: EditProfileFormData
-) {
+function getDiff(dirtyFields: FormState<EditProfileFormData>['dirtyFields'], formData: EditProfileFormData) {
   const diff: Partial<EditProfileFormData> = {}
 
   if (dirtyFields.name) diff.name = formData.name
@@ -90,46 +91,4 @@ function updateAuthUserData(authUser: React.MutableRefObject<User>, formDataDiff
   if (formDataDiff.name) authUser.current.name = formDataDiff.name
   if (formDataDiff.institution) authUser.current.institution = formDataDiff.institution
   if (formDataDiff.phone_no) authUser.current.phone_no = formDataDiff.phone_no
-}
-
-function getFields(formRegister: UseFormRegister<EditProfileFormData>) {
-  // Values will be set by `formRegister` according to default values
-  const fields = [
-    {
-      id: 'name',
-      type: 'text',
-      autoComplete: 'name',
-      autoCapitalize: 'words',
-      maxLength: 20,
-      required: true,
-      label: 'Name',
-      ...formRegister('name'),
-    },
-    {
-      id: 'institution',
-      type: 'text',
-      autoComplete: 'organization',
-      autoCapitalize: 'words',
-      required: true,
-      minLength: 3,
-      maxLength: 50,
-      label: 'Institution',
-      ...formRegister('institution'),
-    },
-    {
-      id: 'phone',
-      type: 'tel',
-      autoComplete: 'tel',
-      inputMode: 'numeric' as const,
-      required: true,
-      label: 'Phone number',
-      pattern: '^[0-9]+$',
-      title: 'This field should contain only digits',
-      minLength: 10,
-      maxLength: 10,
-      ...formRegister('phone_no'),
-    },
-  ]
-
-  return fields
 }

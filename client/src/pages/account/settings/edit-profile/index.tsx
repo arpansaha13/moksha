@@ -9,7 +9,7 @@ import { useEditProfileController } from './edit-profile.controller'
 export const loader = getAuthUserData
 
 export function Component() {
-  const { loading, isDirty, notification, fields, editProfile, setShowNotification } = useEditProfileController()
+  const { loading, isDirty, notification, formRegister, editProfile, setShowNotification } = useEditProfileController()
 
   return (
     <main>
@@ -27,9 +27,42 @@ export function Component() {
 
       <Sheet className='mt-4 p-4 sm:p-6'>
         <form className='max-w-sm space-y-6' onSubmit={editProfile}>
-          {fields.map(field => (
-            <BaseInput key={field.id} {...field} />
-          ))}
+          <BaseInput
+            id='name'
+            type='text'
+            autoComplete='name'
+            autoCapitalize='words'
+            maxLength={20}
+            required={true}
+            label='Name'
+            {...formRegister('name')}
+          />
+
+          <BaseInput
+            id='institution'
+            type='text'
+            autoComplete='organization'
+            autoCapitalize='words'
+            required={true}
+            minLength={3}
+            maxLength={50}
+            label='Institution'
+            {...formRegister('institution')}
+          />
+
+          <BaseInput
+            id='phone'
+            type='tel'
+            autoComplete='tel'
+            inputMode='numeric'
+            required={true}
+            label='Phone number'
+            pattern='^[0-9]+$'
+            title='This field should contain only digits'
+            minLength={10}
+            maxLength={10}
+            {...formRegister('phone_no')}
+          />
 
           <CsrfField />
 
