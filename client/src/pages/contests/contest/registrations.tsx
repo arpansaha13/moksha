@@ -1,15 +1,24 @@
 import { memo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
-import Loader from '~common/Loader'
 import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import RegisteredContestMembers from '~/components/Teams/RegisteredContestMembers'
-import { getContestInPage } from '~loaders/contests.loader'
-import { useRegistrationsController } from './registrations.controller'
+import { registrationsPanelLoader } from '~loaders/contests.loader'
+import type { TeamContest } from '~/types'
 
-export const loader = getContestInPage
+// This route will only be visible for team contests
+
+export const loader = registrationsPanelLoader
+
+interface LoaderData {
+  contest: TeamContest
+  registration: any
+  hasCreatedTeam: boolean
+  createdTeamReg: any
+  fromCreatedTeam: boolean
+}
 
 interface MyRegistrationProps {
   reg: any
@@ -25,11 +34,7 @@ interface RegistrationProps {
 }
 
 export function Component() {
-  const { reg, loading, createdTeamReg, fromCreatedTeam, hasCreatedTeam } = useRegistrationsController()
-
-  if (loading) {
-    return <Loader className='mx-auto w-6 h-6' />
-  }
+  const { registration: reg, hasCreatedTeam, createdTeamReg, fromCreatedTeam } = useLoaderData() as Readonly<LoaderData>
 
   return (
     <div className='space-y-6'>
@@ -42,7 +47,7 @@ export function Component() {
 
 Component.displayName = 'ContestRegistrations'
 
-function MyRegistration({ reg, fromCreatedTeam }: MyRegistrationProps) {
+function MyRegistration({ reg, fromCreatedTeam }: Readonly<MyRegistrationProps>) {
   return (
     <div>
       <div className='mb-6'>
@@ -73,7 +78,7 @@ function MyRegistration({ reg, fromCreatedTeam }: MyRegistrationProps) {
   )
 }
 
-function CreatedTeamRegistration({ reg }: CreatedTeamRegistrationProps) {
+function CreatedTeamRegistration({ reg }: Readonly<CreatedTeamRegistrationProps>) {
   return (
     <div>
       <div className='mb-6'>
@@ -92,7 +97,7 @@ function CreatedTeamRegistration({ reg }: CreatedTeamRegistrationProps) {
   )
 }
 
-const Registration = memo(({ reg }: RegistrationProps) => {
+const Registration = memo(({ reg }: Readonly<RegistrationProps>) => {
   return (
     <Sheet className='px-6 py-4'>
       <h3 className='mb-2 text-xl font-semibold'>
