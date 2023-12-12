@@ -2,7 +2,7 @@ import nprogress from 'nprogress'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 
-import { getContest } from '~loaders/contests.loader'
+import { getContestInLayout } from '~loaders/contests.loader'
 import { allowIfNotAuthenticated } from '~loaders/auth.loader'
 import { getReceivedTeamInvites } from '~loaders/account.loader'
 
@@ -69,7 +69,7 @@ const routes = createRoutesFromElements(
 
       <Route path='/contests' lazy={fetchRoute(Contests)} />
 
-      <Route loader={getContest} element={<ContestLayout />}>
+      <Route loader={getContestInLayout} element={<ContestLayout />}>
         <Route path='/contests/:club/:contest' lazy={fetchRoute(ContestOverview)} errorElement={<NotFound />} />
         <Route
           path='/contests/:club/:contest/register'

@@ -1,33 +1,56 @@
+import type { LoaderFunctionArgs } from 'react-router-dom'
+import { isNullOrUndefined } from '@arpansaha13/utils'
 import { getMokshaContest } from '~/utils/getMokshaContest'
+import { getUdaanContest } from '~/utils/getUdaanContest'
+import fetchWithCredentials from '~/utils/fetchWithCredentials'
 import udaanContestsList from '~/data/contests/udaan'
 import mokshaContestsMap from '~/data/contests/moksha'
-import { isNullOrUndefined } from '@arpansaha13/utils'
 import loaderWrapper from './loaderWrapper'
 
-function getUdaanContest(contestSlug: string) {
-  const contest = udaanContestsList.find(contest => contest.slug === contestSlug)
-  return contest ?? null
-}
+export const getContestInLayout = loaderWrapper({
+  meta: {
+    type: 'layout',
+  },
+  fn: ({ request }) => {
+    return getContest(request.url)
+  },
+})
 
-export const getContest = loaderWrapper({
+export const getContestInPage = loaderWrapper({
   meta: {
     type: 'page',
   },
   fn: ({ request }) => {
-    const pathSegments = new URL(request.url).pathname.split('/')
+    return getContest(request.url)
+  },
+})
 
-    if (['register', 'registrations'].includes(pathSegments.at(-1)!)) pathSegments.pop()
+export const registerPanelLoader = loaderWrapper({
+  meta: {
+    type: 'page',
+  },
+  fn: async ({ request }) => {
+    const contest = getContest(request.url)
 
-    const clubSlug = pathSegments.at(-2)!
-    const contestSlug = pathSegments.at(-1)!
+    const team = await fetchCreatedTeam()
+    if (isNullOrUndefined(team)) return {}
 
-    let contest = getMokshaContest(clubSlug, contestSlug)
+    const registration = await fetchRegistration(team.team_id, contest.id)
+    let teamMembers
+    let alreadyRegisteredMemberIds
 
-    if (isNullOrUndefined(contest)) contest = getUdaanContest(contestSlug)
+    if (isNullOrUndefined(registration)) {
+      const res = await Promise.all([
+        fetchTeamMembers(team.team_id),
+        fetchAlreadyRegisteredMembers(team.team_id, contest.id),
+      ])
+      teamMembers = res[0].data
+      alreadyRegisteredMemberIds = new Set(res[1].data)
 
-    if (isNullOrUndefined(contest)) throw new Error('Invalid url')
+      console.log(alreadyRegisteredMemberIds)
+    }
 
-    return contest
+    return { contest, createdTeam: team, registration, teamMembers, alreadyRegisteredMemberIds }
   },
 })
 
@@ -35,7 +58,47 @@ export const getContests = loaderWrapper({
   meta: {
     type: 'page',
   },
-  fn: () => {
-    return { mokshaContestsMap, udaanContestsList }
-  },
+  fn: () => ({ mokshaContestsMap, udaanContestsList }),
 })
+
+function getContest(url: LoaderFunctionArgs['request']['url']) {
+  const { clubSlug, contestSlug } = getClubAndContestSlugs(url)
+
+  let contest = getMokshaContest(clubSlug, contestSlug)
+  if (isNullOrUndefined(contest)) contest = getUdaanContest(contestSlug)
+  if (isNullOrUndefined(contest)) throw new Error('Invalid url')
+
+  return contest
+}
+
+function getClubAndContestSlugs(url: LoaderFunctionArgs['request']['url']) {
+  const pathSegments = new URL(url).pathname.split('/')
+
+  if (['register', 'registrations'].includes(pathSegments.at(-1)!)) pathSegments.pop()
+
+  const clubSlug = pathSegments.at(-2)!
+  const contestSlug = pathSegments.at(-1)!
+
+  return { clubSlug, contestSlug }
+}
+
+async function fetchCreatedTeam() {
+  return fetchWithCredentials('users/me/created-team').then((r: any) => r.data)
+}
+
+async function fetchRegistration(teamId: string, contestId: number) {
+  const params = new URLSearchParams({
+    team_id: teamId,
+    contest_id: contestId.toString(),
+  })
+
+  return fetchWithCredentials(`contests/team/registration?${params.toString()}`).then((r: any) => r.data)
+}
+
+async function fetchTeamMembers(teamId: string) {
+  return fetchWithCredentials(`teams/${teamId}/members`)
+}
+
+async function fetchAlreadyRegisteredMembers(teamId: string, contestId: number) {
+  return fetchWithCredentials(`teams/${teamId}/members/${contestId}`)
+}

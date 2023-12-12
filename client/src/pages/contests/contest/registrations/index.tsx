@@ -6,10 +6,10 @@ import Loader from '~common/Loader'
 import EmptyState from '~common/EmptyState'
 import TeamData from '~/components/Teams/TeamData'
 import RegisteredContestMembers from '~/components/Teams/RegisteredContestMembers'
-import { getContest } from '~loaders/contests.loader'
+import { getContestInPage } from '~loaders/contests.loader'
 import { useRegistrationsController } from './registrations.controller'
 
-export const loader = getContest
+export const loader = getContestInPage
 
 interface MyRegistrationProps {
   reg: any

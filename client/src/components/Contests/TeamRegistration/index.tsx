@@ -1,25 +1,26 @@
-import { lazy } from 'react'
+import { lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
 import accountMultipleIcon from '@iconify-icons/mdi/account-multiple-remove-outline'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
-import Loader from '~common/Loader'
 import EmptyState from '~common/EmptyState'
-import type { TeamRegistrationProps } from './team-registration.types'
-import { useTeamRegistrationController } from './team-registration.controller'
+import type { Team, TeamContest, User } from '~/types'
+
+export interface TeamRegistrationProps {
+  contest: TeamContest
+  createdTeam: Team
+  registration: any
+  teamMembers: User[]
+  alreadyRegisteredMemberIds: Set<User['user_id']>
+}
 
 const Register = lazy(() => import('./TeamRegister'))
 const Registered = lazy(() => import('./Registered'))
 
-export default function TeamRegistration(props: TeamRegistrationProps) {
-  const { contest } = props
+export default function TeamRegistration(props: Readonly<TeamRegistrationProps>) {
+  const { contest, createdTeam, registration: initialRegistration, teamMembers, alreadyRegisteredMemberIds } = props
 
-  const { loading, createdTeam, teamMembers, registration, alreadyRegisteredMemberIds, setRegistration } =
-    useTeamRegistrationController(props)
-
-  if (loading) {
-    return <Loader className='w-6 mx-auto' />
-  }
+  const [registration, setRegistration] = useState(initialRegistration)
 
   if (createdTeam === null) {
     return (

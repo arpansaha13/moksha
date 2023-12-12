@@ -3,10 +3,10 @@ import { useMediaQuery } from 'react-responsive'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
-import { getContest } from '~loaders/contests.loader'
+import { getContestInPage } from '~loaders/contests.loader'
 import type { Contest } from '~/types'
 
-export const loader = getContest
+export const loader = getContestInPage
 
 interface RenderProseElementProps {
   // FIXME: typescript is not able to identify the type of ProseElement

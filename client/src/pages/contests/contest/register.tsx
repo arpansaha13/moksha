@@ -6,13 +6,22 @@ import Sheet from '~common/Sheet'
 import EmptyState from '~common/EmptyState'
 import SoloRegistration from '~/components/Contests/SoloRegistration'
 import TeamRegistration from '~/components/Contests/TeamRegistration'
-import { getContest } from '~loaders/contests.loader'
-import type { Contest, TeamContest } from '~/types'
+import { registerPanelLoader } from '~loaders/contests.loader'
+import type { Contest, Team, User } from '~/types'
 
-export const loader = getContest
+interface LoaderData {
+  contest: Contest
+  createdTeam: Team
+  registration: any
+  teamMembers: User[]
+  alreadyRegisteredMemberIds: Set<User['user_id']>
+}
+
+export const loader = registerPanelLoader
 
 export function Component() {
-  const contest = useLoaderData() as Contest
+  const { contest, createdTeam, registration, teamMembers, alreadyRegisteredMemberIds } =
+    useLoaderData() as Readonly<LoaderData>
   const authState = useStore(state => state.authState)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,7 +62,13 @@ export function Component() {
       </Sheet>
 
       {authState.authenticated ? (
-        <TeamRegistration contest={contest as TeamContest} />
+        <TeamRegistration
+          contest={contest}
+          createdTeam={createdTeam}
+          teamMembers={teamMembers}
+          registration={registration}
+          alreadyRegisteredMemberIds={alreadyRegisteredMemberIds}
+        />
       ) : (
         <div className='mt-6'>
           <EmptyState
