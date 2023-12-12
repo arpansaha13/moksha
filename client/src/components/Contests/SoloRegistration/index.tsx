@@ -1,19 +1,18 @@
-import { lazy } from 'react'
+import { lazy, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import Loader from '~common/Loader'
-import { useSoloRegistrationController } from './solo-registration.controller'
-import type { SoloRegistrationProps } from './solo-registration.types'
+import type { SoloContest } from '~/types'
+
+interface SoloRegistrationProps {
+  contest: SoloContest
+  registrationId: number | null
+}
 
 const SoloRegister = lazy(() => import('./SoloRegister'))
 const CancelRegistration = lazy(() => import('./CancelRegistration'))
 
-const SoloRegistration = (props: SoloRegistrationProps) => {
-  const { contest } = props
-  const { loading, registrationId, setRegistrationId } = useSoloRegistrationController(props)
-
-  if (loading) {
-    return <Loader className='w-6 mx-auto' />
-  }
+const SoloRegistration = (props: Readonly<SoloRegistrationProps>) => {
+  const { contest, registrationId: initialRegistrationId } = props
+  const [registrationId, setRegistrationId] = useState(initialRegistrationId)
 
   return new Date() > contest.deadline ? (
     <div>Registration for this contest is closed.</div>

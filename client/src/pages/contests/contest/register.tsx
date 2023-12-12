@@ -7,34 +7,42 @@ import EmptyState from '~common/EmptyState'
 import SoloRegistration from '~/components/Contests/SoloRegistration'
 import TeamRegistration from '~/components/Contests/TeamRegistration'
 import { registerPanelLoader } from '~loaders/contests.loader'
-import type { Contest, Team, User } from '~/types'
+import type { SoloContest, Team, TeamContest, User } from '~/types'
 
-interface LoaderData {
-  contest: Contest
+interface SoloRegisterLoaderData {
+  type: 'solo'
+  contest: SoloContest
+  registrationId: number
+}
+
+interface TeamRegisterLoaderData {
+  type: 'team'
+  contest: TeamContest
   createdTeam: Team
   registration: any
   teamMembers: User[]
   alreadyRegisteredMemberIds: Set<User['user_id']>
 }
 
+type LoaderData = Readonly<SoloRegisterLoaderData> | Readonly<TeamRegisterLoaderData>
+
 export const loader = registerPanelLoader
 
 export function Component() {
-  const { contest, createdTeam, registration, teamMembers, alreadyRegisteredMemberIds } =
-    useLoaderData() as Readonly<LoaderData>
+  const loaderData = useLoaderData() as LoaderData
   const authState = useStore(state => state.authState)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const contestTypeIsOpen = useMemo<boolean>(() => contest.badges.includes('open'), [contest.id])
+  const contestTypeIsOpen = useMemo<boolean>(() => loaderData.contest.badges.includes('open'), [loaderData.contest.id])
 
   if (contestTypeIsOpen) {
     return <Sheet className='p-4 sm:p-6'>No registration is required for this contest.</Sheet>
   }
 
-  return contest.type === 'solo' ? (
+  return loaderData.type === 'solo' ? (
     <Sheet className='mt-6 p-6'>
       {authState.authenticated ? (
-        <SoloRegistration contest={contest} />
+        <SoloRegistration contest={loaderData.contest} registrationId={loaderData.registrationId} />
       ) : (
         <EmptyState
           icon={accountAlertIcon}
@@ -63,11 +71,11 @@ export function Component() {
 
       {authState.authenticated ? (
         <TeamRegistration
-          contest={contest}
-          createdTeam={createdTeam}
-          teamMembers={teamMembers}
-          registration={registration}
-          alreadyRegisteredMemberIds={alreadyRegisteredMemberIds}
+          contest={loaderData.contest}
+          createdTeam={loaderData.createdTeam}
+          teamMembers={loaderData.teamMembers}
+          registration={loaderData.registration}
+          alreadyRegisteredMemberIds={loaderData.alreadyRegisteredMemberIds}
         />
       ) : (
         <div className='mt-6'>

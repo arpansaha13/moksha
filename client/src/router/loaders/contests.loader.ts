@@ -1,5 +1,6 @@
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { isNullOrUndefined } from '@arpansaha13/utils'
+import { useStore } from '~/store'
 import { getMokshaContest } from '~/utils/getMokshaContest'
 import { getUdaanContest } from '~/utils/getUdaanContest'
 import fetchWithCredentials from '~/utils/fetchWithCredentials'
@@ -31,26 +32,40 @@ export const registerPanelLoader = loaderWrapper({
   },
   fn: async ({ request }) => {
     const contest = getContest(request.url)
+    const authState = useStore.getState().authState
 
-    // FIXME: return if solo contest
+    // For solo contest
+    if (contest.type === 'solo') {
+      if (!authState.authenticated) return { type: 'solo', contest }
 
-    const team = await fetchCreatedTeam()
-    if (isNullOrUndefined(team)) return {}
+      const params = new URLSearchParams({ contest_id: contest.id.toString() })
+      const { data } = await fetchWithCredentials(`contests/solo/registration?${params.toString()}`)
+      let registrationId = null
+      if (!isNullOrUndefined(data)) registrationId = data.id
 
-    const registration = await fetchRegistration(team.team_id, contest.id)
+      return { type: 'solo', contest, registrationId }
+    }
+
+    // For team contest
+    if (!authState.authenticated) return { type: 'team', contest }
+
+    const createdTeam = await fetchCreatedTeam()
+    if (isNullOrUndefined(createdTeam)) return { type: 'team', contest, createdTeam }
+
+    const registration = await fetchRegistration(createdTeam.team_id, contest.id)
     let teamMembers
     let alreadyRegisteredMemberIds
 
     if (isNullOrUndefined(registration)) {
       const res = await Promise.all([
-        fetchTeamMembers(team.team_id),
-        fetchAlreadyRegisteredMembers(team.team_id, contest.id),
+        fetchTeamMembers(createdTeam.team_id),
+        fetchAlreadyRegisteredMembers(createdTeam.team_id, contest.id),
       ])
       teamMembers = res[0].data
       alreadyRegisteredMemberIds = new Set(res[1].data)
     }
 
-    return { contest, createdTeam: team, registration, teamMembers, alreadyRegisteredMemberIds }
+    return { type: 'team', contest, createdTeam, registration, teamMembers, alreadyRegisteredMemberIds }
   },
 })
 
