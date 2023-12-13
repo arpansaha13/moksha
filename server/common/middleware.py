@@ -22,7 +22,8 @@ def validate_token(auth_token) -> Dict[str, Any] | None:
         return None
 
     try:
-        payload = jwt.decode(auth_token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
+        payload = jwt.decode(auth_token, env('JWT_SECRET'),
+                             algorithms=[env('JWT_ALGO')])
     except jwt.ExpiredSignatureError:
         return None
 
@@ -34,11 +35,16 @@ def validate_session(session_token) -> Dict[str, Any] | None:
         return None
 
     try:
-        payload = jwt.decode(session_token, env('JWT_SECRET'), algorithms=[env('JWT_ALGO')])
+        payload = jwt.decode(session_token, env(
+            'JWT_SECRET'), algorithms=[env('JWT_ALGO')])
     except jwt.ExpiredSignatureError:
         return None
 
     return payload
+
+
+def is_token_invalidated(payload, auth_user: User):
+    return payload['iat'] < auth_user.password_updated_at.timestamp()
 
 
 class JwtMiddleware(MiddlewareMixin):
@@ -63,6 +69,9 @@ class JwtMiddleware(MiddlewareMixin):
 
         if not auth_user:
             return JsonResponse({'message': 'Invalid token'}, status=403)
+
+        if is_token_invalidated(payload, auth_user):
+            return JsonResponse({'data': None, 'message': 'Unauthenticated'}, status=403)
 
         request.auth_user = auth_user
 

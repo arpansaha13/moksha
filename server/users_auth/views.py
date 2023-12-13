@@ -8,12 +8,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, NotFound
 from .models import UnverifiedAccount, ForgotPasswordLink
+from .helpers import create_auth_token, create_session_token
 from users.models import User
 from users.serializers import AuthUserSerializer
-from common.middleware import jwt_exempt, validate_token, validate_session
+from common.middleware import jwt_exempt, validate_token, validate_session, is_token_invalidated
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
-from datetime import datetime, timedelta
-import jwt
 import random
 import secrets
 import string
@@ -45,6 +44,9 @@ class CheckAuth(APIView):
         if not auth_user:
             return Response({'data': None, 'message': 'Invalid token'})
 
+        if is_token_invalidated(payload, auth_user):
+            return Response({'data': None, 'message': 'Unauthenticated'})
+
         response = Response({
             'data': {
                 'avatar_idx': auth_user.avatar_idx,
@@ -55,7 +57,7 @@ class CheckAuth(APIView):
         if SESSION_TOKEN is None:
             response.set_cookie(
                 key='session',
-                value=Login().create_session_token(auth_user.user_id),
+                value=create_session_token(auth_user.user_id),
                 secure=COOKIE_SECURE,
                 httponly=True,
                 path='/api',
@@ -178,8 +180,8 @@ class Login(APIView):
         if not password_matched:
             raise Unauthorized(message=UNAUTHORIZED_MESSAGE)
 
-        AUTH_TOKEN = self.create_auth_token(user.user_id)
-        SESSION_TOKEN = self.create_session_token(user.user_id)
+        AUTH_TOKEN = create_auth_token(user.user_id)
+        SESSION_TOKEN = create_session_token(user.user_id)
 
         response = Response()
         response.set_cookie(
@@ -200,23 +202,6 @@ class Login(APIView):
         response.data = AuthUserSerializer(user).data
         response.status_code = 200
         return response
-
-    def create_auth_token(self, user_id: str) -> str:
-        payload = {
-            'id': user_id,
-            'exp': datetime.utcnow() + timedelta(seconds=int(env('JWT_VALIDATION_SECONDS'))),
-            'iat': datetime.utcnow(),
-        }
-
-        return jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
-
-    def create_session_token(self, user_id: str) -> str:
-        payload = {
-            'id': user_id,
-            'iat': datetime.utcnow(),
-        }
-
-        return jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -500,7 +485,27 @@ class ChangePassword(APIView):
         except IntegrityError:
             raise InternalServerError()
 
-        return Response({'message': 'Your password has been updated.'}, status=200)
+        AUTH_TOKEN = create_auth_token(user.user_id)
+        SESSION_TOKEN = create_session_token(user.user_id)
+
+        response = Response(
+            {'message': 'Your password has been updated.'}, status=200)
+        response.set_cookie(
+            key='auth',
+            value=AUTH_TOKEN,
+            secure=COOKIE_SECURE,
+            httponly=True,
+            path='/api',
+            max_age=int(env('JWT_VALIDATION_SECONDS'))
+        )
+        response.set_cookie(
+            key='session',
+            value=SESSION_TOKEN,
+            secure=COOKIE_SECURE,
+            httponly=True,
+            path='/api',
+        )
+        return response
 
 
 def generate_uid(length=8):

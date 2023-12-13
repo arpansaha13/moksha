@@ -5,10 +5,10 @@ from .models import User
 class AuthUserSerializer(ModelSerializer):
     class Meta:
         model = User
-        exclude = ['password']
+        exclude = ['password', 'password_updated_at']
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        exclude = ['password', 'phone_no', 'email']
+        exclude = ['email', 'phone_no', 'password', 'password_updated_at']
