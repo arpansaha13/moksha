@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,7 +11,6 @@ from rest_framework.exceptions import NotFound
 from .models import UnverifiedAccount, ForgotPasswordLink
 from .helpers import create_auth_token, create_session_token
 from users.models import Profile
-from common.middleware import jwt_exempt
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
 import random
 import secrets
@@ -36,10 +34,6 @@ class CheckAuth(APIView):
             })
 
         return Response({'data': None})
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class Register(APIView):
@@ -132,10 +126,6 @@ class Register(APIView):
 
         return unverified_acc
 
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
 
 class Login(APIView):
     def post(self, request):
@@ -151,11 +141,7 @@ class Login(APIView):
 
         user = User.objects.get(id=abstract_user.pk)
 
-        return Response(data={'user_id': user.profile.profile_id, 'avatar_idx': user.profile.avatar_idx}, status=200)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+        return Response(data={'user_id': user.profile.profile_id, 'avatar_idx': user.profile.avatar_idx})
 
 
 class Logout(APIView):
@@ -171,10 +157,6 @@ class VerifyAccountOtpLink(APIView):
             return Response({'valid': True}, status=200)
 
         return Response({'valid': False}, status=200)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class AccountVerification(APIView):
@@ -228,10 +210,6 @@ class AccountVerification(APIView):
         if otp_age.seconds > int(env('OTP_VALIDATION_SECONDS')):
             raise InvalidOrExpired(message='OTP has expired.')
 
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
 
 class ResendOtp(APIView):
     def get(self, _, otp_hash):
@@ -258,10 +236,6 @@ class ResendOtp(APIView):
         )
 
         return Response({'message': 'An email has been sent with the new OTP.'}, status=200)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class ResendVerificationLink(APIView):
@@ -302,10 +276,6 @@ class ResendVerificationLink(APIView):
 
         return unverified_acc
 
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
 
 class VerifyResetPassLink(APIView):
     def get(self, _, forgot_pass_hash):
@@ -321,10 +291,6 @@ class VerifyResetPassLink(APIView):
             return Response({'valid': False}, status=200)
 
         return Response({'valid': True}, status=200)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class ForgotPassword(APIView):
@@ -365,10 +331,6 @@ class ForgotPassword(APIView):
 
         return Response({'message': "Reset password link has been sent to your email."}, status=201)
 
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
 
 class ResetPassword(APIView):
     def post(self, request, forgot_pass_hash):
@@ -400,10 +362,6 @@ class ResetPassword(APIView):
 
         if link_age.seconds > int(env('FORGOT_PASS_VALIDATION_SECONDS')):
             raise InvalidOrExpired(message='Link has expired.')
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class ChangePassword(APIView):
