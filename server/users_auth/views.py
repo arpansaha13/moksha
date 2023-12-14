@@ -1,5 +1,7 @@
 from django.db.models import Q
 from django.core.mail import send_mail
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -9,15 +11,14 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, NotFound
 from .models import UnverifiedAccount, ForgotPasswordLink
 from .helpers import create_auth_token, create_session_token
-from users.models import User
-from users.serializers import AuthUserSerializer
+from users.models import Profile
 from common.middleware import jwt_exempt, validate_token, validate_session, is_token_invalidated
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
 import random
 import secrets
 import string
 import textwrap
-import environ  # Pylance does not recognize this import for some reason but the dev server runs perfectly
+import environ
 
 env = environ.Env()
 environ.Env.read_env()
@@ -28,42 +29,13 @@ PASSWORD_MISMATCH_EXCEPTION_MESSAGE = "Password and confirm-password do not matc
 
 class CheckAuth(APIView):
     def get(self, request):
-        AUTH_TOKEN = request.COOKIES.get('auth', None)
-        SESSION_TOKEN = request.COOKIES.get('session', None)
+        if request.user.is_authenticated:
+            return Response(data={
+                'avatar_idx': request.user.profile.avatar_idx,
+                'user_id': request.user.profile.profile_id,
+            })
 
-        payload = validate_token(AUTH_TOKEN)
-
-        if payload is None:
-            payload = validate_session(SESSION_TOKEN)
-
-        if payload is None:
-            return Response({'data': None, 'message': 'Unauthenticated'})
-
-        auth_user = User.objects.filter(user_id=payload['id']).first()
-
-        if not auth_user:
-            return Response({'data': None, 'message': 'Invalid token'})
-
-        if is_token_invalidated(payload, auth_user):
-            return Response({'data': None, 'message': 'Unauthenticated'})
-
-        response = Response({
-            'data': {
-                'avatar_idx': auth_user.avatar_idx,
-                'user_id': auth_user.user_id,
-            }
-        })
-
-        if SESSION_TOKEN is None:
-            response.set_cookie(
-                key='session',
-                value=create_session_token(auth_user.user_id),
-                secure=COOKIE_SECURE,
-                httponly=True,
-                path='/api',
-            )
-
-        return response
+        return Response({'data': None})
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -85,17 +57,16 @@ class Register(APIView):
                 self.verify_phone(request.data['phone_no'])
 
                 otp_generated = generate_otp()
-                hashed_password = make_password(request.data['password'])
 
                 unverified_acc = UnverifiedAccount.objects.filter(
                     email=email).first()  # type: ignore
 
                 if unverified_acc is None:
                     unverified_acc = self.create_new_acc(
-                        request, hashed_password, otp_generated)
+                        request, otp_generated)
                 else:
                     unverified_acc = self.update_unverified_acc(
-                        request, unverified_acc, hashed_password, otp_generated)
+                        request, unverified_acc, otp_generated)
 
                 unverified_acc.save()
         except IntegrityError:
@@ -104,7 +75,7 @@ class Register(APIView):
         send_mail(
             subject='Welcome to Moksha 2023, NIT Agartala - Please verify your email',
             message=get_account_verification_mail_message(
-                unverified_acc.name,
+                unverified_acc.first_name,
                 otp_generated,
                 get_account_verification_link(unverified_acc.hash)
             ),
@@ -124,10 +95,10 @@ class Register(APIView):
             raise Conflict(message='This username is already taken.')
 
     def verify_phone(self, phone_no: str):
-        if User.objects.filter(Q(phone_no=phone_no)).exists():
+        if Profile.objects.filter(Q(phone_no=phone_no)).exists():
             raise Conflict(message='This phone number is already registered.')
 
-    def create_new_acc(self, request, hashed_password: str, otp_generated: int) -> UnverifiedAccount:
+    def create_new_acc(self, request, otp_generated: int) -> UnverifiedAccount:
         otp_hash = generate_hash()
 
         while UnverifiedAccount.objects.filter(hash=otp_hash).exists():
@@ -137,25 +108,27 @@ class Register(APIView):
             hash=otp_hash,
             otp=otp_generated,
             avatar_idx=request.data['avatar_idx'],
-            name=request.data['name'],
+            first_name=request.data['first_name'],
+            last_name=request.data['last_name'],
             institution=request.data['institution'],
             phone_no=request.data['phone_no'],
             email=request.data['email'],
             username=request.data['username'],
-            password=hashed_password,
+            password=request.data['password'],
         )
 
         return new_account
 
-    def update_unverified_acc(self, request, unverified_acc: UnverifiedAccount, hashed_password: str, otp_generated: int) -> UnverifiedAccount:
+    def update_unverified_acc(self, request, unverified_acc: UnverifiedAccount, otp_generated: int) -> UnverifiedAccount:
 
         unverified_acc.otp = otp_generated
         unverified_acc.avatar_idx = request.data['avatar_idx']
-        unverified_acc.name = request.data['name']
+        unverified_acc.first_name = request.data['first_name']
+        unverified_acc.last_name = request.data['last_name']
         unverified_acc.institution = request.data['institution']
         unverified_acc.phone_no = request.data['phone_no']
         unverified_acc.username = request.data['username']
-        unverified_acc.password = hashed_password
+        unverified_acc.password = request.data['password']
 
         return unverified_acc
 
@@ -166,42 +139,19 @@ class Register(APIView):
 
 class Login(APIView):
     def post(self, request):
-        email = request.data['email']
-        user = User.objects.filter(email=email).first()
+        username = request.data['username']
+        password = request.data['password']
+        abstract_user = authenticate(
+            request, username=username, password=password)
 
-        UNAUTHORIZED_MESSAGE = 'Invalid email or password.'
+        if abstract_user is None:
+            raise Unauthorized(message='Invalid username or password.')
 
-        if not user:
-            raise Unauthorized(message=UNAUTHORIZED_MESSAGE)
+        login(request, abstract_user)
 
-        password_matched = check_password(
-            request.data['password'], user.password)
+        user = User.objects.get(id=abstract_user.pk)
 
-        if not password_matched:
-            raise Unauthorized(message=UNAUTHORIZED_MESSAGE)
-
-        AUTH_TOKEN = create_auth_token(user.user_id)
-        SESSION_TOKEN = create_session_token(user.user_id)
-
-        response = Response()
-        response.set_cookie(
-            key='auth',
-            value=AUTH_TOKEN,
-            secure=COOKIE_SECURE,
-            httponly=True,
-            path='/api',
-            max_age=int(env('JWT_VALIDATION_SECONDS'))
-        )
-        response.set_cookie(
-            key='session',
-            value=SESSION_TOKEN,
-            secure=COOKIE_SECURE,
-            httponly=True,
-            path='/api',
-        )
-        response.data = AuthUserSerializer(user).data
-        response.status_code = 200
-        return response
+        return Response(data={'user_id': user.profile.profile_id, 'avatar_idx': user.profile.avatar_idx}, status=200)
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -210,24 +160,13 @@ class Login(APIView):
 
 class Logout(APIView):
     def get(self, request):
-        auth_token = request.COOKIES.get('auth', None)
-        session_token = request.COOKIES.get('session', None)
-
-        if auth_token is None and session_token is None:
-            raise PermissionDenied({'Unauthenticated'})
-
-        response = Response()
-        response.set_cookie(key='auth', max_age=1, httponly=True, path='/api')
-        response.set_cookie(key='session', max_age=1,
-                            httponly=True, path='/api')
-        response.data = {'message': 'User has been successfully logged out.'}
-        response.status_code = 200
-        return response
+        logout(request)
+        return Response(data={'message': 'User has been successfully logged out.'}, status=200)
 
 
 class VerifyAccountOtpLink(APIView):
     # Check if account verification link is valid or not
-    def get(self, _, otp_hash):
+    def get(self, request, otp_hash):
         if UnverifiedAccount.objects.filter(hash=otp_hash).exists():
             return Response({'valid': True}, status=200)
 
@@ -255,22 +194,28 @@ class AccountVerification(APIView):
                 if unverified_acc.otp != otp:
                     raise Unauthorized(message='Invalid OTP.')
 
-                new_user_id = generate_uid()
+                new_profile_id = generate_profile_id()
 
-                while User.objects.filter(user_id=new_user_id).exists():
-                    new_user_id = generate_uid()
+                while Profile.objects.filter(profile_id=new_profile_id).exists():
+                    new_profile_id = generate_profile_id()
 
-                new_user = User(
-                    user_id=new_user_id,
-                    avatar_idx=unverified_acc.avatar_idx,
-                    name=unverified_acc.name,
-                    institution=unverified_acc.institution,
-                    phone_no=unverified_acc.phone_no,
+                new_user = User.objects.create_user(
                     email=unverified_acc.email,
+                    first_name=unverified_acc.first_name,
+                    last_name=unverified_acc.last_name,
                     username=unverified_acc.username,
                     password=unverified_acc.password,
                 )
-                new_user.save()
+
+                new_profile = Profile(
+                    user=new_user,
+                    profile_id=new_profile_id,
+                    avatar_idx=unverified_acc.avatar_idx,
+                    institution=unverified_acc.institution,
+                    phone_no=unverified_acc.phone_no,
+                )
+
+                new_profile.save()
                 unverified_acc.delete()
         except IntegrityError:
             raise InternalServerError()
@@ -302,7 +247,7 @@ class ResendOtp(APIView):
         send_mail(
             subject='Moksha 2023, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
-                unverified_acc.name,
+                unverified_acc.first_name,
                 unverified_acc.otp,
                 get_account_verification_link(otp_hash),
                 False
@@ -508,7 +453,7 @@ class ChangePassword(APIView):
         return response
 
 
-def generate_uid(length=8):
+def generate_profile_id(length=8):
     uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
                   for _ in range(length))
     return 'MOK-' + uid
