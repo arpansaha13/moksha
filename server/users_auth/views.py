@@ -8,11 +8,11 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied, NotFound
+from rest_framework.exceptions import NotFound
 from .models import UnverifiedAccount, ForgotPasswordLink
 from .helpers import create_auth_token, create_session_token
 from users.models import Profile
-from common.middleware import jwt_exempt, validate_token, validate_session, is_token_invalidated
+from common.middleware import jwt_exempt
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
 import random
 import secrets
@@ -282,7 +282,7 @@ class ResendVerificationLink(APIView):
         send_mail(
             subject='Moksha 2023, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
-                unverified_acc.name,
+                unverified_acc.first_name,
                 unverified_acc.otp,
                 get_account_verification_link(unverified_acc.hash),
                 False
@@ -363,7 +363,7 @@ class ForgotPassword(APIView):
             fail_silently=False,
         )
 
-        return Response({'message': "Reset password link has been sent to your email."}, 201)
+        return Response({'message': "Reset password link has been sent to your email."}, status=201)
 
     @method_decorator(jwt_exempt)
     def dispatch(self, *args, **kwargs):
@@ -378,23 +378,22 @@ class ResetPassword(APIView):
 
         try:
             with transaction.atomic():
-                forgot_pass_entry = ForgotPasswordLink.objects.filter(
-                    hash=forgot_pass_hash).first()
-
-                if forgot_pass_entry is None:
+                try:
+                    forgot_pass_entry = ForgotPasswordLink.objects.get(
+                        hash=forgot_pass_hash)
+                except ForgotPasswordLink.DoesNotExist:
                     raise NotFound({'message': 'Invalid link.'})
 
                 self.verify_link_age(forgot_pass_entry)
 
-                hashed_password = make_password(request.data['password'])
                 user = forgot_pass_entry.user
-                user.password = hashed_password
+                user.set_password(request.data['password'])
                 user.save()
                 forgot_pass_entry.delete()
         except IntegrityError:
             raise InternalServerError()
 
-        return Response({'message': 'Your password has been reset.'}, status=200)
+        return Response({'message': 'Your password has been reset.'})
 
     def verify_link_age(self, forgot_pass_entry: ForgotPasswordLink):
         link_age = timezone.now() - forgot_pass_entry.updated_at
@@ -491,9 +490,8 @@ def generate_otp():
     return random.randint(1000, 9999)
 
 
-def get_account_verification_mail_message(user_name: str, otp: int, link: str, is_new=True):
+def get_account_verification_mail_message(first_name: str, otp: int, link: str, is_new=True):
     valid_time_hours = int(env('OTP_VALIDATION_SECONDS')) // 3600
-    first_name = user_name.split(' ', 1)[0]
     first_mail_intro = 'Welcome to Moksha 2023 Official Website! Verify your email to get started:'
     resend_intro = 'A new OTP has been generated for your account verification:'
 
@@ -516,11 +514,10 @@ def get_account_verification_mail_message(user_name: str, otp: int, link: str, i
 
 
 def get_forgot_password_mail_message(user: User, link: str):
-    first_name = user.name.split(' ', 1)[0]
     valid_time_hours = int(env('FORGOT_PASS_VALIDATION_SECONDS')) // 3600
 
     return textwrap.dedent(f'''\
-        Dear {first_name},
+        Dear {user.first_name},
 
         We have recently received a request to reset the password for your account associated with the email address: {user.email}. If you did not initiate this request, please disregard this email.
 

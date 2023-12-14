@@ -1,5 +1,5 @@
-from django.db.models import Model, CharField, DateTimeField, EmailField, SmallIntegerField, ForeignKey, CASCADE
 from django.contrib.auth.models import User
+from django.db.models import Model, CharField, DateTimeField, EmailField, SmallIntegerField, ForeignKey, CASCADE
 
 
 class UnverifiedAccount(Model):
