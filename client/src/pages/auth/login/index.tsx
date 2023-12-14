@@ -16,12 +16,12 @@ export function Component() {
 
       <form className='space-y-6' onSubmit={signIn}>
         <BaseInput
-          id='email'
-          type='email'
-          autoComplete='email'
+          id='username'
+          type='text'
+          autoComplete='username'
           required
-          label='Email address'
-          {...formRegister('email')}
+          label='Username'
+          {...formRegister('username')}
         />
 
         <BaseInput
