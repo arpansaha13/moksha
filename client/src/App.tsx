@@ -15,14 +15,14 @@ function App() {
 
   useEffect(() => {
     fetchWithCredentials('auth/check-auth')
-      .then(({ data }) => {
-        if (isNullOrUndefined(data)) {
+      .then(res => {
+        if (isNullOrUndefined(res)) {
           setAuthState('authenticated', false)
           return
         }
         setAuthState('authenticated', true)
-        setAuthState('avatar_idx', data.avatar_idx)
-        setAuthState('user_id', data.user_id)
+        setAuthState('avatar_idx', res.avatar_idx)
+        setAuthState('user_id', res.user_id)
       })
       .finally(() => {
         startTransition(() => setLoading(false))

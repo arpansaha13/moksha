@@ -33,7 +33,7 @@ class CheckAuth(APIView):
                 'user_id': request.user.profile.profile_id,
             })
 
-        return Response({'data': None})
+        return Response(data=None)
 
 
 class Register(APIView):

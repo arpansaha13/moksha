@@ -5,8 +5,8 @@ import fetchWithCredentials from '~/utils/fetchWithCredentials'
 import loaderWrapper from './loaderWrapper'
 
 const isAuthenticated = async () => {
-  const { data } = await fetchWithCredentials('auth/check-auth')
-  return !isNullOrUndefined(data)
+  const res = await fetchWithCredentials('auth/check-auth')
+  return !isNullOrUndefined(res)
 }
 
 export const allowIfNotAuthenticated = loaderWrapper({
