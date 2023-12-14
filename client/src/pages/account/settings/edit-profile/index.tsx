@@ -28,14 +28,25 @@ export function Component() {
       <Sheet className='mt-4 p-4 sm:p-6'>
         <form className='max-w-sm space-y-6' onSubmit={editProfile}>
           <BaseInput
-            id='name'
+            id='first-name'
             type='text'
-            autoComplete='name'
+            autoComplete='given-name'
             autoCapitalize='words'
             maxLength={20}
             required={true}
-            label='Name'
-            {...formRegister('name')}
+            label='First name'
+            {...formRegister('first_name')}
+          />
+
+          <BaseInput
+            id='last-name'
+            type='text'
+            autoComplete='family-name'
+            autoCapitalize='words'
+            maxLength={20}
+            required={true}
+            label='Last name'
+            {...formRegister('last_name')}
           />
 
           <BaseInput
