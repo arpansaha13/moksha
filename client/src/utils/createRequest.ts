@@ -14,13 +14,14 @@ export const FETCH_BASE_URL = import.meta.env.DEV ? 'http://localhost:8000' : wi
  * Create request object for Fetch API with credentials allowed.
  */
 export default function createRequest(url: string, options: RequestOptions = {}): Request {
-  const csrftoken = getCookie('csrftoken')
-
   let headers: RequestOptions['headers'] = {
     'Content-Type': 'text/plain',
   }
 
-  if (csrftoken) headers['x-csrftoken'] = csrftoken
+  if (options?.method && options.method !== 'GET') {
+    const csrftoken = getCookie('csrftoken')
+    if (csrftoken) headers['x-csrftoken'] = csrftoken
+  }
 
   if (options?.headers) {
     headers = {
