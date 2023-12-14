@@ -10,7 +10,7 @@ from django.db.models import Model, CharField, SmallIntegerField, OneToOneField,
 class Profile(Model):
     user = OneToOneField(User, on_delete=CASCADE)
 
-    profile_id = CharField(max_length=50, null=False)
+    tag = CharField(max_length=50, null=False)
     avatar_idx = SmallIntegerField()
     institution = CharField(max_length=100, null=False)
 
@@ -21,7 +21,7 @@ class Profile(Model):
     role = CharField(max_length=100, default='user', null=False)
 
     def __str__(self):
-        return self.user.username
+        return self.tag
 
 
 # https://docs.djangoproject.com/en/5.0/topics/signals/
