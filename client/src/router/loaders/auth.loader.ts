@@ -27,7 +27,7 @@ export const getAuthUserData = loaderWrapper({
   fn: async ({ request }) => {
     try {
       const res = await fetchWithCredentials('users/me')
-      return res.data
+      return res
     } catch {
       return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
     }

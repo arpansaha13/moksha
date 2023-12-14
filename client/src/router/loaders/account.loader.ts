@@ -9,8 +9,8 @@ export const getReceivedTeamInvites = loaderWrapper({
   },
   fn: async ({ request }) => {
     try {
-      const { data } = await fetchWithCredentials('users/me/received-team-invites')
-      return { receivedInvites: data }
+      const res = await fetchWithCredentials('users/me/received-team-invites')
+      return { receivedInvites: res }
     } catch {
       return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
     }
@@ -30,8 +30,8 @@ export const getAuthUserTeams = loaderWrapper({
         fetchWithCredentials('users/me/joined-teams'),
       ])
 
-      data.createdTeam = res[0].data
-      data.joinedTeams = res[1].data
+      data.createdTeam = res[0]
+      data.joinedTeams = res[1]
       return data
     } catch {
       return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
@@ -52,8 +52,8 @@ export const getAuthUserContests = loaderWrapper({
         fetchWithCredentials('users/me/registered-team-contests'),
       ])
 
-      data.soloContests = res[0].data
-      data.teamContests = res[1].data
+      data.soloContests = res[0]
+      data.teamContests = res[1]
 
       return data
     } catch {

@@ -29,7 +29,7 @@ export function Component() {
           </div>
 
           <div className='text-center sm:text-left'>
-            <p className='mb-1 text-4xl font-bold'>{authUser.name}</p>
+            <p className='mb-1 text-4xl font-bold'>{`${authUser.first_name} ${authUser.last_name}`}</p>
             <p className='text-sm text-gray-400'>{authUser.user_id}</p>
           </div>
         </div>

@@ -1,6 +1,7 @@
 export interface User {
   avatar_idx: number
-  name: string
+  first_name: string
+  last_name: string
   user_id: string
   username: string
   email: string
