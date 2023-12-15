@@ -14,7 +14,7 @@ export const loader = registrationsPanelLoader
 
 interface LoaderData {
   contest: TeamContest
-  registration: any
+  authUserReg: any
   hasCreatedTeam: boolean
   createdTeamReg: any
   fromCreatedTeam: boolean
@@ -34,11 +34,11 @@ interface RegistrationProps {
 }
 
 export function Component() {
-  const { registration: reg, hasCreatedTeam, createdTeamReg, fromCreatedTeam } = useLoaderData() as Readonly<LoaderData>
+  const { authUserReg, hasCreatedTeam, createdTeamReg, fromCreatedTeam } = useLoaderData() as Readonly<LoaderData>
 
   return (
     <div className='space-y-6'>
-      <MyRegistration reg={reg} fromCreatedTeam={fromCreatedTeam} />
+      <MyRegistration reg={authUserReg} fromCreatedTeam={fromCreatedTeam} />
 
       {hasCreatedTeam && !fromCreatedTeam && <CreatedTeamRegistration reg={createdTeamReg} />}
     </div>
