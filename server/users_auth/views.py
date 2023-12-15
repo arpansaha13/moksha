@@ -18,7 +18,6 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-COOKIE_SECURE = bool(int(env('COOKIE_SECURE')))
 PASSWORD_MISMATCH_EXCEPTION_MESSAGE = "Password and confirm-password do not match."
 
 
