@@ -12,7 +12,7 @@ const UserListItem = ({ user }: UserListItemProps) => (
     </div>
 
     <div className='ml-1 lg:ml-2 flex-grow'>
-      <p className='font-semibold'>{user.name}</p>
+      <p className='font-semibold'>{`${user.first_name} ${user.last_name}`}</p>
       <p className='text-gray-400'>{`@${user.username}`}</p>
     </div>
   </>

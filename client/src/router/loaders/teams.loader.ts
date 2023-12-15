@@ -12,8 +12,7 @@ export const allowIfNoTeamCreated = loaderWrapper({
   fn: async ({ request }) => {
     try {
       const res = await fetchWithCredentials('users/me/created-team')
-
-      return res.data
+      return res
     } catch {
       return redirect(`/auth/login?from=${encodeURIComponent(getPathFromURL(request.url))}`)
     }
@@ -31,8 +30,8 @@ export const getTeamData = loaderWrapper({
 
       const { team, members } = await getPublicTeamData(teamId)
 
-      const isLeader = team.leader.user_id === authState.user_id
-      const isMember = isLeader || members.findIndex(m => m.user_id === authState.user_id) !== -1
+      const isLeader = team.leader.id === authState.user_id
+      const isMember = isLeader || members.findIndex(m => m.id === authState.user_id) !== -1
 
       const { pendingInvites, registeredContests } = await getPrivateTeamData(teamId, isLeader, isMember)
 
@@ -47,8 +46,8 @@ export const getTeamData = loaderWrapper({
 
 async function getPublicTeamData(teamId: string) {
   const [team, members] = await Promise.all([
-    fetchWithCredentials(`teams/${teamId}`).then(r => r.data) as Promise<Team>,
-    fetchWithCredentials(`teams/${teamId}/members`).then(r => r.data) as Promise<User[]>,
+    fetchWithCredentials(`teams/${teamId}`) as Promise<Team>,
+    fetchWithCredentials(`teams/${teamId}/members`) as Promise<User[]>,
   ])
 
   return { team, members }
@@ -56,8 +55,8 @@ async function getPublicTeamData(teamId: string) {
 
 async function getPrivateTeamData(teamId: string, isLeader: boolean, isMember: boolean) {
   const [pendingInvites, registeredContests] = await Promise.all([
-    isLeader ? (fetchWithCredentials(`teams/${teamId}/pending-invites`).then(r => r.data) as Promise<Invite[]>) : [],
-    isMember ? fetchWithCredentials(`teams/${teamId}/registered-contests`).then(r => r.data) : [],
+    isLeader ? (fetchWithCredentials(`teams/${teamId}/pending-invites`) as Promise<Invite[]>) : [],
+    isMember ? fetchWithCredentials(`teams/${teamId}/registered-contests`) : [],
   ])
 
   return {

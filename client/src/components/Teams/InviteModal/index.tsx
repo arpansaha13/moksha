@@ -45,17 +45,17 @@ export default function InviteModal(props: InviteModalProps) {
         {searchResults.length > 0 ? (
           <ul className='divide-y divide-amber-800/80 text-xs lg:text-sm'>
             {searchResults.map(user => (
-              <li key={user.user_id}>
+              <li key={user.id}>
                 <div className='sm:px-2 py-2 w-full text-left text-gray-100 flex items-center rounded-md'>
                   <UserListItem user={user} />
 
                   <div>
                     <InviteButton
-                      loading={loading.has(user.user_id)}
+                      loading={loading.has(user.id)}
                       withdrawInvite={withdrawInvite}
                       doInvite={doInvite}
-                      userId={user.user_id}
-                      invited={invited.has(user.user_id)}
+                      userId={user.id}
+                      invited={invited.has(user.id)}
                     />
                   </div>
                 </div>
