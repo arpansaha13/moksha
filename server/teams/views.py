@@ -96,6 +96,9 @@ class GetUninvitedUsers(APIView):
         username = request.GET.get('username', None)
         limit = request.GET.get('limit', 10)
 
+        if username is None:
+            return Response(data=[])
+
         team_members = TeamMember.objects.filter(
             team=team_id).values_list('user', flat=True)
 
@@ -104,9 +107,9 @@ class GetUninvitedUsers(APIView):
 
         users = User.objects.filter(
             Q(username__icontains=username)
-            & ~Q(user_id=request.auth_user.user_id)
-            & ~Q(user_id__in=team_members)
-            & ~Q(user_id__in=pending_invites)
+            & ~Q(id=request.user.id)
+            & ~Q(id__in=team_members)
+            & ~Q(id__in=pending_invites)
         ).all()[0:limit]
 
         data = []
