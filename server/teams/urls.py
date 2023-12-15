@@ -2,7 +2,7 @@ from rest_framework.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', BaseEndpoint.as_view()),
+    path('', CreateTeam.as_view()),
     path('/<slug:team_id>', GetTeam.as_view()),
     path('/<slug:team_id>/members', GetTeamMembers.as_view()),
     path(

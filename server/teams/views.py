@@ -1,72 +1,77 @@
 from django.db.models import Q
-from common.exceptions import BadRequest, Conflict
-from .serializers import TeamSerializer
-from .models import Team, TeamMember
-from users.models import User
-from invites.models import Invite, InviteStatus
-from users.serializers import UserSerializer
-from invites.serializers import InviteSerializer
-from contests.serializers import ContestSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
+from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db import transaction, IntegrityError
 from .helpers import get_team
-from contests.helpers import get_contest
+from .models import Team, TeamMember
+from .serializers import TeamSerializer
+from common.exceptions import BadRequest, Conflict, InternalServerError
+from users.serializers import UserSerializer
 from invites.helpers import verify_team_leader
+from invites.models import Invite, InviteStatus
+from invites.serializers import InviteSerializer
+from contests.helpers import get_contest
+from contests.serializers import ContestSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
 import secrets
 import string
 
 
-class BaseEndpoint(APIView):
-    # Create team
+class CreateTeam(APIView):
     def post(self, request):
         team_name = request.data['team_name']
 
         if not team_name:
             raise BadRequest(message='No team name provided.')
 
-        if Team.objects.filter(leader=request.auth_user.user_id).exists():
-            raise Conflict(message='A team is already created by the user.')
+        try:
+            with transaction.atomic():
+                if Team.objects.filter(leader=request.user).exists():
+                    raise Conflict(
+                        message='A team is already created by the user.')
 
-        if Team.objects.filter(team_name__iexact=team_name).exists():
-            raise Conflict(message='This team name is already taken.')
+                if Team.objects.filter(team_name__iexact=team_name).exists():
+                    raise Conflict(message='This team name is already taken.')
 
-        uid = generate_uid()
+                team_id = generate_uid()
 
-        while Team.objects.filter(team_id=uid).exists():
-            uid = generate_uid()
+                while Team.objects.filter(team_id=team_id).exists():
+                    team_id = generate_uid()
 
-        # transaction
-        new_team = Team(
-            team_id=uid,
-            team_name=team_name,
-            leader=request.auth_user
-        )
-        new_team.save()
+                new_team = Team(
+                    team_id=team_id,
+                    team_name=team_name,
+                    leader=request.user
+                )
+                new_team.save()
 
-        new_team_member = TeamMember(
-            team=new_team,
-            user=request.auth_user
-        )
-        new_team_member.save()
+                new_team_member = TeamMember(
+                    team=new_team,
+                    user=request.user
+                )
+                new_team_member.save()
+        except IntegrityError:
+            raise InternalServerError()
 
-        return Response({'team_id': uid}, status=201)
+        return Response(data={'team_id': team_id}, status=201)
 
 
 class GetTeam(APIView):
     def get(self, _, team_id):
         team = get_team(team_id)
         serializer = TeamSerializer(team)
-        return Response({'data': serializer.data}, status=200)
+        return Response(data=serializer.data)
 
 
 class GetTeamMembers(APIView):
     def get(self, _, team_id):
-        user_ids = TeamMember.objects.filter(team_id=team_id).values_list('user_id')
-        users = User.objects.filter(user_id__in=user_ids)
+        user_ids = TeamMember.objects.filter(
+            team_id=team_id).values_list('id')
+        users = User.objects.filter(id__in=user_ids)
 
         serializer = UserSerializer(users, many=True)
 
-        return Response({'data': serializer.data}, status=200)
+        return Response(data=serializer.data)
 
 
 class GetContestRegisteredTeamMembers(APIView):
@@ -74,15 +79,16 @@ class GetContestRegisteredTeamMembers(APIView):
         team = get_team(team_id)
         contest = get_contest(contest_id)
 
-        team_members = team.team_members.values_list('user__user_id', flat=True)  # type: ignore
+        team_members = team.team_members.values_list(
+            'user__id', flat=True)  # type: ignore
         registered_users_in_contest = contest.registered_teams.filter(  # type: ignore
             registered_members__user__user_id__in=team_members
         ).values_list(
-            'registered_members__user__user_id',
+            'registered_members__user__id',
             flat=True
         ).all()
 
-        return Response({'data': registered_users_in_contest}, status=200)
+        return Response(data=registered_users_in_contest)
 
 
 class GetUninvitedUsers(APIView):
@@ -90,7 +96,8 @@ class GetUninvitedUsers(APIView):
         username = request.GET.get('username', None)
         limit = request.GET.get('limit', 10)
 
-        team_members = TeamMember.objects.filter(team=team_id).values_list('user', flat=True)
+        team_members = TeamMember.objects.filter(
+            team=team_id).values_list('user', flat=True)
         pending_invites = Invite.objects.filter(
             Q(team=team_id)
             & Q(status=InviteStatus.PENDING)
@@ -108,7 +115,7 @@ class GetUninvitedUsers(APIView):
             serializer = UserSerializer(user)
             data.append(serializer.data)
 
-        return Response({'data': data}, status=200)
+        return Response(data=data)
 
 
 class GetRegisteredTeamContests(APIView):
@@ -131,10 +138,11 @@ class GetRegisteredTeamContests(APIView):
                 }
             )
 
-            return Response({'data': serializer.data}, status=200)
+            return Response(data=serializer.data)
 
         # A particular contest registration of a team
-        team_contest_reg = team.registered_team_contests.filter(contest=contest_id).first()  # type: ignore
+        team_contest_reg = team.registered_team_contests.filter(
+            contest=contest_id).first()
 
         if team_contest_reg is None:
             return Response({'data': None, 'message': 'No registration found'})
@@ -148,16 +156,17 @@ class GetRegisteredTeamContests(APIView):
             }
         )
 
-        return Response({'data': serializer.data}, status=200)
+        return Response(data=serializer.data)
 
 
 class GetPendingInvites(APIView):
     def get(self, request, team_id):
         team = Team.objects.filter(team_id=team_id).only('leader').first()
 
-        verify_team_leader(team, request.auth_user)
+        verify_team_leader(team, request.user)
 
-        pending_invites = team.pending_invites.filter(status=InviteStatus.PENDING).all()  # type: ignore
+        pending_invites = team.pending_invites.filter(
+            status=InviteStatus.PENDING).all()
 
         serializer = InviteSerializer(
             pending_invites,
@@ -165,7 +174,7 @@ class GetPendingInvites(APIView):
             fields={'user': UserSerializer()}
         )
 
-        return Response({'data': serializer.data}, status=200)
+        return Response(data=serializer.data)
 
 
 def generate_uid(length=8):
