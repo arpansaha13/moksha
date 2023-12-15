@@ -9,7 +9,7 @@ from .serializers import TeamSerializer
 from common.exceptions import BadRequest, Conflict, InternalServerError
 from users.serializers import UserSerializer
 from invites.helpers import verify_team_leader
-from invites.models import Invite, InviteStatus
+from invites.models import Invite
 from invites.serializers import InviteSerializer
 from contests.helpers import get_contest
 from contests.serializers import ContestSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
@@ -98,10 +98,9 @@ class GetUninvitedUsers(APIView):
 
         team_members = TeamMember.objects.filter(
             team=team_id).values_list('user', flat=True)
+
         pending_invites = Invite.objects.filter(
-            Q(team=team_id)
-            & Q(status=InviteStatus.PENDING)
-        ).values_list('user', flat=True)
+            Q(team=team_id)).values_list('user', flat=True)
 
         users = User.objects.filter(
             Q(username__icontains=username)
@@ -165,8 +164,7 @@ class GetPendingInvites(APIView):
 
         verify_team_leader(team, request.user)
 
-        pending_invites = team.pending_invites.filter(
-            status=InviteStatus.PENDING).all()
+        pending_invites = team.pending_invites.all()
 
         serializer = InviteSerializer(
             pending_invites,

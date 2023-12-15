@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.serializers import CharField
 from .serializers import UserSerializer
 from common.decorators import login_required
-from invites.models import InviteStatus
 from invites.serializers import InviteSerializer
 from teams.serializers import TeamSerializer, TeamMemberSerializer
 from contests.serializers import ContestSerializer, SoloContestRegistrationSerializer, TeamContestRegistrationSerializer, TeamContestUserRegistrationSerializer
@@ -103,8 +102,7 @@ class AuthUserJoinedTeams(APIView):
 @method_decorator(login_required, name="dispatch")
 class AuthUserReceivedTeamInvites(APIView):
     def get(self, request):
-        received_invites = request.user.received_invites.filter(
-            status=InviteStatus.PENDING).all()
+        received_invites = request.user.received_invites.all()
 
         serializer = InviteSerializer(
             received_invites,
