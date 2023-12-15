@@ -1,8 +1,10 @@
+import type { User } from '~/types'
+
 export interface InviteModalProps {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   teamId: string
-  inviteCall: (userId: string) => Promise<void>
-  withdrawInviteCall: (userId: string) => Promise<void>
+  inviteCall: (userId: User['id']) => Promise<void>
+  withdrawInviteCall: (userId: User['id']) => Promise<void>
   refetchPendingInvites: () => void
 }

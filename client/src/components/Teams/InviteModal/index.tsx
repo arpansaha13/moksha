@@ -8,7 +8,7 @@ import InviteButton from '../InviteButton'
 import { useInviteModalController } from './invite-modal.controller'
 import type { InviteModalProps } from './invite-modal.types'
 
-export default function InviteModal(props: InviteModalProps) {
+export default function InviteModal(props: Readonly<InviteModalProps>) {
   const { open, setOpen } = props
 
   const {
@@ -65,11 +65,11 @@ export default function InviteModal(props: InviteModalProps) {
         ) : (
           <div className='w-full h-full flex items-center justify-center relative' aria-hidden>
             <div
-              role='presentation'
               className='w-28 h-28 sm:w-32 sm:h-32 bg-amber-800 filter blur-xl absolute rounded-full'
+              aria-hidden='true'
             />
             <div className='relative z-10'>
-              <div role='presentation' className='mx-auto w-20 h-20 sm:w-24 sm:h-24 text-brown rounded-full'>
+              <div className='mx-auto w-20 h-20 sm:w-24 sm:h-24 text-brown rounded-full' aria-hidden='true'>
                 <Icon icon={modalIcon} className='block' color='inherit' width='100%' height='100%' />
               </div>
               <p className='text-xs sm:text-sm text-center text-gray-400 wrap-balance'>{modalText}</p>
