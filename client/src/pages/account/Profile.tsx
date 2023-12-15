@@ -3,12 +3,12 @@ import { useLoaderData } from 'react-router-dom'
 import Sheet from '~common/Sheet'
 import Avatar from '~common/Avatar'
 import { getAuthUserData } from '~loaders/auth.loader'
-import type { User } from '~/types'
+import type { AuthUser } from '~/types'
 
 export const loader = getAuthUserData
 
 export function Component() {
-  const authUser = useLoaderData() as User
+  const authUser = useLoaderData() as AuthUser
 
   const userDetails = useMemo(
     () => [
@@ -30,7 +30,7 @@ export function Component() {
 
           <div className='text-center sm:text-left'>
             <p className='mb-1 text-4xl font-bold'>{`${authUser.first_name} ${authUser.last_name}`}</p>
-            <p className='text-sm text-gray-400'>{authUser.user_id}</p>
+            <p className='text-sm text-gray-400'>{authUser.tag}</p>
           </div>
         </div>
 

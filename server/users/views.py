@@ -16,7 +16,8 @@ from contests.serializers import ContestSerializer, SoloContestRegistrationSeria
 class AuthUser(APIView):
     def get(self, request):
         return Response(data={
-            'user_id': request.user.profile.profile_id,
+            'id': request.user.id,
+            'tag': request.user.profile.tag,
             'avatar_idx': request.user.profile.avatar_idx,
             'institution': request.user.profile.institution,
             'phone_no': request.user.profile.phone_no,
