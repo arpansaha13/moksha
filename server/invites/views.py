@@ -70,10 +70,8 @@ class BaseEndpoint(APIView):
                     & Q(team=team_id)
                 ).first()
 
-                if not invite:
-                    raise NotFound({'message': 'Invite does not exist.'})
-
-                invite.delete()
+                if invite is not None:
+                    invite.delete()
         except IntegrityError:
             raise InternalServerError(
                 message='Some error occurred. Could not withdraw invite.')
