@@ -8,10 +8,10 @@ import type { Team, TeamContest, User } from '~/types'
 
 export interface TeamRegistrationProps {
   contest: TeamContest
-  createdTeam: Team
+  createdTeam?: Team
   registration: any
   teamMembers: User[]
-  alreadyRegisteredMemberIds: Set<User['user_id']>
+  alreadyRegisteredMemberIds: Set<User['id']>
 }
 
 const Register = lazy(() => import('./TeamRegister'))
@@ -22,7 +22,7 @@ export default function TeamRegistration(props: Readonly<TeamRegistrationProps>)
 
   const [registration, setRegistration] = useState(initialRegistration)
 
-  if (createdTeam === null) {
+  if (isNullOrUndefined(createdTeam)) {
     return (
       <>
         <EmptyState icon={accountMultipleIcon} title='You are not the leader of any team' />

@@ -11,11 +11,11 @@ export function useTeamRegisterController({
   members,
   alreadyRegisteredMemberIds,
   setRegistration,
-}: TeamRegisterProps) {
+}: Readonly<TeamRegisterProps>) {
   const fetchHook = useFetch()
   const [loading, setLoading] = useState(false)
   const [error, showError] = useState(false)
-  const { add, delete: del, has, size: selectedCount, toArray } = useSet<string>([])
+  const selectedMembers = useSet<User['id']>([])
 
   const minMembersRequired = getMinMembersRequiredCount(contest.allowedTeamSize)
   const hasAlreadyRegisteredMembers = alreadyRegisteredMemberIds.size > 0
@@ -31,7 +31,7 @@ export function useTeamRegisterController({
 
     if (error) return
 
-    if (!isTeamSizeValid(contest.allowedTeamSize, selectedCount)) {
+    if (!isTeamSizeValid(contest.allowedTeamSize, selectedMembers.size)) {
       showError(true)
       setTimeout(() => showError(false), 500)
       return
@@ -43,29 +43,25 @@ export function useTeamRegisterController({
       body: {
         team_id: team.team_id,
         contest_id: contest.id,
-        selected_members: toArray(),
+        selected_members: selectedMembers.toArray(),
       },
     })
       .then(res =>
         startTransition(() => {
-          setRegistration(res.data)
-          setLoading(false)
+          setRegistration(res)
         })
       )
-      .catch(() => setLoading(false))
+      .finally(() => setLoading(false))
   }
 
   return {
     error,
     loading,
-    selectedCount,
+    selectedMembers,
     filteredMembers,
     minMembersRequired,
     hasAlreadyRegisteredMembers,
     alreadyRegisteredMembers,
-    add,
-    del,
-    has,
     teamRegister,
   }
 }
@@ -94,12 +90,12 @@ function isTeamSizeValid(sizes: TeamContest['allowedTeamSize'], selectedCount: n
   return sizes.min <= selectedCount && selectedCount <= sizes.max
 }
 
-function filterMembers(members: User[], alreadyRegisteredMemberIds: Set<string>) {
+function filterMembers(members: User[], alreadyRegisteredMemberIds: Set<User['id']>) {
   const filteredMembers = []
   const alreadyRegisteredMembers = []
 
   for (const member of members) {
-    if (alreadyRegisteredMemberIds.has(member.user_id)) alreadyRegisteredMembers.push(member)
+    if (alreadyRegisteredMemberIds.has(member.id)) alreadyRegisteredMembers.push(member)
     else filteredMembers.push(member)
   }
 
