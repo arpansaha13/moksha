@@ -84,9 +84,11 @@ class GetContestRegisteredTeamMembers(APIView):
         contest = get_contest(contest_id)
 
         team_members = team.team_members.values_list(
-            'user__id', flat=True)  # type: ignore
-        registered_users_in_contest = contest.registered_teams.filter(  # type: ignore
-            registered_members__user__user_id__in=team_members
+            'user__id',
+            flat=True
+        )
+        registered_users_in_contest = contest.registered_teams.filter(
+            registered_members__user__id__in=team_members
         ).values_list(
             'registered_members__user__id',
             flat=True
@@ -153,7 +155,7 @@ class GetRegisteredTeamContests(APIView):
             contest=contest_id).first()
 
         if team_contest_reg is None:
-            return Response({'data': None, 'message': 'No registration found'})
+            return Response(data=None)
 
         serializer = TeamContestRegistrationSerializer(
             team_contest_reg,
