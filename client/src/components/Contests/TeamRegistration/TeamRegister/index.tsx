@@ -11,9 +11,9 @@ import type { TeamRegisterProps } from './team-register.types'
 
 interface TeamMembersProps {
   members: User[]
-  add: (value: string) => void
-  del: (value: string) => void
-  has: (value: string) => boolean
+  add: (value: User['id']) => void
+  del: (value: User['id']) => void
+  has: (value: User['id']) => boolean
 }
 
 interface AlreadyRegisteredMembers {
@@ -33,20 +33,17 @@ interface ConditionalWrapperProps {
   children: React.ReactNode
 }
 
-export default function Register(props: TeamRegisterProps) {
+export default function Register(props: Readonly<TeamRegisterProps>) {
   const { team, contest } = props
 
   const {
     error,
     loading,
-    selectedCount,
+    selectedMembers,
     filteredMembers,
     minMembersRequired,
     alreadyRegisteredMembers,
     hasAlreadyRegisteredMembers,
-    add,
-    del,
-    has,
     teamRegister,
   } = useTeamRegisterController(props)
 
@@ -64,11 +61,16 @@ export default function Register(props: TeamRegisterProps) {
         <h3 className='my-4 text-lg sm:text-xl font-bold'>Select members</h3>
 
         <div className='mb-4 text-xs sm:text-sm space-y-4'>
-          <TeamMembers members={filteredMembers} add={add} del={del} has={has} />
+          <TeamMembers
+            members={filteredMembers}
+            add={selectedMembers.add}
+            del={selectedMembers.delete}
+            has={selectedMembers.has}
+          />
 
           <ConditionalWrapper renderDisclosure={hasAlreadyRegisteredMembers}>
             <div className='flex flex-col sm:flex-row items-end sm:justify-between gap-1 sm:gap-0'>
-              <p>Members selected: {selectedCount}</p>
+              <p>Members selected: {selectedMembers.size}</p>
 
               {hasAlreadyRegisteredMembers && (
                 <Disclosure.Button className='block text-amber-600 hover:text-amber-500 font-medium transition-colors'>
@@ -103,8 +105,8 @@ export default function Register(props: TeamRegisterProps) {
   )
 }
 
-function TeamMembers({ members, add, del, has }: TeamMembersProps) {
-  function toggle(userId: string) {
+function TeamMembers({ members, add, del, has }: Readonly<TeamMembersProps>) {
+  function toggle(userId: User['id']) {
     if (has(userId)) del(userId)
     else add(userId)
   }
@@ -113,16 +115,13 @@ function TeamMembers({ members, add, del, has }: TeamMembersProps) {
     <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs lg:text-sm'>
       {members.map(member => (
         <li
-          key={member.user_id}
+          key={member.id}
           className={classNames(
             'rounded-sm sm:rounded select-none',
-            has(member.user_id) ? 'bg-amber-800/60' : 'hover:bg-amber-800/30'
+            has(member.id) ? 'bg-amber-800/60' : 'hover:bg-amber-800/30'
           )}
         >
-          <button
-            className='p-1 w-full text-gray-100 text-left flex items-center'
-            onClick={() => toggle(member.user_id)}
-          >
+          <button className='p-1 w-full text-gray-100 text-left flex items-center' onClick={() => toggle(member.id)}>
             <UserListItem user={member} />
           </button>
         </li>
@@ -136,7 +135,7 @@ function AlreadyRegisteredMembers({ members }: AlreadyRegisteredMembers) {
     <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs lg:text-sm'>
       {members.map(member => (
         <li
-          key={member.user_id}
+          key={member.id}
           className='p-1 w-full text-gray-100 text-left flex items-center rounded-sm sm:rounded select-none'
         >
           <UserListItem user={member} />

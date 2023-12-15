@@ -1,5 +1,5 @@
+from django.contrib.auth.models import User
 from django.db.models import Model, CharField, DateTimeField, EmailField, SmallIntegerField, ForeignKey, CASCADE
-from users.models import User
 
 
 class UnverifiedAccount(Model):
@@ -9,7 +9,8 @@ class UnverifiedAccount(Model):
     updated_at = DateTimeField(auto_now=True)
 
     avatar_idx = SmallIntegerField()
-    name = CharField(max_length=100, null=False)
+    first_name = CharField(max_length=100, null=False)
+    last_name = CharField(max_length=100, null=False)
     institution = CharField(max_length=100, null=False)
     phone_no = CharField(null=False)
     email = EmailField(unique=True, null=False)

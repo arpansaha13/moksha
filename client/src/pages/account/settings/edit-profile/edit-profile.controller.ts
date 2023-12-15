@@ -5,11 +5,7 @@ import { useFetch } from '~/hooks/common/useFetch'
 import { useNotification } from '~/hooks/useNotification'
 import type { User } from '~/types'
 
-interface EditProfileFormData {
-  name: string
-  institution: string
-  phone_no: string
-}
+type EditProfileFormData = Pick<User, 'first_name' | 'last_name' | 'institution' | 'phone_no'>
 
 export function useEditProfileController() {
   const authUser = useRef(useLoaderData() as User)
@@ -21,7 +17,8 @@ export function useEditProfileController() {
     reset,
   } = useForm<EditProfileFormData>({
     defaultValues: {
-      name: authUser.current.name,
+      first_name: authUser.current.first_name,
+      last_name: authUser.current.last_name,
       institution: authUser.current.institution,
       phone_no: authUser.current.phone_no,
     },
@@ -44,7 +41,8 @@ export function useEditProfileController() {
       .then(res => {
         updateAuthUserData(authUser, formDataDiff)
         reset({
-          name: authUser.current.name,
+          first_name: authUser.current.first_name,
+          last_name: authUser.current.last_name,
           institution: authUser.current.institution,
           phone_no: authUser.current.phone_no,
         })
@@ -80,7 +78,8 @@ export function useEditProfileController() {
 function getDiff(dirtyFields: FormState<EditProfileFormData>['dirtyFields'], formData: EditProfileFormData) {
   const diff: Partial<EditProfileFormData> = {}
 
-  if (dirtyFields.name) diff.name = formData.name
+  if (dirtyFields.first_name) diff.first_name = formData.first_name
+  if (dirtyFields.last_name) diff.last_name = formData.last_name
   if (dirtyFields.institution) diff.institution = formData.institution
   if (dirtyFields.phone_no) diff.phone_no = formData.phone_no
 
@@ -88,7 +87,8 @@ function getDiff(dirtyFields: FormState<EditProfileFormData>['dirtyFields'], for
 }
 
 function updateAuthUserData(authUser: React.MutableRefObject<User>, formDataDiff: Partial<EditProfileFormData>) {
-  if (formDataDiff.name) authUser.current.name = formDataDiff.name
+  if (formDataDiff.first_name) authUser.current.first_name = formDataDiff.first_name
+  if (formDataDiff.last_name) authUser.current.last_name = formDataDiff.last_name
   if (formDataDiff.institution) authUser.current.institution = formDataDiff.institution
   if (formDataDiff.phone_no) authUser.current.phone_no = formDataDiff.phone_no
 }

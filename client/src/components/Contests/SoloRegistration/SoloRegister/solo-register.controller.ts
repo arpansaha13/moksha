@@ -3,7 +3,7 @@ import { useFetch } from '~/hooks/common/useFetch'
 import getFormData from '~/utils/getFormData'
 import type { SoloRegisterProps } from './solo-register.types'
 
-export function useSoloRegisterController({ contestId, setRegistrationId }: SoloRegisterProps) {
+export function useSoloRegisterController({ contestId, setRegistrationId }: Readonly<SoloRegisterProps>) {
   const fetchHook = useFetch()
   const formRef = useRef<HTMLFormElement>(null)
   const [loading, setLoading] = useState(false)
@@ -21,7 +21,7 @@ export function useSoloRegisterController({ contestId, setRegistrationId }: Solo
     })
       .then(res => {
         startTransition(() => {
-          setRegistrationId(res.data.id)
+          setRegistrationId(res.id)
           setLoading(false)
         })
       })

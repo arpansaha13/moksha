@@ -4,6 +4,6 @@ export interface TeamRegisterProps {
   contest: TeamContest
   team: Team
   members: User[]
-  alreadyRegisteredMemberIds: Set<string>
+  alreadyRegisteredMemberIds: Set<User['id']>
   setRegistration: React.Dispatch<React.SetStateAction<any>> // FIXME: fix types
 }

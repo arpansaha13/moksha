@@ -17,7 +17,8 @@ interface Field extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 interface SignUpFormData {
-  name: string
+  first_name: string
+  last_name: string
   email: string
   phone_no: string
   username: string
@@ -142,7 +143,8 @@ function usernameIsValid(
 }
 
 function prepareRequestBody(formData: SignUpFormData) {
-  formData.name = trim(formData.name)
+  formData.first_name = trim(formData.first_name)
+  formData.last_name = trim(formData.last_name)
   formData.institution = trim(formData.institution)
   formData['avatar_idx'] = String(parseInt(formData['phone_no']) % 10)
 }
@@ -150,14 +152,22 @@ function prepareRequestBody(formData: SignUpFormData) {
 const getFields = (errors: FieldErrors<SignUpFormData>, formRegister: UseFormRegister<SignUpFormData>): Field[] => {
   const fields: Field[] = [
     {
-      id: 'name',
+      id: 'first-name',
       type: 'text',
-      autoComplete: 'name',
-      autoCapitalize: 'words',
+      autoComplete: 'given-name',
       maxLength: 20,
       required: true,
-      label: 'Name',
-      ...formRegister('name'),
+      label: 'First name',
+      ...formRegister('first_name'),
+    },
+    {
+      id: 'last-name',
+      type: 'text',
+      autoComplete: 'family-name',
+      maxLength: 20,
+      required: true,
+      label: 'Last name',
+      ...formRegister('last_name'),
     },
     {
       id: 'username',
@@ -191,17 +201,6 @@ const getFields = (errors: FieldErrors<SignUpFormData>, formRegister: UseFormReg
       ...formRegister('institution'),
     },
     {
-      id: 'password',
-      type: 'password',
-      autoComplete: 'new-password',
-      required: true,
-      minLength: 8,
-      maxLength: 30,
-      label: 'Password',
-      validationError: errors.password?.message,
-      ...formRegister('password'),
-    },
-    {
       id: 'phone',
       type: 'tel',
       autoComplete: 'tel',
@@ -213,6 +212,17 @@ const getFields = (errors: FieldErrors<SignUpFormData>, formRegister: UseFormReg
       minLength: 10,
       maxLength: 10,
       ...formRegister('phone_no'),
+    },
+    {
+      id: 'password',
+      type: 'password',
+      autoComplete: 'new-password',
+      required: true,
+      minLength: 8,
+      maxLength: 30,
+      label: 'Password',
+      validationError: errors.password?.message,
+      ...formRegister('password'),
     },
     {
       id: 'confirm-password',

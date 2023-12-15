@@ -18,7 +18,7 @@ export function useInviteModalController({
   inviteCall,
   withdrawInviteCall,
   refetchPendingInvites,
-}: InviteModalProps) {
+}: Readonly<InviteModalProps>) {
   const fetchHook = useFetch()
   const isFirstRender = useRef(true)
 
@@ -28,8 +28,8 @@ export function useInviteModalController({
   const [modalText, setModalText] = useState(INITIAL_MODAL_TEXT)
   const [searching, setSearching] = useState(false)
 
-  const loading = useSet<string>()
-  const invited = useSet<string>()
+  const loading = useSet<User['id']>()
+  const invited = useSet<User['id']>()
 
   useEffect(() => {
     if (!open) {
@@ -54,8 +54,8 @@ export function useInviteModalController({
       setSearching(true)
       await fetchHook(`teams/${teamId}/search/uninvited-users?` + new URLSearchParams({ username: searchString })).then(
         res => {
-          setSearchResults(res.data)
-          if (res.data.length === 0) {
+          setSearchResults(res)
+          if (res.length === 0) {
             setModalIcon(accountQuestionIcon)
             setModalText(NO_RESULTS_MODAL_TEXT)
           }
@@ -67,7 +67,7 @@ export function useInviteModalController({
     [searchString]
   )
 
-  const doInvite = useCallback(async (userId: string) => {
+  const doInvite = useCallback(async (userId: User['id']) => {
     loading.add(userId)
     await inviteCall(userId)
     invited.add(userId)
@@ -75,7 +75,7 @@ export function useInviteModalController({
     refetchPendingInvites()
   }, [])
 
-  const withdrawInvite = useCallback(async (userId: string) => {
+  const withdrawInvite = useCallback(async (userId: User['id']) => {
     loading.add(userId)
     await withdrawInviteCall(userId)
     invited.delete(userId)

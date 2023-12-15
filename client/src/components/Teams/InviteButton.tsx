@@ -4,13 +4,14 @@ import plusIcon from '@iconify-icons/mdi/plus'
 import minusIcon from '@iconify-icons/mdi/minus'
 import { classNames } from '@arpansaha13/utils'
 import Loader from '~common/Loader'
+import type { User } from '~/types'
 
 interface InviteButtonProps {
   loading: boolean
-  userId: string
+  userId: User['id']
   invited: boolean
-  doInvite: (userId: string) => void
-  withdrawInvite: (userId: string) => void
+  doInvite: (userId: User['id']) => void
+  withdrawInvite: (userId: User['id']) => void
 }
 
 const InviteButton = memo(({ loading, userId, invited, doInvite, withdrawInvite }: InviteButtonProps) => (

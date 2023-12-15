@@ -39,7 +39,7 @@ export function Component() {
 
 Component.displayName = 'Verification'
 
-function OtpForm(props: OtpFormProps) {
+function OtpForm(props: Readonly<OtpFormProps>) {
   const { coolDownIsActive, otpValue, loading, resendOTP, verifyOTP, onCoolDownEnd, setOtpValue } =
     useOtpFormController(props)
 
@@ -92,7 +92,7 @@ function LinkExpired() {
   )
 }
 
-const ResendOtpCoolDown = memo((props: ResendOtpCoolDownProps) => {
+const ResendOtpCoolDown = memo((props: Readonly<ResendOtpCoolDownProps>) => {
   const { count } = useResendOtpCoolDownController(props)
 
   return (

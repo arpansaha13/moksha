@@ -5,7 +5,7 @@ import { useStore } from '~/store'
 import { useFetch } from '~/hooks/common/useFetch'
 
 interface LoginFormData {
-  email: string
+  username: string
   password: string
 }
 

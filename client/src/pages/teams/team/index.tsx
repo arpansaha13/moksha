@@ -118,12 +118,12 @@ export function Component() {
 
 Component.displayName = 'Team'
 
-const TeamMembers = memo(({ members }: TeamMembersProps) => {
+const TeamMembers = memo(({ members }: Readonly<TeamMembersProps>) => {
   return (
     <Sheet className='px-6 py-4 space-y-3'>
       <ul className='grid grid-cols-1 sm:grid-cols-2 text-xs lg:text-sm'>
         {members.map(member => (
-          <li key={member.user_id} className='py-1.5 first:pt-0 last:pb-0'>
+          <li key={member.id} className='py-1.5 first:pt-0 last:pb-0'>
             <div className='text-gray-100 flex items-center'>
               <UserListItem user={member} />
             </div>
@@ -134,7 +134,7 @@ const TeamMembers = memo(({ members }: TeamMembersProps) => {
   )
 })
 
-const RegisteredContests = memo(({ registrations }: RegisteredContestsProps) => {
+const RegisteredContests = memo(({ registrations }: Readonly<RegisteredContestsProps>) => {
   return (
     <>
       <div className='h-[42px] flex items-center'>

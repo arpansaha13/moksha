@@ -4,7 +4,7 @@ import type { SoloContest } from '~/types'
 
 interface SoloRegistrationProps {
   contest: SoloContest
-  registrationId: number | null
+  registrationId?: number
 }
 
 const SoloRegister = lazy(() => import('./SoloRegister'))
@@ -12,7 +12,7 @@ const CancelRegistration = lazy(() => import('./CancelRegistration'))
 
 const SoloRegistration = (props: Readonly<SoloRegistrationProps>) => {
   const { contest, registrationId: initialRegistrationId } = props
-  const [registrationId, setRegistrationId] = useState(initialRegistrationId)
+  const [registrationId, setRegistrationId] = useState(initialRegistrationId ?? null)
 
   return new Date() > contest.deadline ? (
     <div>Registration for this contest is closed.</div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLoaderData, useOutletContext, useParams } from 'react-router-dom'
 import { useFetch } from '~/hooks/common/useFetch'
 import type { OtpFormProps, ResendOtpCoolDownProps } from './verification.types'
@@ -10,7 +10,7 @@ export function useVerificationController() {
   return { linkIsValid, verified, setVerified }
 }
 
-export function useOtpFormController({ setVerified }: OtpFormProps) {
+export function useOtpFormController({ setVerified }: Readonly<OtpFormProps>) {
   const params = useParams()
   const { setNotification, setAllNotification } = useOutletContext() as any
 
@@ -20,7 +20,7 @@ export function useOtpFormController({ setVerified }: OtpFormProps) {
   const [loading, setLoading] = useState(false)
   const [coolDownIsActive, setCoolDown] = useState(false)
 
-  const onCoolDownEnd = () => setCoolDown(false)
+  const onCoolDownEnd = useCallback(() => setCoolDown(false), [setCoolDown])
 
   function verifyOTP(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -74,7 +74,7 @@ export function useOtpFormController({ setVerified }: OtpFormProps) {
   return { loading, otpValue, coolDownIsActive, verifyOTP, resendOTP, onCoolDownEnd, setOtpValue }
 }
 
-export function useResendOtpCoolDownController({ onCoolDownEnd }: ResendOtpCoolDownProps) {
+export function useResendOtpCoolDownController({ onCoolDownEnd }: Readonly<ResendOtpCoolDownProps>) {
   const [count, setCount] = useState(30)
   const timeoutId = useRef<NodeJS.Timeout | null>(null)
 
@@ -89,6 +89,10 @@ export function useResendOtpCoolDownController({ onCoolDownEnd }: ResendOtpCoolD
         return state - 1
       })
     }, 1000)
+
+    return () => {
+      if (timeoutId.current !== null) clearInterval(timeoutId.current)
+    }
   }, [onCoolDownEnd])
 
   return { count }

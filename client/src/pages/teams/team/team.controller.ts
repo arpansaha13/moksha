@@ -31,13 +31,13 @@ export function useTeamController() {
   const refetchPendingInvites = useDebouncedFn(
     async () => {
       const res = await fetchHook(`teams/${team.team_id}/pending-invites`)
-      setPendingInvites(res.data)
+      setPendingInvites(res)
     },
-    500,
+    600,
     []
   )
 
-  const inviteCall = useCallback(async (userId: string) => {
+  const inviteCall = useCallback(async (userId: User['id']) => {
     await fetchHook('invites', {
       method: 'POST',
       body: {
@@ -47,7 +47,7 @@ export function useTeamController() {
     })
   }, [])
 
-  const withdrawInviteCall = useCallback(async (userId: string) => {
+  const withdrawInviteCall = useCallback(async (userId: User['id']) => {
     await fetchHook('invites', {
       method: 'DELETE',
       body: {

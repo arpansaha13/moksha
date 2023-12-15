@@ -1,71 +1,35 @@
 from django.db.models import Q
 from django.core.mail import send_mail
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 from django.db import IntegrityError, transaction
 from django.utils import timezone
-from django.utils.decorators import method_decorator
-from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied, NotFound
-from .models import UnverifiedAccount, ForgotPasswordLink
-from users.models import User
-from users.serializers import AuthUserSerializer
-from common.middleware import jwt_exempt, validate_token, validate_session
+from rest_framework.exceptions import NotFound
+from common.decorators import login_required
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
-from datetime import datetime, timedelta
-import jwt
-import random
-import secrets
-import string
-import textwrap
-import environ  # Pylance does not recognize this import for some reason but the dev server runs perfectly
+from users.models import Profile
+from .models import UnverifiedAccount, ForgotPasswordLink
+from .helpers import generate_hash, generate_otp, generate_profile_tag, get_account_verification_link, get_account_verification_mail_message, get_forgot_password_link, get_forgot_password_mail_message
+import environ
 
 env = environ.Env()
 environ.Env.read_env()
 
-COOKIE_SECURE = bool(int(env('COOKIE_SECURE')))
 PASSWORD_MISMATCH_EXCEPTION_MESSAGE = "Password and confirm-password do not match."
 
 
 class CheckAuth(APIView):
     def get(self, request):
-        AUTH_TOKEN = request.COOKIES.get('auth', None)
-        SESSION_TOKEN = request.COOKIES.get('session', None)
+        if request.user.is_authenticated:
+            return Response(data={
+                'avatar_idx': request.user.profile.avatar_idx,
+                'user_id': request.user.id,
+            })
 
-        payload = validate_token(AUTH_TOKEN)
-
-        if payload is None:
-            payload = validate_session(SESSION_TOKEN)
-
-        if payload is None:
-            return Response({'data': None, 'message': 'Unauthenticated'})
-
-        auth_user = User.objects.filter(user_id=payload['id']).first()
-
-        if not auth_user:
-            return Response({'data': None, 'message': 'Invalid token'})
-
-        response = Response({
-            'data': {
-                'avatar_idx': auth_user.avatar_idx,
-                'user_id': auth_user.user_id,
-            }
-        })
-
-        if SESSION_TOKEN is None:
-            response.set_cookie(
-                key='session',
-                value=Login().create_session_token(auth_user.user_id),
-                secure=COOKIE_SECURE,
-                httponly=True,
-                path='/api',
-            )
-
-        return response
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+        return Response(data=None)
 
 
 class Register(APIView):
@@ -83,17 +47,16 @@ class Register(APIView):
                 self.verify_phone(request.data['phone_no'])
 
                 otp_generated = generate_otp()
-                hashed_password = make_password(request.data['password'])
 
                 unverified_acc = UnverifiedAccount.objects.filter(
                     email=email).first()  # type: ignore
 
                 if unverified_acc is None:
                     unverified_acc = self.create_new_acc(
-                        request, hashed_password, otp_generated)
+                        request, otp_generated)
                 else:
                     unverified_acc = self.update_unverified_acc(
-                        request, unverified_acc, hashed_password, otp_generated)
+                        request, unverified_acc, otp_generated)
 
                 unverified_acc.save()
         except IntegrityError:
@@ -102,7 +65,7 @@ class Register(APIView):
         send_mail(
             subject='Welcome to Moksha 2023, NIT Agartala - Please verify your email',
             message=get_account_verification_mail_message(
-                unverified_acc.name,
+                unverified_acc.first_name,
                 otp_generated,
                 get_account_verification_link(unverified_acc.hash)
             ),
@@ -122,10 +85,10 @@ class Register(APIView):
             raise Conflict(message='This username is already taken.')
 
     def verify_phone(self, phone_no: str):
-        if User.objects.filter(Q(phone_no=phone_no)).exists():
+        if Profile.objects.filter(Q(phone_no=phone_no)).exists():
             raise Conflict(message='This phone number is already registered.')
 
-    def create_new_acc(self, request, hashed_password: str, otp_generated: int) -> UnverifiedAccount:
+    def create_new_acc(self, request, otp_generated: int) -> UnverifiedAccount:
         otp_hash = generate_hash()
 
         while UnverifiedAccount.objects.filter(hash=otp_hash).exists():
@@ -135,122 +98,61 @@ class Register(APIView):
             hash=otp_hash,
             otp=otp_generated,
             avatar_idx=request.data['avatar_idx'],
-            name=request.data['name'],
+            first_name=request.data['first_name'],
+            last_name=request.data['last_name'],
             institution=request.data['institution'],
             phone_no=request.data['phone_no'],
             email=request.data['email'],
             username=request.data['username'],
-            password=hashed_password,
+            password=request.data['password'],
         )
 
         return new_account
 
-    def update_unverified_acc(self, request, unverified_acc: UnverifiedAccount, hashed_password: str, otp_generated: int) -> UnverifiedAccount:
+    def update_unverified_acc(self, request, unverified_acc: UnverifiedAccount, otp_generated: int) -> UnverifiedAccount:
 
         unverified_acc.otp = otp_generated
         unverified_acc.avatar_idx = request.data['avatar_idx']
-        unverified_acc.name = request.data['name']
+        unverified_acc.first_name = request.data['first_name']
+        unverified_acc.last_name = request.data['last_name']
         unverified_acc.institution = request.data['institution']
         unverified_acc.phone_no = request.data['phone_no']
         unverified_acc.username = request.data['username']
-        unverified_acc.password = hashed_password
+        unverified_acc.password = request.data['password']
 
         return unverified_acc
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class Login(APIView):
     def post(self, request):
-        email = request.data['email']
-        user = User.objects.filter(email=email).first()
+        username = request.data['username']
+        password = request.data['password']
+        abstract_user = authenticate(
+            request, username=username, password=password)
 
-        UNAUTHORIZED_MESSAGE = 'Invalid email or password.'
+        if abstract_user is None:
+            raise Unauthorized(message='Invalid username or password.')
 
-        if not user:
-            raise Unauthorized(message=UNAUTHORIZED_MESSAGE)
+        login(request, abstract_user)
 
-        password_matched = check_password(
-            request.data['password'], user.password)
+        user = User.objects.get(id=abstract_user.pk)
 
-        if not password_matched:
-            raise Unauthorized(message=UNAUTHORIZED_MESSAGE)
-
-        AUTH_TOKEN = self.create_auth_token(user.user_id)
-        SESSION_TOKEN = self.create_session_token(user.user_id)
-
-        response = Response()
-        response.set_cookie(
-            key='auth',
-            value=AUTH_TOKEN,
-            secure=COOKIE_SECURE,
-            httponly=True,
-            path='/api',
-            max_age=int(env('JWT_VALIDATION_SECONDS'))
-        )
-        response.set_cookie(
-            key='session',
-            value=SESSION_TOKEN,
-            secure=COOKIE_SECURE,
-            httponly=True,
-            path='/api',
-        )
-        response.data = AuthUserSerializer(user).data
-        response.status_code = 200
-        return response
-
-    def create_auth_token(self, user_id: str) -> str:
-        payload = {
-            'id': user_id,
-            'exp': datetime.utcnow() + timedelta(seconds=int(env('JWT_VALIDATION_SECONDS'))),
-            'iat': datetime.utcnow(),
-        }
-
-        return jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
-
-    def create_session_token(self, user_id: str) -> str:
-        payload = {
-            'id': user_id,
-            'iat': datetime.utcnow(),
-        }
-
-        return jwt.encode(payload, env('JWT_SECRET'), algorithm=env('JWT_ALGO'))
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+        return Response(data={'user_id': user.id, 'avatar_idx': user.profile.avatar_idx})
 
 
 class Logout(APIView):
     def get(self, request):
-        auth_token = request.COOKIES.get('auth', None)
-        session_token = request.COOKIES.get('session', None)
-
-        if auth_token is None and session_token is None:
-            raise PermissionDenied({'Unauthenticated'})
-
-        response = Response()
-        response.set_cookie(key='auth', max_age=1, httponly=True, path='/api')
-        response.set_cookie(key='session', max_age=1,
-                            httponly=True, path='/api')
-        response.data = {'message': 'User has been successfully logged out.'}
-        response.status_code = 200
-        return response
+        logout(request)
+        return Response(data={'message': 'User has been successfully logged out.'}, status=200)
 
 
 class VerifyAccountOtpLink(APIView):
     # Check if account verification link is valid or not
-    def get(self, _, otp_hash):
+    def get(self, request, otp_hash):
         if UnverifiedAccount.objects.filter(hash=otp_hash).exists():
             return Response({'valid': True}, status=200)
 
         return Response({'valid': False}, status=200)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class AccountVerification(APIView):
@@ -270,37 +172,39 @@ class AccountVerification(APIView):
                 if unverified_acc.otp != otp:
                     raise Unauthorized(message='Invalid OTP.')
 
-                new_user_id = generate_uid()
+                new_tag = generate_profile_tag()
 
-                while User.objects.filter(user_id=new_user_id).exists():
-                    new_user_id = generate_uid()
+                while Profile.objects.filter(tag=new_tag).exists():
+                    new_tag = generate_profile_tag()
 
-                new_user = User(
-                    user_id=new_user_id,
-                    avatar_idx=unverified_acc.avatar_idx,
-                    name=unverified_acc.name,
-                    institution=unverified_acc.institution,
-                    phone_no=unverified_acc.phone_no,
+                new_user = User.objects.create_user(
                     email=unverified_acc.email,
+                    first_name=unverified_acc.first_name,
+                    last_name=unverified_acc.last_name,
                     username=unverified_acc.username,
                     password=unverified_acc.password,
                 )
-                new_user.save()
+
+                new_profile = Profile(
+                    user=new_user,
+                    tag=new_tag,
+                    avatar_idx=unverified_acc.avatar_idx,
+                    institution=unverified_acc.institution,
+                    phone_no=unverified_acc.phone_no,
+                )
+
+                new_profile.save()
                 unverified_acc.delete()
         except IntegrityError:
             raise InternalServerError()
 
-        return Response({'message': 'Account verification successful.'}, status=200)
+        return Response({'message': 'Account verification successful.'})
 
     def verify_otp_age(self, unverified_acc: UnverifiedAccount):
         otp_age = timezone.now() - unverified_acc.updated_at
 
         if otp_age.seconds > int(env('OTP_VALIDATION_SECONDS')):
             raise InvalidOrExpired(message='OTP has expired.')
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class ResendOtp(APIView):
@@ -317,7 +221,7 @@ class ResendOtp(APIView):
         send_mail(
             subject='Moksha 2023, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
-                unverified_acc.name,
+                unverified_acc.first_name,
                 unverified_acc.otp,
                 get_account_verification_link(otp_hash),
                 False
@@ -328,10 +232,6 @@ class ResendOtp(APIView):
         )
 
         return Response({'message': 'An email has been sent with the new OTP.'}, status=200)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class ResendVerificationLink(APIView):
@@ -352,7 +252,7 @@ class ResendVerificationLink(APIView):
         send_mail(
             subject='Moksha 2023, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
-                unverified_acc.name,
+                unverified_acc.first_name,
                 unverified_acc.otp,
                 get_account_verification_link(unverified_acc.hash),
                 False
@@ -372,10 +272,6 @@ class ResendVerificationLink(APIView):
 
         return unverified_acc
 
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
 
 class VerifyResetPassLink(APIView):
     def get(self, _, forgot_pass_hash):
@@ -391,10 +287,6 @@ class VerifyResetPassLink(APIView):
             return Response({'valid': False}, status=200)
 
         return Response({'valid': True}, status=200)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 
 class ForgotPassword(APIView):
@@ -433,11 +325,7 @@ class ForgotPassword(APIView):
             fail_silently=False,
         )
 
-        return Response({'message': "Reset password link has been sent to your email."}, 201)
-
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+        return Response({'message': "Reset password link has been sent to your email."}, status=201)
 
 
 class ResetPassword(APIView):
@@ -448,23 +336,22 @@ class ResetPassword(APIView):
 
         try:
             with transaction.atomic():
-                forgot_pass_entry = ForgotPasswordLink.objects.filter(
-                    hash=forgot_pass_hash).first()
-
-                if forgot_pass_entry is None:
+                try:
+                    forgot_pass_entry = ForgotPasswordLink.objects.get(
+                        hash=forgot_pass_hash)
+                except ForgotPasswordLink.DoesNotExist:
                     raise NotFound({'message': 'Invalid link.'})
 
                 self.verify_link_age(forgot_pass_entry)
 
-                hashed_password = make_password(request.data['password'])
                 user = forgot_pass_entry.user
-                user.password = hashed_password
+                user.set_password(request.data['password'])
                 user.save()
                 forgot_pass_entry.delete()
         except IntegrityError:
             raise InternalServerError()
 
-        return Response({'message': 'Your password has been reset.'}, status=200)
+        return Response({'message': 'Your password has been reset.'})
 
     def verify_link_age(self, forgot_pass_entry: ForgotPasswordLink):
         link_age = timezone.now() - forgot_pass_entry.updated_at
@@ -472,11 +359,8 @@ class ResetPassword(APIView):
         if link_age.seconds > int(env('FORGOT_PASS_VALIDATION_SECONDS')):
             raise InvalidOrExpired(message='Link has expired.')
 
-    @method_decorator(jwt_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
-
+@method_decorator(login_required, name="dispatch")
 class ChangePassword(APIView):
     def post(self, request):
         if request.data['new_password'] != request.data['confirm_password']:
@@ -487,102 +371,18 @@ class ChangePassword(APIView):
             raise Unauthorized(
                 {'message': "New password and old password cannot be the same."})
 
+        user: User = request.user
+
         try:
             with transaction.atomic():
-                if not check_password(request.data['old_password'], request.auth_user.password):
-                    raise Unauthorized(
-                        {'message': "Old password does not match with your current password."})
+                abstract_user = authenticate(
+                    request, username=user.username, password=request.data['old_password'])
 
-                hashed_password = make_password(request.data['new_password'])
-                user = request.auth_user
-                user.password = hashed_password
+                if abstract_user is None:
+                    raise Unauthorized(
+                        message="Old password does not match with your current password.")
+
+                user.set_password(request.data['new_password'])
                 user.save()
         except IntegrityError:
             raise InternalServerError()
-
-        return Response({'message': 'Your password has been updated.'}, status=200)
-
-
-def generate_uid(length=8):
-    uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
-                  for _ in range(length))
-    return 'MOK-' + uid
-
-
-def generate_hash(length=15):
-    random_hash = ''.join(secrets.choice(
-        string.ascii_letters + string.digits) for _ in range(length))
-    return random_hash
-
-
-def get_account_verification_link(hash: str):
-    client_domain = env('CLIENT_DOMAIN')
-
-    if client_domain[-1] == '/':
-        client_domain = client_domain + 'auth/verification/'
-    else:
-        client_domain = client_domain + '/auth/verification/'
-
-    return client_domain + hash
-
-
-def get_forgot_password_link(hash: str):
-    client_domain = env('CLIENT_DOMAIN')
-
-    if client_domain[-1] == '/':
-        client_domain = client_domain + 'auth/reset-password/'
-    else:
-        client_domain = client_domain + '/auth/reset-password/'
-
-    return client_domain + hash
-
-
-def generate_otp():
-    return random.randint(1000, 9999)
-
-
-def get_account_verification_mail_message(user_name: str, otp: int, link: str, is_new=True):
-    valid_time_hours = int(env('OTP_VALIDATION_SECONDS')) // 3600
-    first_name = user_name.split(' ', 1)[0]
-    first_mail_intro = 'Welcome to Moksha 2023 Official Website! Verify your email to get started:'
-    resend_intro = 'A new OTP has been generated for your account verification:'
-
-    return textwrap.dedent(f'''\
-        Hi {first_name},
-
-        {first_mail_intro if is_new else resend_intro}
-
-        OTP: {otp}
-        Verification Link: {link}
-
-        Please use this OTP within {valid_time_hours} hour(s) to complete the verification process.
-
-        If you have any questions or require further assistance, please reply to this email or write an email to {env('EMAIL_HOST_USER')}.
-
-        Cheers,
-        Moksha 2023 Tech Team,
-        NIT Agartala
-    ''')
-
-
-def get_forgot_password_mail_message(user: User, link: str):
-    first_name = user.name.split(' ', 1)[0]
-    valid_time_hours = int(env('FORGOT_PASS_VALIDATION_SECONDS')) // 3600
-
-    return textwrap.dedent(f'''\
-        Dear {first_name},
-
-        We have recently received a request to reset the password for your account associated with the email address: {user.email}. If you did not initiate this request, please disregard this email.
-
-        To proceed with resetting your password, please click on the following link or copy and paste it into your web browser:
-
-        {link}
-
-        This link will expire within {valid_time_hours} hour(s). If the link expires, you can initiate a new password reset request through our website.
-
-        If you have any questions or require further assistance, please reply to this email or write an email to {env('EMAIL_HOST_USER')}.
-
-        Cheers,
-        Moksha 2023 Tech Team,
-        NIT Agartala
-    ''')

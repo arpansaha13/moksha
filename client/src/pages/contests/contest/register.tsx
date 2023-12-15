@@ -12,16 +12,16 @@ import type { SoloContest, Team, TeamContest, User } from '~/types'
 interface SoloRegisterLoaderData {
   type: 'solo'
   contest: SoloContest
-  registrationId: number
+  registrationId?: number
 }
 
 interface TeamRegisterLoaderData {
   type: 'team'
   contest: TeamContest
   createdTeam: Team
-  registration: any
-  teamMembers: User[]
-  alreadyRegisteredMemberIds: Set<User['user_id']>
+  registration?: any
+  teamMembers?: User[]
+  alreadyRegisteredMemberIds?: Set<User['id']>
 }
 
 type LoaderData = Readonly<SoloRegisterLoaderData> | Readonly<TeamRegisterLoaderData>
@@ -73,9 +73,9 @@ export function Component() {
         <TeamRegistration
           contest={loaderData.contest}
           createdTeam={loaderData.createdTeam}
-          teamMembers={loaderData.teamMembers}
+          teamMembers={loaderData.teamMembers!}
           registration={loaderData.registration}
-          alreadyRegisteredMemberIds={loaderData.alreadyRegisteredMemberIds}
+          alreadyRegisteredMemberIds={loaderData.alreadyRegisteredMemberIds!}
         />
       ) : (
         <div className='mt-6'>

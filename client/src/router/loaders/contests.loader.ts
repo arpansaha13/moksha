@@ -39,18 +39,20 @@ export const registerPanelLoader = loaderWrapper({
       if (!authState.authenticated) return { type: 'solo', contest }
 
       const params = new URLSearchParams({ contest_id: contest.id.toString() })
-      const { data } = await fetchWithCredentials(`contests/solo/registration?${params.toString()}`)
-      let registrationId = null
-      if (!isNullOrUndefined(data)) registrationId = data.id
+      const soloRegistration = await fetchWithCredentials(`contests/solo/registration?${params.toString()}`)
 
-      return { type: 'solo', contest, registrationId }
+      return {
+        type: 'solo',
+        contest,
+        registrationId: soloRegistration?.id,
+      }
     }
 
     // For team contest
     if (!authState.authenticated) return { type: 'team', contest }
 
     const createdTeam = await fetchCreatedTeam()
-    if (isNullOrUndefined(createdTeam)) return { type: 'team', contest, createdTeam }
+    if (isNullOrUndefined(createdTeam)) return { type: 'team', contest }
 
     const registration = await fetchRegistration(createdTeam.team_id, contest.id)
     let teamMembers
@@ -61,8 +63,8 @@ export const registerPanelLoader = loaderWrapper({
         fetchTeamMembers(createdTeam.team_id),
         fetchAlreadyRegisteredMembers(createdTeam.team_id, contest.id),
       ])
-      teamMembers = res[0].data
-      alreadyRegisteredMemberIds = new Set(res[1].data)
+      teamMembers = res[0]
+      alreadyRegisteredMemberIds = new Set(res[1])
     }
 
     return { type: 'team', contest, createdTeam, registration, teamMembers, alreadyRegisteredMemberIds }
@@ -78,16 +80,16 @@ export const registrationsPanelLoader = loaderWrapper({
 
     const res = await Promise.all([fetchAuthUserReg(contest.id), fetchCreatedTeamReg(contest.id)])
 
-    const registration = res[0]
+    const authUserReg = res[0]
     const hasCreatedTeam = res[1].hasCreatedTeam
 
-    if (!res[1].hasCreatedTeam) return { contest, registration, hasCreatedTeam }
+    if (!hasCreatedTeam) return { contest, authUserReg, hasCreatedTeam }
 
-    const createdTeamReg = res[1].data
+    const createdTeamReg = res[1].createdTeamReg
     const fromCreatedTeam =
-      !isNullOrUndefined(registration) && !isNullOrUndefined(createdTeamReg) && registration.id === createdTeamReg.id
+      !isNullOrUndefined(authUserReg) && !isNullOrUndefined(createdTeamReg) && authUserReg.id === createdTeamReg.id
 
-    return { contest, registration, hasCreatedTeam, createdTeamReg, fromCreatedTeam }
+    return { contest, authUserReg, hasCreatedTeam, createdTeamReg, fromCreatedTeam }
   },
 })
 
@@ -120,7 +122,7 @@ function getClubAndContestSlugs(url: LoaderFunctionArgs['request']['url']) {
 }
 
 async function fetchCreatedTeam() {
-  return fetchWithCredentials('users/me/created-team').then((r: any) => r.data)
+  return fetchWithCredentials('users/me/created-team')
 }
 
 async function fetchRegistration(teamId: string, contestId: number) {
@@ -129,7 +131,7 @@ async function fetchRegistration(teamId: string, contestId: number) {
     contest_id: contestId.toString(),
   })
 
-  return fetchWithCredentials(`contests/team/registration?${params.toString()}`).then((r: any) => r.data)
+  return fetchWithCredentials(`contests/team/registration?${params.toString()}`)
 }
 
 async function fetchTeamMembers(teamId: string) {
@@ -143,15 +145,15 @@ async function fetchAlreadyRegisteredMembers(teamId: string, contestId: number) 
 async function fetchAuthUserReg(contestId: number) {
   const params = new URLSearchParams({ contest_id: contestId.toString() }).toString()
   const res = await fetchWithCredentials(`users/me/registered-team-contests?${params}`)
-  return res.data?.team_contest_registration
+  return res?.team_contest_registration
 }
 
 async function fetchCreatedTeamReg(contestId: number) {
-  const { data: team } = await fetchWithCredentials('users/me/created-team')
+  const team = await fetchWithCredentials('users/me/created-team')
 
-  if (isNullOrUndefined(team)) return { hasCreatedTeam: false, data: null }
+  if (isNullOrUndefined(team)) return { hasCreatedTeam: false }
 
   const params = new URLSearchParams({ contest_id: contestId.toString() }).toString()
-  const res = await fetchWithCredentials(`teams/${team.team_id}/registered-contests?${params}`)
-  return { hasCreatedTeam: true, data: res.data }
+  const createdTeamReg = await fetchWithCredentials(`teams/${team.team_id}/registered-contests?${params}`)
+  return { hasCreatedTeam: true, createdTeamReg }
 }
