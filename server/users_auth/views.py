@@ -4,18 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.utils import timezone
-from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from .models import UnverifiedAccount, ForgotPasswordLink
-from .helpers import create_auth_token, create_session_token
 from users.models import Profile
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
-import random
-import secrets
-import string
-import textwrap
+from .models import UnverifiedAccount, ForgotPasswordLink
+from .helpers import generate_hash, generate_otp, generate_profile_tag, get_account_verification_link, get_account_verification_mail_message, get_forgot_password_link, get_forgot_password_mail_message
 import environ
 
 env = environ.Env()
@@ -30,7 +25,7 @@ class CheckAuth(APIView):
         if request.user.is_authenticated:
             return Response(data={
                 'avatar_idx': request.user.profile.avatar_idx,
-                'user_id': request.user.profile.profile_id,
+                'user_id': request.user.id,
             })
 
         return Response(data=None)
@@ -141,7 +136,7 @@ class Login(APIView):
 
         user = User.objects.get(id=abstract_user.pk)
 
-        return Response(data={'user_id': user.profile.profile_id, 'avatar_idx': user.profile.avatar_idx})
+        return Response(data={'user_id': user.id, 'avatar_idx': user.profile.avatar_idx})
 
 
 class Logout(APIView):
@@ -176,10 +171,10 @@ class AccountVerification(APIView):
                 if unverified_acc.otp != otp:
                     raise Unauthorized(message='Invalid OTP.')
 
-                new_profile_id = generate_profile_id()
+                new_tag = generate_profile_tag()
 
-                while Profile.objects.filter(profile_id=new_profile_id).exists():
-                    new_profile_id = generate_profile_id()
+                while Profile.objects.filter(tag=new_tag).exists():
+                    new_tag = generate_profile_tag()
 
                 new_user = User.objects.create_user(
                     email=unverified_acc.email,
@@ -191,7 +186,7 @@ class AccountVerification(APIView):
 
                 new_profile = Profile(
                     user=new_user,
-                    profile_id=new_profile_id,
+                    tag=new_tag,
                     avatar_idx=unverified_acc.avatar_idx,
                     institution=unverified_acc.institution,
                     phone_no=unverified_acc.phone_no,
@@ -202,7 +197,7 @@ class AccountVerification(APIView):
         except IntegrityError:
             raise InternalServerError()
 
-        return Response({'message': 'Account verification successful.'}, status=200)
+        return Response({'message': 'Account verification successful.'})
 
     def verify_otp_age(self, unverified_acc: UnverifiedAccount):
         otp_age = timezone.now() - unverified_acc.updated_at
@@ -374,120 +369,18 @@ class ChangePassword(APIView):
             raise Unauthorized(
                 {'message': "New password and old password cannot be the same."})
 
+        user: User = request.user
+
         try:
             with transaction.atomic():
-                if not check_password(request.data['old_password'], request.auth_user.password):
-                    raise Unauthorized(
-                        {'message': "Old password does not match with your current password."})
+                abstract_user = authenticate(
+                    request, username=user.username, password=request.data['old_password'])
 
-                hashed_password = make_password(request.data['new_password'])
-                user = request.auth_user
-                user.password = hashed_password
+                if abstract_user is None:
+                    raise Unauthorized(
+                        message="Old password does not match with your current password.")
+
+                user.set_password(request.data['new_password'])
                 user.save()
         except IntegrityError:
             raise InternalServerError()
-
-        AUTH_TOKEN = create_auth_token(user.user_id)
-        SESSION_TOKEN = create_session_token(user.user_id)
-
-        response = Response(
-            {'message': 'Your password has been updated.'}, status=200)
-        response.set_cookie(
-            key='auth',
-            value=AUTH_TOKEN,
-            secure=COOKIE_SECURE,
-            httponly=True,
-            path='/api',
-            max_age=int(env('JWT_VALIDATION_SECONDS'))
-        )
-        response.set_cookie(
-            key='session',
-            value=SESSION_TOKEN,
-            secure=COOKIE_SECURE,
-            httponly=True,
-            path='/api',
-        )
-        return response
-
-
-def generate_profile_id(length=8):
-    uid = ''.join(secrets.choice(string.ascii_lowercase + string.digits)
-                  for _ in range(length))
-    return 'MOK-' + uid
-
-
-def generate_hash(length=15):
-    random_hash = ''.join(secrets.choice(
-        string.ascii_letters + string.digits) for _ in range(length))
-    return random_hash
-
-
-def get_account_verification_link(hash: str):
-    client_domain = env('CLIENT_DOMAIN')
-
-    if client_domain[-1] == '/':
-        client_domain = client_domain + 'auth/verification/'
-    else:
-        client_domain = client_domain + '/auth/verification/'
-
-    return client_domain + hash
-
-
-def get_forgot_password_link(hash: str):
-    client_domain = env('CLIENT_DOMAIN')
-
-    if client_domain[-1] == '/':
-        client_domain = client_domain + 'auth/reset-password/'
-    else:
-        client_domain = client_domain + '/auth/reset-password/'
-
-    return client_domain + hash
-
-
-def generate_otp():
-    return random.randint(1000, 9999)
-
-
-def get_account_verification_mail_message(first_name: str, otp: int, link: str, is_new=True):
-    valid_time_hours = int(env('OTP_VALIDATION_SECONDS')) // 3600
-    first_mail_intro = 'Welcome to Moksha 2023 Official Website! Verify your email to get started:'
-    resend_intro = 'A new OTP has been generated for your account verification:'
-
-    return textwrap.dedent(f'''\
-        Hi {first_name},
-
-        {first_mail_intro if is_new else resend_intro}
-
-        OTP: {otp}
-        Verification Link: {link}
-
-        Please use this OTP within {valid_time_hours} hour(s) to complete the verification process.
-
-        If you have any questions or require further assistance, please reply to this email or write an email to {env('EMAIL_HOST_USER')}.
-
-        Cheers,
-        Moksha 2023 Tech Team,
-        NIT Agartala
-    ''')
-
-
-def get_forgot_password_mail_message(user: User, link: str):
-    valid_time_hours = int(env('FORGOT_PASS_VALIDATION_SECONDS')) // 3600
-
-    return textwrap.dedent(f'''\
-        Dear {user.first_name},
-
-        We have recently received a request to reset the password for your account associated with the email address: {user.email}. If you did not initiate this request, please disregard this email.
-
-        To proceed with resetting your password, please click on the following link or copy and paste it into your web browser:
-
-        {link}
-
-        This link will expire within {valid_time_hours} hour(s). If the link expires, you can initiate a new password reset request through our website.
-
-        If you have any questions or require further assistance, please reply to this email or write an email to {env('EMAIL_HOST_USER')}.
-
-        Cheers,
-        Moksha 2023 Tech Team,
-        NIT Agartala
-    ''')
