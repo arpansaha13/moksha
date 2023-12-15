@@ -1,1 +1,3 @@
-export type Invite = any // FIXME: fix types
+export interface Invite {
+  id: number
+}

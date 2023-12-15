@@ -2,7 +2,7 @@ import type { Slice } from './types.store'
 
 interface AuthState {
   authenticated: boolean
-  user_id: string
+  user_id: number
   avatar_idx: number
 }
 
@@ -15,7 +15,7 @@ export interface AuthSlice {
 export const createAuthSlice: Slice<AuthSlice> = set => ({
   authState: {
     authenticated: false,
-    user_id: '',
+    user_id: 0,
     avatar_idx: 0,
   },
 
@@ -29,7 +29,7 @@ export const createAuthSlice: Slice<AuthSlice> = set => ({
     set({
       authState: {
         authenticated: false,
-        user_id: '',
+        user_id: 0,
         avatar_idx: 0,
       },
     })
