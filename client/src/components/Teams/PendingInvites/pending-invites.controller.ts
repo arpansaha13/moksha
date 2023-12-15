@@ -2,23 +2,24 @@
 import { useCallback, useEffect } from 'react'
 import { useSet } from '~/hooks/common/useSet'
 import type { PendingInviteProps } from './pending-invites.types'
+import type { User } from '~/types'
 
 export function usePendingInvitesController({ pendingInvites, inviteCall, withdrawInviteCall }: PendingInviteProps) {
-  const loading = useSet<string>()
-  const invited = useSet<string>(pendingInvites.map(inv => inv.user.user_id))
+  const loading = useSet<User['id']>()
+  const invited = useSet<User['id']>(pendingInvites.map(inv => inv.user.id))
 
   useEffect(() => {
-    invited.setAll(pendingInvites.map(inv => inv.user.user_id))
+    invited.setAll(pendingInvites.map(inv => inv.user.id))
   }, [pendingInvites])
 
-  const doInvite = useCallback(async (userId: string) => {
+  const doInvite = useCallback(async (userId: User['id']) => {
     loading.add(userId)
     await inviteCall(userId)
     invited.add(userId)
     loading.delete(userId)
   }, [])
 
-  const withdrawInvite = useCallback(async (userId: string) => {
+  const withdrawInvite = useCallback(async (userId: User['id']) => {
     loading.add(userId)
     await withdrawInviteCall(userId)
     invited.delete(userId)
