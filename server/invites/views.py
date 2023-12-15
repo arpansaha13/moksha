@@ -2,16 +2,19 @@
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.db import transaction, IntegrityError
+from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from teams.models import Team, TeamMember
-from teams.helpers import get_team
+from common.decorators import login_required
 from common.exceptions import Conflict, BadRequest, InternalServerError
+from teams.helpers import get_team
+from teams.models import Team, TeamMember
 from .models import Invite
 from .helpers import verify_invite, verify_team_leader
 
 
+@method_decorator(login_required, name="dispatch")
 class BaseEndpoint(APIView):
     # Create invite
     def post(self, request):
@@ -79,6 +82,7 @@ class BaseEndpoint(APIView):
         return Response(data={'message': 'Invite has been withdrawn'})
 
 
+@method_decorator(login_required, name="dispatch")
 class AcceptInvite(APIView):
     def patch(self, _, invite_id):
         invite = Invite.objects.get(id=invite_id)
@@ -102,6 +106,7 @@ class AcceptInvite(APIView):
         return Response(data={'message': 'Invite accepted'})
 
 
+@method_decorator(login_required, name="dispatch")
 class RejectInvite(APIView):
     def patch(self, _, invite_id):
         invite = Invite.objects.get(id=invite_id)

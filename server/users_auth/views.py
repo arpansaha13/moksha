@@ -2,13 +2,15 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from users.models import Profile
+from common.decorators import login_required
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
+from users.models import Profile
 from .models import UnverifiedAccount, ForgotPasswordLink
 from .helpers import generate_hash, generate_otp, generate_profile_tag, get_account_verification_link, get_account_verification_mail_message, get_forgot_password_link, get_forgot_password_mail_message
 import environ
@@ -359,6 +361,7 @@ class ResetPassword(APIView):
             raise InvalidOrExpired(message='Link has expired.')
 
 
+@method_decorator(login_required, name="dispatch")
 class ChangePassword(APIView):
     def post(self, request):
         if request.data['new_password'] != request.data['confirm_password']:

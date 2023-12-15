@@ -1,11 +1,13 @@
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db import transaction, IntegrityError
 from .helpers import get_team
 from .models import Team, TeamMember
 from .serializers import TeamSerializer
+from common.decorators import login_required
 from common.exceptions import BadRequest, Conflict, InternalServerError
 from users.serializers import UserSerializer
 from invites.helpers import verify_team_leader
@@ -17,6 +19,7 @@ import secrets
 import string
 
 
+@method_decorator(login_required, name="dispatch")
 class CreateTeam(APIView):
     def post(self, request):
         team_name = request.data['team_name']
@@ -74,6 +77,7 @@ class GetTeamMembers(APIView):
         return Response(data=serializer.data)
 
 
+@method_decorator(login_required, name="dispatch")
 class GetContestRegisteredTeamMembers(APIView):
     def get(self, _, team_id, contest_id):
         team = get_team(team_id)
@@ -91,6 +95,7 @@ class GetContestRegisteredTeamMembers(APIView):
         return Response(data=registered_users_in_contest)
 
 
+@method_decorator(login_required, name="dispatch")
 class GetUninvitedUsers(APIView):
     def get(self, request, team_id):
         username = request.GET.get('username', None)
@@ -120,6 +125,7 @@ class GetUninvitedUsers(APIView):
         return Response(data=data)
 
 
+@method_decorator(login_required, name="dispatch")
 class GetRegisteredTeamContests(APIView):
     def get(self, request, team_id):
         team = get_team(team_id)
@@ -161,6 +167,7 @@ class GetRegisteredTeamContests(APIView):
         return Response(data=serializer.data)
 
 
+@method_decorator(login_required, name="dispatch")
 class GetPendingInvites(APIView):
     def get(self, request, team_id):
         team = Team.objects.filter(team_id=team_id).only('leader').first()
