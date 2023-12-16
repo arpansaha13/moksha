@@ -397,3 +397,11 @@ class ChangePassword(APIView):
                 user.save()
         except IntegrityError:
             raise InternalServerError()
+
+        # Login the user again to create a new session
+        abstract_user = authenticate(
+            request, username=user.username, password=request.data['new_password'])
+
+        login(request, abstract_user)
+
+        return Response(data={'message': 'Your password has been updated.'})
