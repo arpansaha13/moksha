@@ -1,14 +1,13 @@
-from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.db import IntegrityError, transaction
-from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from common.decorators import login_required
+from common.decorators import login_required, body
 from common.exceptions import Conflict, Unauthorized, InternalServerError, InvalidOrExpired
 from users.models import Profile
 from .models import UnverifiedAccount, ForgotPasswordLink
@@ -33,6 +32,12 @@ class CheckAuth(APIView):
 
 
 class Register(APIView):
+    @body({
+        'email', 'username',
+        'first_name', 'last_name',
+        'avatar_idx', 'institution', 'phone_no',
+        'password', 'confirm_password'
+    })
     def post(self, request):
         if request.data['password'] != request.data['confirm_password']:
             raise Unauthorized(message=PASSWORD_MISMATCH_EXCEPTION_MESSAGE)
@@ -77,15 +82,15 @@ class Register(APIView):
         return Response({'message': "Otp validation link has been sent to your email."}, 201)
 
     def verify_email(self, email: str):
-        if User.objects.filter(Q(email=email)).exists():
+        if User.objects.filter(email=email).exists():
             raise Conflict(message='This email is already registered.')
 
     def verify_username(self, username: str):
-        if User.objects.filter(Q(username=username)).exists():
+        if User.objects.filter(username=username).exists():
             raise Conflict(message='This username is already taken.')
 
     def verify_phone(self, phone_no: str):
-        if Profile.objects.filter(Q(phone_no=phone_no)).exists():
+        if Profile.objects.filter(phone_no=phone_no).exists():
             raise Conflict(message='This phone number is already registered.')
 
     def create_new_acc(self, request, otp_generated: int) -> UnverifiedAccount:
@@ -124,6 +129,7 @@ class Register(APIView):
 
 
 class Login(APIView):
+    @body({'username', 'password'})
     def post(self, request):
         username = request.data['username']
         password = request.data['password']
@@ -156,6 +162,7 @@ class VerifyAccountOtpLink(APIView):
 
 
 class AccountVerification(APIView):
+    @body({'otp'})
     def post(self, request, otp_hash):
         try:
             with transaction.atomic():
@@ -208,7 +215,7 @@ class AccountVerification(APIView):
 
 
 class ResendOtp(APIView):
-    def get(self, _, otp_hash):
+    def get(self, request, otp_hash):
         unverified_acc = UnverifiedAccount.objects.filter(
             hash=otp_hash).first()
 
@@ -235,6 +242,7 @@ class ResendOtp(APIView):
 
 
 class ResendVerificationLink(APIView):
+    @body({'email'})
     def post(self, request):
         email = request.data['email']
 
@@ -274,7 +282,7 @@ class ResendVerificationLink(APIView):
 
 
 class VerifyResetPassLink(APIView):
-    def get(self, _, forgot_pass_hash):
+    def get(self, request, forgot_pass_hash):
         forgot_pass_entry = ForgotPasswordLink.objects.filter(
             hash=forgot_pass_hash).first()
 
@@ -290,6 +298,7 @@ class VerifyResetPassLink(APIView):
 
 
 class ForgotPassword(APIView):
+    @body({'email'})
     def post(self, request):
         email = request.data['email']
 
@@ -329,6 +338,7 @@ class ForgotPassword(APIView):
 
 
 class ResetPassword(APIView):
+    @body({'password', 'confirm_password'})
     def post(self, request, forgot_pass_hash):
         if request.data['password'] != request.data['confirm_password']:
             raise Unauthorized(
@@ -362,6 +372,7 @@ class ResetPassword(APIView):
 
 @method_decorator(login_required, name="dispatch")
 class ChangePassword(APIView):
+    @body({'old_password', 'new_password', 'confirm_password'})
     def post(self, request):
         if request.data['new_password'] != request.data['confirm_password']:
             raise Unauthorized(

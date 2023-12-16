@@ -7,7 +7,7 @@ from django.db import transaction, IntegrityError
 from .helpers import get_team
 from .models import Team, TeamMember
 from .serializers import TeamSerializer
-from common.decorators import login_required
+from common.decorators import login_required, body
 from common.exceptions import BadRequest, Conflict, InternalServerError
 from users.serializers import UserSerializer
 from invites.helpers import verify_team_leader
@@ -21,11 +21,9 @@ import string
 
 @method_decorator(login_required, name="dispatch")
 class CreateTeam(APIView):
+    @body({'team_name'})
     def post(self, request):
         team_name = request.data['team_name']
-
-        if not team_name:
-            raise BadRequest(message='No team name provided.')
 
         try:
             with transaction.atomic():

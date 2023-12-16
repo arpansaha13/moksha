@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from common.decorators import login_required
+from common.decorators import login_required, body
 from common.exceptions import Conflict, BadRequest, InternalServerError
 from teams.helpers import get_team
 from teams.models import Team, TeamMember
@@ -54,9 +54,10 @@ class BaseEndpoint(APIView):
         return Response(data={'message': 'Invited'}, status=201)
 
     # Withdraw invite
+    @body({'team_id', 'user_id'})
     def delete(self, request):
-        team_id = request.data.get('team_id')
-        user_id = request.data.get('user_id')
+        team_id = request.data['team_id']
+        user_id = request.data['user_id']
 
         try:
             with transaction.atomic():

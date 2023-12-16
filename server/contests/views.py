@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from common.decorators import login_required
+from common.decorators import login_required, body
 from common.responses import NoContentResponse
 from common.exceptions import BadRequest, Conflict
 from contests.helpers import get_contest, get_team_reg
@@ -31,6 +31,7 @@ class SoloContestRegistration(APIView):
         serializer = SoloContestRegistrationSerializer(solo_reg)
         return Response(data=serializer.data)
 
+    @body({'contest_id'})
     def post(self, request):
         contest_id = request.data['contest_id']
         contest = get_contest(contest_id)
@@ -52,6 +53,7 @@ class SoloContestRegistration(APIView):
         serializer = SoloContestRegistrationSerializer(solo_reg)
         return Response(data=serializer.data, status=201)
 
+    @body({'solo_reg_id'})
     def delete(self, request):
         solo_reg_id = request.data['solo_reg_id']
 
@@ -86,6 +88,7 @@ class TeamContestRegistration(APIView):
 
         return Response(data=serializer.data)
 
+    @body({'team_id', 'contest_id', 'selected_members'})
     def post(self, request):
         team_id = request.data['team_id']
         contest_id = request.data['contest_id']
@@ -130,6 +133,7 @@ class TeamContestRegistration(APIView):
 
         return Response(data=serializer.data, status=201)
 
+    @body({'team_id', 'contest_id'})
     def delete(self, request):
         team_id = request.data['team_id']
         contest_id = request.data['contest_id']
