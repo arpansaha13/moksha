@@ -3,7 +3,7 @@ import { useStore } from '~/store'
 import getPathFromURL from '~/utils/getPathFromURL'
 import fetchWithCredentials from '~/utils/fetchWithCredentials'
 import loaderWrapper from './loaderWrapper'
-import type { Invite, Team, User } from '~/types'
+import type { TeamPendingInvite, Team, User } from '~/types'
 
 export const allowIfNoTeamCreated = loaderWrapper({
   meta: {
@@ -55,7 +55,7 @@ async function getPublicTeamData(teamId: string) {
 
 async function getPrivateTeamData(teamId: string, isLeader: boolean, isMember: boolean) {
   const [pendingInvites, registeredContests] = await Promise.all([
-    isLeader ? (fetchWithCredentials(`teams/${teamId}/pending-invites`) as Promise<Invite[]>) : [],
+    isLeader ? (fetchWithCredentials(`teams/${teamId}/pending-invites`) as Promise<TeamPendingInvite[]>) : [],
     isMember ? fetchWithCredentials(`teams/${teamId}/registered-contests`) : [],
   ])
 

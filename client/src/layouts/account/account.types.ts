@@ -1,12 +1,12 @@
 import type { IconifyIcon } from '@iconify/react'
-import { Invite } from '~/types'
+import type { UserReceivedInvite } from '~/types'
 
 export interface ReceivedInvitesProps {
-  invites: Invite[]
+  invites: UserReceivedInvite[]
 }
 
 export interface InviteListItemProps {
-  invite: Invite
+  invite: UserReceivedInvite
 }
 
 export interface AcceptRejectButtonProps {

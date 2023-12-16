@@ -7,9 +7,10 @@ import Picture from '~/components/pictures/Picture'
 import { getMokshaContest } from '~/utils/getMokshaContest'
 import { getUdaanContest } from '~/utils/getUdaanContest'
 import { isNullOrUndefined } from '@arpansaha13/utils'
+import type { ClubSlug } from '~/types'
 
 interface RegisteredSoloContestCardProps {
-  clubSlug: string
+  clubSlug: ClubSlug
   contestSlug: string
 }
 
@@ -54,7 +55,7 @@ const RegisteredSoloContestCard = memo(({ clubSlug, contestSlug }: RegisteredSol
 
 export default RegisteredSoloContestCard
 
-function getContest(clubSlug: string, contestSlug: string) {
+function getContest(clubSlug: ClubSlug, contestSlug: string) {
   const contest = getMokshaContest(clubSlug, contestSlug)
 
   return isNullOrUndefined(contest) ? getUdaanContest(contestSlug) : contest

@@ -3,12 +3,12 @@ import { useCallback, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import { useFetch } from '~/hooks/common/useFetch'
 import { useDebouncedFn } from '~/hooks/common/useDebouncedFn'
-import type { User, Team, Invite } from '~/types'
+import type { User, Team, TeamPendingInvite } from '~/types'
 
 interface LoaderData {
   team: Team
   members: User[]
-  pendingInvites: Invite[]
+  pendingInvites: TeamPendingInvite[]
   registeredContests: any[]
   isLeader: boolean
   isMember: boolean

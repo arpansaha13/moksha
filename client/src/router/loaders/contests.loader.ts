@@ -7,6 +7,7 @@ import fetchWithCredentials from '~/utils/fetchWithCredentials'
 import udaanContestsList from '~/data/contests/udaan'
 import mokshaContestsMap from '~/data/contests/moksha'
 import loaderWrapper from './loaderWrapper'
+import { ClubSlug } from '~/types'
 
 export const getContestInLayout = loaderWrapper({
   meta: {
@@ -115,7 +116,7 @@ function getClubAndContestSlugs(url: LoaderFunctionArgs['request']['url']) {
 
   if (['register', 'registrations'].includes(pathSegments.at(-1)!)) pathSegments.pop()
 
-  const clubSlug = pathSegments.at(-2)!
+  const clubSlug = pathSegments.at(-2) as ClubSlug
   const contestSlug = pathSegments.at(-1)!
 
   return { clubSlug, contestSlug }

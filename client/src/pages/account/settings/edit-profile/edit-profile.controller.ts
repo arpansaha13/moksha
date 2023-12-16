@@ -3,12 +3,12 @@ import { useLoaderData } from 'react-router-dom'
 import { type FormState, useForm } from 'react-hook-form'
 import { useFetch } from '~/hooks/common/useFetch'
 import { useNotification } from '~/hooks/useNotification'
-import type { User } from '~/types'
+import type { AuthUser } from '~/types'
 
-type EditProfileFormData = Pick<User, 'first_name' | 'last_name' | 'institution' | 'phone_no'>
+type EditProfileFormData = Pick<AuthUser, 'first_name' | 'last_name' | 'institution' | 'phone_no'>
 
 export function useEditProfileController() {
-  const authUser = useRef(useLoaderData() as User)
+  const authUser = useRef(useLoaderData() as AuthUser)
 
   const {
     formState,
@@ -86,7 +86,7 @@ function getDiff(dirtyFields: FormState<EditProfileFormData>['dirtyFields'], for
   return diff
 }
 
-function updateAuthUserData(authUser: React.MutableRefObject<User>, formDataDiff: Partial<EditProfileFormData>) {
+function updateAuthUserData(authUser: React.MutableRefObject<AuthUser>, formDataDiff: Partial<EditProfileFormData>) {
   if (formDataDiff.first_name) authUser.current.first_name = formDataDiff.first_name
   if (formDataDiff.last_name) authUser.current.last_name = formDataDiff.last_name
   if (formDataDiff.institution) authUser.current.institution = formDataDiff.institution

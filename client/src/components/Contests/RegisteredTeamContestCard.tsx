@@ -10,6 +10,7 @@ import Picture from '~/components/pictures/Picture'
 import RegisteredContestMembers from '../Teams/RegisteredContestMembers'
 import { getMokshaContest } from '~/utils/getMokshaContest'
 import { getUdaanContest } from '~/utils/getUdaanContest'
+import type { ClubSlug } from '~/types'
 
 interface RegisteredTeamContestCardProps {
   reg: any
@@ -25,7 +26,7 @@ interface ConditionalWrapperProps {
 
 const RegisteredTeamContestCard = memo(
   ({ reg, showRegisteredMembers = true }: RegisteredTeamContestCardProps) => {
-    const clubName = reg.contest.club_slug as string
+    const clubName = reg.contest.club_slug as ClubSlug
     const contestSlug = reg.contest.contest_slug as string
 
     const contest = getContest(clubName, contestSlug)!
@@ -114,7 +115,7 @@ function ConditionalWrapper({ renderDisclosure, children, className }: Condition
   )
 }
 
-function getContest(clubSlug: string, contestSlug: string) {
+function getContest(clubSlug: ClubSlug, contestSlug: string) {
   const contest = getMokshaContest(clubSlug, contestSlug)
 
   return isNullOrUndefined(contest) ? getUdaanContest(contestSlug) : contest

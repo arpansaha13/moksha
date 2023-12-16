@@ -37,6 +37,6 @@ const nlc: Contest[] = [
   },
 ]
 
-const udaanContests = Object.freeze([...nlc])
+const udaanContests = Object.freeze<Contest[]>([...nlc])
 
 export default udaanContests
