@@ -14,7 +14,6 @@
   Official Moksha 2023 website, NIT Agartala
 </p>
 
-
 ## Features
 
 ### Major
@@ -25,13 +24,6 @@
 - Solo and team contest Registration
 - User account and profile
 
-### UX
-- Maintain auth after token invalidation for the current session
-- Renew session token on every new session
-- Progress bar during navigation
-- Show 404 page when team, event, or contest is not found
-- Scroll to top after navigation
-
 ### Performance
 - Route level code-splitting
 - Responsive images with optimized formats
@@ -40,5 +32,4 @@
 
 ### Security
 - End-to-end network body encryption
-- Redirect APIs through an express proxy server
-- JWT tokens with HTTP-only secure cookies
+- Redirect APIs through proxy server
