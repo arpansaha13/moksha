@@ -6,7 +6,7 @@ export default defineConfig({
     crawler: false,
     sitemap: true,
     robotsTxt: true,
-    samples: 3,
+    samples: 1,
     device: 'mobile',
     throttle: false,
     dynamicSampling: 5,
