@@ -12,10 +12,10 @@ const port = process.env.PROXY_PORT || 5173
 const app = express()
 
 app.use(compression())
-app.use('/assets', sirv('./dist/assets', { extensions: [] }))
-app.use('/images', sirv('./dist/images', { extensions: [] }))
-app.use('/logos', sirv('./dist/logos', { extensions: [] }))
-app.use('/moksha', sirv('./dist/moksha', { extensions: [] }))
+app.use('/assets', sirv('./dist/assets', { maxAge: 86400 })) // 1 day
+app.use('/images', sirv('./dist/images', { maxAge: 2592000 })) // 1 month
+app.use('/logos', sirv('./dist/logos', { maxAge: 2592000 }))
+app.use('/moksha', sirv('./dist/moksha', { maxAge: 2592000 }))
 
 app.use(
   '/api',
@@ -26,7 +26,7 @@ app.use(
   })
 )
 
-app.use('/', sirv('./dist', { extensions: [] }))
+app.use('/', sirv('./dist'))
 
 app.use('*', (_, res) => {
   res.sendFile(resolve('./dist/index.html'))
