@@ -26,6 +26,8 @@ app.use(
   })
 )
 
+app.use('/', sirv('./dist', { extensions: [] }))
+
 app.use('*', (_, res) => {
   res.sendFile(resolve('./dist/index.html'))
 })
