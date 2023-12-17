@@ -1,38 +1,36 @@
-import { useEffect, useState } from 'react'
+import { lazy, startTransition, useEffect, useState } from 'react'
 import { isNullOrUndefined } from '@arpansaha13/utils'
-import { useAppContext } from './containers/DataProvider'
-import { useCe } from './hooks/useCe'
+import { useStore } from './store'
 import { useAnalytics } from './hooks/useAnalytics'
-import Routes from './router/routes'
 import AppLoader from './components/AppLoader'
 import fetchWithCredentials from './utils/fetchWithCredentials'
 import './styles/main.css'
 import 'nprogress/nprogress.css'
 
+const Routes = lazy(() => import('./router/routes'))
+
 function App() {
-  const { setAppContext } = useAppContext()!
+  const setAuthState = useStore(state => state.setAuthState)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetchWithCredentials('auth/check-auth')
-      .then(({ data }) => {
-        if (isNullOrUndefined(data)) {
-          setAppContext('authenticated', false)
+      .then(res => {
+        if (isNullOrUndefined(res)) {
+          setAuthState('authenticated', false)
           return
         }
-        setAppContext('authenticated', true)
-        setAppContext('avatar_idx', data.avatar_idx)
-        setAppContext('user_id', data.user_id)
+        setAuthState('authenticated', true)
+        setAuthState('avatar_idx', res.avatar_idx)
+        setAuthState('user_id', res.user_id)
       })
       .finally(() => {
-        setLoading(false)
+        startTransition(() => setLoading(false))
       })
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useAnalytics()
-  useCe()
 
   return loading ? (
     <AppLoader />

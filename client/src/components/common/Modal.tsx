@@ -1,6 +1,6 @@
 import { Fragment, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { useScrollbarWidth } from '~/hooks/useScrollbarWidth'
+import { useScrollbarWidth } from '~/hooks/common/useScrollbarWidth'
 import { classNames } from '@arpansaha13/utils'
 
 interface ModalProps {

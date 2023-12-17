@@ -4,10 +4,11 @@ import type { Contest } from '~/types'
 export const nlc: Contest[] = [
   {
     id: 16,
+    type: 'team',
     slug: 'oxford-union-debate',
     name: 'Oxford Union Debate',
     subtitle: 'Debate Competition',
-    type: ['duo'],
+    badges: ['duo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -96,13 +97,13 @@ export const nlc: Contest[] = [
       },
     ],
   },
-
   {
     id: 17,
+    type: 'solo',
     slug: 'open-mic',
     name: 'Open Mic',
     subtitle: 'Open Mic Competition',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -213,10 +214,11 @@ export const nlc: Contest[] = [
   },
   {
     id: 18,
+    type: 'solo',
     slug: 'plot-twist',
     name: 'Plot-Twist',
     subtitle: 'Writing Competition',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -257,13 +259,13 @@ export const nlc: Contest[] = [
       },
     ],
   },
-
   {
     id: 19,
+    type: 'team',
     slug: 'treasure-hunt',
     name: 'Treasure Hunt',
     subtitle: 'Treasure Hunt',
-    type: ['team'],
+    badges: ['team'],
     image: {
       src: '/images/contests/generic-poster.png',
     },

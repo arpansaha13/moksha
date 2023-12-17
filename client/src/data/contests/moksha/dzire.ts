@@ -4,10 +4,11 @@ import type { Contest } from '~/types'
 export const dzire: Contest[] = [
   {
     id: 10,
+    type: 'solo',
     slug: 'shinigami-showdown',
     name: 'Shinigami Showdown',
     subtitle: 'Solo Dance Competition',
-    type: ['solo'],
+    badges: ['solo'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -30,10 +31,11 @@ export const dzire: Contest[] = [
   },
   {
     id: 11,
+    type: 'team',
     slug: 'dragon-ballroom',
     name: 'Dragon Ballroom',
     subtitle: 'Duet Competition',
-    type: ['duet'],
+    badges: ['duet'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -58,10 +60,11 @@ export const dzire: Contest[] = [
   },
   {
     id: 12,
+    type: 'team',
     slug: 'hunter-x-hunter-showdown',
     name: 'Hunter x Hunter Showdown',
     subtitle: 'Group Dance Competition',
-    type: ['team'],
+    badges: ['team'],
     image: {
       src: '/images/contests/generic-poster.png',
     },
@@ -85,10 +88,11 @@ export const dzire: Contest[] = [
 
   {
     id: 13,
+    type: 'solo',
     slug: 'bop-till-you-drop',
     name: 'Bop Till You Drop',
     subtitle: 'Open Dance Competition',
-    type: ['open'],
+    badges: ['open'],
     image: {
       src: '/images/contests/generic-poster.png',
     },

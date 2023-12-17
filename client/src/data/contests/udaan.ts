@@ -3,12 +3,13 @@ import type { Contest } from '~/types'
 
 const nlc: Contest[] = [
   {
+    type: 'team',
     id: 1,
     slug: 'quiz-competition',
     name: 'Quiz Competition',
     club: 'nlc',
     subtitle: 'NLC',
-    type: ['duo'],
+    badges: ['duo'],
     allowedTeamSize: 2,
     image: {
       sources: [
@@ -36,6 +37,6 @@ const nlc: Contest[] = [
   },
 ]
 
-const udaanContests = Object.freeze([...nlc])
+const udaanContests = Object.freeze<Contest[]>([...nlc])
 
 export default udaanContests

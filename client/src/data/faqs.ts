@@ -1,6 +1,6 @@
 // Fill in the dates in first answer
 
-interface Faq {
+export interface Faq {
   question: string
   answer: string
 }

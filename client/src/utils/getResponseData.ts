@@ -5,7 +5,10 @@ export default async function getResponseData<T = any>(res: Response): Promise<T
   const ciphertext = await res.text()
 
   const bytes = AES.decrypt(ciphertext, import.meta.env.VITE_PAYLOAD_SECRET)
-  const jsonData: T = JSON.parse(bytes.toString(encUtf8))
+
+  const stringifiedJson = bytes.toString(encUtf8)
+
+  const jsonData: T = stringifiedJson ? JSON.parse(stringifiedJson) : null
 
   return jsonData
 }

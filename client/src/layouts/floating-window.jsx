@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 import TzFloatingWindow from '@tranzis/react-layouts/TzFloatingWindow'
-import { useScrollToTop } from '~/hooks/useScrollToTop'
+import { useScrollToTop } from '~/hooks/common/useScrollToTop'
 import Sidebar from '../components/Sidebar'
 import '@tranzis/react-layouts/styles/TzFloatingWindow'
 

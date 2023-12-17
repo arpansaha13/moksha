@@ -1,11 +1,13 @@
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import mokshaContests from '../data/contests/moksha'
-import type { ClubSlug } from '~/types'
+import type { ClubSlug, Contest } from '~/types'
 
-export function getMokshaContest(clubSlug: string, contestSlug: string) {
-  if (isNullOrUndefined(mokshaContests[clubSlug as ClubSlug])) return null
+export function getMokshaContest(clubSlug: ClubSlug, contestSlug: string) {
+  let contest: Contest | null = null
 
-  const contest = mokshaContests[clubSlug as ClubSlug].find(contest => contest.slug === contestSlug)
+  if (!isNullOrUndefined(mokshaContests[clubSlug])) {
+    contest = mokshaContests[clubSlug]!.find(contest => contest.slug === contestSlug) ?? null
+  }
 
   return contest ?? null
 }

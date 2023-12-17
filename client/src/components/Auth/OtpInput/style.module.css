@@ -1,0 +1,8 @@
+/* Hide the arrow keys in input field of number type */
+.otp-field[type='number']::-webkit-inner-spin-button,
+.otp-field[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}

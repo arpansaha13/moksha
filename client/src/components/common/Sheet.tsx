@@ -2,7 +2,8 @@ import { ReactNode, createElement, forwardRef } from 'react'
 import { classNames } from '@arpansaha13/utils'
 import type { HTMLElementTagNames } from '~/types'
 
-interface SheetProps {
+interface SheetProps extends React.HTMLAttributes<HTMLElement> {
+  /** @default 'div' */
   as?: HTMLElementTagNames
   children: ReactNode
   className?: string

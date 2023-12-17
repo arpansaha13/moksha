@@ -4,13 +4,14 @@ import { Link, useLoaderData, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import shareIcon from '@iconify-icons/mdi/share'
 import leftIcon from '@iconify-icons/mdi/chevron-left'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Tz3dCard } from '@tranzis/core/Tz3dCard'
+import { defineCustomElement } from '@tranzis/core/dist/components/tz-3d-card'
 import { isNullOrUndefined } from '@arpansaha13/utils'
 import SocialShare from '~/components/SocialShare'
 import Container from '~common/Container'
 import Sheet from '~/components/common/Sheet'
 import { getEvent } from '~loaders/events.loader'
+
+defineCustomElement()
 
 export const loader = getEvent
 
@@ -86,8 +87,8 @@ function EventInfo({ event }) {
     <>
       <Sheet className='p-4 sm:p-6'>
         <article className='markdown'>
-          {event.description.map((para, i) => (
-            <Para key={i} para={para} />
+          {event.description.map((proseElement, i) => (
+            <ProseElement key={i} proseElement={proseElement} />
           ))}
         </article>
       </Sheet>
@@ -97,8 +98,8 @@ function EventInfo({ event }) {
           <article className='markdown'>
             <h2>Instructions</h2>
 
-            {event.instructions.map((para, i) => (
-              <Para key={i} para={para} />
+            {event.instructions.map((proseElement, i) => (
+              <ProseElement key={i} proseElement={proseElement} />
             ))}
           </article>
         </Sheet>
@@ -107,15 +108,16 @@ function EventInfo({ event }) {
   )
 }
 
-const Para = ({ para }) => {
-  if (!isNullOrUndefined(para.heading)) return <h3>{para.heading}</h3>
+const ProseElement = ({ proseElement }) => {
+  if (!isNullOrUndefined(proseElement.heading)) return <h3>{proseElement.heading}</h3>
 
-  if (!isNullOrUndefined(para.p)) return <p className={para.bold ? 'font-semibold' : ''}>{para.p}</p>
+  if (!isNullOrUndefined(proseElement.p))
+    return <p className={proseElement.bold ? 'font-semibold' : ''}>{proseElement.p}</p>
 
-  if (!isNullOrUndefined(para.ul))
+  if (!isNullOrUndefined(proseElement.ul))
     return (
       <ul>
-        {para.ul.map((li, i) => (
+        {proseElement.ul.map((li, i) => (
           <li key={i}>{li}</li>
         ))}
       </ul>

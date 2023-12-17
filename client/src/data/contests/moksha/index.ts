@@ -5,8 +5,9 @@ import { malhar } from './malhar'
 // import { pixel } from './pixels'
 import { fineArts } from './fine-arts'
 import { collab } from './collab'
+import type { ClubSlug, Contest } from '~/types'
 
-const mokshaContests = Object.freeze({
+const mokshaContests = Object.freeze<{ [key in ClubSlug]?: Contest[] }>({
   nlc: nlc,
   dzire: dzire,
   // pixel: pixel,

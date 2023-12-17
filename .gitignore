@@ -12,3 +12,5 @@ venv
 .env
 server/static
 server/templates
+
+.unlighthouse
