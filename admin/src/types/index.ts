@@ -6,13 +6,16 @@ export interface SelectMenuItem<SlugType extends string = string> {
 }
 
 export interface User {
-  name: string
-  user_id: string
-  institution: string
+  id: number
+  tag: string
+  avatar_idx: number
+  first_name: string
+  last_name: string
+  username: string
   email: string
-  phone_no: number
+  institution: string
+  phone_no: string
 }
-
 export interface Team {
   team_id: string
   team_name: string

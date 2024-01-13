@@ -54,10 +54,10 @@
                     {{ data.team.team_id }}
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
-                    {{ user.name }}
+                    {{ user.first_name }} {{ user.last_name }}
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
-                    {{ user.user_id }}
+                    {{ user.tag }}
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                     {{ user.institution }}
