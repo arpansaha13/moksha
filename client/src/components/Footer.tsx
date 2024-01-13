@@ -23,7 +23,8 @@ const socialLinks = Object.freeze([
   },
 ])
 
-const CURRENT_YEAR = new Date().getFullYear()
+const CURRENT_YEAR = '2024'
+// const CURRENT_YEAR = new Date().getFullYear()
 
 function Footer() {
   return (

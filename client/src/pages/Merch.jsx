@@ -32,7 +32,7 @@ export function Component() {
           { srcSet: 'images/merch/black-1024x900.png', type: 'image/png' },
         ],
         src: 'images/merch/black-1024x900.png',
-        alt: 'Moksha 2023 merch (black)',
+        alt: 'Moksha 2024 merch (black)',
       },
       {
         sources: [
@@ -40,7 +40,7 @@ export function Component() {
           { srcSet: 'images/merch/white-1024x900.png', type: 'image/png' },
         ],
         src: 'images/merch/white-1024x900.png',
-        alt: 'Moksha 2023 merch (white)',
+        alt: 'Moksha 2024 merch (white)',
       },
     ]
   }, [])

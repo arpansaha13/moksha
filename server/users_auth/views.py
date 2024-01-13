@@ -68,7 +68,7 @@ class Register(APIView):
             raise InternalServerError()
 
         send_mail(
-            subject='Welcome to Moksha 2023, NIT Agartala - Please verify your email',
+            subject='Welcome to Moksha 2024, NIT Agartala - Please verify your email',
             message=get_account_verification_mail_message(
                 unverified_acc.first_name,
                 otp_generated,
@@ -226,7 +226,7 @@ class ResendOtp(APIView):
         unverified_acc.save()
 
         send_mail(
-            subject='Moksha 2023, NIT Agartala - New OTP for account verification',
+            subject='Moksha 2024, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
                 unverified_acc.first_name,
                 unverified_acc.otp,
@@ -258,7 +258,7 @@ class ResendVerificationLink(APIView):
             raise InternalServerError()
 
         send_mail(
-            subject='Moksha 2023, NIT Agartala - New OTP for account verification',
+            subject='Moksha 2024, NIT Agartala - New OTP for account verification',
             message=get_account_verification_mail_message(
                 unverified_acc.first_name,
                 unverified_acc.otp,
@@ -324,7 +324,7 @@ class ForgotPassword(APIView):
             raise InternalServerError()
 
         send_mail(
-            subject='Moksha 2023, NIT Agartala - Reset Password',
+            subject='Moksha 2024, NIT Agartala - Reset Password',
             message=get_forgot_password_mail_message(
                 user,
                 get_forgot_password_link(forgot_pass_hash)

@@ -6,7 +6,7 @@ export default function AppLoader() {
       <div />
       <MokshaLogo />
       <div className='text-center'>
-        <p className='text-amber-600 text-lg font-semibold'>Moksha 2023</p>
+        <p className='text-amber-600 text-lg font-semibold'>Moksha 2024</p>
         <p className='text-gray-400'>NIT Agartala</p>
       </div>
     </div>

@@ -2,7 +2,7 @@
   <div v-if="!passwordMatched" class="w-screen h-screen flex flex-col items-center justify-center gap-6">
     <img src="/moksha/moksha-192x192.png" alt="Moksha Logo" class="block mr-2 w-16 h-16" />
 
-    <h1 class="text-2xl font-bold">Moksha 2023 Admin Client</h1>
+    <h1 class="text-2xl font-bold">Moksha {{ CURRENT_YEAR }} Admin Client</h1>
 
     <div
       class="p-4 max-w-md w-full mx-auto bg-gray-50 rounded-sm md:rounded-lg shadow ring-1 ring-black ring-opacity-5 overflow-hidden"
@@ -23,7 +23,7 @@
     <header class="px-6 py-3 flex items-center bg-gray-50 shadow">
       <img src="/moksha/moksha-192x192.png" alt="Moksha Logo" class="block mr-2 w-10 h-10" />
 
-      <p class="font-bold">Moksha 2023 Admin Client</p>
+      <p class="font-bold">Moksha {{ CURRENT_YEAR }} Admin Client</p>
     </header>
 
     <main class="max-w-6xl mx-auto px-2 sm:px-0 py-6 space-y-6 min-h-[calc(100vh-128px)]">
@@ -92,6 +92,7 @@ import TeamRegTable from '~/components/TeamRegTable.vue'
 import { clubs, contestTypes, contests } from '~/data'
 import rfetch from '~/utils/rfetch'
 
+const CURRENT_YEAR = '2024'
 const passwordMatched = ref(false)
 const password = ref('')
 const error = ref<string | null>(null)

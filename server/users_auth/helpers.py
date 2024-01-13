@@ -49,7 +49,7 @@ def generate_otp():
 
 def get_account_verification_mail_message(first_name: str, otp: int, link: str, is_new=True):
     valid_time_hours = int(env('OTP_VALIDATION_SECONDS')) // 3600
-    first_mail_intro = 'Welcome to Moksha 2023 Official Website! Verify your email to get started:'
+    first_mail_intro = 'Welcome to Moksha 2024 Official Website! Verify your email to get started:'
     resend_intro = 'A new OTP has been generated for your account verification:'
 
     return textwrap.dedent(f'''\
@@ -65,7 +65,7 @@ def get_account_verification_mail_message(first_name: str, otp: int, link: str, 
         If you have any questions or require further assistance, please reply to this email or write an email to {env('EMAIL_HOST_USER')}.
 
         Cheers,
-        Moksha 2023 Tech Team,
+        Moksha 2024 Tech Team,
         NIT Agartala
     ''')
 
@@ -87,6 +87,6 @@ def get_forgot_password_mail_message(user: User, link: str):
         If you have any questions or require further assistance, please reply to this email or write an email to {env('EMAIL_HOST_USER')}.
 
         Cheers,
-        Moksha 2023 Tech Team,
+        Moksha 2024 Tech Team,
         NIT Agartala
     ''')

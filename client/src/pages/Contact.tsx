@@ -8,7 +8,7 @@ import contact, { type Contact } from '../data/contact'
 export function Component() {
   return (
     <Container as='main'>
-      <section id='moksha-2023-general-secretaries'>
+      <section id='moksha-2024-general-secretaries'>
         <h1 className='pt-6 pb-12 text-4xl text-center font-bold text-gray-50'>Contact us</h1>
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>

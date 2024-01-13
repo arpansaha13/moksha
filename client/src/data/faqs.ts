@@ -7,7 +7,7 @@ export interface Faq {
 
 const faqs: Faq[] = [
   {
-    question: 'What are the dates for Moksha 2023?',
+    question: 'What are the dates for Moksha 2024?',
     answer:
       'The 8th edition of Moksha will be held from (dd) th to (dd) th (mm).So, buckle up for an incredible voyage with us!',
   },
