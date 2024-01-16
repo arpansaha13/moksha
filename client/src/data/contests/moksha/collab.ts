@@ -11,7 +11,7 @@ export const collab: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     badges: ['solo'],
     description: [
       {
@@ -59,7 +59,7 @@ export const collab: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     badges: ['team'],
     allowedTeamSize: { min: 1, max: 3 }, // needs verification
     description: [

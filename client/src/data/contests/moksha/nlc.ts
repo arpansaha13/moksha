@@ -12,7 +12,7 @@ export const nlc: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         bold: true,
@@ -107,7 +107,7 @@ export const nlc: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'It is a solo entry competition wherein participants can partake in one of the given 2 formats - Poetry (and Shayaris) & Standup Comedy. The event will provide a platform for budding poets and comedians to showcase their talent.',
@@ -222,7 +222,7 @@ export const nlc: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'This is a movie-inspired writing event, bristling with creativity and celebrating the spirit of the quintessential cinephiles. This will be a pan-India event hosted on Unstop.',
@@ -269,7 +269,7 @@ export const nlc: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     allowedTeamSize: { min: 1, max: 4 },
     description: [
       {

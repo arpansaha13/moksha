@@ -12,7 +12,7 @@ export const fineArts: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'It is an event to provide a platform for children to showcase their talent, express their creativity and develop their artistic skills.',
@@ -61,7 +61,7 @@ export const fineArts: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'Comic characters or themes (All forms of art such as Digital, Traditional, Vector, etc are allowed) (All entries will be accepted online. No artwork will be accepted offline).',

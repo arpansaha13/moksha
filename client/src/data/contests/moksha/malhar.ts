@@ -14,7 +14,7 @@ export const malhar: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'This solo singing competition will be held in two stages: the preliminary round the and final round, contestants will have to submit their video of a maximum of 5 minutes for the preliminary round. selected candidates from the preliminary round will be competing in the Finals.',
@@ -66,7 +66,7 @@ export const malhar: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     allowedTeamSize: { min: 3, max: 6 },
     description: [
       {
@@ -119,7 +119,7 @@ export const malhar: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'This solo instrumental competition will be held in 2 stages: a preliminary round, from which selected contestants will advance to the final round and compete in the main event of ‘Moksha’, which will take place in the Auditorium.',
@@ -168,7 +168,7 @@ export const malhar: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'This rap battle competition will be held in two stages: a preliminary round, from which a chosen group of contestants will advance to the final round, which will take place in the auditorium.',
@@ -226,7 +226,7 @@ export const malhar: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'India is a land of diverse culture and heritage. Folklore fiesta is a competition to celebrate the varied cultural heritage of different parts of India. This is the perfect platform to showcase your vocal talents.In this competition a group of performers have to choose any regional folk theme to perform, For example - Gujrati folk, Rajasthani folk, Assamese folk etc.This competition consists of two rounds: a preliminary round(online) from which a chosen group of contestants will advance to the final round. the winner will be announced respectively.',
@@ -281,7 +281,7 @@ export const malhar: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
         p: 'Antakshari is that game that has been played since Ramayana days of Hindu culture. We all are well known for it . Boredom pacifies its medicinal way out to such interesting games!!',

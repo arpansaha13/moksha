@@ -12,7 +12,7 @@ export const dzire: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       { p: 'It is a solo dance competition on classical and freestyle genres.' },
       { ul: ['Prelims will be online.', 'Finals will be offline.', 'Venue will be updated later on.'] },
@@ -39,7 +39,7 @@ export const dzire: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     allowedTeamSize: 2,
     description: [
       {
@@ -68,7 +68,7 @@ export const dzire: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     allowedTeamSize: { min: 4, max: 15 },
     description: [{ p: 'It is a group dance competition where  any form of dance can be performed.' }],
     instructions: [
@@ -96,7 +96,7 @@ export const dzire: Contest[] = [
     image: {
       src: '/images/contests/generic-poster.png',
     },
-    deadline: getDateFromIST('2023-10-10', '23:59:00'),
+    deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       { p: "It's a dance competition which is open for all, any form of dance can be performed." },
       {
