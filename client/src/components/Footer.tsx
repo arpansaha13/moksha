@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import instagramIcon from '@iconify-icons/mdi/instagram'
-import githubIcon from '@iconify-icons/mdi/github'
+// import githubIcon from '@iconify-icons/mdi/github'
 import MokshaLogo from '~/components/pictures/MokshaLogo'
 import { navTabs } from '../data/tabs'
 
@@ -16,11 +16,11 @@ const socialLinks = Object.freeze([
     href: 'https://www.instagram.com/moksha.nita/?igshid=MzRlODBiNWFlZA%3D%3D',
     icon: instagramIcon,
   },
-  {
-    name: 'GitHub',
-    href: 'https://github.com/arpansaha13/moksha',
-    icon: githubIcon,
-  },
+  // {
+  //   name: 'GitHub',
+  //   href: 'https://github.com/arpansaha13/moksha',
+  //   icon: githubIcon,
+  // },
 ])
 
 const CURRENT_YEAR = '2024'
