@@ -59,7 +59,9 @@
         </div>
 
         <div>
-          <BaseButton type="submit" :loading="searching"> Search </BaseButton>
+          <BaseButton type="submit" :disabled="typeof selectedContest === 'undefined'" :loading="searching">
+            Search
+          </BaseButton>
         </div>
       </form>
 
