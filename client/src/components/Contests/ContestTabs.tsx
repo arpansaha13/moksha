@@ -8,6 +8,7 @@ import type { Contest } from '~/types'
 
 interface ContestTabsProps {
   contestType: Contest['type']
+  isOpen: boolean
 }
 
 interface TabPanelButtonProps {
@@ -15,10 +16,11 @@ interface TabPanelButtonProps {
   to: string
 }
 
-const ContestTabs = ({ contestType }: ContestTabsProps) => {
+const ContestTabs = ({ contestType, isOpen }: ContestTabsProps) => {
   const params = useParams()
   const location = useLocation()
   const authState = useStore(state => state.authState)
+  const showRegistrationsPanel = contestType === 'team' && !isOpen
 
   const panels = useMemo(() => {
     const panels = [
@@ -34,7 +36,7 @@ const ContestTabs = ({ contestType }: ContestTabsProps) => {
       },
     ]
 
-    if (contestType === 'team') {
+    if (showRegistrationsPanel) {
       panels.push({
         name: 'Registrations',
         requiresAuth: true,
@@ -59,7 +61,7 @@ const ContestTabs = ({ contestType }: ContestTabsProps) => {
         as={Sheet}
         className={classNames(
           'my-4 sm:my-6 grid bg-amber-900/30 text-gray-200 text-sm font-medium divide-x divide-amber-900/70 overflow-hidden',
-          authState.authenticated && contestType === 'team' ? 'grid-cols-3' : 'grid-cols-2'
+          authState.authenticated && showRegistrationsPanel ? 'grid-cols-3' : 'grid-cols-2'
         )}
       >
         {panels.map((panel, i) =>

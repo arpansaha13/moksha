@@ -63,7 +63,7 @@ export default function ContestLayout() {
             <span>Go to contests</span>
           </Link>
 
-          <ContestTabs contestType={contest.type} />
+          <ContestTabs contestType={contest.type} isOpen={contest.badges.includes('open')} />
 
           <Outlet />
         </div>
