@@ -21,7 +21,10 @@ def body(fields: set[str]):
             fields_copy = fields.copy()
 
             for key in request.data:
-                fields_copy.remove(key)
+                try:
+                    fields_copy.remove(key)
+                except KeyError:
+                    raise BadRequest(message=f'{key} should not be present in request body')
 
             for field in fields_copy:
                 raise BadRequest(message=f'{field} is required')
