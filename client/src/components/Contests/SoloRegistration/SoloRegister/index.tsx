@@ -1,5 +1,4 @@
 import BaseButton from '~base/BaseButton'
-import CsrfField from '~common/CsrfField'
 import type { SoloRegisterProps } from './solo-register.types'
 import { useSoloRegisterController } from './solo-register.controller'
 
@@ -13,8 +12,6 @@ export default function SoloRegister(props: SoloRegisterProps) {
           Register
         </BaseButton>
       </div>
-
-      <CsrfField />
     </form>
   )
 }

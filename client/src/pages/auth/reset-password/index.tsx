@@ -4,7 +4,6 @@ import { useLoaderData } from 'react-router-dom'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import BaseButtonLink from '~base/BaseButtonLink'
-import CsrfField from '~common/CsrfField'
 import { getForgotPassLinkValidity } from '~loaders/auth.loader'
 import { useResetPasswordController } from './reset-password.controller'
 import type { ResetPassFormProps } from './reset-password.types'
@@ -60,8 +59,6 @@ function ResetPassForm(props: ResetPassFormProps) {
         validationError={validationErrors.confirm_password?.message}
         {...formRegister('confirm_password')}
       />
-
-      <CsrfField />
 
       <div>
         <BaseButton type='submit' stretch loading={loading}>

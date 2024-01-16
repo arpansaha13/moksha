@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
-import CsrfField from '~common/CsrfField'
 import { useLoginController } from './login.controller'
 
 export function Component() {
@@ -50,8 +49,6 @@ export function Component() {
             </Link>
           </div>
         </div>
-
-        <CsrfField />
 
         <div>
           <BaseButton type='submit' stretch loading={loading}>

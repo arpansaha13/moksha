@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
-import CsrfField from '~common/CsrfField'
 import { useForgotPasswordController } from './forgot-password.controller'
 
 export function Component() {
@@ -23,8 +22,6 @@ export function Component() {
           label='Email address'
           {...formRegister('email')}
         />
-
-        <CsrfField />
 
         <div>
           <BaseButton type='submit' stretch loading={loading}>

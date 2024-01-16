@@ -60,8 +60,6 @@ export function Component() {
             {...formRegister('confirm_password')}
           />
 
-          <CsrfField />
-
           <BaseButton type='submit' loading={loading}>
             Change password
           </BaseButton>

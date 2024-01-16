@@ -3,7 +3,6 @@ import { isNullOrUndefined } from '@arpansaha13/utils'
 import Sheet from '~common/Sheet'
 import BaseButton from '~base/BaseButton'
 import BaseInput from '~base/BaseInput'
-import CsrfField from '~common/CsrfField'
 import Notification from '~common/Notification'
 import { allowIfNoTeamCreated } from '~loaders/teams.loader'
 import { useCreateTeamController, useCreateTeamFormController } from './create-team.controller'
@@ -65,8 +64,6 @@ function CreateTeamForm(props: CreateTeamFormProps) {
       <div className='not-prose mt-6'>
         <BaseInput id='team_name' type='text' label='Team name' required {...formRegister('team_name')} />
       </div>
-
-      <CsrfField />
 
       <div className='mt-6 flex flex-col sm:flex-row sm:justify-end gap-4'>
         <BaseButton loading={loading} type='submit'>

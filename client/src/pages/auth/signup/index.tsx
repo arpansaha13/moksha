@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
-import CsrfField from '~common/CsrfField'
 import { useSignUpController } from './signup.controller'
 
 export function Component() {
@@ -20,8 +19,6 @@ export function Component() {
             <BaseInput key={field.id} {...field} />
           ))}
         </div>
-
-        <CsrfField />
 
         <div className='text-sm 2xs:flex 2xs:items-center 2xs:justify-between space-y-3 2xs:space-y-0'>
           <div>

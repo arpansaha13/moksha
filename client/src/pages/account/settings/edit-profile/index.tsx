@@ -1,7 +1,6 @@
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
-import CsrfField from '~common/CsrfField'
 import Notification from '~common/Notification'
 import { getAuthUserData } from '~/router/loaders/auth.loader'
 import { useEditProfileController } from './edit-profile.controller'
@@ -74,8 +73,6 @@ export function Component() {
             maxLength={10}
             {...formRegister('phone_no')}
           />
-
-          <CsrfField />
 
           <div>
             <BaseButton disabled={!isDirty} type='submit' loading={loading}>

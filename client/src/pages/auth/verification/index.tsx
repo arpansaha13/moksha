@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet'
 import { classNames } from '@arpansaha13/utils'
 import BaseButton from '~base/BaseButton'
 import BaseButtonLink from '~base/BaseButtonLink'
-import CsrfField from '~common/CsrfField'
 import OtpInput from '~/components/Auth/OtpInput'
 import { getVerificationLinkValidity } from '~loaders/auth.loader'
 import {
@@ -58,8 +57,6 @@ function OtpForm(props: Readonly<OtpFormProps>) {
         </button>
         {coolDownIsActive && <ResendOtpCoolDown onCoolDownEnd={onCoolDownEnd} />}
       </div>
-
-      <CsrfField />
 
       <div>
         <BaseButton type='submit' stretch loading={loading}>
