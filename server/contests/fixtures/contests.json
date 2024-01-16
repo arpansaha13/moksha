@@ -158,7 +158,7 @@
     "fields": {
       "club_slug": "nlc",
       "contest_slug": "plot-twist",
-      "is_solo": false
+      "is_solo": true
     }
   },
   {
@@ -175,8 +175,8 @@
     "pk": 20,
     "fields": {
       "club_slug": "aaveg",
-      "contest_slug": "i-me-myself",
-      "is_solo": false
+      "contest_slug": "parichay",
+      "is_solo": true
     }
   },
   {
@@ -184,7 +184,16 @@
     "pk": 21,
     "fields": {
       "club_slug": "aaveg",
-      "contest_slug": "rangmanch",
+      "contest_slug": "hallabol",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 22,
+    "fields": {
+      "club_slug": "aaveg",
+      "contest_slug": "ad-mockery-matchup",
       "is_solo": false
     }
   }

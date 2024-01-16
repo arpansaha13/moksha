@@ -5,8 +5,8 @@ export const aaveg: Contest[] = [
   {
     id: 20,
     type: 'solo',
-    slug: 'i-me-myself',
-    name: 'I Me Myself',
+    slug: 'parichay',
+    name: 'Parichay',
     subtitle: 'Mono Act Competition',
     badges: ['solo'],
     image: {
@@ -51,8 +51,8 @@ export const aaveg: Contest[] = [
   {
     id: 21,
     type: 'team',
-    slug: 'rangmanch',
-    name: 'Rangmanch',
+    slug: 'hallabol',
+    name: 'Hallabol',
     subtitle: 'Group Act Competition',
     badges: ['team'],
     allowedTeamSize: { min: 5, max: 10 },
@@ -97,80 +97,6 @@ export const aaveg: Contest[] = [
   },
   {
     id: 22,
-    type: 'solo',
-    slug: 'showcase-showdown',
-    name: 'Showcase Showdown',
-    subtitle: 'Open Act Game',
-    badges: ['open'],
-    image: {
-      src: '/images/contests/generic-poster.png',
-    },
-    deadline: getDateFromIST('2024-02-01', '23:59:00'),
-    description: [
-      {
-        p: 'Unleash Your Improvisation Skills! This fun event is for encouraging quick thinking and collaboration among participants, where every moment is a chance to shine!',
-      },
-    ],
-
-    instructions: [
-      {
-        heading: 'Rules',
-      },
-      {
-        ul: [
-          'Participants will draw random chits from a jar of situations.',
-          'They must instantly transform the given scenario into a compelling performance.',
-          'From comedic sketches to dramatic scenes, anything goes!',
-          'No scripts, no rehearsals - just pure, spontaneous acting.',
-          'The ability to think on your feet and deliver a convincing portrayal.',
-          'Each act is a surprise, keeping the audience engaged and entertained.',
-          'Rewards for the most captivating and inventive performances.',
-        ],
-      },
-    ],
-  },
-  {
-    id: 23,
-    type: 'solo',
-    slug: 'helium-highs',
-    name: 'Helium Highs',
-    subtitle: 'Helium Gas Game',
-    badges: ['open'],
-    image: {
-      src: '/images/contests/generic-poster.png',
-    },
-    deadline: getDateFromIST('2024-02-01', '23:59:00'),
-    description: [
-      {
-        p: "Ladies and gentlemen, get ready to elevate your spirits and voices in our uproarious Helium Gas Challenge! Prepare for a day of high-pitched hilarity as we take on the lighter side of science. Remember, this contest isn't just about breath control, it's about who can bring the most laughs with a touch of helium magic! So, grab a balloon and let's turn this place into a symphony of giggles!",
-      },
-    ],
-
-    instructions: [
-      { heading: 'Special Guidelines' },
-      {
-        ul: [
-          'Only participants above a certain age (usually 12 or older) should take part, as younger children may not fully understand the risks.',
-          'Avoid inhaling helium too quickly or deeply, as this can lead to hypoxia.',
-          'Competitions to see who can inhale the most helium is strongly discouraged. This can be dangerous and is not recommended.',
-          'If anyone experiences dizziness, lightheadedness, or any discomfort, they should stop immediately.',
-          'The time each participant spends inhaling helium is limited. Short bursts are recommended to avoid potential side effects.',
-        ],
-      },
-      {
-        heading: 'Rules',
-      },
-      {
-        ul: [
-          'The participants will go 1v1.',
-          'After the inhalation of helium from balloons under supervision the participants are supposed to read out dialogues/sing songs as present in flashcards.',
-          'If the opposing participant exhibits any sign of mirth, such as laughter or a smile, they shall stand defeated from that round.',
-        ],
-      },
-    ],
-  },
-  {
-    id: 24,
     type: 'team',
     slug: 'ad-mockery-matchup',
     name: 'Ad Mockery Matchup',
