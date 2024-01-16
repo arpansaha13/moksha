@@ -2,7 +2,6 @@ import nprogress from 'nprogress'
 import BaseInput from '~base/BaseInput'
 import BaseButton from '~base/BaseButton'
 import Sheet from '~common/Sheet'
-import CsrfField from '~common/CsrfField'
 import Notification from '~common/Notification'
 import { useChangePasswordController } from './change-password.controller'
 
