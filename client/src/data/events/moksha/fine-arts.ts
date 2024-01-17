@@ -24,28 +24,6 @@ export const fineArts: Event[] = [
     ],
   },
   {
-    id: 4,
-    slug: 'celebrity-portrait',
-    name: 'Celebrity Portrait',
-    club: 'fine-arts',
-    subtitle: 'Fine Arts Club',
-    image: {
-      src: '/images/events/generic-poster.png',
-    },
-    description: [
-      {
-        p: 'Use of small musical symbols to make the portrait of our invited honorable celebrity is the main attraction of this event.It will be in the form of a collage. We will first display it to everyone and lastly it will be gifted to the artist.',
-      },
-      {
-        bold: true,
-        p: 'Event Managers',
-      },
-      {
-        ul: ['Deepratip Nandi', 'Anubha'],
-      },
-    ],
-  },
-  {
     id: 5,
     slug: 'ink-splash',
     name: 'InkSplash',
