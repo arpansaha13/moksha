@@ -16,7 +16,7 @@ export const collab: Contest[] = [
     description: [
       {
         bold: true,
-        p: 'MEME CELL in Collaboration with PIXEL and FAC brings KBC (Kaun Banega Comedian)',
+        p: 'MEME CELL in Collaboration with Pixels and FAC brings KBC (Kaun Banega Comedian)',
       },
       {
         p: 'It is a comedy contest where participants are encouraged to showcase their sense of humor in formats like:-',
@@ -65,7 +65,7 @@ export const collab: Contest[] = [
     description: [
       {
         bold: true,
-        p: 'In collaboration with Aaveg, Malhar, NLC & Pixel, we bring COSMANIA for you guys!!',
+        p: 'In collaboration with Aaveg, Malhar, NLC & Pixels, we bring COSMANIA for you guys!!',
       },
       {
         p: "The Cosplay Competition at our event promises a realm of imagination, where fantasy becomes reality. From galaxies far, far away to enchanted realms, bring your favorite characters to life with jaw-dropping precision and passion. Whether you're a master of makeup, a wizard with wigs, or a crafting virtuoso, this is your stage. Embrace the challenge, embody the essence, and let your creativity soar.",
