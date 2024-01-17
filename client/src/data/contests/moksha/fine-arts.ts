@@ -15,35 +15,31 @@ export const fineArts: Contest[] = [
     deadline: getDateFromIST('2024-02-01', '23:59:00'),
     description: [
       {
-        p: 'It is an event to provide a platform for children to showcase their talent, express their creativity and develop their artistic skills.',
+        p: 'It is an event to provide a platform for students to showcase their talent, express their creativity and develop their artistic skills.',
       },
       {
         bold: true,
         p: 'Theme',
       },
       {
-        ul: [
-          'Class (1-4) :- Paint the graffiti of Moksha. (Outline will be provided).',
-          'Class (5-8) :- Your favorite comic character.',
-          'Class (9-12) :- Anything that includes Moksha bird.',
-        ],
+        p: 'Comics (Super hero or Super villain)',
       },
       {
         bold: true,
         p: 'Event Managers',
       },
       {
-        ul: ['Arghya Paitya : +91 87877 63931', 'Sreeja Ghosh : +91 87989 96322'],
+        ul: ['Hrishikesh Munde (72492 70240)', 'Prathamesh Shitre (87677 14582)'],
       },
     ],
     instructions: [
       { heading: 'Rules' },
       {
         ul: [
-          'All sketches should be coloured and can’t be only  a pencil sketch.',
+          'Sketches can be only a pencil sketch or coloured.',
           'Drawing sheets will be provided on site by the organizers.',
           'Every participant should bring their own pencil, rubber, board, colors during the contest day. Nothing related to them will be provided on site.',
-          'Duration of the competition will be 2hrs.',
+          'Duration of the competition will be 2 hours.',
           'Participants must look after their own items carefully by themselves.',
           'Participants have to bring their school Id card.',
           'If any unfair means are found with the participant, his/her artwork will be canceled.',
@@ -75,6 +71,7 @@ export const fineArts: Contest[] = [
           'Soumyadeep Shome : +91 96120 52905',
           'Soumyadeep Bhowmik : +91 93629 49590',
           'Anamika Debnath : +91 60091 55970',
+          'Nabadiganta Acharjee: 60094 08045',
         ],
       },
     ],
