@@ -35,6 +35,8 @@ export const malhar: Contest[] = [
           'Finals: Auditorium or stage provided.',
         ],
       },
+      { heading: 'Malhar official mail' },
+      { p: 'malhar.music.nita@gmail.com' },
       { heading: 'Rules - Prelims' },
       {
         ul: [
@@ -81,6 +83,8 @@ export const malhar: Contest[] = [
       },
     ],
     instructions: [
+      { heading: 'Malhar official mail' },
+      { p: 'malhar.music.nita@gmail.com' },
       { heading: 'Rules - Prelims' },
       {
         ul: [
@@ -135,6 +139,8 @@ export const malhar: Contest[] = [
     instructions: [
       { heading: 'Venue' },
       { ul: ['Prelims: Online', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'] },
+      { heading: 'Malhar official mail' },
+      { p: 'malhar.music.nita@gmail.com' },
       { heading: 'Rules - Prelims' },
       {
         ul: [
@@ -184,16 +190,18 @@ export const malhar: Contest[] = [
     instructions: [
       { heading: 'Venue' },
       {
-        ul: ['Prelims: Offline', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'],
+        ul: ['Prelims: Online', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'],
       },
+      { heading: 'Malhar official mail' },
+      { p: 'malhar.music.nita@gmail.com' },
       { heading: 'Rules - Prelims' },
       {
         bold: true,
-        p: 'It will take place before cultural fest',
+        p: 'It will take place before cultural fest.',
       },
       {
         ul: [
-          'The participants have to perform any one rap of his or her choice. Gform will be circulated for participation.',
+          'The participants have to perform any one rap of his or her choice and has to send it to the official mail id of Malhar in mp4 format.',
           'The rap must only be in Hindi or English.',
           'Time limit for performance will be 2-4 mins.',
           'Judgment will be strictly based on beats, pronunciations, and speed.',
@@ -242,12 +250,14 @@ export const malhar: Contest[] = [
     instructions: [
       { heading: 'Venue' },
       {
-        ul: ['Prelims: Offline', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'],
+        ul: ['Prelims: Online', 'Finals: Auditorium or stage provided.', 'Duration: 1 hour'],
       },
+      { heading: 'Malhar official mail' },
+      { p: 'malhar.music.nita@gmail.com' },
       { heading: 'Rules - Prelims' },
       {
         ul: [
-          'The participants have to perform one or more songs of one regional folk of their choice and have to send the video in MP4 format to the official mail id of malhar.',
+          'The participants have to perform one or more songs of one regional folk of their choice and have to send the video in MP4 format to the official mail id of Malhar.',
           'Group will comprise members a maximum of 7 and a minimum of 3 which includes a minimum of 2 vocalists and at least 1 instrumentalist.',
           'Time limit for performance will be 2-4 mins.',
           'Participants will be given a maximum of 7 minutes and a minimum of 5 minutes to complete their performance. Extra time will deduct marks.',
