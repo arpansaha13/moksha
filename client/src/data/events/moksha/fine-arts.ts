@@ -24,7 +24,7 @@ export const fineArts: Event[] = [
     ],
   },
   {
-    id: 5,
+    id: 4,
     slug: 'ink-splash',
     name: 'InkSplash',
     club: 'fine-arts',
@@ -47,7 +47,7 @@ export const fineArts: Event[] = [
     ],
   },
   {
-    id: 6,
+    id: 5,
     slug: 'asgards-gallery',
     name: "Asgard's Gallery",
     club: 'fine-arts',
@@ -65,7 +65,7 @@ export const fineArts: Event[] = [
     ],
   },
   {
-    id: 7,
+    id: 6,
     slug: 'graffiti',
     name: 'Graffiti/Mural Graffiti',
     club: 'fine-arts',

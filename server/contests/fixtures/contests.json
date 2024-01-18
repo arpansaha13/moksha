@@ -109,15 +109,6 @@
   },
   {
     "model": "contests.contest",
-    "pk": 13,
-    "fields": {
-      "club_slug": "dzire",
-      "contest_slug": "bop-till-you-drop",
-      "is_solo": false
-    }
-  },
-  {
-    "model": "contests.contest",
     "pk": 14,
     "fields": {
       "club_slug": "collabs",

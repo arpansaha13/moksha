@@ -85,27 +85,4 @@ export const dzire: Contest[] = [
       },
     ],
   },
-
-  {
-    id: 13,
-    type: 'solo',
-    slug: 'bop-till-you-drop',
-    name: 'Bop Till You Drop',
-    subtitle: 'Open Dance Competition',
-    badges: ['open'],
-    image: {
-      src: '/images/contests/generic-poster.png',
-    },
-    deadline: getDateFromIST('2024-02-01', '23:59:00'),
-    description: [
-      { p: "It's a dance competition which is open for all, any form of dance can be performed." },
-      {
-        p: 'Anybody from the crowd can come up and dance on any song.',
-      },
-      {
-        bold: true,
-        p: 'Time Limit: 1 to 2 mins.',
-      },
-    ],
-  },
 ]
