@@ -1,4 +1,4 @@
-export type Club = 'fine-arts' | 'malhar' | 'dzire' | 'nlc' | 'collab' | 'aaveg'
+export type Club = 'fine-arts' | 'malhar' | 'dzire' | 'nlc' | 'collab' | 'aaveg' | 'pixels' | 'wecan'
 
 export interface SelectMenuItem<SlugType extends string = string> {
   readonly name: string

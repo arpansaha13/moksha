@@ -13,6 +13,8 @@ export const clubs: SelectMenuItem<Club>[] = [
   { name: 'Dzire', slug: 'dzire' },
   { name: 'Aaveg', slug: 'aaveg' },
   { name: 'Fine Arts', slug: 'fine-arts' },
+  { name: 'Pixels', slug: 'pixels' },
+  { name: 'Wecan', slug: 'wecan' },
   { name: 'Collab', slug: 'collab' },
 ]
 
@@ -56,6 +58,20 @@ export const contests = Object.freeze<Record<Club, Record<ContestTypeSlug, Selec
       { name: 'Comiquest', slug: 'comiquest' },
     ],
     team: [],
+  },
+  pixels: {
+    solo: [
+      { name: 'Shoot Your Shot', slug: 'shoot-your-shot' },
+      { name: 'Highlight Heist', slug: 'highlight-heist' },
+    ],
+    team: [],
+  },
+  wecan: {
+    solo: [],
+    team: [
+      { name: 'Dumb Charades', slug: 'dumb-charades' },
+      { name: "Nita's Got Talent", slug: 'nita-got-talent' },
+    ],
   },
   collab: {
     solo: [
