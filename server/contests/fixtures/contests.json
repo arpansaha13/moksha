@@ -205,5 +205,23 @@
       "contest_slug": "highlight-heist",
       "is_solo": true
     }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 25,
+    "fields": {
+      "club_slug": "wecan",
+      "contest_slug": "dumb-charades",
+      "is_solo": false
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 26,
+    "fields": {
+      "club_slug": "wecan",
+      "contest_slug": "nita-got-talent",
+      "is_solo": false
+    }
   }
 ]
