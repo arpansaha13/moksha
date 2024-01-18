@@ -1,8 +1,6 @@
 import getDateFromIST from '~/utils/getDateFromIST'
 import type { Contest } from '~/types'
 
-// This is old data
-
 export const malhar: Contest[] = [
   {
     id: 4,
@@ -25,6 +23,13 @@ export const malhar: Contest[] = [
       },
       {
         p: 'VISION: Malhar has always been one of the most active cultures of NIT Agartala. Its mission has always been to discover musical talents throughout the campus and to provide them with a favorable atmosphere to nurture their talents. Additionally, as a part of our musical endeavor, we will offer an ideal platform for everyone to showcase their singing skills and expand their horizons beyond academics.',
+      },
+      {
+        bold: true,
+        p: 'Contest Managers',
+      },
+      {
+        ul: ['Agrani (69099 17823)', 'Sudib (94364 74865)', 'Chandrayee (60331 95685)'],
       },
     ],
     instructions: [
@@ -81,6 +86,13 @@ export const malhar: Contest[] = [
       {
         p: "VISION: Malhar's mission has always been to provide a platform for talented singers to showcase their musical abilities. The competition can provide a way for these singers to gain exposure and recognition, and potentially even launch a career in the music industry. In addition, this competition will help to develop important teamwork skills, such as communication, collaboration, and respect for each other. As icing on the cake, this will promote cultural diversity by featuring groups with different backgrounds, musical traditions, and styles of music.",
       },
+      {
+        bold: true,
+        p: 'Contest Managers',
+      },
+      {
+        ul: ['Bishmoy (76290 97157)', 'Atriman (98633 07628)', 'Diganta (84139 75143)'],
+      },
     ],
     instructions: [
       { heading: 'Malhar official mail' },
@@ -135,6 +147,13 @@ export const malhar: Contest[] = [
       {
         p: 'VISION: The main motive of this solo instrumental competition is to discover the untapped talented instrumentalists and give them the platform to showcase their talent and perform their heart out. ‘Malhar’s’ vision is to encourage all the instrumentalists out there to express themselves in front of such a huge crowd and to push them towards active participation in club and college events in the future and outshine their cultural horizons.',
       },
+      {
+        bold: true,
+        p: 'Contest Managers',
+      },
+      {
+        ul: ['Papu (69098 24602)', 'Pradeepta (96125 71637)', 'Pallab (87320 70871)'],
+      },
     ],
     instructions: [
       { heading: 'Venue' },
@@ -185,6 +204,13 @@ export const malhar: Contest[] = [
       },
       {
         p: 'VISION: Finding undiscovered talent on campus and providing students with a stage to perform in addition to their academic obligations have always been the goals of Malhar. In addition, as a part of our musical endeavour, we will provide the perfect stage for all participants to broaden their perspectives beyond academics and exhibit their musical prowess.',
+      },
+      {
+        bold: true,
+        p: 'Contest Managers',
+      },
+      {
+        ul: ['Sayandip (79083 90658)', 'Deepratip (70059 02255)'],
       },
     ],
     instructions: [
@@ -246,6 +272,13 @@ export const malhar: Contest[] = [
       {
         p: "VISION: Malhar's mission has always been to provide a platform for talented singers to showcase their musical abilities. The competition can provide a way for these singers to gain exposure and recognition, and potentially even launch a career in the music industry. In addition, this competition will help to develop important teamwork skills, such as communication, collaboration, and respect for each other. As icing on the cake, this will promote cultural diversity by featuring groups with different backgrounds, musical traditions, and styles of music.",
       },
+      {
+        bold: true,
+        p: 'Contest Managers',
+      },
+      {
+        ul: ['Pallab (87320 70871)', 'Deepayan (60099 36598)', 'Bipasha (84658 50314)'],
+      },
     ],
     instructions: [
       { heading: 'Venue' },
@@ -302,6 +335,13 @@ export const malhar: Contest[] = [
       {
         bold: true,
         p: 'This game is also one kinda ANTAKSHARI only.',
+      },
+      {
+        bold: true,
+        p: 'Contest Managers',
+      },
+      {
+        ul: ['Prerna (91302 24569)', 'Bipasha (84658 50314)'],
       },
     ],
     instructions: [
