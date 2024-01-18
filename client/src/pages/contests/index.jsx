@@ -14,6 +14,7 @@ import SocialShare from '~/components/SocialShare'
 import Picture from '~/components/pictures/Picture'
 import ContestTypeBadge from '~/components/Contests/ContestTypeBadge'
 import { getContests } from '~loaders/contests.loader'
+import { clubNames } from '~/data/clubs'
 
 export const loader = getContests
 
@@ -80,7 +81,7 @@ const MokshaContests = memo(
 const ClubContests = memo(
   ({ clubSlug, contests }) => (
     <section className='flex-grow w-full' id={`${clubSlug}-contests`}>
-      <h3 className='mb-4 text-4xl font-bold'>{capitalCase(clubSlug)}</h3>
+      <h3 className='mb-4 text-4xl font-bold'>{clubNames[clubSlug] ?? capitalCase(clubSlug)}</h3>
 
       <div className='h-scroll lg:pb-0 lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {contests.map(contest => (
