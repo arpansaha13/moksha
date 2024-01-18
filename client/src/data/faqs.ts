@@ -1,5 +1,3 @@
-// Fill in the dates in first answer
-
 export interface Faq {
   question: string
   answer: string
@@ -9,7 +7,7 @@ const faqs: Faq[] = [
   {
     question: 'What are the dates for Moksha 2024?',
     answer:
-      'The 8th edition of Moksha will be held from (dd) th to (dd) th (mm).So, buckle up for an incredible voyage with us!',
+      'The 8th edition of Moksha will be held from 2nd February to 4th February. So, buckle up for an incredible voyage with us!',
   },
   {
     question: 'Why is registration necessary?',
