@@ -67,6 +67,11 @@ export function Component() {
           You can create, and be the leader, of only <strong>one team</strong>. But you can join as many teams as you
           want.
         </p>
+
+        <p>
+          <strong>Note: </strong>Some contests allow both solo and team participation. In that case, if you want to
+          participate as solo, then you can register only yourself from a team.
+        </p>
       </Sheet>
 
       {authState.authenticated ? (
