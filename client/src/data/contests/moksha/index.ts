@@ -2,7 +2,7 @@ import { nlc } from './nlc'
 import { aaveg } from './aaveg'
 import { dzire } from './dzire'
 import { malhar } from './malhar'
-// import { pixel } from './pixels'
+import { pixels } from './pixels'
 import { fineArts } from './fine-arts'
 import { collab } from './collab'
 import type { ClubSlug, Contest } from '~/types'
@@ -10,7 +10,7 @@ import type { ClubSlug, Contest } from '~/types'
 const mokshaContests = Object.freeze<{ [key in ClubSlug]?: Contest[] }>({
   nlc: nlc,
   dzire: dzire,
-  // pixel: pixel,
+  pixels: pixels,
   aaveg: aaveg,
   malhar: malhar,
   'fine-arts': fineArts,

@@ -187,5 +187,23 @@
       "contest_slug": "ad-mockery-matchup",
       "is_solo": false
     }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 23,
+    "fields": {
+      "club_slug": "pixels",
+      "contest_slug": "shoot-your-shot",
+      "is_solo": true
+    }
+  },
+  {
+    "model": "contests.contest",
+    "pk": 24,
+    "fields": {
+      "club_slug": "pixels",
+      "contest_slug": "highlight-heist",
+      "is_solo": true
+    }
   }
 ]
