@@ -67,7 +67,7 @@ class GetTeam(APIView):
 class GetTeamMembers(APIView):
     def get(self, _, team_id):
         user_ids = TeamMember.objects.filter(
-            team_id=team_id).values_list('id')
+            team_id=team_id).values_list('user')
         users = User.objects.filter(id__in=user_ids)
 
         serializer = UserSerializer(users, many=True)
