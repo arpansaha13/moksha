@@ -3,7 +3,7 @@ import Container from '../components/common/Container'
 import { Icon } from '@iconify/react'
 import gmailIcon from '@iconify-icons/mdi/gmail'
 import whatsappIcon from '@iconify-icons/mdi/whatsapp'
-import contact, { type Contact } from '../data/contact'
+import contacts, { type Contact } from '../data/contact'
 
 export function Component() {
   return (
@@ -12,9 +12,7 @@ export function Component() {
         <h1 className='pt-6 pb-12 text-4xl text-center font-bold text-gray-50'>Contact us</h1>
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-          <Card data={contact.generalSecretary} />
-
-          {contact.asstGeneralSecretaries.map(data => (
+          {contacts.map(data => (
             <Card key={data.email} data={data} />
           ))}
         </div>
