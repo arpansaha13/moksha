@@ -112,7 +112,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=env('DB_URL'), conn_max_age=60),
+    'default': dj_database_url.config(default=env('DB_URL'), conn_max_age=20),
 }
 
 # Internationalization
